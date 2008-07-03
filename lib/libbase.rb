@@ -9,7 +9,7 @@
 # published by the Free Software Foundation; either version 2 of
 # the License or (at your option) version 3 or any later version
 # accepted by the membership of KDE e.V. (or its successor approved
-# by the membership of KDE e.V.), which shall act as a proxy 
+# by the membership of KDE e.V.), which shall act as a proxy
 # defined in Section 14 of version 3 of the license.
 #
 # This program is distributed in the hope that it will be useful,
@@ -25,16 +25,15 @@ require 'lib/libkdialog'
 @dlg = KDialog.new("#{NAME} release script","cookie")
 
 # This will take you to the default execution directory (BASEPATH)
-def BaseDir()
-  Dir.chdir(BASEPATH)
+def baseDir()
+    Dir.chdir(BASEPATH)
 end
 
 # This will take you to the default src directory, which is by default:
 #  execution dir + / + src folder name (NAME-VERSION)
-def SrcDir()
-  Dir.chdir(BASEPATH + "/" + @folder)
+def srcDir()
+    Dir.chdir(BASEPATH + "/" + @folder)
 end
-
 
 # Queries the executer for all sorts of so called information.
 # By default it will query for:
@@ -46,72 +45,72 @@ end
 # You can override the query by providing these information when calling the method.
 # For example:
 #    InformationQuery("trunk","1.0.0","https","sitter")
-def InformationQuery(location=nil, version=nil, protocol=nil, user=nil)
-#     @version  = "2.0.0" #DEBUG.
-#     @protocol = "anonsvn" #DEBUG
+def informationQuery(location=nil, version=nil, protocol=nil, user=nil)
+    #     @version  = "2.0.0" #DEBUG.
+    #     @protocol = "anonsvn" #DEBUG
 
-  unless location
-    CheckoutLocation()
-  else
-    CheckoutLocationDef(location)
-  end
+    unless location
+        checkoutLocation()
+    else
+        checkoutLocationDef(location)
+    end
 
-  unless version
-    ReleaseVersion()
-  else
-    @version = version
-  end
+    unless version
+        releaseVersion()
+    else
+        @version = version
+    end
 
-  unless protocol
-    SvnProtcol()
-  else
-    @protocol = protocol
-  end
+    unless protocol
+        svnProtcol()
+    else
+        @protocol = protocol
+    end
 
-  unless user
-    SvnUsername()
-  else
-    @user = user + "@svn"
-  end
+    unless user
+        svnUsername()
+    else
+        @user = user + "@svn"
+    end
 end
 
 private
-def CheckoutLocation()
-  location = @dlg.combobox("Select checkout\\'s place:", "Trunk Stable Tag")
-  puts location #DEBUG
-  CheckoutLocationDef(location)
+def checkoutLocation()
+    location = @dlg.combobox("Select checkout\\'s place:", "Trunk Stable Tag")
+    puts location #DEBUG
+    checkoutLocationDef(location)
 end
 
-def CheckoutLocationDef(location)
-  if location == "Stable"
-    @useStable = true
-  elsif location == "Tag"
-    @tag = @dlg.inputbox("Enter the tag name:")
-    puts @tag #DEBUG
-  end
+def checkoutLocationDef(location)
+    if location == "Stable"
+        @useStable = true
+    elsif location == "Tag"
+        @tag = @dlg.inputbox("Enter the tag name:")
+        puts @tag #DEBUG
+    end
 end
 
-def ReleaseVersion()
-  if @tag and not @tag.empty?()
-    @version = @tag
-  else
-    @version = @dlg.inputbox("Enter the release version:")
-  end
-  puts @version #DEBUG
+def releaseVersion()
+    if @tag and not @tag.empty?()
+        @version = @tag
+    else
+        @version = @dlg.inputbox("Enter the release version:")
+    end
+    puts @version #DEBUG
 end
 
-def SvnProtcol()
-  @protocol = @dlg.radiolist("Do you use svn+ssh, https or anonsvn :",["svn+ssh","https","anonsvn"],1)
-  puts @protocol #DEBUG
+def svnProtcol()
+    @protocol = @dlg.radiolist("Do you use svn+ssh, https or anonsvn :",["svn+ssh","https","anonsvn"],1)
+    puts @protocol #DEBUG
 end
 
-def SvnUsername()
-  if @protocol == "anonsvn"
-    @protocol = "svn"
-    @user = "anonsvn"
-  else
-    @user = @dlg.inputbox("Your SVN user:")
-    @user += "@svn"
-  end
-  puts @user #DEBUG
+def svnUsername()
+    if @protocol == "anonsvn"
+        @protocol = "svn"
+        @user = "anonsvn"
+    else
+        @user = @dlg.inputbox("Your SVN user:")
+        @user += "@svn"
+    end
+    puts @user #DEBUG
 end

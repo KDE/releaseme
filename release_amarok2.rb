@@ -9,7 +9,7 @@
 # published by the Free Software Foundation; either version 2 of
 # the License or (at your option) version 3 or any later version
 # accepted by the membership of KDE e.V. (or its successor approved
-# by the membership of KDE e.V.), which shall act as a proxy 
+# by the membership of KDE e.V.), which shall act as a proxy
 # defined in Section 14 of version 3 of the license.
 #
 # This program is distributed in the hope that it will be useful,
@@ -34,45 +34,43 @@ require 'lib/libtag.rb'
 # Amarok-only changes
 # * Change application version to releaseversion
 # * Remove unnecessary files
-def Amarok()
-  # Change version
-  Dir.chdir(BASEPATH + "/" + @folder)
-  Dir.chdir("src")
-  file = File.new( "Amarok.h", File::RDWR )
-  str = file.read()
-  file.rewind()
-  file.truncate( 0 )
-  str.sub!( /APP_VERSION \".*\"/, "APP_VERSION \"#{@version}\"" )
-  file << str
-  file.close()
-  Dir.chdir("..") #amarok
+def amarok()
+    # Change version
+    Dir.chdir(BASEPATH + "/" + @folder)
+    Dir.chdir("src")
+    file = File.new( "Amarok.h", File::RDWR )
+    str = file.read()
+    file.rewind()
+    file.truncate( 0 )
+    str.sub!( /APP_VERSION \".*\"/, "APP_VERSION \"#{@version}\"" )
+    file << str
+    file.close()
+    Dir.chdir("..") #amarok
 
-  # Remove unnecessary stuff
-  toberemoved = ["release_scripts","supplementary_scripts","src/history"]
-  for object in toberemoved
-    FileUtils.rm_rf(object)
-  end
+    # Remove unnecessary stuff
+    toberemoved = ["release_scripts","supplementary_scripts","src/history"]
+    for object in toberemoved
+        FileUtils.rm_rf(object)
+    end
 
-  Dir.chdir(BASEPATH)
+    Dir.chdir(BASEPATH)
 end
 
-InformationQuery()
+informationQuery()
 
 # TODO: why is this done here?
 @folder = "#{NAME}-#{@version}" #create folder instance var
 
-FetchSource()
+fetchSource()
 
-FetchTranslations()
+fetchTranslations()
 
-FetchDocumentation()
+fetchDocumentation()
 
-CreateTranslationStats()
+createTranslationStats()
 
-# Tag()
+# createTag()
 
-Amarok()
+amarok()
 
-CreateTar()
-
-
+createTar()
