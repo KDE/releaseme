@@ -46,22 +46,26 @@ end
 # You probably want to run this command as one of the last actions, since for
 # example tagging heavily depends on the presence of the .svn directories.
 def createTar()
+    puts("creating tarball...")
     baseDir()
     system("find #{@folder} -name .svn | xargs rm -rf")
     system("tar -cf #{@folder}.tar #{@folder}")
     system("bzip2 #{@folder}.tar")
     FileUtils.rm_rf(@folder)
+    puts("tarball created...")
 end
 
 # Create and output checksums for the created tarball
 # * MD5
 # * SHA1
 def createCheckSums()
-    @md5sum = system("md5sum #{@folder}.tar.bz2")
-    puts("MD5Sum: #{@md5sum}")
+    puts("#########################################")
 
-    @sha1sum = `sha1sum #{@folder}.tar.bz2`
-    puts("SHA1Sum: #{@sha1sum}")
+    @md5sum = %x[md5sum #{@folder}.tar.bz2]
+    puts("MD5Sum: #{@md5sum.split(" ")[0]}")
+
+    @sha1sum = %x[sha1sum #{@folder}.tar.bz2]
+    puts("SHA1Sum: #{@sha1sum.split(" ")[0]}")
 end
 
 # TODO

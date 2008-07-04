@@ -69,8 +69,11 @@ fetchDocumentation()
 
 createTranslationStats()
 
+# TODO: currently broken
 # createTag()
 
 amarok()
 
 createTar()
+
+createCheckSums()
