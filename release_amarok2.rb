@@ -36,7 +36,7 @@ require 'lib/libtag.rb'
 # * Remove unnecessary files
 def amarok()
     # Change version
-    Dir.chdir(BASEPATH + "/" + @folder)
+    srcDir()
     Dir.chdir("src")
     file = File.new( "Amarok.h", File::RDWR )
     str = file.read()
@@ -53,7 +53,7 @@ def amarok()
         FileUtils.rm_rf(object)
     end
 
-    Dir.chdir(BASEPATH)
+    baseDir()
 end
 
 informationQuery()
