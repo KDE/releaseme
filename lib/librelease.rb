@@ -22,7 +22,6 @@
 
 # DOC TODO
 def fetchSource()
-    bar  = @dlg.progressbar("fetching source code",1)
     FileUtils.rm_rf( @folder )
     FileUtils.rm_rf( "#{@folder}.tar.bz2" )
 
@@ -41,9 +40,6 @@ def fetchSource()
     puts "Fetching source from #{branch}...\n\n"
     # TODO: ruby-svn
     system("svn co #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{@folder}")
-
-    bar.progress = 1
-    bar.close
 end
 
 # Removes all .svn directories, creates a tar.bz2 and removes the source folder.
@@ -51,15 +47,10 @@ end
 # example tagging heavily depends on the presence of the .svn directories.
 def createTar()
     baseDir()
-    bar  = @dlg.progressbar("creating tarball",4)
     system("find #{@folder} -name .svn | xargs rm -rf")
-    bar.progress = 1
     system("tar -cf #{@folder}.tar #{@folder}")
-    bar.progress = 2
     system("bzip2 #{@folder}.tar")
-    bar.progress = 3
     FileUtils.rm_rf(@folder)
-    bar.close
 end
 
 # Create and output checksums for the created tarball
