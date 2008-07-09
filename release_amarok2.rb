@@ -48,7 +48,7 @@ def amarok()
     Dir.chdir("..") #amarok
 
     # Remove unnecessary stuff
-    toberemoved = ["release_scripts","supplementary_scripts","src/history"]
+    toberemoved = ["Amarok.kdev4", "release_scripts","supplementary_scripts","HACKING","VIS_PLAN"]
     for object in toberemoved
         FileUtils.rm_rf(object)
     end
