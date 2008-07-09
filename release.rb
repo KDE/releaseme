@@ -199,7 +199,7 @@ class MyWidget < Qt::Widget
 
         informationQuery(@coBox.currentText, @versionText.text, @accessBox.currentText, @userText.text)
 
-        @folder = "#{NAME}-#{@version}" #create folder instance var
+        @folder = "#{NAME}-#{@version}"
 
         if @sourceCheck.checkState() == 2
             fetchSource()
@@ -218,7 +218,6 @@ class MyWidget < Qt::Widget
         end
 
         if @tagCheck.checkState() == 2
-#         TODO: currently broken
 #         createTag()
         end
 
