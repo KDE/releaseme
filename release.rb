@@ -218,7 +218,7 @@ class MyWidget < Qt::Widget
         end
 
         if @tagCheck.checkState() == 2
-#         createTag()
+            createTag()
         end
 
         if @specCheck.checkState() == 2

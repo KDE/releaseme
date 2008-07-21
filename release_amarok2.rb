@@ -56,24 +56,21 @@ def amarok()
     baseDir()
 end
 
-# informationQuery($*[0], $*[1], $*[2], $*[3])
-
 # TODO: why is this done here?
-# @folder = "#{NAME}-#{@version}" #create folder instance var
+@folder = "#{NAME}-#{@version}" #create folder instance var
 
-# fetchSource()
+fetchSource()
 
-# fetchTranslations()
-# 
-# fetchDocumentation()
-# 
-# createTranslationStats()
+fetchTranslations()
 
-# TODO: currently broken
-# createTag()
+fetchDocumentation()
 
-# amarok()
+createTranslationStats()
 
-# createTar()
+createTag()
 
-# createCheckSums()
+amarok()
+
+createTar()
+
+createCheckSums()
