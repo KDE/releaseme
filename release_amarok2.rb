@@ -56,6 +56,8 @@ def amarok()
     baseDir()
 end
 
+informationQuery()
+
 # TODO: why is this done here?
 @folder = "#{NAME}-#{@version}" #create folder instance var
 
