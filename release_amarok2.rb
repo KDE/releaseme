@@ -56,23 +56,23 @@ def amarok()
     baseDir()
 end
 
-informationQuery()
-
-# TODO: why is this done here?
-@folder = "#{NAME}-#{@version}" #create folder instance var
-
-fetchSource()
-
-fetchTranslations()
-
-fetchDocumentation()
-
-createTranslationStats()
-
-createTag()
-
-amarok()
-
-createTar()
-
-createCheckSums()
+# informationQuery()
+# 
+# # TODO: why is this done here?
+# @folder = "#{NAME}-#{@version}" #create folder instance var
+# 
+# fetchSource()
+# 
+# fetchTranslations()
+# 
+# fetchDocumentation()
+# 
+# createTranslationStats()
+# 
+# createTag()
+# 
+# amarok()
+# 
+# createTar()
+# 
+# createCheckSums()
