@@ -20,7 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-NAME      = "digikam"
+NAME      = "kipi-plugins"
 COMPONENT = "extragear"
 SECTION   = "graphics"
 BASEPATH  = Dir.getwd()

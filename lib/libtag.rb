@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-#
 # Generic ruby library for KDE extragear/playground releases
 #
 # Copyright (C) 2008 Harald Sitter <harald@getamarok.com>
@@ -42,6 +40,8 @@ end
 # * Svn cp from fetched translations (libl10n)
 # TODO: optionalify depend on libl10n
 def tagTranslations()
+    @name = NAME.gsub("-","")
+
     Dir.chdir( BASEPATH + "/" + @folder )
     `svn co -N #{@tag1} tagging`
 
