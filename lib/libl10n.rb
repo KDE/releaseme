@@ -20,10 +20,10 @@
 
 require 'lib/libkdialog.rb'
 
-@name = NAME.gsub("-","") #strip hyphens (required for kipi-plugins)
 @dlg = KDialog.new("#{NAME} release script","start-here")
 
 def fetchTranslations()
+    @name = NAME.split("-").join #strip hyphens (required for kipi-plugins)
     srcDir()
     Dir.mkdir("l10n")
     Dir.mkdir("po")
@@ -226,6 +226,7 @@ def createTranslationStats()
     end
 
     def stats( lang )
+        @name = NAME.split("-").join #strip hyphens (required for kipi-plugins)
         srcDir()
         values = nil
 

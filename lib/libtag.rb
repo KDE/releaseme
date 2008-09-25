@@ -40,7 +40,7 @@ end
 # * Svn cp from fetched translations (libl10n)
 # TODO: optionalify depend on libl10n
 def tagTranslations()
-    @name = NAME.gsub("-","")
+    @name = NAME.split("-").join
 
     Dir.chdir( BASEPATH + "/" + @folder )
     `svn co -N #{@tag1} tagging`
