@@ -52,7 +52,7 @@ def tagTranslations()
     for translation in @translations do
         `svn mkdir tagging/po/#{translation}`
         for f in Dir.glob("po/#{translation}/#{@name.chop}*.po")
-            `svn cp po/#{translation}/#{f}.po tagging/po/#{translation}/`
+            `svn cp #{f}.po tagging/po/#{translation}/`
         end
     end
     `svn ci -m "Tag #{NAME} #{@version} - translations." tagging/po`
