@@ -32,6 +32,7 @@ require 'lib/libl10n.rb'
 require 'lib/libtag.rb'
 
 require 'lib/libreleasedigikamkipi.rb'
+@changelog = "ChangeLog"
 
 informationQuery()
 

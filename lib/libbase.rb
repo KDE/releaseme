@@ -21,6 +21,7 @@
 require 'lib/libkdialog'
 
 @dlg = KDialog.new("#{NAME} release script","cookie")
+@changelog = nil
 
 # This will take you to the default execution directory (BASEPATH)
 def baseDir()
