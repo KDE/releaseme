@@ -20,7 +20,7 @@
 
 require 'lib/libkdialog'
 
-@dlg = KDialog.new("#{NAME} release script","cookie")
+$dlg = KDialog.new("#{NAME} release script","cookie")
 @changelog = nil
 
 # This will take you to the default execution directory (BASEPATH)
@@ -80,16 +80,16 @@ end
 
 private
 def checkoutLocation()
-    location = @dlg.combobox("Select checkout's place:", "Trunk Stable Tag")
+    location = $dlg.combobox("Select checkout's place:", "Trunk Stable Tag")
     puts location #DEBUG
     checkoutLocationDef(location)
 end
 
 def checkoutLocationDef(location)
-    if location == "Stable"
+    if location.downcase == "stable"
         @useStable = true
-    elsif location == "Tag"
-        @tag = @dlg.inputbox("Enter the tag name:")
+    elsif location.downcase == "tag"
+        @tag = $dlg.inputbox("Enter the tag name:")
         puts @tag #DEBUG
     end
 end
@@ -98,13 +98,13 @@ def releaseVersion()
     if @tag and not @tag.empty?()
         @version = @tag
     else
-        @version = @dlg.inputbox("Enter the release version:")
+        @version = $dlg.inputbox("Enter the release version:")
     end
     puts @version #DEBUG
 end
 
 def svnProtcol()
-    @protocol = @dlg.radiolist("Do you use svn+ssh, https or anonsvn :",["svn+ssh","https","anonsvn"],1)
+    @protocol = $dlg.radiolist("Do you use svn+ssh, https or anonsvn :",["svn+ssh","https","anonsvn"],1)
     puts @protocol #DEBUG
 end
 
@@ -113,7 +113,7 @@ def svnUsername()
         @protocol = "svn"
         @user = "anonsvn"
     else
-        @user = @dlg.inputbox("Your SVN user:")
+        @user = $dlg.inputbox("Your SVN user:")
         @user += "@svn"
     end
     puts @user #DEBUG
@@ -126,7 +126,7 @@ def changeLog()
         @changelog = nil
         return
     end
-    unless @dlg.yesno("Create changelog using svn2cl?<br /><br /><b>Note:</b> this will commit the changelog right after creating it,<br />so only use this feature when you really want to do a release")
+    unless $dlg.yesno("Create changelog using svn2cl?<br /><br /><b>Note:</b> this will commit the changelog right after creating it,<br />so only use this feature when you really want to do a release")
         @changelog = nil
     else
         puts @changelog #DEBUG

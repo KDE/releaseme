@@ -20,8 +20,6 @@
 
 require 'lib/libkdialog.rb'
 
-@dlg = KDialog.new("#{NAME} release script","start-here")
-
 def fetchTranslations()
     @name = NAME.split("-").join #strip hyphens (required for kipi-plugins)
     srcDir()
@@ -234,9 +232,7 @@ def createTranslationStats()
         Dir.chdir("po/#{lang}")
 
         # grab statistics data
-        system("msgfmt --statistics #{@name}.po 2> tmp.txt")
-        term = `cat tmp.txt`
-        File.delete("tmp.txt")
+        term = %x[msgfmt --statistics #{@name}.po]
 
         # rape the data and create some proper variables
         values  = term.scan(/[\d]+/)
