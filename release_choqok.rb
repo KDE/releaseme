@@ -26,7 +26,7 @@ COMPONENT = "playground"
 SECTION   = "network"
 BASEPATH  = Dir.getwd()
 
-require 'filjobseutils'
+require 'fileutils'
 require 'lib/libbase.rb'
 require 'lib/librelease.rb'
 require 'lib/libl10n.rb'
