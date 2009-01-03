@@ -65,7 +65,7 @@ fetchTranslations()
 
 # fetchDocumentation()
 
-createTranslationStats()
+# createTranslationStats()
 
 createTag()
 
