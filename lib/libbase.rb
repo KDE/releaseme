@@ -39,7 +39,7 @@ end
 #  - SVN location to checkout (trunk, stable, tag)
 #  - Release version
 #  - SVN protcol to use (ssh, https, anonsvn)
-#  - If protocl is not 'anonsvn' it will also ask for a user name
+#  - If protcol is not 'anonsvn' it will also ask for a user name
 #  - Whether to use svn2cl or not
 #
 # You can override the query by providing these information when calling the method.
