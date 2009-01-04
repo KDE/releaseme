@@ -40,6 +40,11 @@ class KDialog
         @selection = @@exit_status[exit]
     end
 
+    def warningcontinuecancel(text)
+        exit = perform('--warningcontinuecancel', text)[1]
+        @selection = @@exit_status[exit]
+    end
+
     def error(text)
         exit = perform('--error', text)[1]
         @selection = @@exit_status[exit]
