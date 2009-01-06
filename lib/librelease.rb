@@ -104,7 +104,9 @@ end
 def createTar()
     puts("creating tarball...")
     baseDir()
-    system("find #{@folder} -name .svn | xargs rm -rf")
+    for psvn in Dir.glob("#{@folder}/**/.svn")
+        FileUtils.rm_rf(psvn)
+    end
     system("tar -cf #{@folder}.tar #{@folder}")
     system("bzip2 #{@folder}.tar")
     FileUtils.rm_rf(@folder)
@@ -117,11 +119,16 @@ end
 def createCheckSums()
     puts("#########################################")
 
-    @md5sum = %x[md5sum #{@folder}.tar.bz2]
-    puts("MD5Sum: #{@md5sum.split(" ")[0]}")
+    md5sum = %x[md5sum #{@folder}.tar.bz2]
+    puts("MD5Sum: #{md5sum.split(" ")[0]}")
 
-    @sha1sum = %x[sha1sum #{@folder}.tar.bz2]
-    puts("SHA1Sum: #{@sha1sum.split(" ")[0]}")
+    sha1sum = %x[sha1sum #{@folder}.tar.bz2]
+    puts("SHA1Sum: #{sha1sum.split(" ")[0]}")
+
+    @checksums = {
+        "MD5SUM" => md5sum,
+        "SHA1SUM" => sha1sum
+    }
 end
 
 # TODO
