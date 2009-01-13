@@ -23,34 +23,7 @@
 NAME      = "digikam"
 COMPONENT = "extragear"
 SECTION   = "graphics"
-BASEPATH  = Dir.getwd()
-
-require 'fileutils'
-require 'lib/libbase.rb'
-require 'lib/librelease.rb'
-require 'lib/libl10n.rb'
-require 'lib/libtag.rb'
 
 require 'lib/libreleasedigikamkipi.rb'
 
-informationQuery()
-
-# TODO: why is this done here?
-@folder = "#{NAME}-#{@version}" #create folder instance var
-
-fetchSource()
-
-fetchTranslations()
-
-# fetchDocumentation()
-
-createTranslationStats()
-
-# TODO: currently broken
-# createTag()
-
-release() #libreleasedigikamkipi.rb
-
-createTar()
-
-createCheckSums()
+require 'lib/starter'

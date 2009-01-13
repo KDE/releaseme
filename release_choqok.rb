@@ -24,50 +24,24 @@
 NAME      = "choqok"
 COMPONENT = "playground"
 SECTION   = "network"
-BASEPATH  = Dir.getwd()
 
-require 'fileutils'
-require 'lib/libbase.rb'
-require 'lib/librelease.rb'
-require 'lib/libl10n.rb'
-require 'lib/libtag.rb'
-
-def release()
+def custom
     # Change version
-    src_dir()
+    src_dir
     Dir.chdir("src")
     file = File.new( "main.cpp", File::RDWR )
-    str = file.read()
-    file.rewind()
+    str = file.read
+    file.rewind
     file.truncate( 0 )
     str.sub!( /static const char version\[\] = \".*\"/, "static const char version\[\] = \"#{@version}\"" )
     file << str
-    file.close()
+    file.close
     Dir.chdir("..") #choqok
 
     # Remove unnecessary stuff
     remover([])
 
-    base_dir()
+    base_dir
 end
 
-informationQuery()
-
-# TODO: why is this done here?
-@folder = "#{NAME}-#{@version}" #create folder instance var
-
-fetchSource()
-
-fetchTranslations()
-
-# fetchDocumentation()
-
-# createTranslationStats()
-
-createTag()
-
-release()
-
-createTar()
-
-createCheckSums()
+require 'lib/starter'
