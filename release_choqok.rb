@@ -34,7 +34,7 @@ require 'lib/libtag.rb'
 
 def release()
     # Change version
-    srcDir()
+    src_dir()
     Dir.chdir("src")
     file = File.new( "main.cpp", File::RDWR )
     str = file.read()
@@ -46,12 +46,9 @@ def release()
     Dir.chdir("..") #choqok
 
     # Remove unnecessary stuff
-    toberemoved = []
-    for object in toberemoved
-        FileUtils.rm_rf(object)
-    end
+    remover([])
 
-    baseDir()
+    base_dir()
 end
 
 informationQuery()

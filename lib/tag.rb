@@ -1,6 +1,6 @@
 # Generic ruby library for KDE extragear/playground releases
 #
-# Copyright (C) 2008 Harald Sitter <harald@getamarok.com>
+# Copyright (C) 2008-2009 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -23,8 +23,8 @@
 # * Therefore the source will be in tags/NAME/VERSION/NAME
 # * Svn mkdir
 # * Svn cp from the downloaded source (librelease)
-def tagSource()
-    Dir.chdir( BASEPATH + "/" + @folder )
+def tagSource
+    base_dir
 
     @tag1 = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}"
 
@@ -39,24 +39,23 @@ end
 # * Svn mkdir TRANSLATION for all TRANSLATIONS (provided by libl10n. So, if no translation fetching did happen, it's going o break here)
 # * Svn cp from fetched translations (libl10n)
 # TODO: optionalify depend on libl10n
-def tagTranslations()
-    return if @translations == nil
+def tagTranslations
     @name = NAME.split("-").join
 
-    Dir.chdir( BASEPATH + "/" + @folder )
+    base_dir
     `svn co -N #{@tag1} tagging`
 
     tag = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}/po"
 
     `svn mkdir -m "Create tag #{NAME} #{@version} po directory" #{tag}`
     `svn up tagging/po`
-    for translation in @translations do
-        `svn mkdir tagging/po/#{translation}`
-        for f in Dir.glob("po/#{translation}/#{@name.chop}*.po")
-            `svn cp #{f} tagging/po/#{translation}/`
+    for translation in @l10n do
+        `svn mkdir tagging/po/#{l10n}`
+        for f in Dir.glob("po/#{l10n}/#{@name.chop}*.po")
+            `svn cp #{f} tagging/po/#{l10n}/`
         end
     end
-    `svn ci -m "Tag #{NAME} #{@version} - translations." tagging/po`
+    `svn ci -m "Tag #{NAME} #{@version} - localizations." tagging/po`
 
     FileUtils.rm_rf("tagging")
 end
@@ -66,9 +65,8 @@ end
 # * Svn co tag directory
 # * Svn mkdir doc
 # * Svn cp DOC for all DOCS (provided by libl10n. So, if no translation fetching did happen, it's going o break here)
-def tagDocumentations()
-    return if @docs == nil
-    Dir.chdir( BASEPATH + "/" + @folder )
+def tagDocumentations
+    base_dir
     `svn co -N #{@tag1} tagging`
 
     tag = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}/po"
@@ -87,8 +85,8 @@ end
 # 1. source
 # 2. translations (depends on libl10n)
 # 3. documentation (depends on libl10n)
-def createTag()
-    tagSource()
-    tagTranslations()
-    tagDocumentations()
+def create_tag
+    tagSource
+    tagTranslations unless @l10n == nil
+    tagDocumentations unless @docs == nil
 end

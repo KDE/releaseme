@@ -1,6 +1,6 @@
 # Ruby library for Digikam and Kipi-Plugins pre-archiving changes
 #
-# Copyright (C) 2008 Harald Sitter <harald@getamarok.com>
+# Copyright (C) 2008 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -20,9 +20,9 @@
 
 @changelog = "ChangeLog"
 
-def release
+def custom
+    src_dir
     puts("Running #{NAME}-only changes")
-    srcDir()
 
     # change version in CMakeLists.txt
     version       = @version.split(".")
@@ -35,7 +35,7 @@ def release
     name          = NAME.gsub("-","").upcase
 
     file = File.new( "CMakeLists.txt", File::RDWR )
-    str = file.read()
+    str = file.read
     file.rewind()
     file.truncate( 0 )
     str.sub!( /SET\(#{name}_MAJOR_VERSION \".*\"\)/, "SET\(#{name}_MAJOR_VERSION \"#{majorversion}\"\)" )
@@ -45,13 +45,10 @@ def release
         str.sub!( /SET\(#{name}_SUFFIX_VERSION \".*\"\)/, "SET\(#{name}_SUFFIX_VERSION \"-#{suffixversion}\"\)" )
     end
     file << str
-    file.close()
+    file.close
 
     # remove unnecessary stuff from tarball
-    toberemoved = ["project"]
-    for object in toberemoved
-        FileUtils.rm_rf(object)
-    end
+    remover(["project"])
 
-    baseDir()
+    base_dir
 end

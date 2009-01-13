@@ -2,7 +2,7 @@
 #
 # Generates a release tarball from KDE SVN
 #
-# Copyright (C) 2007-2008 Harald Sitter <harald@getamarok.com>
+# Copyright (C) 2007-2009 Harald Sitter <harald@getamarok.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -23,20 +23,13 @@
 NAME      = "amarok"
 COMPONENT = "extragear"
 SECTION   = "multimedia"
-BASEPATH  = Dir.getwd()
-
-require 'fileutils'
-require 'lib/libbase.rb'
-require 'lib/librelease.rb'
-require 'lib/libl10n.rb'
-require 'lib/libtag.rb'
 
 # Amarok-only changes
 # * Change application version to releaseversion
 # * Remove unnecessary files
-def amarok()
+def custom()
     # Change version
-    srcDir()
+    src_dir()
     Dir.chdir("src")
     file = File.new( "Amarok.h", File::RDWR )
     str = file.read()
@@ -47,32 +40,17 @@ def amarok()
     file.close()
     Dir.chdir("..") #amarok
 
-    # Remove unnecessary stuff
-    toberemoved = ["Amarok.kdev4", "release_scripts","supplementary_scripts","HACKING","VIS_PLAN","docs"]
-    for object in toberemoved
-        FileUtils.rm_rf(object)
-    end
+    remover([
+        "Amarok.kdev4","release_scripts","supplementary_scripts","HACKING",
+        "VIS_PLAN",".krazy","src/.gitignore"
+    ])
+    base_dir()
 
-    baseDir()
+    create_tar("mac")
+    remover(["src/mac"])
 end
 
-# informationQuery()
-# 
-# # TODO: why is this done here?
-# @folder = "#{NAME}-#{@version}" #create folder instance var
-# 
-# fetchSource()
-# 
-# fetchTranslations()
-# 
-# fetchDocumentation()
-# 
-# createTranslationStats()
-# 
-# createTag()
-# 
-# amarok()
-# 
-# createTar()
-# 
-# createCheckSums()
+$options = {:version=>"0.1", :user=>"sitter", :branch=>"trunk", :barrier=>75, :protocol=>"svn+ssh"}
+
+# get things started
+require 'lib/starter'

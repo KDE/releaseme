@@ -1,6 +1,6 @@
 # Generic ruby library for KDE extragear/playground releases
 #
-# Copyright (C) 2007-2008 Harald Sitter <harald@getamarok.com>
+# Copyright (C) 2007-2009 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -18,35 +18,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# DOC TODO
-def fetchSource()
-    FileUtils.rm_rf( @folder )
-    FileUtils.rm_rf( "#{@folder}.tar.bz2" )
+def fetch_source()
+    rm_rf SRC
+    rm_rf "#{SRC}.tar.bz2"
 
-    branch = "trunk"
+    %x[svn -N co #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{SRC}]
+    exit_checker($?,"the whole freaking source tree")
 
-    if @useStable
-        branch = "branches/stable"
-    elsif @tag and not @tag.empty?()
-        branch = "tags/#{NAME}/#{@tag}"
-    end
-
-    @repo = "#{@protocol}://#{@user}.kde.org/home/kde/#{branch}"
-    #   @repo = "file:///home/kde/#{branch}"
-    puts @repo #DEBUG
-
-    puts "Fetching source from #{branch}...\n\n"
-    # TODO: ruby-svn
-    system("svn co #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{@folder}")
-
-    createChangeLog()
+    create_changelog()
 end
 
 # Creates a changelog using svn2cl.
 # Gets invoked from fetchSource once the SVN checkout is finished.
 # Adds a header afterwards and commits the updated changelog.
 # Expects the constant CHANGELOG to be set and svn2cl to be in your $PATH.
-def createChangeLog()
+def create_changelog()
 # TODO: not initialized
     return unless @changelog
     if not %x[which svn2cl.sh] == ""
@@ -65,7 +51,7 @@ def createChangeLog()
 
     puts("generating new changelog...")
     file = File.new(@changelog, File::RDWR)
-    str = file.read()
+    str  = file.read()
 
 # TODO: .include isn't precise enough, we need to have a complete match of linestart-version-whitespace-isodate
 #     if str.include?(@version)
@@ -97,42 +83,92 @@ def createChangeLog()
     puts("committing changelog...")
     %x[svn ci ChangeLog "Update changelog for #{@version}."]
 end
+private :create_changelog
 
 # Removes all .svn directories, creates a tar.bz2 and removes the source folder.
 # You probably want to run this command as one of the last actions, since for
 # example tagging heavily depends on the presence of the .svn directories.
-def createTar()
+def create_tar(suffix=nil)
+    base_dir()
     puts("creating tarball...")
-    baseDir()
-    for psvn in Dir.glob("#{@folder}/**/.svn")
+    if suffix
+        folder = SRC + "-" + suffix
+        rm_rf(folder)
+        cp_rf(SRC,folder)
+    else
+        folder = SRC
+    end
+    for psvn in Dir.glob("#{folder}/**/.svn")
         FileUtils.rm_rf(psvn)
     end
-    system("tar -cf #{@folder}.tar #{@folder}")
-    system("bzip2 #{@folder}.tar")
-    FileUtils.rm_rf(@folder)
+    system("tar -cf #{folder}.tar #{folder}")
+    system("bzip2 -9 #{folder}.tar")
     puts("tarball created...")
+    create_checksums("#{folder}.tar.bz2")
+    rm_rf(folder)
 end
 
 # Create and output checksums for the created tarball
 # * MD5
 # * SHA1
-def createCheckSums()
-    puts("#########################################")
+def create_checksums(tar)
+    @checksums = {} if @checksums == nil
 
-    md5sum = %x[md5sum #{@folder}.tar.bz2]
+    puts(sharper)
+
+    md5sum = %x[md5sum #{tar}]
     puts("MD5Sum: #{md5sum.split(" ")[0]}")
 
-    sha1sum = %x[sha1sum #{@folder}.tar.bz2]
+    sha1sum = %x[sha1sum #{tar}]
     puts("SHA1Sum: #{sha1sum.split(" ")[0]}")
 
-    @checksums = {
-        "MD5SUM" => md5sum,
-        "SHA1SUM" => sha1sum
+    @checksums[tar] = {
+        "MD5Sum" => md5sum,
+        "SHA1Sum" => sha1sum,
     }
 end
 
-# TODO
-def createMailNotification()
+def create_packager_notification()
+    filename = "#{NAME}-PackagerNotification-#{@version}.txt"
+    puts "Writing #{filename}..."
+
+    file = File.new(filename, File::CREAT | File::RDWR | File::TRUNC)
+
+    # checksum string composer
+    unless @checksums == nil
+        puts "Parsing checksums..."
+        sumstring = "Checksums\n#{sharper}"
+        @checksums.each_key{|key|
+            @checksums[key].each_pair{|key,value|
+                sumstring += "#{key}: #{value.chomp}\n"
+            }
+            sumstring += "\n"
+        }
+        file << sumstring + "\n"
+    end
+
+    # doc string composer
+    unless @docs == nil
+        puts "Parsing documentaton..."
+        docstring = "Documentation (#{@docs.count})\n#{sharper}"
+        for doc in @docs
+            docstring += doc + " "
+        end
+        file << docstring + "\n\n"
+    end
+
+    # translation string composer
+    unless @l10n == nil
+        puts "Parsing localization..."
+        l10nstring = "Translations (#{@l10n.count})\n#{sharper}"
+        for l10n in @l10n
+            l10nstring += l10n + " "
+        end
+        file << l10nstring + "\n\n"
+    end
+
+    file.close
+    puts "...done"
 end
 
 # TODO
