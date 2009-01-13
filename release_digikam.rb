@@ -2,7 +2,7 @@
 #
 # Generates a release tarball from KDE SVN
 #
-# Copyright (C) 2008 Harald Sitter <harald@getamarok.com>
+# Copyright (C) 2008 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
