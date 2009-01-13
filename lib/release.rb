@@ -172,9 +172,9 @@ def create_packager_notification()
 end
 
 # TODO
-def createMailAnnouncement()
+def create_mail_announcement()
 end
 
 # TODO
-def createChangeLogHtml()
+def create_changelog_html()
 end

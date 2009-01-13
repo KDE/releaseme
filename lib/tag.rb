@@ -23,7 +23,7 @@
 # * Therefore the source will be in tags/NAME/VERSION/NAME
 # * Svn mkdir
 # * Svn cp from the downloaded source (librelease)
-def tagSource
+def tag_source
     base_dir
 
     @tag1 = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}"
@@ -39,7 +39,7 @@ end
 # * Svn mkdir TRANSLATION for all TRANSLATIONS (provided by libl10n. So, if no translation fetching did happen, it's going o break here)
 # * Svn cp from fetched translations (libl10n)
 # TODO: optionalify depend on libl10n
-def tagTranslations
+def tag_l10n
     @name = NAME.split("-").join
 
     base_dir
@@ -65,7 +65,7 @@ end
 # * Svn co tag directory
 # * Svn mkdir doc
 # * Svn cp DOC for all DOCS (provided by libl10n. So, if no translation fetching did happen, it's going o break here)
-def tagDocumentations
+def tag_docs
     base_dir
     `svn co -N #{@tag1} tagging`
 
@@ -86,7 +86,7 @@ end
 # 2. translations (depends on libl10n)
 # 3. documentation (depends on libl10n)
 def create_tag
-    tagSource
-    tagTranslations unless @l10n == nil
-    tagDocumentations unless @docs == nil
+    tag_source
+    tag_l10n unless @l10n == nil
+    tag_docs unless @docs == nil
 end
