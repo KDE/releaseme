@@ -1,2 +1,1 @@
-kate: space-indent on; indent-width 4; replace-tabs on; tab-width 4; auto-insert-doxygen on; eol unix; hl ruby; keep-extra-spaces false; remove-trailing-space true; replace-tabs-save true; replace-tabs true;
-
+kate: space-indent on; indent-width 4; replace-tabs on; tab-width 4; auto-insert-doxygen on; indent-mode ruby; eol unix; hl ruby; keep-extra-spaces false; remove-trailing-space true; replace-tabs-save true; replace-tabs true;
