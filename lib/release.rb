@@ -20,7 +20,9 @@
 
 def fetch_source()
     rm_rf SRC
-    rm_rf "#{SRC}.tar.bz2"
+    for f in Dir.glob("#{SRC}*.tar.bz2")
+        rm_rf f
+    end
 
     system("svn co #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{SRC}")
     exit_checker($?,"the whole freaking source tree")
@@ -94,7 +96,7 @@ def create_tar(suffix=nil,keep=false)
     if suffix
         folder = SRC + "-" + suffix
         rm_rf(folder)
-        cp_rf(SRC,folder)
+        cp_r(SRC,folder)
     else
         folder = SRC
     end
@@ -103,7 +105,7 @@ def create_tar(suffix=nil,keep=false)
     end
     system("tar -cf #{folder}.tar #{folder}")
     system("bzip2 -9 #{folder}.tar")
-    puts("tarball created...")
+    puts("tarball created for #{folder}...")
     create_checksums("#{folder}.tar.bz2")
     rm_rf(folder) unless keep
 end
