@@ -75,6 +75,10 @@ OptionParser.new do |opts|
     opts.on("-r", "--[no-]tar", "Create tarball") do |r|
         $options[:tar] = r
     end
+
+    opts.on("--[no]-notification", "Create file containing information for packagers") do |n|
+        $options[:pkgnotify] = n
+    end
 end.parse!
 
 p $options
