@@ -34,7 +34,7 @@ def fetch_l10n
     @l10n     = []
 
     for lang in l10nlangs
-        next if lang == "x-test" or lang != "de"
+        next if lang == "x-test"
 
         pofilename = "l10n-kde4/#{lang}/messages/#{COMPONENT}-#{SECTION}"
         rm_rf ld

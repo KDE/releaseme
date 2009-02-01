@@ -66,7 +66,6 @@ def sharper(string="")
     while i < l
         string += "#"
         i += 1
-        puts i
     end
     return string + "\n"
 end
