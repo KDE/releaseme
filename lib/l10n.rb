@@ -18,7 +18,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require 'lib/l10ncore.rb'
+require 'lib/l10ncore'
+require 'lib/l10nstat'
+
+include L10nCore
 
 def fetch_l10n
     src_dir
@@ -36,7 +39,7 @@ def fetch_l10n
         pofilename = "l10n-kde4/#{lang}/messages/#{COMPONENT}-#{SECTION}"
         rm_rf ld
         next if %x[svn ls #{@repo}/#{pofilename}].empty?
-        %x[svn co #{@repo}/#{pofilename} #{ld}]
+        system("svn co #{@repo}/#{pofilename} #{ld}")
         exit_checker($?,pofilename)
 
         dest = pd + "/#{lang}"
@@ -60,10 +63,10 @@ def fetch_l10n
 
     if not @l10n.empty? # make sure we actually fetched languages
         # create po's cmake file
-        L10nCore.cmake_creator(dd,lang,true)
+        cmake_creator(pd,lang,true)
 
         # change cmake file
-        L10nCore.cmake_add_sub(dd)
+        cmake_add_sub(pd)
     else
         rm_rf pd
     end
@@ -71,5 +74,5 @@ def fetch_l10n
     rm_rf ld
 
     # the statistics depend on @l10n, so invoking it only within fetch_l10n makes most sense
-    require 'lib/l10nstat' unless $options[:stat] == false and @l10n.empty?
+    l10nstat unless $options[:stat] == false or @l10n.empty?
 end

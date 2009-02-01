@@ -39,7 +39,7 @@ module L10nCore
 
     def cmake_add_sub(dir)
         cmakefile = File.new( "CMakeLists.txt", File::APPEND | File::RDWR )
-        cmakefile << "include(MacroOptionalAddSubdirectory)\n" unless file.read.include?("include(MacroOptionalAddSubdirectory)")
+        cmakefile << "include(MacroOptionalAddSubdirectory)\n" unless cmakefile.read.include?("include(MacroOptionalAddSubdirectory)")
         cmakefile << "macro_optional_add_subdirectory( #{dir} )\n"
         cmakefile.close
     end

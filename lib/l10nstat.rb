@@ -21,6 +21,7 @@
 # TODO: there are some rough edges :-S
 # TODO: needs to go to seperate file
 
+def l10nstat
 @stats   = {}
 @sorter  = {}
 @counter = {"fuzzy"=>0,"untranslated"=>0,"notshown"=>0,"percentage"=>0.0,"language"=>0}
@@ -170,3 +171,4 @@ write_footer
 @file.close
 
 puts("Creation finished...")
+end
