@@ -22,7 +22,7 @@ def fetch_source()
     rm_rf SRC
     rm_rf "#{SRC}.tar.bz2"
 
-    %x[svn -N co #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{SRC}]
+    system("svn co #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{SRC}")
     exit_checker($?,"the whole freaking source tree")
 
     create_changelog()
@@ -88,7 +88,7 @@ private :create_changelog
 # Removes all .svn directories, creates a tar.bz2 and removes the source folder.
 # You probably want to run this command as one of the last actions, since for
 # example tagging heavily depends on the presence of the .svn directories.
-def create_tar(suffix=nil)
+def create_tar(suffix=nil,keep=false)
     base_dir()
     puts("creating tarball...")
     if suffix
@@ -105,7 +105,7 @@ def create_tar(suffix=nil)
     system("bzip2 -9 #{folder}.tar")
     puts("tarball created...")
     create_checksums("#{folder}.tar.bz2")
-    rm_rf(folder)
+    rm_rf(folder) unless keep
 end
 
 # Create and output checksums for the created tarball
@@ -113,8 +113,6 @@ end
 # * SHA1
 def create_checksums(tar)
     @checksums = {} if @checksums == nil
-
-    puts(sharper)
 
     md5sum = %x[md5sum #{tar}]
     puts("MD5Sum: #{md5sum.split(" ")[0]}")

@@ -27,30 +27,31 @@ SECTION   = "multimedia"
 # Amarok-only changes
 # * Change application version to releaseversion
 # * Remove unnecessary files
-def custom()
+def custom
     # Change version
-    src_dir()
+    src_dir
     Dir.chdir("src")
     file = File.new( "Amarok.h", File::RDWR )
-    str = file.read()
-    file.rewind()
+    str = file.read
+    file.rewind
     file.truncate( 0 )
     str.sub!( /APP_VERSION \".*\"/, "APP_VERSION \"#{@version}\"" )
     file << str
-    file.close()
+    file.close
     Dir.chdir("..") #amarok
 
     remover([
         "Amarok.kdev4","release_scripts","supplementary_scripts","HACKING",
         "VIS_PLAN",".krazy","src/.gitignore"
     ])
-    base_dir()
+    base_dir
 
-    create_tar("mac")
+    create_tar("mac",true)
     remover(["src/mac"])
 end
 
-$options = {:version=>"0.1", :user=>"sitter", :branch=>"trunk", :barrier=>75, :protocol=>"svn+ssh"}
+$options = {:version=>"0.1", :user=>"sitter", :branch=>"trunk", :barrier=>75,
+            :protocol=>"svn+ssh"}
 
 # get things started
 require 'lib/starter'
