@@ -149,7 +149,7 @@ def create_packager_notification()
 
     # doc string composer
     unless @docs == nil
-        puts "Parsing documentaton..."
+        puts "Parsing documentation..."
         docstring = "Documentation (#{@docs.count})\n#{sharper}"
         for doc in @docs
             docstring += doc + " "
