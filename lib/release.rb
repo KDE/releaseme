@@ -46,7 +46,7 @@ def create_changelog()
         return
     end
 
-    srcDir()
+    src_dir
 
     puts("running svn2cl...")
     cl = %x[#{svn2cl} --stdout]
