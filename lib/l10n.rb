@@ -39,13 +39,17 @@ def fetch_l10n
         pofilename = "l10n-kde4/#{lang}/messages/#{COMPONENT}-#{SECTION}"
         rm_rf ld
         next if %x[svn ls #{@repo}/#{pofilename}].empty?
+        # do a complete checkout because it is a) faster b) more flexible
         system("svn co #{@repo}/#{pofilename} #{ld}")
         exit_checker($?,pofilename)
 
+        files = Dir.glob("l10n/#{@name.chop}*.po") # chop last char because of kipiplugin(s)
+        next if files == []
+
         dest = pd + "/#{lang}"
         Dir.mkdir dest
-        puts("Copying #{lang}\'s #{@name}.po over ...")
-        mv( Dir.glob("l10n/#{@name.chop}*.po"), dest ) # chop last char because of kipiplugins
+        puts("Copying #{lang}\'s #{@name}.po(s) over ...")
+        mv( files, dest )
         mv( ld + "/.svn", dest )
 
         # create lang's cmake files
