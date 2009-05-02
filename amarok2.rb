@@ -46,12 +46,12 @@ def custom
     ])
     base_dir
 
-    create_tar("mac",true)
-    remover(["src/mac"])
+# reference implementation of multi-tarballing
+#    create_tar("mac",true) # second create_tar gets called by the starter helper
+#    remover(["src/mac"])
 end
 
-$options = {:version=>"0.1", :user=>"sitter", :branch=>"trunk", :barrier=>75,
-            :protocol=>"svn+ssh"}
+$options = {:barrier=>75}
 
 # get things started
 require 'lib/starter'
