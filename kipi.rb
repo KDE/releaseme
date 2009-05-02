@@ -24,6 +24,6 @@ NAME      = "kipi-plugins"
 COMPONENT = "extragear"
 SECTION   = "graphics"
 
-require 'lib/libreleasedigikamkipi.rb'
+require 'lib/releasedigikamkipi.rb'
 
 require 'lib/starter'
