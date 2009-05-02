@@ -66,7 +66,7 @@ def write_footer
     <td align="center" valign="middle" width="163" height="12"><u><i><b>
     #{@counter["notshown"]}</b></i></u></td>
     <td align="center" valign="middle" width="163" height="12"><u><i><b>
-    #{(@counter["percentage"]/@counter["language"]).to_i.to_s + " %"}</b></i></u></td></tr>
+    #{(@counter["percentage"]/@counter["language"] unless @counter["language"] == 0 ).to_i.to_s + " %"}</b></i></u></td></tr>
 EOT
 end
 
@@ -76,18 +76,25 @@ def create_stat( lang )
     values = nil
     translated = fuzzy = untranslated = 0
 
-    data = %x[msgfmt --statistics po/#{lang}/#{@name}.po > /dev/stdout 2>&1]
+    for file in Dir.glob("po/#{lang}/*.po")
+        t = f = u = 0
+        data = %x[LANG=C msgfmt --statistics #{file} > /dev/stdout 2>&1]
 
-    # tear the data apart and create some variables
-    data.split(",").each{|x|
-        if x.include? "untranslated"
-            untranslated = x.scan(/[\d]+/)[0].to_i #don't ask
-        elsif x.include? "fuzzy"
-            fuzzy = x.scan(/[\d]+/)[0].to_i
-        elsif x.include? "translated"
-            translated = x.scan(/[\d]+/)[0].to_i
-        end
-    }
+        # tear the data apart and create some variables
+        data.split(",").each{|x|
+            if x.include? "untranslated"
+                u = x.scan(/[\d]+/)[0].to_i #don't ask
+            elsif x.include? "fuzzy"
+                f = x.scan(/[\d]+/)[0].to_i
+            elsif x.include? "translated"
+                t = x.scan(/[\d]+/)[0].to_i
+            end
+        }
+
+        untranslated += u
+        fuzzy += f
+        translated += t
+    end
 
     notshown = fuzzy + untranslated
     all      = translated + fuzzy + untranslated
@@ -140,6 +147,7 @@ order.each_slice(2){|lang,x|
 
         if $options[:barrier] and per < $options[:barrier]
             @l10n.delete(lang)
+            @counter.delete(lang)
             rm_rf("po/#{lang}")
             puts "WARNING: #{lang} doesn't match the barrier of #{$options[:barrier]}%\n...removed"
             next
