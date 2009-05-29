@@ -63,7 +63,7 @@ def fetch_doc
 
     if not @docs.empty? # make sure we actually fetched docs
         # create doc's cmake file
-        L10nCore.cmake_creator(dd,lang)
+        L10nCore.cmake_creator(dd)
 
         # change cmake file
         L10nCore.cmake_add_sub(dd)

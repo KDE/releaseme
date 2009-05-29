@@ -19,7 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 module L10nCore
-    def cmake_creator(dir,lang,l10n=false)
+    def cmake_creator(dir,l10n=false)
         cmakefile = File.new( "#{dir}/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC )
         if l10n
             cmakefile << "find_package(Gettext REQUIRED)\n"

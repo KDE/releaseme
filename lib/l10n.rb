@@ -65,9 +65,12 @@ def fetch_l10n
         puts "done."
     end
 
+    # the statistics depend on @l10n, so invoking it only within fetch_l10n makes most sense
+    l10nstat unless $options[:stat] == false or @l10n.empty?
+
     if not @l10n.empty? # make sure we actually fetched languages
         # create po's cmake file
-        cmake_creator(pd,lang,true)
+        cmake_creator(pd,true)
 
         # change cmake file
         cmake_add_sub(pd)
@@ -76,7 +79,4 @@ def fetch_l10n
     end
 
     rm_rf ld
-
-    # the statistics depend on @l10n, so invoking it only within fetch_l10n makes most sense
-    l10nstat unless $options[:stat] == false or @l10n.empty?
 end
