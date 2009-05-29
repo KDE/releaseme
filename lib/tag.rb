@@ -49,7 +49,7 @@ def tag_l10n
 
     `svn mkdir -m "Create tag #{NAME} #{@version} po directory" #{tag}`
     `svn up tagging/po`
-    for translation in @l10n do
+    for l10n in @l10n do
         `svn mkdir tagging/po/#{l10n}`
         for f in Dir.glob("po/#{l10n}/#{@name.chop}*.po")
             `svn cp #{f} tagging/po/#{l10n}/`
@@ -87,6 +87,6 @@ end
 # 3. documentation (depends on libl10n)
 def create_tag
     tag_source
-    tag_l10n unless @l10n == nil
-    tag_docs unless @docs == nil
+    tag_l10n unless @l10n.empty?
+    tag_docs unless @docs.empty?
 end
