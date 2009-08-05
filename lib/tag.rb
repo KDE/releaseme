@@ -28,8 +28,7 @@ def tag_source
 
     @tag1 = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}"
 
-    `svn mkdir -m "Create tag #{NAME} #{@version} root directory" #{@tag1}`
-    `svn cp -m "Tag #{NAME} #{@version}." #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{@tag1}`
+    SRCVCS.tagSrc(@tag1)
 end
 
 # Tags translation - 2nd step

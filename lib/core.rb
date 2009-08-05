@@ -31,6 +31,14 @@ SRC      = "#{NAME}-#{@version}"
 BASEPATH = Dir.getwd()
 SRCPATH  = BASEPATH + "/" + SRC
 
+if $srcvcs == "git" then
+    require 'lib/vcs-git.rb'
+    SRCVCS = GIT
+else
+    require 'lib/vcs-svn.rb'
+    SRCVCS = SVN
+end
+
 if @useStable
     branch = "branches/stable"
 elsif @tag and not @tag.empty?()

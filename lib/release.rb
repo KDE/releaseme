@@ -24,7 +24,7 @@ def fetch_source()
         rm_rf f
     end
 
-    system("svn co #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{SRC}")
+    SRCVCS.getSrc(@repo,SRC)
     exit_checker($?,"the whole freaking source tree")
 
     create_changelog()
@@ -103,6 +103,7 @@ def create_tar(suffix=nil,keep=false)
     for psvn in Dir.glob("#{folder}/**/.svn")
         FileUtils.rm_rf(psvn)
     end
+    FileUtils.rm_rf("#{folder}/.git")
     system("tar -cf #{folder}.tar #{folder}")
     system("bzip2 -9 #{folder}.tar")
     puts("tarball created for #{folder}...")

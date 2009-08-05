@@ -24,6 +24,8 @@ NAME      = "amarok"
 COMPONENT = "extragear"
 SECTION   = "multimedia"
 
+$srcvcs   = "git"
+
 # Amarok-only changes
 # * Change application version to releaseversion
 # * Remove unnecessary files
