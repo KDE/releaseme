@@ -22,13 +22,12 @@ module GIT
     module_function
 
     def getSrc(repo,folder)
-        system("git clone nightrose@gitorious.org:#{NAME}/#{NAME}.git #{folder}")
-#         system("git clone git://gitorious.org/#{NAME}/#{NAME}.git #{folder}")
+        system("git clone git://gitorious.org/#{NAME}/#{NAME}.git #{folder}")
     end
 
     def tagSrc(tag)
         version = tag.split("/")[-1]
         %x[git tag -a -m "Tagging #{NAME} #{version}" v#{version}]
-        %x[git push]
+        %x[git push git@gitorious.org:amarok/amarok.git]
     end
 end
