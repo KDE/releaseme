@@ -18,6 +18,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Checks if tagging directory is actually available, if not it will create one
+def check_tag
+    %x[svn ls #{@tag1}]
+    %x[svn mkdir -m "Create tag #{NAME} #{@version} root directory" #{@tag1}] if $? != 0
+end
+
 # Tags actual source content - 1st step
 # * The tag itself will be placed in tags/NAME/VERSION
 # * Therefore the source will be in tags/NAME/VERSION/NAME
@@ -42,6 +48,7 @@ def tag_l10n
     @name = NAME.split("-").join
 
     src_dir
+    check_tag
     `svn co -N #{@tag1} tagging`
 
     tag = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}/po"
@@ -66,6 +73,7 @@ end
 # * Svn cp DOC for all DOCS (provided by libl10n. So, if no translation fetching did happen, it's going o break here)
 def tag_docs
     src_dir
+    check_tag
     `svn co -N #{@tag1} tagging`
 
     tag = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}/po"
