@@ -103,7 +103,11 @@ def create_tar(suffix=nil,keep=false)
     for psvn in Dir.glob("#{folder}/**/.svn")
         FileUtils.rm_rf(psvn)
     end
+    for gi in Dir.glob("#{folder}/**/.gitignore")
+        FileUtils.rm_rf(gi)
+    end
     FileUtils.rm_rf("#{folder}/.git")
+    FileUtils.rm_rf("#{folder}/messages.mo")
     system("tar -cf #{folder}.tar #{folder}")
     system("bzip2 -9 #{folder}.tar")
     puts("tarball created for #{folder}...")
