@@ -44,7 +44,7 @@ def custom
 
     remover([
         "Amarok.kdev4","release_scripts","supplementary_scripts","HACKING",
-        "VIS_PLAN",".krazy","bamboo"
+        "VIS_PLAN",".krazy","bamboo","playground","docs"
     ])
     base_dir
 
