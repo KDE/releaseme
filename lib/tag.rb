@@ -94,6 +94,6 @@ end
 # 3. documentation (depends on libl10n)
 def create_tag
     tag_source
-    tag_l10n unless @l10n.empty?
-    tag_docs unless @docs.empty?
+    tag_l10n unless @l10n == nil or @l10n.empty?
+    tag_docs unless @docs == nil or @docs.empty?
 end
