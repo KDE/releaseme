@@ -26,8 +26,10 @@ module GIT
     end
 
     def tagSrc(tag)
-        version = tag.split("/")[-1]
-        %x[git tag -a -m "Tagging #{NAME} #{version}" v#{version}]
-        %x[git push git@gitorious.org:amarok/amarok.git]
+        puts "To tag with your standard Gitorious project that bans push -f:
+*Ask an admin to uncheck the ban of push -f's
+*git tag v#{tag.split("/")[-1]}
+*git push --tags git://gitorious.org/#{NAME}/#{NAME}.git
+*tell admin to reenable the push -f ban"
     end
 end
