@@ -22,7 +22,11 @@ module SVN
     module_function
 
     def getSrc(repo,folder)
-        %x[svn co #{repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{folder}]
+        unless PATHPREFIX
+            %x[svn co #{repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{folder}]
+        else
+            %x[svn co #{repo}/#{COMPONENT}/#{SECTION}/#{PATHPREFIX}/#{NAME} #{folder}]
+        end
     end
 
     def tagSrc(tag)
