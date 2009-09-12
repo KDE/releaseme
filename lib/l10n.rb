@@ -25,13 +25,13 @@ include L10nCore
 
 def fetch_l10n
     src_dir
-    @name = NAME.split("-").join #strip hyphens (required for kipi-plugins)
     ld    = "l10n"
     pd    = "po"
     Dir.mkdir pd
 
+    pos       = po_finder
     l10nlangs = %x[svn cat #{@repo}/l10n-kde4/subdirs].split("\n")
-    @l10n     = []
+    @l10n     = Array.new
 
     for lang in l10nlangs
         next if lang == "x-test"
@@ -43,12 +43,16 @@ def fetch_l10n
         system("svn co #{@repo}/#{pofilename} #{ld}")
         exit_checker($?,pofilename)
 
-        files = Dir.glob("l10n/#{@name.chop}*.po") # chop last char because of kipiplugin(s)
-        next if files == []
+        files = Array.new
+        pos.each do |po|
+            files << "l10n/#{po}" if File.exist?("l10n/#{po}")
+        end
+        next if files.empty?
 
         dest = pd + "/#{lang}"
         Dir.mkdir dest
-        puts("Copying #{lang}\'s #{@name}.po(s) over ...")
+        p files
+        puts("Copying #{lang}\'s .po(s) over ...")
         mv( files, dest )
         mv( ld + "/.svn", dest )
 
