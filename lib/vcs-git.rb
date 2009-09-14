@@ -28,8 +28,8 @@ module GIT
     def tagSrc(tag)
         puts "To tag with your standard Gitorious project that bans push -f:
 *Ask an admin to uncheck the ban of push -f's
-*git tag v#{tag.split("/")[-1]}
-*git push --tags git://gitorious.org/#{NAME}/#{NAME}.git
+*git tag -a -m \"Some ever nice tage message\" v#{tag.split("/")[-1]}
+*git push --tags git://git@gitorious.org:#{NAME}/#{NAME}.git
 *tell admin to reenable the push -f ban"
     end
 end
