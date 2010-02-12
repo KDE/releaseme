@@ -32,19 +32,17 @@ $srcvcs   = "git"
 def custom
     # Change version
     src_dir
-    Dir.chdir("src")
-    file = File.new( "Amarok.h", File::RDWR )
+    file = File.new( "Version.h", File::RDWR )
     str = file.read
     file.rewind
     file.truncate( 0 )
-    str.sub!( /APP_VERSION \".*\"/, "APP_VERSION \"#{@version}\"" )
+    str.sub!( /AMAROK_VERSION \".*\"/, "AMAROK_VERSION \"#{@version}\"" )
     file << str
     file.close
-    Dir.chdir("..") #amarok
 
     remover([
         "Amarok.kdev4","release_scripts","supplementary_scripts","HACKING",
-        "VIS_PLAN",".krazy","bamboo","playground","docs"
+        "VIS_PLAN",".krazy","bamboo","playground","docs","handbook"
     ])
     base_dir
 
