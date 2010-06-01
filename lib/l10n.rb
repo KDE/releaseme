@@ -45,7 +45,22 @@ def fetch_l10n
 
         files = Array.new
         pos.each do |po|
-            files << "l10n/#{po}" if File.exist?("l10n/#{po}")
+            next if not File.exist?("l10n/#{po}")
+
+            files << "l10n/#{po}"
+
+            # Strip #~ lines, which once were sensible translations, but then the
+            # strings become removed, so they now stick around in case the strings
+            # return, poor souls, waiting forever :(
+            # Problem is that msgfmt does add those to the binary!
+            file = File.new( "l10n/#{po}", File::RDWR )
+            str = file.read
+            file.rewind
+            file.truncate(0)
+            str.gsub!(/#~.*/, "")
+            str = str.strip
+            file << str
+            file.close
         end
         next if files.empty?
 
