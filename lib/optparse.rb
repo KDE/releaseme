@@ -37,6 +37,12 @@ end
 OptionParser.new do |opts|
     opts.banner = "Usage: #{File.basename($0)} [$options]"
 
+    $options[:gitbranch] = cv("gitbranch")
+    opts.on("-gb", "--git-branch BRANCH",
+        "Defines Git branch to release from") do |gb|
+        $options[:gitbranch] = gb.to_s
+    end
+
     $options[:branch] = cv("branch")
     opts.on("-b", "--branch BRANCH", [:trunk, :stable, :tag],
         "Select transfer type (trunk, stable, tag)") do |b|

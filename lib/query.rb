@@ -1,6 +1,6 @@
 # Generic ruby library for KDE extragear/playground releases
 #
-# Copyright (C) 2007-2009 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2007-2010 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -18,9 +18,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+def getGitBranch(branch)
+    branch = $dlg.inputbox("Enter the Git Branch to release from (e.g. master):") unless branch
+
+    $gitbranch = branch
+end
+
 def checkout_location(location)
     location = $dlg.combobox("Select checkout's place:",
     "Trunk Stable Tag") unless location
+
     if location.downcase == "stable"
         @useStable = true
     elsif location.downcase == "tag"

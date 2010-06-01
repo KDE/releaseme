@@ -1,6 +1,6 @@
 # Generic ruby library for KDE extragear/playground releases
 #
-# Copyright (C) 2007-2009 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2007-2010 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -24,6 +24,9 @@ require 'lib/kdialog'
 $dlg = KDialog.new("#{NAME} release script","start-here-kde")
 
 require 'lib/query'
+if $srcvcs == "git"
+    getGitBranch($options[:gitbranch])
+end
 checkout_location($options[:branch])
 release_version($options[:version])
 svn_protocol($options[:protocol])

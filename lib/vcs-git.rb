@@ -1,6 +1,6 @@
 # Generic ruby library for KDE extragear/playground releases
 #
-# Copyright (C) 2009 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2009-2010 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -23,6 +23,11 @@ module GIT
 
     def getSrc(repo,folder)
         system("git clone git://gitorious.org/#{NAME}/#{NAME}.git #{folder}")
+
+        if $gitbranch != nil and $gitbranch != "master"
+            puts "Switching to branch #{$gitbranch}..."
+            system("cd #{folder} && git checkout #{$gitbranch}")
+        end
     end
 
     def tagSrc(tag)
