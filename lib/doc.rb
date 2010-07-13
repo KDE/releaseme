@@ -30,6 +30,14 @@ def fetch_doc
     @docs     = []
 
     system("svn co #{@repo}/#{COMPONENT}/#{SECTION}/doc/#{NAME} doc/en_US")
+
+    # No documentation avilable -> leave me alone
+    if not File.exists?("doc/en_US") then
+        puts("There is no documentation :(")
+        puts("Leave me alone :(")
+        return
+    end
+
     cmakefile = File.new( "doc/en_US/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC )
     cmakefile << "kde4_create_handbook(index.docbook INSTALL_DESTINATION \${HTML_INSTALL_DIR}/\${CURRENT_LANG}/ SUBDIR #{NAME} )\n"
     cmakefile.close
