@@ -24,7 +24,18 @@ NAME      = "muon"
 COMPONENT = "playground"
 SECTION   = "sysadmin"
 
-def custom
+def custom()
+    src_dir
+
+    file = File.new( "src/main.cpp", File::RDWR )
+    str = file.read
+    file.rewind
+    file.truncate( 0 )
+    str.sub!( /static const char version\[\] = \".*\";/, "static const char version[] = \"#{@version}\";" )
+    file << str
+    file.close
+
+    base_dir
 end
 
 # get things started
