@@ -1,6 +1,6 @@
 # Generic ruby library for KDE extragear/playground releases
 #
-# Copyright (C) 2009 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright © 2009-2010 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -23,6 +23,9 @@ require 'optparse'
 
 $options = {} if $options == nil
 @conf = Config::read(".#{NAME}rc") if File.exist? ".#{NAME}rc"
+if @conf == nil
+    @conf = Config::read("#{NAME}rc") if File.exist? "#{NAME}rc"
+end
 
 def cv(keyword)
     return @conf.value("main",keyword) unless @conf == nil
@@ -37,8 +40,14 @@ end
 OptionParser.new do |opts|
     opts.banner = "Usage: #{File.basename($0)} [$options]"
 
+    $options[:customsrc] = cv("customsrc")
+    opts.on("--src PATH",
+        "Defines custom source path to use for fetching") do |cs|
+        $options[:customsrc] = cs.to_s
+    end
+
     $options[:gitbranch] = cv("gitbranch")
-    opts.on("-gb", "--git-branch BRANCH",
+    opts.on("--git-branch BRANCH",
         "Defines Git branch to release from") do |gb|
         $options[:gitbranch] = gb.to_s
     end

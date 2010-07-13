@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 #
-# Generates a release tarball from KDE SVN
+# Generates a release tarball
 #
-# Copyright © 2007-2009 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright © 2010 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -20,38 +20,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-NAME      = "amarok"
+NAME      = "kdevplatform"
 COMPONENT = "extragear"
-SECTION   = "multimedia"
+SECTION   = "sdk"
 
 $srcvcs   = "git"
 
-# Amarok-only changes
-# * Change application version to releaseversion
-# * Remove unnecessary files
 def custom
-    # Change version
-    src_dir
-    file = File.new( "Version.h", File::RDWR )
-    str = file.read
-    file.rewind
-    file.truncate( 0 )
-    str.sub!( /AMAROK_VERSION \".*\"/, "AMAROK_VERSION \"#{@version}\"" )
-    file << str
-    file.close
-
-    remover([
-        "Amarok.kdev4","release_scripts","supplementary_scripts","HACKING",
-        "VIS_PLAN",".krazy","bamboo","playground","docs","handbook"
-    ])
-    base_dir
-
-# reference implementation of multi-tarballing
-#    create_tar("mac",true) # second create_tar gets called by the starter helper
-#    remover(["src/mac"])
 end
-
-$options = {:barrier=>75}
 
 # get things started
 require 'lib/starter'

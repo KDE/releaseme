@@ -1,0 +1,3 @@
+[main]
+customsrc=git://gitorious.org/kdevelop/kdevplatform.git
+doc=false

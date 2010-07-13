@@ -50,12 +50,12 @@ Usage
 Config File
 =================
 Can be used \o/
- => Must be named .NAMErc (e.g. .amarokrc)
+ => Must be named NAMErc (e.g. amarokrc)
  => Must contain a main group (i.e. [main])
  => May manipulate anything argumentable
 
 Example:
-cat .amarokrc
+cat amarokrc
 [main]
 branch=stable
 version=1.0

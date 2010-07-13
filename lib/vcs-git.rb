@@ -1,6 +1,6 @@
 # Generic ruby library for KDE extragear/playground releases
 #
-# Copyright (C) 2009-2010 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright © 2009-2010 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -22,7 +22,11 @@ module GIT
     module_function
 
     def getSrc(repo,folder)
-        system("git clone git://gitorious.org/#{NAME}/#{NAME}.git #{folder}")
+        if ($options[:customsrc] == nil) then
+            system("git clone --depth 1 git://gitorious.org/#{NAME}/#{NAME}.git #{folder}")
+        else
+            system("git clone --depth 1 #{$options[:customsrc]} #{folder}")
+        end
 
         if $gitbranch != nil and $gitbranch != "master"
             puts "Switching to branch #{$gitbranch}..."
