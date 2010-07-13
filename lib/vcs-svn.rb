@@ -22,10 +22,10 @@ module SVN
     module_function
 
     def getSrc(repo,folder)
-        unless PATHPREFIX
-            %x[svn co #{repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{folder}]
-        else
+        begin
             %x[svn co #{repo}/#{COMPONENT}/#{SECTION}/#{PATHPREFIX}/#{NAME} #{folder}]
+        rescue NameError
+            %x[svn co #{repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{folder}]
         end
     end
 
