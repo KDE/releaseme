@@ -24,6 +24,7 @@ NAME      = "kdevplatform"
 COMPONENT = "extragear"
 SECTION   = "sdk"
 
+$: << File.dirname( __FILE__)
 $srcvcs   = "git"
 
 def custom
