@@ -22,7 +22,7 @@
 # Remove unnecessary stuffnot, see <http://www.gnu.org/licenses/>.
 
 NAME      = "choqok"
-COMPONENT = "playground"
+COMPONENT = "extragear"
 SECTION   = "network"
 
 def custom
