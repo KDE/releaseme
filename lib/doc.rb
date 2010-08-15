@@ -50,7 +50,7 @@ def fetch_doc
         # TODO: ruby-svn
         FileUtils.rm_rf( "l10n" )
         %x[svn co #{@repo}/#{docdirname} l10n 2> /dev/null]
-        next unless FileTest.exists?( "l10n" )
+        next unless FileTest.exists?( "l10n/index.docbook" ) # without index the translation is not worth butter
 
         dest = "doc/#{lang}"
         puts("Copying #{lang}'s #{NAME} documentation over...")
