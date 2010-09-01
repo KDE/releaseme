@@ -37,6 +37,15 @@ end
 def create_changelog()
 # TODO: not initialized
     return unless @changelog
+
+    src_dir()
+
+    if File.exist?(@changelog)
+        puts "using given changelog file"
+        copy(@changelog, Dir.pwd)
+        return
+    end
+
     if not %x[which svn2cl.sh] == ""
         svn2cl = "svn2cl.sh"
     elsif not %x[which svn2cl] == ""
@@ -45,8 +54,6 @@ def create_changelog()
         puts "NO svn2cl in your $PATH, can't generate CHANGELOG!"
         return
     end
-
-    src_dir
 
     puts("running svn2cl...")
     cl = %x[#{svn2cl} --stdout]
