@@ -1,2 +1,2 @@
 [main]
-customsrc=/home/me/src/git/amarok
+customsrc=git://git.kde.org/amarok/amarok.git
