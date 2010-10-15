@@ -44,4 +44,4 @@ def custom
     base_dir
 end
 
-require 'lib/starter'
+require './lib/starter'

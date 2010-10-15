@@ -65,8 +65,7 @@ class KDialog
         @selection = @@exit_status[exit] ? selection.chomp : ''
     end
 
-    def combobox(text, list)
-        args = list.sort.join(' ')
+    def combobox(text, args)
         (selection, exit) = perform('--combobox', text, args)
         @selection = @@exit_status[exit] ? selection.chomp : ''
     end
