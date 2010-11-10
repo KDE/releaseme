@@ -24,7 +24,7 @@ def fetch_doc
     src_dir
     ld = "l10n"
     dd = "doc"
-    Dir.mkdir dd
+    Dir.mkdir dd unless File.exists?("doc")
 
     l10nlangs = %x[svn cat #{@repo}/l10n-kde4/subdirs].split("\n")
     @docs     = []
