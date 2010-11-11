@@ -132,6 +132,9 @@ write_header
     create_stat( lang )
 }
 
+# temp debug
+p @sorter
+
 puts "Sorting by percentage..."
 tmp   = @sorter.sort{|a,b| b[1]<=>a[1]}
 order = []
