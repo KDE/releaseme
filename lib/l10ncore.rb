@@ -56,7 +56,8 @@ module L10nCore
         macro = "\ninclude(MacroOptionalAddSubdirectory)\nmacro_optional_add_subdirectory( #{dir} )\n"
         if cmakestr.include?("##{dir.upcase}_SUBDIR")
             cmakestr = cmakestr.sub("##{dir.upcase}_SUBDIR",macro)
-        else
+        # TODO: should be a regex for whitespace lovers
+        elsif not cmakestr.include?("add_subdirectory(#{dir})") and not cmakestr.include?("macro_optional_add_subdirectory(#{dir})")
             cmakestr << macro
         end
         cmakefile << cmakestr
