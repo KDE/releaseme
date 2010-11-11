@@ -105,7 +105,7 @@ def fetch_l10n
 
         dest = pd + "/#{lang}"
         Dir.mkdir dest
-        p files
+
         puts("Copying #{lang}\'s .po(s) over ...")
         mv( files, dest )
         mv( ld + "/.svn", dest ) if $options[:tag] # Must be fatal iff tagging
@@ -117,7 +117,7 @@ def fetch_l10n
         cmakefile.close
 
         # add to SVN in case we are tagging
-        %x[svn add #{dest}/CMakeLists.txt]
+        %x[svn add #{dest}/CMakeLists.txt] if $options[:tag]
         @l10n += [lang]
 
         puts "done."
