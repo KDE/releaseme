@@ -1,0 +1,4 @@
+[main]
+customsrc=git://gitorious.org/~apachelogger/kmess/apacheloggers-likeback.git
+doc=false
+l10n=false
