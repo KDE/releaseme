@@ -29,14 +29,24 @@ $srcvcs   = "git"
 
 def custom()
     src_dir()
+
     file = File.new( "vlc/backend.cpp", File::RDWR )
-    str = file.read
-    file.rewind
+    str = file.read()
+    file.rewind()
     file.truncate( 0 )
-    str.sub!( /setProperty\(\"backendVersion\", QLatin1String\(\".*\"\)\);/, "setProperty(\"backendVersion\", QLatin1String(\"#{@version}\"));" )
+    str.sub!(/setProperty\(\"backendVersion\", QLatin1String\(\".*\"\)\);/, "setProperty(\"backendVersion\", QLatin1String(\"#{@version}\"));")
     file << str
-    file.close
-    base_dir
+    file.close()
+
+    file = File.new( "vlc/vlc.desktop", File::RDWR )
+    str = file.read()
+    file.rewind()
+    file.truncate( 0 )
+    str.sub!(/X-KDE-PhononBackendInfo-Version=.*/, "X-KDE-PhononBackendInfo-Version=#{@version}")
+    file << str
+    file.close()
+
+    base_dir()
 end
 
 # get things started
