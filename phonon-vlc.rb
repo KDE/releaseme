@@ -27,7 +27,16 @@ SECTION   = ""
 $: << File.dirname( __FILE__)
 $srcvcs   = "git"
 
-def custom
+def custom()
+    src_dir()
+    file = File.new( "vlc/backend.cpp", File::RDWR )
+    str = file.read
+    file.rewind
+    file.truncate( 0 )
+    str.sub!( /setProperty\(\"backendVersion\", QLatin1String\(\".*\"\)\);/, "setProperty(\"backendVersion\", QLatin1String(\"#{@version}\"));" )
+    file << str
+    file.close
+    base_dir
 end
 
 # get things started
