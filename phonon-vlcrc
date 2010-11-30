@@ -1,0 +1,4 @@
+[main]
+customsrc=git://gitorious.org/phonon/phonon-vlc.git
+doc=false
+l10n=false
