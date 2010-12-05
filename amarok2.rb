@@ -32,7 +32,7 @@ $srcvcs   = "git"
 def custom
     # Change version
     src_dir
-    file = File.new( "Version.h", File::RDWR )
+    file = File.new( "shared/Version.h", File::RDWR )
     str = file.read
     file.rewind
     file.truncate( 0 )
