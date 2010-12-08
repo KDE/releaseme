@@ -22,7 +22,7 @@ module L10nCore
     def po_finder(pos=Array.new)
         Dir.glob("**/**/Messages.sh").each do |file|
             File.readlines(file).each do |line|
-                line.match(/[\w]*\.pot/).to_a.each do |match|
+                line.match(/[^\/]*\.pot/).to_a.each do |match|
                     pos << match.sub(".pot",".po")
                 end
             end
