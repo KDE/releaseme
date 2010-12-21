@@ -24,6 +24,8 @@ NAME      = "kpackagekit"
 COMPONENT = "playground"
 SECTION   = "sysadmin"
 
+$srcvcs   = "git"
+
 def custom()
     src_dir()
     file = File.new( "libkpackagekit/version.h", File::RDWR )
