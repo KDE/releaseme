@@ -1,0 +1,4 @@
+[main]
+customsrc=git@git.kde.org:phonon-xine
+doc=false
+l10n=false
