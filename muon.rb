@@ -21,8 +21,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 NAME      = "muon"
-COMPONENT = "playground"
+COMPONENT = "extragear"
 SECTION   = "sysadmin"
+
+$srcvcs   = "git"
 
 def custom()
     src_dir
