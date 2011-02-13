@@ -24,6 +24,8 @@ NAME      = "libqapt"
 COMPONENT = "extragear"
 SECTION   = "sysadmin"
 
+$srcvcs   = "git"
+
 def custom()
     src_dir
 
