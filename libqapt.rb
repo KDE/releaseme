@@ -21,8 +21,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 NAME      = "libqapt"
-COMPONENT = "playground"
-SECTION   = "libs"
+COMPONENT = "extragear"
+SECTION   = "sysadmin"
 
 def custom()
     src_dir
