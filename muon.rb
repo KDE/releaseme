@@ -29,7 +29,7 @@ $srcvcs   = "git"
 def custom()
     src_dir
 
-    file = File.new( "src/main.cpp", File::RDWR )
+    file = File.new( "muon/main.cpp", File::RDWR )
     str = file.read
     file.rewind
     file.truncate( 0 )
