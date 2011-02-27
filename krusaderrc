@@ -1,0 +1,7 @@
+[main]
+customsrc=git@git.kde.org:krusader
+doc=true
+l10n=true
+protocol=anonsvn
+branch=trunk
+version=2.3.0-beta1
