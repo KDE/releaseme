@@ -1,0 +1,7 @@
+[main]
+customsrc=git@git.kde.org:nepomukextras
+doc=false
+l10n=true
+protocol=anonsvn
+branch=trunk
+gitbranch=master
