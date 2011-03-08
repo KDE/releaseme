@@ -17,13 +17,13 @@
 # with this program; if not, write to the Free Software Foundation, Inc., 675
 # Mass Ave, Cambridge, MA 02139, USA.
 #
-# See Config for class documentation.
+# See ReleasemeConfig for class documentation.
 #
 # History:
 #    v0.1.0	alpha code	Sat May  7 23:39:59 IST 2005 bsd
 #    v0.1.2	bugfix, rdoc	Sun May 22 01:01:33 IST 2005 bsd
 
-# = Config
+# = ReleasemeConfig
 #
 # == What is This Library?
 #
@@ -46,7 +46,7 @@
 #
 #     require 'config'
 #
-#     conf = Config::read('/etc/yate/h343chan.conf')
+#     conf = ReleasemeConfig::read('/etc/yate/h343chan.conf')
 #     conf.cat				# -> <<EOT
 #
 #     [ep]
@@ -77,7 +77,7 @@
 #     conf.section?('outgoing')		# -> false
 #     conf.value?('ep','name')		# -> false
 #
-class Config
+class ReleasemeConfig
     # User definable +operator+, e.g. '=>', ':=' or ':' etc., default is '='.
     attr_accessor :operator
 
@@ -119,7 +119,7 @@ class Config
 	end
     end
 
-    # A wrapper method to trick out +Config#new+ and read in a configuration
+    # A wrapper method to trick out +ReleasemeConfig#new+ and read in a configuration
     # +file+ directly.
     def self.read(file, operator = '=')
 	self.new(file, operator)
