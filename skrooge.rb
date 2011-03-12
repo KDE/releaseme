@@ -19,7 +19,7 @@ def custom
 
     # Remove unnecessary stuff
     remover([
-        "20101101-presentation skrooge.odp","20110319-KDE4.6 release party-skrooge.odp"
+        "examples"
     ])
 
     base_dir    
