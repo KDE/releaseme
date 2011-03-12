@@ -22,9 +22,9 @@ require 'lib/config'
 require 'optparse'
 
 $options = {} if $options == nil
-@conf = Config::read(".#{NAME}rc") if File.exist? ".#{NAME}rc"
+@conf = ReleasemeConfig::read(".#{NAME}rc") if File.exist? ".#{NAME}rc"
 if @conf == nil
-    @conf = Config::read("#{NAME}rc") if File.exist? "#{NAME}rc"
+    @conf = ReleasemeConfig::read("#{NAME}rc") if File.exist? "#{NAME}rc"
 end
 
 def cv(keyword)
