@@ -1,0 +1,7 @@
+[main]
+customsrc=git@git.kde.org:kplayer
+doc=ture
+l10n=true
+protocol=anonsvn
+branch=trunk
+version=0.7.1
