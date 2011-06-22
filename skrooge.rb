@@ -14,12 +14,21 @@ def custom
     file.rewind
     file.truncate( 0 )
     str.sub!( /SKG_VERSION \".*\"/, "SKG_VERSION \"#{@version}\"" )
+    str.sub!( /Build the test\" ON/, "Build the test\" OFF" )
     file << str
     file.close
 
     # Remove unnecessary stuff
     remover([
-        "examples"
+        "examples",
+        "skgbasemodelertest",
+        "skgbankmodelertest",
+        "skgbaseguitest",
+        "skgbankguitest",
+        "skroogetest",
+        "skgmyapplitest",
+        "tests",
+        "templates"
     ])
 
     base_dir    
