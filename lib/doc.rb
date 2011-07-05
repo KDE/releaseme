@@ -32,10 +32,18 @@ def fetch_doc
     system("svn co #{@repo}/#{COMPONENT}/#{SECTION}/doc/#{NAME} doc/en_US")
 
     # No documentation avilable -> leave me alone
-    if not File.exists?("doc/en_US") then
+    if not (File.exists?("doc/en_US") or File.exists?("doc/index.docbook")) then
         puts("There is no documentation :(")
         puts("Leave me alone :(")
         return
+    end
+
+    # On git a layout doc/{file,file,file} may appear, in this case we move stuff
+    # to en_US
+    if File.exists?("doc/index.docbook") and not File.exists?("doc/en_US") then
+        files = Dir.glob('doc/**/*')
+        Dir.mkdir('doc/en_US')
+        FileUtils.mv(files, 'doc/en_US')
     end
 
     cmakefile = File.new( "doc/en_US/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC )
