@@ -65,7 +65,7 @@ def fetch_l10n_single(ld, pos, lang)
         # fails then we have to assume the file is not present in SVN.
         # Of course it still might, but the connection could be busted, but that
         # is a lot less likely to be the case for 2 independent commands.
-        if ret != 0 && not gotInfo
+        if not gotInfo && ret != 0
             system("svn info #{@repo}/#{pofiledir}/#{pofilename}")
             # If the info also failed, declare the file as not existant and
             # prevent a retry dialog annoyance.
@@ -120,11 +120,11 @@ def fetch_l10n
     for lang in l10nlangs
         next if lang == "x-test"
 
-#         if multiple
-#             files = fetch_l10n_multiple(ld, pos, lang)
-#         else
-            files = fetch_l10n_single(ld, pos, lang)
-#         end
+        if multiple
+            files = fetch_l10n_multiple(ld, pos, lang)
+        else
+           files = fetch_l10n_single(ld, pos, lang)
+        end
 
         next if files.empty?
 
