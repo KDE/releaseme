@@ -42,13 +42,37 @@ def strip_comments(file)
     file.close
 end
 
+def retry_cmd?(exit_code, thing)
+    if exit_code != 0
+        retry_ = $dlg.yesnocancel("Fetching of #{thing} failed.", "Retry", "Skip")
+        puts retry_
+        exit 1 if retry_.nil?
+        return retry_
+    end
+    return false
+end
+
 def fetch_l10n_single(ld, pos, lang)
     pofiledir = pofiledir?(lang)
     pofilename = pos[0] #
     rm_rf ld
     Dir.mkdir(ld)
-    system("svn export #{@repo}/#{pofiledir}/#{pofilename} #{ld}/#{pofilename}")
-    # Do not exit check here, since a failed co on 
+    gotInfo = false
+    begin
+        system("svn export #{@repo}/#{pofiledir}/#{pofilename} #{ld}/#{pofilename}")
+        ret = $?
+        # If the export failed, try to see if there is a file, if this command also
+        # fails then we have to assume the file is not present in SVN.
+        # Of course it still might, but the connection could be busted, but that
+        # is a lot less likely to be the case for 2 independent commands.
+        if not gotInfo && ret != 0
+            system("svn info #{@repo}/#{pofiledir}/#{pofilename}")
+            # If the info also failed, declare the file as not existant and
+            # prevent a retry dialog annoyance.
+            break if $? != 0
+            gotInfo = true
+        end
+    end while retry_cmd?(ret, "#{pofiledir}/#{pofilename}")
 
     files = Array.new
     if File.exist?("#{ld}/#{pofilename}")
@@ -62,8 +86,9 @@ def fetch_l10n_multiple(ld, pos, lang)
     pofiledir = pofiledir?(lang)
     rm_rf ld
     return Array.new if %x[svn ls #{@repo}/#{pofiledir}].empty?
-    system("svn co #{@repo}/#{pofiledir} #{ld}")
-    exit_checker($?,pofiledir)
+    begin
+        system("svn co #{@repo}/#{pofiledir} #{ld}")
+    end while retry_cmd?($?, pofiledir)
 
     files = Array.new
     pos.each do |po|
@@ -98,7 +123,7 @@ def fetch_l10n
         if multiple
             files = fetch_l10n_multiple(ld, pos, lang)
         else
-            files = fetch_l10n_single(ld, pos, lang)
+           files = fetch_l10n_single(ld, pos, lang)
         end
 
         next if files.empty?

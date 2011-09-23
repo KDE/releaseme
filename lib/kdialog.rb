@@ -35,6 +35,16 @@ class KDialog
         @selection = @@exit_status[exit]
     end
 
+    def yesnocancel(text, yes_label = nil, no_label = nil)
+        cmd = ''
+        cmd += " --yes-label \"#{yes_label}\"" unless (yes_label.nil?)
+        cmd += " --no-label  \"#{no_label} \"" unless (no_label.nil?)
+        cmd += ' --yesnocancel'
+        exit = perform(cmd, text)[1]
+        @selection = @@exit_status[exit]
+    end
+
+
     def warningyesno(text)
         exit = perform('--warningyesno', text)[1]
         @selection = @@exit_status[exit]
