@@ -21,12 +21,6 @@ def custom
     # Remove unnecessary stuff
     remover([
         "examples",
-        "skgbasemodelertest",
-        "skgbankmodelertest",
-        "skgbaseguitest",
-        "skgbankguitest",
-        "skroogetest",
-        "skgmyapplitest",
         "tests",
         "templates"
     ])
@@ -34,6 +28,6 @@ def custom
     base_dir    
 end
 
-#$options = {:barrier=>75}
+$options = {:barrier=>75}
 
 require 'lib/starter'
