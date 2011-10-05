@@ -78,7 +78,7 @@ def create_stat( lang )
 
     for file in Dir.glob("po/#{lang}/*.po")
         t = f = u = 0
-        data = %x[LANG=C msgfmt --statistics #{file} > /dev/stdout 2>&1]
+        data = %x[LC_ALL=C LANG=C msgfmt --statistics #{file} > /dev/stdout 2>&1]
 
         # tear the data apart and create some variables
         data.split(",").each{|x|
