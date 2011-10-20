@@ -28,11 +28,11 @@ $srcvcs   = "git"
 
 def custom()
     src_dir()
-    file = File.new( "libkpackagekit/version.h", File::RDWR )
+    file = File.new( "libapper/version.h", File::RDWR )
     str = file.read()
     file.rewind()
     file.truncate(0)
-    str.sub!(/#define KPK_VERSION \".*\"/, "#define KPK_VERSION \"#{@version}\"")
+    str.sub!(/#define APP_VERSION \".*\"/, "#define APP_VERSION \"#{@version}\"")
     file << str
     file.close()
     base_dir()
