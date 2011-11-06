@@ -70,7 +70,7 @@ def changelog(cl)
         @changelog = nil
         return
     end
-    if not File.exists(@changelog)
+    if not File.exists?(@changelog)
         unless $dlg.yesno("Create changelog using svn2cl?<br /><br /><b>Note:</b>
         this will commit the changelog right after creating it,<br />so only use this
         feature when you really want to do a release")
