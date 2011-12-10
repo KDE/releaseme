@@ -1,0 +1,8 @@
+[main]
+customsrc=git@git.kde.org:rekonq
+doc=true
+l10n=true
+protocol=anonsvn
+branch=trunk
+gitbranch=Branches.0.8
+version=0.8.1
