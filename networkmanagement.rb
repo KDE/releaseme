@@ -24,7 +24,7 @@ NAME      = "networkmanagement"
 COMPONENT = "extragear"
 SECTION   = "base"
 
-$: << File.dirname( __FILE__)
+#$: << File.dirname( __FILE__)
 $srcvcs   = "git"
 
 def custom
