@@ -22,7 +22,7 @@
 
 NAME      = "kdevelop-php-docs"
 COMPONENT = "extragear"
-SECTION   = "sdk"
+SECTION   = "kdevelop"
 
 $srcvcs   = "git"
 

@@ -22,7 +22,7 @@
 
 NAME      = "kdevelop"
 COMPONENT = "extragear"
-SECTION   = "sdk"
+SECTION   = "kdevelop"
 
 $: << File.dirname( __FILE__)
 $srcvcs   = "git"
