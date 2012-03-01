@@ -5,4 +5,4 @@ l10n=true
 protocol=anonsvn
 branch=trunk
 gitbranch=Branches.0.9
-version=0.8.90
+version=0.9.0
