@@ -1,0 +1,10 @@
+[main]
+#customsrc=git@git.kde.org:kdenlive
+#anonymous checkout
+customsrc=git://anongit.kde.org/kdenlive
+doc=true
+l10n=true
+protocol=anonsvn
+branch=trunk
+gitbranch=master
+version=0.8.3-git
