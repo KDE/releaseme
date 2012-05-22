@@ -33,13 +33,21 @@ module L10nCore
     def cmake_creator(dir,l10n=false)
         cmakefile = File.new( "#{dir}/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC )
         if l10n
-            cmakefile << "find_package(Gettext REQUIRED)\n"
-            cmakefile << "if (NOT GETTEXT_MSGMERGE_EXECUTABLE)\n"
-            cmakefile << "MESSAGE(FATAL_ERROR \"Please install msgmerge binary\")\n"
-            cmakefile << "endif (NOT GETTEXT_MSGMERGE_EXECUTABLE)\n"
-            cmakefile << "if (NOT GETTEXT_MSGFMT_EXECUTABLE)\n"
-            cmakefile << "MESSAGE(FATAL_ERROR \"Please install msgmerge binary\")\n"
-            cmakefile << "endif (NOT GETTEXT_MSGFMT_EXECUTABLE)\n"
+            cmakefile.write <<-EOF
+# The pofiles macro creates in some versions same name targets
+# which since cmake 2.8 leads to target clashes.
+# Hence force the old policy for all po directories.
+# http://public.kitware.com/Bug/view.php?id=12952
+cmake_policy(SET CMP0002 OLD)
+
+find_package(Gettext REQUIRED)
+if (NOT GETTEXT_MSGMERGE_EXECUTABLE)
+MESSAGE(FATAL_ERROR "Please install msgmerge binary")
+endif (NOT GETTEXT_MSGMERGE_EXECUTABLE)
+if (NOT GETTEXT_MSGFMT_EXECUTABLE)
+MESSAGE(FATAL_ERROR "Please install msgmerge binary")
+endif (NOT GETTEXT_MSGFMT_EXECUTABLE)
+            EOF
         end
         Dir.foreach(dir) {|lang|
             next if lang == '.' or lang == '..' or lang == 'CMakeLists.txt'
