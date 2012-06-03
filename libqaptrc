@@ -1,0 +1,6 @@
+[main]
+customsrc=git@git.kde.org:libqapt
+doc=false
+l10n=true
+protocol=anonsvn
+gitbranch=1.3
