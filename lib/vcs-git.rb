@@ -22,15 +22,14 @@ module GIT
     module_function
 
     def getSrc(repo,folder)
-        if ($options[:customsrc] == nil) then
-            system("git clone --depth 1 git://gitorious.org/#{NAME}/#{NAME}.git #{folder}")
-        else
-            system("git clone --depth 1 #{$options[:customsrc]} #{folder}")
-        end
+        branch = "master"
+        branch = $gitbranch if $gitbranch != nil
 
-        if $gitbranch != nil and $gitbranch != "master"
-            puts "Switching to branch #{$gitbranch}..."
-            system("cd #{folder} && git checkout #{$gitbranch}")
+        puts "Shallow cloning branch #{branch}..."
+        if ($options[:customsrc] == nil) then
+            system("git clone --branch #{branch} --depth 1 git://gitorious.org/#{NAME}/#{NAME}.git #{folder}")
+        else
+            system("git clone --branch #{branch} --depth 1 #{$options[:customsrc]} #{folder}")
         end
     end
 
