@@ -148,7 +148,7 @@ puts "Writing the statistics..."
 order.each_slice(2){|lang,x|
     @stats[lang].each_slice(5){| fuzzy, untranslated, notshown, per, fcolor |
 
-        if $options[:barrier] and per < $options[:barrier]
+        if $options[:barrier] and per < Float($options[:barrier])
             @l10n.delete(lang)
             @counter.delete(lang)
             rm_rf("po/#{lang}")
