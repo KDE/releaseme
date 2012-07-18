@@ -51,7 +51,5 @@ def custom
 #    remover(["src/mac"])
 end
 
-$options = {:barrier=>75}
-
 # get things started
 require 'lib/starter'

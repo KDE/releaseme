@@ -1,2 +1,6 @@
 [main]
 customsrc=git@git.kde.org:amarok
+branch=trunk
+gitbranch=master
+protocol=svn+ssh
+barrier=75
