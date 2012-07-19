@@ -58,7 +58,7 @@ end
 def write_footer
     @file.print <<EOT
     <tr><td align="left" valign="middle" width="60" height="12">
-    <u><i><b>#{@counter["language"]}</b></i></u></td>
+    <u><i><b>#{@counter["language"]}</b></i></u> included</td>
     <td align="center" valign="middle" width="142" height="12"><u><i><b>
     #{@counter["fuzzy"]}</b></i></u></td>
     <td align="center" valign="middle" width="168" height="12"><u><i><b>
@@ -148,19 +148,20 @@ puts "Writing the statistics..."
 order.each_slice(2){|lang,x|
     @stats[lang].each_slice(5){| fuzzy, untranslated, notshown, per, fcolor |
 
+        excluded = ""
         if $options[:barrier] and per < Float($options[:barrier])
             @l10n.delete(lang)
             @counter.delete(lang)
             rm_rf("po/#{lang}")
             puts "WARNING: #{lang} doesn't match the barrier of #{$options[:barrier]}%\n...removed"
-            next
+            excluded = "(excluded)"
+        else
+            @counter["fuzzy"]        = @counter["fuzzy"] + fuzzy if fuzzy
+            @counter["untranslated"] = @counter["untranslated"] + untranslated if untranslated
+            @counter["notshown"]     = @counter["notshown"] + notshown if notshown
+            @counter["percentage"]   = @counter["percentage"] + per if per
+            @counter["language"]     = @counter["language"] + 1
         end
-
-        @counter["fuzzy"]        = @counter["fuzzy"] + fuzzy if fuzzy
-        @counter["untranslated"] = @counter["untranslated"] + untranslated if untranslated
-        @counter["notshown"]     = @counter["notshown"] + notshown if notshown
-        @counter["percentage"]   = @counter["percentage"] + per if per
-        @counter["language"]     = @counter["language"] + 1
 
         @file.print <<EOT
         <tr><td align="left" valign="middle" width="60" height="12">
@@ -172,7 +173,7 @@ order.each_slice(2){|lang,x|
         <td align="center" valign="middle" width="163" height="12">
         <font color="#{fcolor}">#{notshown}</font></td>
         <td align="center" valign="middle" width="163" height="12">
-        <font color="#{fcolor}">#{per.to_i.to_s + " %"}</font></td></tr>
+        <font color="#{fcolor}">#{per.to_i.to_s + " %"} #{excluded}</font></td></tr>
 EOT
     }
 }
