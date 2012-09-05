@@ -21,7 +21,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 NAME      = "apper"
-COMPONENT = "playground"
+COMPONENT = "extragear"
 SECTION   = "sysadmin"
 
 $srcvcs   = "git"
@@ -39,4 +39,4 @@ def custom()
 end
 
 # get things started
-require 'lib/starter'
+require './lib/starter'
