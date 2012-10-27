@@ -1,0 +1,3 @@
+[main]
+customsrc=git@git.kde.org:kdev-xdebug
+doc=false
