@@ -30,11 +30,11 @@ $srcvcs   = "git"
 def custom
     # Change version
     src_dir
-    file = File.new( "main.cpp", File::RDWR )
+    file = File.new( "version.h.in", File::RDWR )
     str = file.read
-    file.rewind
-    file.truncate( 0 )
-    str.sub!( /"GIT"/, "\"#{@version}\"" )
+    file.close
+    file = File.new( "version.h", File::RDWR|File::CREAT|File::TRUNC, 0644 )
+    str.sub!( /"@KPA_VERSION@"/, "\"#{@version}\"" )
     file << str
     file.close
 
