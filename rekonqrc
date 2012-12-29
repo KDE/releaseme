@@ -6,3 +6,4 @@ protocol=anonsvn
 branch=trunk
 gitbranch=master
 version=2.0
+barrier=75
