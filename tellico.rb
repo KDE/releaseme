@@ -27,4 +27,4 @@ end
 
 #$options = {:barrier=>75}
 
-require 'lib/starter'
+require_relative 'lib/starter'
