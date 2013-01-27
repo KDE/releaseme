@@ -5,5 +5,5 @@ l10n=true
 protocol=anonsvn
 branch=trunk
 gitbranch=master
-version=2.0
+version=2.1
 barrier=75
