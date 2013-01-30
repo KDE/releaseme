@@ -1,5 +1,5 @@
 [main]
-customsrc=git@git.kde.org:kwebkitpart
+customsrc=git://anongit.kde.org/kwebkitpart
 doc=false
 l10n=true
 protocol=anonsvn
