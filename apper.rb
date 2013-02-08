@@ -27,15 +27,17 @@ SECTION   = "sysadmin"
 $srcvcs   = "git"
 
 def custom()
-    src_dir()
-    file = File.new( "libapper/version.h", File::RDWR )
-    str = file.read()
-    file.rewind()
-    file.truncate(0)
-    str.sub!(/#define APP_VERSION \".*\"/, "#define APP_VERSION \"#{@version}\"")
+    src_dir
+
+    file = File.new( "CMakeLists.txt", File::RDWR )
+    str = file.read
+    file.rewind
+    file.truncate( 0 )
+    str.sub!( /set\(APP_VERSION .*\)/, "set(APP_VERSION #{@version})" )
     file << str
-    file.close()
-    base_dir()
+    file.close
+
+    base_dir
 end
 
 # get things started
