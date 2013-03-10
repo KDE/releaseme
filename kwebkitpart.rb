@@ -29,6 +29,9 @@ SECTION   = "base"
 $srcvcs   = "git"
 
 def custom
+    remover([
+        "kdelauncher","tests","scripts"
+    ])
 end
 
 # get things started
