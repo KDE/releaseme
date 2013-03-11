@@ -27,7 +27,7 @@ module L10nCore
                 end
             end
         end
-        return pos
+        return pos.uniq
     end
 
     def cmake_creator(dir,l10n=false)
