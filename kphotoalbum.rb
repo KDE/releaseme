@@ -30,13 +30,16 @@ $srcvcs   = "git"
 def custom
     # Change version
     src_dir
-    file = File.new( "main.cpp", File::RDWR )
+    file = File.new( "version.h.in", File::RDWR )
     str = file.read
-    file.rewind
-    file.truncate( 0 )
-    str.sub!( /"GIT"/, "\"#{@version}\"" )
+    file.close
+    file = File.new( "version.h", File::RDWR|File::CREAT|File::TRUNC, 0644 )
+    str.sub!( /"@KPA_VERSION@"/, "\"#{@version}\"" )
     file << str
     file.close
+
+    # Fix the CMakeLists as translated documentation is included in
+    # releases
 
     file = File.new( "CMakeLists.txt", File::RDWR )
     str = file.read
@@ -45,6 +48,29 @@ def custom
     str.sub!( /add_subdirectory\( doc \)/, "" )
     file << str
     file.close
+
+
+    # A hack to make sure a couple of possibly missing entities used in
+    # our translated documentation don't break the compilation on some
+    # older systems
+
+    file = File.new( "doc/nl/index.docbook", File::RDWR )
+    str = file.read
+    file.rewind
+    file.truncate( 0 )
+    str.sub!( /\]>/, "  <!ENTITY ged.vertaald           '<othercredit role=\"translator\"><firstname>Dit document is nog maar gedeeltelijk vertaald.</firstname> <surname>Wilt u meehelpen, stuur een bericht naar:</surname><affiliation><address> <email>kde-i18n-nl@kde.org</email></address></affiliation> <contrib>Nieuwe vertaler</contrib></othercredit>'>\n]>" )
+    file << str
+    file.close
+
+    file = File.new( "doc/fr/index.docbook", File::RDWR )
+    str = file.read
+    file.rewind
+    file.truncate( 0 )
+    str.sub!( /\]>/, "  <!ENTITY traducteurXavierBesnard       '<othercredit role=\"translator\"><firstname>Xavier</firstname><surname>Besnard</surname><affiliation><address><email>ktranslator31@yahoo.fr</email></address></affiliation><contrib>Traduction française&nbsp;</contrib></othercredit>'>\n]>" )
+    file << str
+    file.close
+
+    # end hack
 end
 
 $options = {:barrier=>75}

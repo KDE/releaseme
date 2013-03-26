@@ -1,9 +1,8 @@
 [main]
-customsrc=git@git.kde.org:rekonq
+customsrc=git@git.kde.org:wacomtablet
 doc=true
+stat=false
 l10n=true
 protocol=anonsvn
 branch=trunk
 gitbranch=master
-version=2.1
-barrier=75

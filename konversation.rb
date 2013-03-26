@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Generates a release tarball
-#
-# Copyright © 2010 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright © 2007-2013 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -20,25 +18,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-NAME      = "apper"
+NAME      = "konversation"
 COMPONENT = "extragear"
-SECTION   = "sysadmin"
+SECTION   = "network"
 
+$: << File.dirname( __FILE__)
 $srcvcs   = "git"
 
-def custom()
-    src_dir
-
-    file = File.new( "CMakeLists.txt", File::RDWR )
-    str = file.read
-    file.rewind
-    file.truncate( 0 )
-    str.sub!( /set\(APP_VERSION .*\)/, "set(APP_VERSION #{@version})" )
-    file << str
-    file.close
-
+def custom
+    remover([
+    ])
     base_dir
 end
 
 # get things started
-require './lib/starter'
+require 'lib/starter'
