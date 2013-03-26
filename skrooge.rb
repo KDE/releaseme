@@ -4,6 +4,7 @@ NAME      = "skrooge"
 COMPONENT = "extragear"
 SECTION   = "office"
 
+$: << File.dirname( __FILE__)
 $srcvcs   = "git"
 
 def custom
