@@ -1,5 +1,5 @@
 [main]
-customsrc=git@git.kde.org:skrooge
+customsrc=git://anongit.kde.org/skrooge
 doc=true
 l10n=true
 protocol=anonsvn
