@@ -1,0 +1,7 @@
+[main]
+customsrc=git://anongit.kde.org/libnm-qt
+l10n=false
+doc=false
+gitbranch=master
+branch=trunk
+protocol=anonsvn
