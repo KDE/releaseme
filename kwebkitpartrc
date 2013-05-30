@@ -5,4 +5,4 @@ l10n=true
 protocol=anonsvn
 branch=stable
 gitbranch=1.3
-version=1.3.2
+version=1.3.3
