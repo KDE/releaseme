@@ -1,6 +1,6 @@
 [main]
 customsrc=git@git.kde.org:k3b
-doc=false
+doc=true
 l10n=true
 protocol=anonsvn
 branch=stable
