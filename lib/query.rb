@@ -56,8 +56,7 @@ def svn_username(user)
         @protocol = "svn"
         user = "anonsvn"
     else
-        user = $dlg.inputbox("Your SVN username:") unless user
-        user += "@svn"
+        user = "svn@svn"
     end
     @user = user
 end
