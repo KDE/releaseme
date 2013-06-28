@@ -70,11 +70,6 @@ OptionParser.new do |opts|
         $options[:protocol] = pr.to_s
     end
 
-    $options[:user] = cv("user")
-    opts.on("-u", "--user USER", "Set SVN username (not necessary if protocol is anonsvn)") do |u|
-        $options[:user] = u
-    end
-
     $options[:changelog] = cv("changelog")
     opts.on("-c", "--changelog CHANGELOG", "Set changelog file name") do |c|
         $options[:changelog] = c
