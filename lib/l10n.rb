@@ -24,6 +24,9 @@ require 'lib/l10nstat'
 include L10nCore
 
 def pofiledir?(lang)
+    if SECTION.nil? or SECTION.empty? # e.g. kdereview
+        return "l10n-kde4/#{lang}/messages/#{COMPONENT}"
+    end
     return "l10n-kde4/#{lang}/messages/#{COMPONENT}-#{SECTION}"
 end
 

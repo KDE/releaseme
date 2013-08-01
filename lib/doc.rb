@@ -54,7 +54,11 @@ def fetch_doc
     for lang in l10nlangs
         lang.chomp!
 
-        docdirname = "l10n-kde4/#{lang}/docs/#{COMPONENT}-#{SECTION}/#{NAME}"
+        if SECTION.nil? or SECTION.empty? # e.g. kdereview
+            docdirname = "l10n-kde4/#{lang}/docs/#{COMPONENT}/#{NAME}"
+        else
+            docdirname = "l10n-kde4/#{lang}/docs/#{COMPONENT}-#{SECTION}/#{NAME}"
+        end
         # TODO: ruby-svn
         FileUtils.rm_rf( "l10n" )
         %x[svn co #{@repo}/#{docdirname} l10n 2> /dev/null]
