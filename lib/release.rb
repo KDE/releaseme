@@ -107,11 +107,14 @@ def create_tar(suffix=nil,keep=false)
     else
         folder = SRC
     end
-    for psvn in Dir.glob("#{folder}/**/.svn")
-        FileUtils.rm_rf(psvn)
+    for dot_svn in Dir.glob("#{folder}/**/.svn")
+        FileUtils.rm_rf(dot_svn)
     end
-    for gi in Dir.glob("#{folder}/**/.gitignore")
-        FileUtils.rm_rf(gi)
+    for dot_git in Dir.glob("#{folder}/**/.gitignore")
+        FileUtils.rm_rf(dot_git)
+    end
+    for dot_krazy in Dir.glob("#{folder}/**/.krazy")
+        FileUtils.rm_rf(dot_krazy)
     end
     FileUtils.rm_rf("#{folder}/.git")
     FileUtils.rm_rf("#{folder}/messages.mo")
