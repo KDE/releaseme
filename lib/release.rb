@@ -126,20 +126,26 @@ def create_tar(suffix=nil,keep=false)
 end
 
 # Create and output checksums for the created tarball
-# * MD5
+# * SHA256
 # * SHA1
+# * MD5
 def create_checksums(tar)
     @checksums = {} if @checksums == nil
 
-    md5sum = %x[md5sum #{tar}]
-    puts("MD5Sum: #{md5sum.split(" ")[0]}")
+    sha256sum = %x[sha256sum #{tar}]
+    puts("SHA256Sum: #{sha256sum.split(" ")[0]}")
 
     sha1sum = %x[sha1sum #{tar}]
     puts("SHA1Sum: #{sha1sum.split(" ")[0]}")
 
+    md5sum = %x[md5sum #{tar}]
+    puts("MD5Sum: #{md5sum.split(" ")[0]}")
+
+
     @checksums[tar] = {
-        "MD5Sum" => md5sum,
+        "SHA256Sum" => sha256sum,
         "SHA1Sum" => sha1sum,
+        "MD5Sum" => md5sum,
     }
 end
 
