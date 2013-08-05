@@ -20,7 +20,7 @@
 
 def fetch_source()
     rm_rf SRC
-    for f in Dir.glob("#{SRC}*.tar.bz2")
+    for f in Dir.glob("#{SRC}*.tar.xz")
         rm_rf f
     end
 
@@ -94,7 +94,7 @@ def create_changelog()
 end
 private :create_changelog
 
-# Removes all .svn directories, creates a tar.bz2 and removes the source folder.
+# Removes all .svn directories, creates a tar.xz and removes the source folder.
 # You probably want to run this command as one of the last actions, since for
 # example tagging heavily depends on the presence of the .svn directories.
 def create_tar(suffix=nil,keep=false)
@@ -119,9 +119,9 @@ def create_tar(suffix=nil,keep=false)
     FileUtils.rm_rf("#{folder}/.git")
     FileUtils.rm_rf("#{folder}/messages.mo")
     system("tar -cf #{folder}.tar #{folder}")
-    system("bzip2 -9 #{folder}.tar")
+    system("xz -9 #{folder}.tar")
     puts("tarball created for #{folder}...")
-    create_checksums("#{folder}.tar.bz2")
+    create_checksums("#{folder}.tar.xz")
     rm_rf(folder) unless keep
 end
 
