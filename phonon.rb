@@ -28,6 +28,9 @@ $: << File.dirname( __FILE__)
 $srcvcs   = "git"
 
 def custom
+    remover([
+        ".krazy"
+    ])
 end
 
 # get things started
