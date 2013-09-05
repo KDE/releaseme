@@ -1,0 +1,5 @@
+[main]
+customsrc=kde:kdeconnect-kde
+branch=trunk
+gitbranch=techpreview
+protocol=svn+ssh
