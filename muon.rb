@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 #
 # Generates a release tarball
 #
@@ -41,4 +42,4 @@ def custom()
 end
 
 # get things started
-require 'lib/starter'
+require File.join(File.dirname(__FILE__), 'lib/starter')
