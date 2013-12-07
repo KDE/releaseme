@@ -1,4 +1,6 @@
 [main]
 customsrc=git@git.kde.org:kdev-python
 doc=false
-l10n=false
+l10n=true
+protocol=anonsvn
+branch=trunk
