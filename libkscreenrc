@@ -1,7 +1,7 @@
 [main]
 customsrc=kde:libkscreen
 branch=trunk
-gitbranch=master
+gitbranch=v1.0.2
 protocol=svn+ssh
 l10n=false
 doc=false

@@ -1,5 +1,5 @@
 [main]
 customsrc=kde:kscreen
 branch=trunk
-gitbranch=master
+gitbranch=v1.0.2
 protocol=svn+ssh

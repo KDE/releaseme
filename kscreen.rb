@@ -19,8 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 NAME      = "kscreen"
-COMPONENT = "kdereview"
-SECTION   = ""
+COMPONENT = "extragear"
+SECTION   = "base"
 
 $: << File.dirname( __FILE__)
 $srcvcs   = "git"
