@@ -30,7 +30,7 @@ $srcvcs   = "git"
 
 def custom
     remover([
-        "kdelauncher","tests","scripts"
+        "tests", "scripts"
     ])
 end
 
