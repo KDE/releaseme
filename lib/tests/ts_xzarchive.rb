@@ -1,24 +1,27 @@
 require "fileutils"
 require "test/unit"
 
-require_relative "../kdegitrelease.rb"
+require_relative "../xzarchive"
 
 class TestXzArchive < Test::Unit::TestCase
     def setup
         @dir = Dir.pwd + "/tmp_xz_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
-        FileUtils.rm_rf(@dir)
+        teardown() # Make sure everything is clean...
+        Dir.mkdir(@dir)
     end
 
     def teardown
         FileUtils.rm_rf(@dir)
+        FileUtils.rm_rf(tarFile())
+        FileUtils.rm_rf(xzFile())
     end
 
-    def tar(directory)
-        return directory + ".tar"
+    def tarFile()
+        return @dir + ".tar"
     end
 
-    def file(directory)
-        return tar(directory) + ".xz"
+    def xzFile()
+        return tarFile() + ".xz"
     end
 
     def test_directory
@@ -38,32 +41,45 @@ class TestXzArchive < Test::Unit::TestCase
         assert_equal(a.level, 5)
     end
 
-    def test_create
-        file_ = file(@dir)
-        FileUtils.rm_rf(@dir)
-        Dir.mkdir(@dir)
-
+    def test_create_valid
         a = XzArchive.new()
         a.directory = @dir
 
-        FileUtils.rm_rf(file_)
+        # Proper setup.
+        # Must have returned with true.
+        # Must have @dir.tar.xz.
+        # Must not have @dir.tar.
+        FileUtils.rm_rf(tarFile())
+        FileUtils.rm_rf(xzFile())
         a.level = 1
-        a.create()
-        assert(File::exists?(file_))
-        FileUtils.rm_rf(tar(@dir))
+        ret = a.create()
+        assert_equal(ret, true)
+        assert(File::exists?(xzFile()))
+        assert(!File::exists?(tarFile()))
 
-        FileUtils.rm_rf(file_)
+        # Bogus compression level.
+        # Must return with false.
+        # Must not have @dir.tar.
+        # Must not have @dir.tar.xz
+        FileUtils.rm_rf(tarFile())
+        FileUtils.rm_rf(xzFile())
         a.level = -1
-        a.create()
-        assert(!File::exists?(file_))
-        FileUtils.rm_rf(tar(@dir))
+        ret = a.create()
+        assert_equal(ret, false)
+        assert(!File::exists?(tarFile()))
+        assert(!File::exists?(xzFile()))
 
-        # On failure (e.g. wrong directory) neither tar nor xz should be present
-        FileUtils.rm_rf(file_)
+        # Directory does not exist.
+        # Must return with false
+        # Must not have @dir.tar.
+        # Must not have @dir.tar.xz
+        FileUtils.rm_rf(tarFile())
+        FileUtils.rm_rf(xzFile())
         d = "tmp_xz_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         a.directory = d
-        a.create()
-        assert(!File::exists?(tar(d)))
-        assert(!File::exists?(file(d)))
+        ret = a.create()
+        assert_equal(ret, false)
+        assert(!File::exists?(tarFile()))
+        assert(!File::exists?(xzFile()))
     end
 end

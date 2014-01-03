@@ -1,7 +1,7 @@
 require "fileutils"
 require "test/unit"
 
-require_relative "../kdegitrelease.rb"
+require_relative "../source"
 
 class TestSource < Test::Unit::TestCase
     def setup
