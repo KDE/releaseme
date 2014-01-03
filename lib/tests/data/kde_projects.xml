@@ -36,10 +36,10 @@ http://projects.kde.org/projects/extragear/utils/yakuake/repository
 <url access="read-only" protocol="tarball">
 http://anongit.kde.org/yakuake/yakuake-latest.tar.gz
 </url>
-<branch>kde3</branch>
+<branch>notmaster</branch>
 <branch>master</branch>
-<branch i18n="trunk"/>
-<branch i18n="stable"/>
+<branch i18n="trunk">master</branch>
+<branch i18n="stable">notmaster</branch>
 <active>true</active>
 </repo>
 <member username="hein">Eike Hein</member>

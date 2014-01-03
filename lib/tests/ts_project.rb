@@ -37,7 +37,7 @@ class TestProject < Test::Unit::TestCase
 
     def test_resolve_valid
         pr.id = 'yakuake'
-        ret = pr.resolve()
+        ret = pr.resolve!
         assert_equal(ret, true)
         assert_equal(pr.id, 'yakuake')
         assert_equal(pr.identifier, 'yakuake')
@@ -47,11 +47,18 @@ class TestProject < Test::Unit::TestCase
 
     def test_resolve_invalid
         pr.id = 'kitten'
-        ret = pr.resolve()
+        ret = pr.resolve!
         assert_equal(ret, false)
         assert_equal(pr.id, 'kitten')
         assert_equal(pr.identifier, nil)
         assert_equal(pr.module, nil)
         assert_equal(pr.component, nil)
+    end
+
+    def test_vcs
+        pr.id = 'yakuake'
+        pr.resolve!
+        vcs = pr.vcs
+        assert_equal(vcs.repository, 'git://anongit.kde.org/yakuake')
     end
 end

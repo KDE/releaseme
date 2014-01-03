@@ -21,6 +21,8 @@
 require 'net/http'
 require 'rexml/document'
 
+require_relative 'git'
+
 class Project
     # The identifier to be resolved
     attr :id, true
@@ -30,6 +32,8 @@ class Project
     attr :module, false
     # Project component found. nil if not resolved.
     attr :component, false
+    # VCS to use for this project
+    attr :vcs, false
 
     # XML URL to use for resolution
     attr :xml_path, true
@@ -47,6 +51,7 @@ public
         @identifier = nil
         @module = nil
         @component = nil
+        @vcs = nil
         @xml_path = 'http://projects.kde.org/kde_projects.xml'
     end
 
@@ -55,7 +60,7 @@ public
     #  project.resolve() -> true or false
     #
     # Resolves identifier, module and component of the project at hand.
-    def resolve()
+    def resolve!()
         return false if id.nil? or id.empty?
 
         xml_data = nil
@@ -65,6 +70,8 @@ public
             xml_data = File.read(@xml_path)
         end
         doc = REXML::Document.new(xml_data)
+
+        # Resolve project/module/component
         @project_element = nil
         projects = doc.root.get_elements('/kdeprojects/component/module/project')
         projects.each do | p |
@@ -83,6 +90,17 @@ public
         @identifier = @project_element.attribute('identifier').to_s
         @module = @module_element.attribute('identifier').to_s
         @component = @component_element.attribute('identifier').to_s
+
+        # Resolve git url.
+        @vcs = nil
+        urls = doc.root.get_elements("#{@project_element.xpath}/repo/url")
+        urls.each do | url |
+            if url.attribute('access').to_s == 'read-only' and
+                url.attribute('protocol').to_s == 'git'
+                @vcs = Git.new()
+                @vcs.repository = url.text
+            end
+        end
 
         return true;
     end
