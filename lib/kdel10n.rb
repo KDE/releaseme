@@ -136,7 +136,7 @@ class KdeL10n < Source
 
         gotInfo = false
         begin
-            ret = vcs.export(vcsFilePath, poFilePath)
+            ret = vcs.export(poFilePath, vcsFilePath)
             # If the export failed, try to see if there is a file, if this command also
             # fails then we have to assume the file is not present in SVN.
             # Of course it still might, but the connection could be busted, but that
