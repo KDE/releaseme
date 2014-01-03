@@ -144,7 +144,7 @@ class KdeL10n < Source
             if not gotInfo and not ret
                 # If the info also failed, declare the file as not existent and
                 # prevent a retry dialog annoyance.
-                break if not vcs.exists?(vcsFilePath)
+                break if not vcs.exist?(vcsFilePath)
                 gotInfo = true
             end
         end while retry_cmd?(ret, "#{vcsFilePath}")

@@ -1,0 +1,49 @@
+<kdeprojects version="1">
+<component identifier="extragear">
+<name>Extragear</name>
+<description>
+<![CDATA[ Extragear applications are mature applications. ]]>
+</description>
+<path>extragear</path>
+<web>http://projects.kde.org/projects/extragear</web>
+<module identifier="utils">
+<name>Utils</name>
+<description>
+<![CDATA[ ]]>
+</description>
+<path>extragear/utils</path>
+<web>http://projects.kde.org/projects/extragear/utils</web>
+<project identifier="yakuake">
+<name>Yakuake</name>
+<description>
+<![CDATA[
+Yakuake is a drop-down terminal emulator based on KDE Konsole technology.   "Homepage":http://yakuake.kde.org/ "Bugs and wishes":http://bugs.kde.org/ "QuickGit":http://quickgit.kde.org/?p=yakuake.git&a=summary
+]]>
+</description>
+<path>extragear/utils/yakuake</path>
+<web>
+http://projects.kde.org/projects/extragear/utils/yakuake
+</web>
+<icon/>
+<repo>
+<web type="projects">
+http://projects.kde.org/projects/extragear/utils/yakuake/repository
+</web>
+<web type="gitweb">http://gitweb.kde.org/yakuake.git</web>
+<url access="read-only" protocol="git">git://anongit.kde.org/yakuake</url>
+<url access="read-only" protocol="http">http://anongit.kde.org/yakuake</url>
+<url access="read+write" protocol="ssh">git@git.kde.org:yakuake</url>
+<url access="read-only" protocol="tarball">
+http://anongit.kde.org/yakuake/yakuake-latest.tar.gz
+</url>
+<branch>kde3</branch>
+<branch>master</branch>
+<branch i18n="trunk"/>
+<branch i18n="stable"/>
+<active>true</active>
+</repo>
+<member username="hein">Eike Hein</member>
+</project>
+</module>
+</component>
+</kdeprojects>
