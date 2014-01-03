@@ -21,6 +21,16 @@
 require_relative 'vcs'
 
 class Svn < Vcs
+private
+    def url?(path)
+        if path.match('((\w|\W)+)://.*')
+            puts "SVN: possbily inversed argument order detected!"
+            return true
+        end
+        return false
+    end
+
+public
     ##
     # call-seq:
     #  svn.get(target directory, path to check out) -> true or false
@@ -30,6 +40,7 @@ class Svn < Vcs
     # @param path is an additional path to append to the repo URL
     # @returns boolean whether the checkout was successful
     def get(target, path = nil)
+        url?(target)
         url = repository.dup # Deep copy since we will patch around
         if not path.nil? and not path.empty?
             url.concat("/#{path}")
@@ -72,6 +83,7 @@ class Svn < Vcs
     # @param targetFilePath target file path to write to
     # @returns boolean whether or not the export was successful
     def export(target, path)
+        url?(target)
         return system("svn export #{repository}/#{path} #{target}")
     end
     ##
