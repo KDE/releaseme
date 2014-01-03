@@ -49,7 +49,7 @@ class Svn < Vcs
         if not path.nil? and not path.empty?
             url.concat("/#{path}")
         end
-        return system("svn co #{url} #{target}")
+        return %x{svn co #{url} #{target}}
     end
 
     # Svn ls
@@ -75,15 +75,14 @@ class Svn < Vcs
     # @param targetFilePath target file path to write to
     # @returns boolean whether or not the export was successful
     def export(filePath, targetFilePath)
-        puts "svn export #{repository}/#{filePath} #{targetFilePath}"
-        return system("svn export #{repository}/#{filePath} #{targetFilePath}")
+        return %x[svn export #{repository}/#{filePath} #{targetFilePath}]
     end
 
     # Checks whether a file/dir exists on the remote repository
     # @param filePath filepath to append to the repository URL
     # @returns boolean whether or not the path exists
     def exists?(filePath)
-        return system("svn info #{repository}/#{filePath}")
+        return %x[svn info #{repository}/#{filePath}]
     end
 end
 
@@ -150,6 +149,21 @@ class KdeL10n < Source
 
         @languages = Array.new
         @templates = Array.new
+
+        initRepoUrl("svn://anonsvn.kde.org/home/kde/")
+    end
+
+    def initRepoUrl(baseUrl)
+        repoUrl = baseUrl
+        repoUrl.concat("/") if not repoUrl.end_with?("/")
+        if type == TRUNK
+            repoUrl.concat("trunk/")
+        else
+            repoUrl.concat("branches/stable/")
+        end
+        repoUrl.concat("/l10n-kde4/")
+
+        @vcs.repository = repoUrl
     end
 
     def find_templates(directory, pos=Array.new)
@@ -178,7 +192,7 @@ class KdeL10n < Source
         file.close
     end
 
-    def pofiledir?(lang)
+    def po_file_dir(lang)
         return "#{lang}/messages/#{@module}-#{@section}"
     end
 
@@ -195,13 +209,14 @@ class KdeL10n < Source
     end
 
     def get_single(lang)
-        puts "get single #{lang}"
         tempDir = "l10n"
         FileUtils.rm_rf(tempDir)
         Dir.mkdir(tempDir)
 
-        pofilename = templates[0]
-        vcsFilePath = "#{pofiledir?(lang)}/#{pofilename}"
+        # TODO: maybe class this
+        poFileName = templates[0]
+        vcsFilePath = "#{po_file_dir(lang)}/#{poFileName}"
+        poFilePath = "#{tempDir}/#{poFileName}"
 
         gotInfo = false
         begin
@@ -227,12 +242,11 @@ class KdeL10n < Source
     end
 
     def get_multiple(lang)
-        puts "get multi #{lang}"
         tempDir = "l10n"
         FileUtils.rm_rf(tempDir)
         Dir.mkdir(tempDir)
 
-        vcsDirPath = pofiledir?(lang)
+        vcsDirPath = po_file_dir(lang)
 
         return Array.new if vcs.list(vcsDirPath).empty?
         begin
@@ -250,15 +264,6 @@ class KdeL10n < Source
     end
 
     def get(sourceDirectory)
-        repo = "svn://anonsvn.kde.org/home/kde/"
-        if type == TRUNK
-            repo.concat("trunk/")
-        else
-            repo.concat("branches/stable/")
-        end
-        repo.concat("/l10n-kde4/")
-
-        vcs.repository = repo
         target = sourceDirectory + "/po/"
         Dir.mkdir(target)
 
@@ -276,12 +281,9 @@ class KdeL10n < Source
                 files = get_single(language)
             end
 
-            p "FILESS"
-            p files
             # No files obtained :(
             next if files.empty?
 
-            puts("Copying #{language}\'s .po(s) over ...")
             # TODO: path confusing with target
             destinationDir = "po/" + language
             Dir.mkdir(destinationDir)
@@ -296,8 +298,6 @@ class KdeL10n < Source
             # add to SVN in case we are tagging
             #%x[svn add #{dest}/CMakeLists.txt] if $options[:tag]
             @languages += [language]
-
-            puts "done."
         }
         Dir.chdir("..")
     end
@@ -318,9 +318,10 @@ class XzArchive
     # Create the archive
     def create()
         tar = "#{directory}.tar"
+        return if not File.exists?(@directory)
         begin
-            raise RuntimeError if not system("tar -cf #{tar} #{directory}")
-            raise RuntimeError if not system("xz -#{level} #{tar}")
+            raise RuntimeError if not %x[tar -cf #{tar} #{directory}]
+            raise RuntimeError if not %x[xz -#{level} #{tar}]
         rescue
             FileUtils.rm_rf(tar)
             FileUtils.rm_rf(tar + ".xz")

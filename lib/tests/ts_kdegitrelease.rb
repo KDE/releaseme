@@ -3,16 +3,20 @@ require_relative "../kdegitrelease.rb"
 
 class TestKdeGitRelease < Test::Unit::TestCase
     def setup
-        @gitTemplateDir = (0...50).map{ ('a'..'z').to_a[rand(26)] }.join
-        system("git init #{@gitTemplateDir}")
+        @dir = "tmp_release_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+        @gitTemplateDir = "tmp_release_git_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+        %x[git init #{@gitTemplateDir}]
         assert(File::exists?(@gitTemplateDir))
-        @dir = "foo"
         FileUtils.rm_rf(@dir + "*")
     end
 
     def teardown
         FileUtils.rm_rf(@gitTemplateDir)
-        FileUtils.rm_rf(@dir + "*")
+        # Also drop tar/xz etc.
+        Dir.glob("#{@dir}*").each do | file |
+            p file
+            FileUtils.rm_rf(file)
+        end
     end
 
     def test_vcs_pure_virtual

@@ -5,27 +5,28 @@ require_relative "../kdegitrelease.rb"
 
 class TestSvn < Test::Unit::TestCase
     def setup
-        @svnTemplateDir = (0...50).map{ ('a'..'z').to_a[rand(26)] }.join
-        system("svnadmin create #{@svnTemplateDir}")
-        assert(File::exists?(@svnTemplateDir))
+        @svnCheckoutDir = Dir.pwd + "/tmp_check_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+        @svnRepoDir = Dir.pwd + "/tmp_repo_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+        %x[svnadmin create #{@svnRepoDir}]
+        assert(File::exists?(@svnRepoDir))
     end
 
     def teardown
-        FileUtils.rm_rf(@svnTemplateDir)
+        FileUtils.rm_rf(@svnRepoDir)
+        FileUtils.rm_rf(@svnCheckoutDir)
     end
 
     def test_get
-        d = "foo"
         s = Svn.new()
 
-        s.repository = @svnTemplateDir
-        s.get(d)
-        assert(File::exists?(d))
-        FileUtils.rm_rf(d)
+        s.repository = "file://#{@svnRepoDir}"
+        s.get(@svnCheckoutDir)
+        assert(File::exists?(@svnCheckoutDir))
+        FileUtils.rm_rf(@svnCheckoutDir)
 
-        s.repository = "foofooofoo"
-        s.get(d)
-        assert(!File::exists?(d))
-        FileUtils.rm_rf(d)
+        s.repository = "file://foofooofoo"
+        s.get(@svnCheckoutDir)
+        assert(!File::exists?(@svnCheckoutDir))
+        FileUtils.rm_rf(@svnCheckoutDir)
     end
 end

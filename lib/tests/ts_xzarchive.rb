@@ -5,7 +5,11 @@ require_relative "../kdegitrelease.rb"
 
 class TestXzArchive < Test::Unit::TestCase
     def setup
-        @dir = "foo"
+        @dir = Dir.pwd + "/tmp_xz_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+        FileUtils.rm_rf(@dir)
+    end
+
+    def teardown
         FileUtils.rm_rf(@dir)
     end
 
@@ -56,7 +60,7 @@ class TestXzArchive < Test::Unit::TestCase
 
         # On failure (e.g. wrong directory) neither tar nor xz should be present
         FileUtils.rm_rf(file_)
-        d = (0...50).map{ ('a'..'z').to_a[rand(26)] }.join
+        d = "tmp_xz_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         a.directory = d
         a.create()
         assert(!File::exists?(tar(d)))
