@@ -46,7 +46,7 @@ private
 public
     # Creates a new Project. Identifier can be nil but must be set manually
     # before calling resolve.
-    def initalize(project_identifier=nil)
+    def initialize(project_identifier=nil)
         @id = project_identifier
         @identifier = nil
         @module = nil
