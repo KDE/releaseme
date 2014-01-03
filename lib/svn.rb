@@ -72,7 +72,6 @@ class Svn < Vcs
     # @param targetFilePath target file path to write to
     # @returns boolean whether or not the export was successful
     def export(target, path)
-        puts "svn export #{repository}/#{path} #{target}"
         return system("svn export #{repository}/#{path} #{target}")
     end
     ##

@@ -6,8 +6,9 @@ unless Kernel.respond_to?(:require_relative)
   end
 end
 
-require_relative "ts_xzarchive.rb"
-require_relative "ts_svn.rb"
-require_relative "ts_source.rb"
-require_relative "ts_kdel10n.rb"
 require_relative "ts_kdegitrelease.rb"
+require_relative "ts_kdel10n.rb"
+require_relative "ts_project.rb"
+require_relative "ts_source.rb"
+require_relative "ts_svn.rb"
+require_relative "ts_xzarchive.rb"

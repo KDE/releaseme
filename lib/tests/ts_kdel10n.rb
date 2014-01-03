@@ -71,6 +71,7 @@ class TestKdeL10n < Test::Unit::TestCase
         assert_equal(templates.count, 1)
     end
 
+    # FIXME: need to check that *all* files are there!
     def test_get
         l = create()
         l.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")

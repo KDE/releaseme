@@ -40,10 +40,10 @@ class TestSvn < Test::Unit::TestCase
         `svn co file://#@svnRepoDir #@svnCheckoutDir`
         `echo "yolo" > #@svnCheckoutDir/foo`
         Dir.mkdir(@svnCheckoutDir + "/dir")
-        `echo "yolo" > #@svnCheckoutDir/dir/file`
+        `echo "oloy" > #@svnCheckoutDir/dir/file`
         Dir.chdir(@svnCheckoutDir)
         `svn add *`
-        `svn ci -m 'yolo'`
+        `svn ci -m 'I am a troll'`
         Dir.chdir("..")
     end
 
