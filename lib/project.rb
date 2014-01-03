@@ -76,9 +76,9 @@ public
         projects = doc.root.get_elements('/kdeprojects/component/module/project')
         projects.each do | p |
             if p.attribute('identifier').to_s == id
-                @project_element = p.dup
-                @module_element = p.parent.dup
-                @component_element = module_element.parent.dup
+                @project_element = p
+                @module_element = p.parent
+                @component_element = module_element.parent
                 break
             end
         end
@@ -100,6 +100,10 @@ public
                 @vcs = Git.new()
                 @vcs.repository = url.text
             end
+        end
+
+        if @vcs.nil?
+            return false
         end
 
         return true;
