@@ -18,37 +18,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require_relative 'git'
-require_relative 'svn'
-require_relative 'source'
-require_relative 'kdel10n'
-require_relative 'xzarchive'
+class Vcs
+    # The repository URL
+    attr :repository, true
 
-class KdeGitRelease
-    # The vcs from which to get the source
-    attr_reader :vcs
-    # The source object from which the release is done
-    attr_reader :source
-    # The archive object which will create the archive
-    attr_reader :archive
-
-    # Init
-    def initialize()
-        @vcs = Git.new()
-        @source = Source.new()
-        @archive = XzArchive.new()
+    def get(target)
+        raise "Pure virtual"
     end
-
-    # Get the source
-    def get()
-        source.cleanup()
-        source.get(vcs)
-    end
-
-    # Create the final archive file
-    def archive()
-        @archive.directory = source.target
-        @archive.create()
-    end
-
 end

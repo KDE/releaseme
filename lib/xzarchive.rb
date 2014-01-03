@@ -18,37 +18,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require_relative 'git'
-require_relative 'svn'
-require_relative 'source'
-require_relative 'kdel10n'
-require_relative 'xzarchive'
+class XzArchive
+    # The directory to archive
+    attr :directory, true
 
-class KdeGitRelease
-    # The vcs from which to get the source
-    attr_reader :vcs
-    # The source object from which the release is done
-    attr_reader :source
-    # The archive object which will create the archive
-    attr_reader :archive
+    # XZ compression level
+    attr :level, true
 
-    # Init
     def initialize()
-        @vcs = Git.new()
-        @source = Source.new()
-        @archive = XzArchive.new()
+        @directory = nil
+        @level = 9
     end
 
-    # Get the source
-    def get()
-        source.cleanup()
-        source.get(vcs)
+    # Create the archive
+    def create()
+        tar = "#{directory}.tar"
+        return if not File.exists?(@directory)
+        begin
+            raise RuntimeError if not %x[tar -cf #{tar} #{directory}]
+            raise RuntimeError if not %x[xz -#{level} #{tar}]
+        rescue
+            FileUtils.rm_rf(tar)
+            FileUtils.rm_rf(tar + ".xz")
+        end
     end
-
-    # Create the final archive file
-    def archive()
-        @archive.directory = source.target
-        @archive.create()
-    end
-
 end
