@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+# FIXME: doesn't write master cmake right now...
 class KdeL10n < Source
     # The VCS to use to obtain the l10n sources
     attr :vcs, false
