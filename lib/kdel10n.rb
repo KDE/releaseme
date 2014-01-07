@@ -21,6 +21,8 @@
 require 'fileutils'
 
 require_relative 'cmakeeditor'
+require_relative 'source'
+require_relative 'svn'
 
 # FIXME: doesn't write master cmake right now...
 class KdeL10n < Source
@@ -212,7 +214,7 @@ class KdeL10n < Source
             FileUtils.mv(files, destinationDir)
             #mv( ld + "/.svn", dest ) if $options[:tag] # Must be fatal iff tagging
 
-            CMakeEditor::create_language_specific_lists!(destinationDir, language)
+            CMakeEditor::create_language_specific_po_lists!(destinationDir, language)
 
             # add to SVN in case we are tagging
             #%x[svn add #{dest}/CMakeLists.txt] if $ptions[:tag]

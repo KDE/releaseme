@@ -22,8 +22,27 @@
 module CMakeEditor
     extend self
 
+    # Creates the CMakeLists.txt for doc/$LANG/*
+    def create_language_specific_doc_lists!(dir, language, software_name)
+        file = File.new("#{dir}/CMakeLists.txt",
+                        File::CREAT | File::RDWR | File::TRUNC)
+        file << "kde4_create_handbook(index.docbook INSTALL_DESTINATION \${HTML_INSTALL_DIR}/#{language} SUBDIR #{software_name})\n"
+        file.close
+    end
+
+    # Creates the CMakeLists.txt for doc/*
+    def create_doc_meta_lists!(dir)
+        file = File.new("#{dir}/CMakeLists.txt",
+                             File::CREAT | File::RDWR | File::TRUNC)
+        Dir.foreach(dir) do |lang|
+            next if lang == '.' or lang == '..' or lang == 'CMakeLists.txt'
+            file << "add_subdirectory(#{lang})\n"
+        end
+        file.close
+    end
+
     # Creates the CMakeLists.txt for po/$LANG/*.po
-    def create_language_specific_lists!(dir, language)
+    def create_language_specific_po_lists!(dir, language)
         file = File.new("#{dir}/CMakeLists.txt",
                         File::CREAT | File::RDWR | File::TRUNC)
         file << "file(GLOB _po_files *.po)\n"
@@ -31,7 +50,7 @@ module CMakeEditor
         file.close
     end
 
-    # Creates the CMakeLists.txt for po/*/
+    # Creates the CMakeLists.txt for po/*
     def create_po_meta_lists!(dir)
         file = File.new("#{dir}/CMakeLists.txt",
                              File::CREAT | File::RDWR | File::TRUNC)
@@ -55,7 +74,6 @@ endif (NOT GETTEXT_MSGFMT_EXECUTABLE)
             file << "add_subdirectory(#{lang})\n"
         end
         file.close
-
     end
 
     # Appends the inclusion of po/CMakeLists.txt
@@ -74,4 +92,6 @@ endif (NOT GETTEXT_MSGFMT_EXECUTABLE)
         file << data
         file.close
     end
+
+private
 end

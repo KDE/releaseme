@@ -43,8 +43,30 @@ class TestCMakeEditor < Test::Unit::TestCase
         assert(data.end_with?("\n"))
     end
 
-    def test_create_language_specific_lists
-        CMakeEditor::create_language_specific_lists!(dir, lang)
+    def test_create_language_specific_handbook_lists
+        CMakeEditor::create_language_specific_doc_lists!(dir, lang, "yolo")
+        assert(File::exists?(file))
+        data = File.read(file)
+        assert(data.downcase.include?('kde4_create_handbook(index.docbook install_destination ${html_install_dir}/xx subdir yolo)'))
+        assert_has_terminal_newline(data)
+    end
+
+    def test_create_doc_meta_lists
+        Dir.mkdir("#{dir}/aa")
+        Dir.mkdir("#{dir}/bb")
+        Dir.mkdir("#{dir}/cc")
+        CMakeEditor::create_doc_meta_lists!(dir)
+        assert(File::exists?(file))
+        data = File.read(file)
+        assert(!data.downcase.include?("find_package(gettext")) # PO-only!
+        assert(data.downcase.include?("add_subdirectory(aa)"))
+        assert(data.downcase.include?("add_subdirectory(bb)"))
+        assert(data.downcase.include?("add_subdirectory(cc)"))
+        assert_has_terminal_newline(data)
+    end
+
+    def test_create_language_specific_po_lists
+        CMakeEditor::create_language_specific_po_lists!(dir, lang)
         assert(File::exists?(file))
         data = File.read(file)
         assert(data.downcase.include?("gettext_process_po_files(#{lang}"))

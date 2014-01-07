@@ -6,10 +6,8 @@ unless Kernel.respond_to?(:require_relative)
   end
 end
 
-require_relative "ts_cmakeeditor.rb"
-require_relative "ts_kdegitrelease.rb"
-require_relative "ts_kdel10n.rb"
-require_relative "ts_project.rb"
-require_relative "ts_source.rb"
-require_relative "ts_svn.rb"
-require_relative "ts_xzarchive.rb"
+Dir.glob("#{File.dirname( __FILE__)}/ts_*.rb").each do |testfile|
+    puts "Adding Test File:"
+    puts "  #{testfile}"
+    require_relative testfile
+end

@@ -35,12 +35,17 @@ class Project
     # VCS to use for this project
     attr :vcs, false
 
-    # XML URL to use for resolution
+    ##
+    # XML URL to use for resolution (defaults to http://projects.kde.org/kde_projects.xml).
+    # Should not be changed unless you know what you are doing.
     attr :xml_path, true
 
 private
+    # XML element of the project (e.g. yakuake's).
     attr :project_element, false
+    # XML element of the module (e.g. utils').
     attr :module_element, false
+    # XML element of the componenet (e.g. extragear's).
     attr :component_element, false
 
 public
