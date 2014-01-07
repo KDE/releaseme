@@ -18,6 +18,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'fileutils'
+
+require_relative 'cmakeeditor'
+
 # FIXME: doesn't write master cmake right now...
 class KdeL10n < Source
     # The VCS to use to obtain the l10n sources
@@ -96,7 +100,7 @@ class KdeL10n < Source
 
     def strip_comments(file)
         # Strip #~ lines, which once were sensible translations, but then the
-        # strings become removed, so they now stick around in case the strings
+        # strings got removed, so they now stick around in case the strings
         # return, poor souls, waiting for a comeback, reminds me of Sunset Blvd :(
         # Problem is that msgfmt adds those to the binary!
         file = File.new(file, File::RDWR)
@@ -181,6 +185,7 @@ class KdeL10n < Source
     end
 
     def get(sourceDirectory)
+        previous_pwd = Dir.pwd
         target = sourceDirectory + "/po/"
         Dir.mkdir(target)
 
@@ -189,7 +194,7 @@ class KdeL10n < Source
 
         # TODO: fix chdiring to something better
         Dir.chdir(sourceDirectory)
-        availableLanguages.each { | language |
+        availableLanguages.each do | language |
             next if language == "x-test"
 
             if templates.count > 1
@@ -207,15 +212,18 @@ class KdeL10n < Source
             FileUtils.mv(files, destinationDir)
             #mv( ld + "/.svn", dest ) if $options[:tag] # Must be fatal iff tagging
 
-            cmakefile = File.new( "#{destinationDir}/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC )
-            cmakefile << "file(GLOB _po_files *.po)\n"
-            cmakefile << "GETTEXT_PROCESS_PO_FILES(#{language} ALL INSTALL_DESTINATION ${LOCALE_INSTALL_DIR} ${_po_files} )\n"
-            cmakefile.close
+            CMakeEditor::create_language_specific_lists!(destinationDir, language)
 
             # add to SVN in case we are tagging
-            #%x[svn add #{dest}/CMakeLists.txt] if $options[:tag]
+            #%x[svn add #{dest}/CMakeLists.txt] if $ptions[:tag]
             @languages += [language]
-        }
-        Dir.chdir("..")
+        end
+        # Make sure the temp dir is cleaned up
+        FileUtils::rm_rf('l10n')
+        # Update CMakeLists.txt
+        CMakeEditor::create_po_meta_lists!('po/')
+        CMakeEditor::append_optional_add_subdirectory!(Dir.pwd, 'po')
+        Dir.chdir(previous_pwd)
     end
+
 end
