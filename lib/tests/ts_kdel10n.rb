@@ -81,7 +81,7 @@ class TestKdeL10n < Test::Unit::TestCase
         l.get(@dir)
         assert(File::exists?("#{@dir}"))
         assert(File::exists?("#{@dir}/CMakeLists.txt"))
-        assert(!File::exists?("#{@dir}/l10n"))
+        assert(!File::exists?("#{@dir}/l10n")) # temp dir must not be there
         assert(File::exists?("#{@dir}/po"))
         assert(File::exists?("#{@dir}/po/CMakeLists.txt"))
         assert(File::exists?("#{@dir}/po/de/CMakeLists.txt"))
@@ -92,7 +92,7 @@ class TestKdeL10n < Test::Unit::TestCase
         l.get(@dir)
         assert(File::exists?("#{@dir}"))
         assert(File::exists?("#{@dir}/CMakeLists.txt"))
-        assert(!File::exists?("#{@dir}/l10n"))
+        assert(!File::exists?("#{@dir}/l10n")) # temp dir must not be there
         assert(File::exists?("#{@dir}/po"))
         assert(File::exists?("#{@dir}/po/CMakeLists.txt"))
         assert(File::exists?("#{@dir}/po/de/CMakeLists.txt"))
