@@ -139,4 +139,15 @@ class TestSvn < Test::Unit::TestCase
         assert(!File::exists?(@svnCheckoutDir))
         FileUtils.rm_rf(@svnCheckoutDir)
     end
+
+    def test_clean
+        populateRepo()
+        s = validRepo()
+
+        s.get(@svnCheckoutDir)
+        s.clean!(@svnCheckoutDir)
+        assert(!File::exists?("#@svnCheckoutDir/.svn"))
+        assert(!File::exists?("#@svnCheckoutDir/dir/.svn"))
+    end
+
 end

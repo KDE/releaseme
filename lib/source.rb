@@ -24,6 +24,11 @@ class Source
     # The target directory
     attr :target, true
 
+    # Cleans the source for archiving (e.g. removes .git directory).
+    def clean()
+        vcs.clean(target)
+    end
+
     # Cleans up data created
     def cleanup()
         FileUtils.rm_rf(target)
@@ -33,4 +38,5 @@ class Source
     def get(vcs)
         vcs.get(target)
     end
+
 end

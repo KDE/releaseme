@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'fileutils'
+
 require_relative 'vcs'
 
 class Svn < Vcs
@@ -46,6 +48,13 @@ public
             url.concat("/#{path}")
         end
         return system("svn co #{url} #{target}")
+    end
+
+    # Removes .svn recursively from target.
+    def clean!(target)
+        Dir.glob("#{target}/**/**/.svn").each do |node|
+            FileUtils::rm_rf(node)
+        end
     end
 
     ##

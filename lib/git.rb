@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'fileutils'
+
 require_relative 'vcs'
 
 class Git < Vcs
@@ -29,5 +31,10 @@ class Git < Vcs
         else
             system("git clone #{repository} #{target}")
         end
+    end
+
+    # Removes target/.git.
+    def clean!(target)
+        FileUtils::rm_rf("#{target}/.git")
     end
 end

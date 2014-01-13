@@ -22,7 +22,13 @@ class Vcs
     # The repository URL
     attr :repository, true
 
+    # Does a standard get operation. Obtaining repository.url into target.
     def get(target)
+        raise "Pure virtual"
+    end
+
+    # Does a standard clean operation. Removing any VCS data from target (e.g. .git/.svn etc.)
+    def clean!(target)
         raise "Pure virtual"
     end
 end
