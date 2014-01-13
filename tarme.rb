@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'optparse'
 
 options = {}
@@ -32,8 +34,9 @@ p project_name
 
 require_relative 'lib/project'
 require_relative 'lib/kdegitrelease'
+require_relative 'lib/kdel10n'
 
-project = Project.new('yakuake')
+project = Project.new(project_name)
 if not project.resolve!
     puts "Failed to resolve project"
     exit 1
