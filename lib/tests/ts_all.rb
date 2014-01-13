@@ -7,7 +7,6 @@ unless Kernel.respond_to?(:require_relative)
 end
 
 Dir.glob("#{File.dirname( __FILE__)}/ts_*.rb").each do |testfile|
-    puts "Adding Test File:"
-    puts "  #{testfile}"
+    puts "Adding Test File: #{testfile}"
     require_relative testfile
 end
