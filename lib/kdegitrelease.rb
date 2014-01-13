@@ -19,9 +19,7 @@
 #++
 
 require_relative 'git'
-require_relative 'svn'
 require_relative 'source'
-require_relative 'kdel10n'
 require_relative 'xzarchive'
 
 class KdeGitRelease
