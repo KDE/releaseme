@@ -45,7 +45,7 @@ class KdeGitRelease
 
     # Create the final archive file
     def archive()
-        source.clean()
+        source.clean(vcs)
         @archive.directory = source.target
         @archive.create()
     end

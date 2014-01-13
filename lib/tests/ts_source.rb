@@ -5,6 +5,7 @@ require_relative "../source"
 
 class TestSource < Test::Unit::TestCase
     def setup
+        p ">>>>>>need testsource::test_clean"
         @dir = "tmp_src_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         @gitTemplateDir = "tmp_src_git_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         %x[git init #{@gitTemplateDir}]

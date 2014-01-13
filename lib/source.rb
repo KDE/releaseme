@@ -25,8 +25,8 @@ class Source
     attr :target, true
 
     # Cleans the source for archiving (e.g. removes .git directory).
-    def clean()
-        vcs.clean(target)
+    def clean(vcs)
+        vcs.clean!(target)
     end
 
     # Cleans up data created
