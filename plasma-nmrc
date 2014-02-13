@@ -1,5 +1,7 @@
 [main]
-customsrc=git://anongit.kde.org/plasma-nm
+customsrc=kde:plasma-nm
 branch=trunk
 gitbranch=master
 protocol=anonsvn
+l10n=true
+doc=false
