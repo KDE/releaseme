@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright © 2007-2013 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright © 2007-2014 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -27,7 +27,6 @@ $srcvcs   = "git"
 
 def custom
     remover([
-        ".reviewboardrc"
     ])
     base_dir
 end
