@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 #
 # Generates a release tarball
 #
-# Copyright © 2010 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright © 2010-2014 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -28,17 +29,8 @@ $srcvcs   = "git"
 
 def custom()
     src_dir
-
-    file = File.new( "CMakeLists.txt", File::RDWR )
-    str = file.read
-    file.rewind
-    file.truncate( 0 )
-    str.sub!( /set\(qapt_VERSION .*\)/, "set(qapt_VERSION #{@version})" )
-    file << str
-    file.close
-
     base_dir
 end
 
 # get things started
-require 'lib/starter'
+require File.join(File.dirname(__FILE__), 'lib/starter')
