@@ -4,5 +4,4 @@ doc=false
 l10n=false
 protocol=anonsvn
 branch=stable
-gitbranch=MM/0.5
-version=0.5.0
+gitbranch=MM/1.0
