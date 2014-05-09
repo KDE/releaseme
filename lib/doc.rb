@@ -1,6 +1,6 @@
 # Generic ruby library for KDE extragear/playground releases
 #
-# Copyright (C) 2007-2009 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2007-2014 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -44,6 +44,7 @@ def fetch_doc
         files = Dir.glob('doc/**/*')
         Dir.mkdir('doc/en_US')
         FileUtils.mv(files, 'doc/en_US')
+        @docs += ["en_US"]
     end
 
     cmakefile = File.new( "doc/en_US/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC )
@@ -88,6 +89,7 @@ def fetch_doc
         # change cmake file
         L10nCore.cmake_add_sub(dd)
     else
+        puts "removing working doc dir on account of not having any languages"
         rm_rf dd
     end
 
