@@ -3,6 +3,6 @@ customsrc=kde:oxygen-font
 branch=trunk
 gitbranch=master
 protocol=svn+ssh
-version=4.95.0
+version=0.3.96
 doc=false
 barrier=75

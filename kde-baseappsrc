@@ -3,6 +3,6 @@ customsrc=kde:kde-baseapps
 branch=trunk
 gitbranch=master
 protocol=svn+ssh
-version=4.95.0
+version=4.96.0
 doc=false
 barrier=75
