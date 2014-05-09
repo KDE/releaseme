@@ -1,6 +1,0 @@
-[main]
-customsrc=kde:bluedevil
-branch=trunk
-gitbranch=master
-protocol=svn+ssh
-l10n=true

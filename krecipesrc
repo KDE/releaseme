@@ -1,8 +1,0 @@
-[main]
-customsrc=git@git.kde.org:krecipes
-doc=true
-l10n=true
-protocol=anonsvn
-branch=trunk
-gitbranch=2.0
-version=2.0.0

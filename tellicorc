@@ -1,7 +1,0 @@
-[main]
-customsrc=git@git.kde.org:tellico
-doc=true
-l10n=true
-protocol=anonsvn
-branch=stable
-gitbranch=2.3

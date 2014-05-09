@@ -1,5 +1,0 @@
-[main]
-customsrc=kde:kscreen
-branch=trunk
-gitbranch=master
-protocol=svn+ssh

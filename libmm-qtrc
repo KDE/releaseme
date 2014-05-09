@@ -1,7 +1,0 @@
-[main]
-customsrc=git@git.kde.org:libmm-qt
-doc=false
-l10n=false
-protocol=anonsvn
-branch=stable
-gitbranch=MM/1.0

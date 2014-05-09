@@ -1,8 +1,0 @@
-[main]
-customsrc=git://anongit.kde.org/kio-mtp
-doc=false
-l10n=true
-protocol=anonsvn
-branch=trunk
-gitbranch=master
-barrier=75

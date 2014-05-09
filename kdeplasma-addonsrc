@@ -1,5 +1,5 @@
 [main]
-customsrc=kde:libkscreen
+customsrc=kde:kdeplasma-addons
 branch=trunk
 gitbranch=master
 protocol=svn+ssh

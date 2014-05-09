@@ -1,5 +1,0 @@
-[main]
-customsrc=kde:colibri
-branch=trunk
-gitbranch=master
-protocol=svn+ssh

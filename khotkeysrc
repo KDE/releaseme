@@ -1,5 +1,5 @@
 [main]
-customsrc=kde:libkscreen
+customsrc=kde:khotkeys
 branch=trunk
 gitbranch=master
 protocol=svn+ssh

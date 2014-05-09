@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Generic ruby library for KDE extragear/playground releases
 #
 # Copyright © 2009-2010 Harald Sitter <apachelogger@ubuntu.com>
@@ -61,11 +62,11 @@ endif (NOT GETTEXT_MSGFMT_EXECUTABLE)
         cmakestr = cmakefile.read()
         cmakefile.rewind()
         cmakefile.truncate( 0 )
-        macro = "\ninclude(MacroOptionalAddSubdirectory)\nmacro_optional_add_subdirectory( #{dir} )\n"
+        macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory( #{dir} )\n"
         if cmakestr.include?("##{dir.upcase}_SUBDIR")
             cmakestr = cmakestr.sub("##{dir.upcase}_SUBDIR",macro)
         # TODO: should be a regex for whitespace lovers
-        elsif not cmakestr.include?("add_subdirectory(#{dir})") and not cmakestr.include?("macro_optional_add_subdirectory(#{dir})")
+        elsif not cmakestr.include?("add_subdirectory(#{dir})") and not cmakestr.include?("ecm_optional_add_subdirectory(#{dir})")
             cmakestr << macro
         end
         cmakefile << cmakestr

@@ -1,7 +1,0 @@
-[main]
-customsrc=kde:plasma-nm
-branch=trunk
-gitbranch=master
-protocol=anonsvn
-l10n=true
-doc=false

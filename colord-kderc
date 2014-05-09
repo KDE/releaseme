@@ -1,9 +1,0 @@
-[main]
-customsrc=git://anongit.kde.org/colord-kde
-doc=false
-l10n=true
-protocol=anonsvn
-branch=trunk
-gitbranch=master
-version=0.3
-barrier=75
