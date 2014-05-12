@@ -1,8 +1,10 @@
 [main]
-customsrc=kde:oxygen-font
+customsrc=kde:milou
 branch=trunk
 gitbranch=master
 protocol=svn+ssh
-version=0.3.96
+version=4.96.0
 doc=false
 barrier=75
+l10n=false
+gitbranch=frameworks

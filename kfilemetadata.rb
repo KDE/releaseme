@@ -19,8 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-NAME      = "kwindowsaddons"
-COMPONENT = "kde-workspace"
+NAME      = "kfilemetadata"
+COMPONENT = ""
 SECTION   = ""
 
 $: << File.dirname( __FILE__)

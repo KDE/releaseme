@@ -1,8 +1,10 @@
 [main]
-customsrc=kde:kwindowsaddons
+customsrc=kde:kfilemetadata
 branch=trunk
 gitbranch=master
 protocol=svn+ssh
 version=4.96.0
 doc=false
 barrier=75
+gitbranch=frameworks
+l10n=false

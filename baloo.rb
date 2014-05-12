@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 NAME      = "baloo"
-COMPONENT = "kde-workspace"
+COMPONENT = "kdelibs"
 SECTION   = ""
 
 $: << File.dirname( __FILE__)

@@ -1,24 +1,24 @@
 #!/bin/bash
 
-./baloo.rb
-./breeze.rb
-./kde-baseapps.rb
-./kde-cli-tools.rb
-./kdeplasma-addons.rb
-./khelpcenter.rb
-./khotkeys.rb
-./kinfocenter.rb
-./kio-extras.rb
-./kmenuedit.rb
-./ksysguard.rb
-./kwindowsaddons.rb
-./kwin.rb
-./kwrited.rb
-./libkscreen.rb
-./libksysguard.rb
-./oxygen-font.rb
-./oxygen.rb
-./plasma-desktop.rb
-./plasma-workspace.rb
-./powerdevil.rb
-./systemsettings.rb
+./baloo.rb &
+./breeze.rb &
+./kde-baseapps.rb &
+./kde-cli-tools.rb &
+./kdeplasma-addons.rb &
+./khelpcenter.rb &
+./khotkeys.rb &
+./kinfocenter.rb &
+./kio-extras.rb &
+./kmenuedit.rb &
+./ksysguard.rb &
+./kwindowsaddons.rb &
+./kwin.rb &
+./kwrited.rb &
+./libkscreen.rb &
+./libksysguard.rb &
+./oxygen-font.rb &
+./oxygen.rb &
+./plasma-desktop.rb &
+./plasma-workspace.rb &
+./powerdevil.rb &
+./systemsettings.rb &

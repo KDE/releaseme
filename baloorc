@@ -6,3 +6,5 @@ protocol=svn+ssh
 version=4.96.0
 doc=false
 barrier=75
+l10n=false
+gitbranch=frameworks
