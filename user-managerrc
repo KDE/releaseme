@@ -1,5 +1,5 @@
 [main]
 customsrc=kde:user-manager
 branch=trunk
-gitbranch=master
+gitbranch=0.1
 protocol=svn+ssh
