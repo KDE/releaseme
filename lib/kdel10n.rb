@@ -97,7 +97,10 @@ class KdeL10n < Source
                 end
             end
         end
-        return pos
+        # Templates must be unique as multiple lines can contribute to the same
+        # template, as such it can happen that a.pot appears twice which can
+        # have unintended consequences by an outside user of the Array.
+        return pos.uniq
     end
 
     def strip_comments(file)
@@ -161,7 +164,7 @@ class KdeL10n < Source
             files << poFilePath
             strip_comments(poFilePath)
         end
-        return files
+        return files.uniq
     end
 
     def get_multiple(lang)
@@ -183,7 +186,7 @@ class KdeL10n < Source
             files << poFilePath
             strip_comments(poFilePath)
         end
-        return files
+        return files.uniq
     end
 
     def get(sourceDirectory)

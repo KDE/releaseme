@@ -6,3 +6,4 @@ if test -n "$LIST"; then
 	$XGETTEXT $LIST -o $podir/amarok.pot
 fi
 rm -f rc.cpp
+$XGETTEXT_QT utilities/collectionscanner/CollectionScanner.cpp -o $podir/amarokcollectionscanner_qt.pot
