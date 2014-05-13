@@ -105,10 +105,15 @@ class TestL10n < Test::Unit::TestCase
         return l
     end
 
+    def create_doc_without_translation
+        l = DocumentationL10n.new(DocumentationL10n::TRUNK, "frenchfries", @module, @section)
+        return l
+    end
+
     def test_get_doc
+        # en_US & de
         d = create_doc()
         d.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
-
         FileUtils.rm_rf(@dir)
         FileUtils.cp_r("data/single-pot", @dir)
         d.get(@dir)
@@ -120,5 +125,20 @@ class TestL10n < Test::Unit::TestCase
         assert(File::exists?("#{@dir}/doc/en_US/CMakeLists.txt"))
         assert(File::exists?("#{@dir}/doc/de/index.docbook"))
         assert(File::exists?("#{@dir}/doc/de/CMakeLists.txt"))
+
+        # en_US only (everything works if only doc/ is present in git but not translated)
+        d = create_doc_without_translation()
+        d.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
+        FileUtils.rm_rf(@dir)
+        FileUtils.cp_r("data/single-pot", @dir)
+        d.get(@dir)
+        FileUtils.rm_rf("frufru")
+        FileUtils.cp_r(@dir, "frufru")
+        assert(File::exists?("#{@dir}/CMakeLists.txt"))
+        assert(File::exists?("#{@dir}/doc/CMakeLists.txt"))
+        assert(File::exists?("#{@dir}/doc/en_US/index.docbook"))
+        assert(File::exists?("#{@dir}/doc/en_US/CMakeLists.txt"))
+        assert(!File::exists?("#{@dir}/doc/de/index.docbook"))
+        assert(!File::exists?("#{@dir}/doc/de/CMakeLists.txt"))
     end
 end
