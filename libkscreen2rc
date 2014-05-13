@@ -7,3 +7,4 @@ version=4.96.0
 doc=false
 barrier=75
 gitbranch=frameworks
+l10n=false

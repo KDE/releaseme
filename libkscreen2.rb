@@ -19,9 +19,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-NAME      = "libkscreen"
-COMPONENT = "kde-workspace"
-SECTION   = ""
+NAME      = "libkscreen2"
+COMPONENT = "extragear"
+SECTION   = "libs"
 
 $: << File.dirname( __FILE__)
 $srcvcs   = "git"
