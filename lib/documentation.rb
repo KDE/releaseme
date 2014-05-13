@@ -120,6 +120,7 @@ class DocumentationL10n < Source
             files = Dir.glob("#{dir}/**/*")
             Dir.mkdir("#{dir}/en_US")
             FileUtils.mv(files, "#{dir}/en_US")
+            # FIXME: docs is empty if only en_US is present, this is not tested correctly
         end
 
         # No documentation avilable -> leave me alone
