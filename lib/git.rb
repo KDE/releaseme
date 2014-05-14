@@ -22,15 +22,18 @@ require 'fileutils'
 
 require_relative 'vcs'
 
+# FIXME: git is not tested
 class Git < Vcs
+    # Git branch to get() from, when nil no explicit argument is passed to git
+    attr :branch, true
+
     # Clones repository into target directory
     # @param shallow whether or not to create a shallow clone
     def get(target, shallow = true)
-        if (shallow)
-            system("git clone --depth 1 #{repository} #{target}")
-        else
-            system("git clone #{repository} #{target}")
-        end
+        args = []
+        args << "--depth 1" if shallow
+        args << "--branch #{branch}" unless branch.nil? or branch.empty? # defaults to master
+        system("git clone #{args.join(' ')} #{repository} #{target}")
     end
 
     # Removes target/.git.
