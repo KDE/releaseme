@@ -43,6 +43,8 @@ class TestProject < Test::Unit::TestCase
         assert_equal(pr.identifier, 'yakuake')
         assert_equal(pr.module, 'utils')
         assert_equal(pr.component, 'extragear')
+        assert_equal(pr.i18n_trunk, 'master')
+        assert_equal(pr.i18n_stable, 'notmaster')
     end
 
     def test_resolve_invalid
@@ -53,6 +55,8 @@ class TestProject < Test::Unit::TestCase
         assert_equal(pr.identifier, nil)
         assert_equal(pr.module, nil)
         assert_equal(pr.component, nil)
+        assert_equal(pr.i18n_trunk, nil)
+        assert_equal(pr.i18n_stable, nil)
     end
 
     def test_vcs

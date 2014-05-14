@@ -34,6 +34,10 @@ class Project
     attr :component, false
     # VCS to use for this project
     attr :vcs, false
+    # Branch used for i18n trunk
+    attr :i18n_trunk, false
+    # Branch used for i18n stable
+    attr :i18n_stable, false
 
     ##
     # XML URL to use for resolution (defaults to http://projects.kde.org/kde_projects.xml).
@@ -57,6 +61,8 @@ public
         @module = nil
         @component = nil
         @vcs = nil
+        @i18n_trunk = nil
+        @i18n_stable = nil
         @xml_path = 'http://projects.kde.org/kde_projects.xml'
     end
 
@@ -106,6 +112,18 @@ public
                 @vcs.repository = url.text
             end
         end
+
+        branches = doc.root.get_elements("#{@project_element.xpath}/repo/branch")
+        branches.each do | branch |
+            i18n = branch.attribute('i18n').to_s
+            next if i18n.nil? or i18n.empty?
+            if i18n == 'trunk'
+                @i18n_trunk = branch.text
+            elsif i18n == 'stable'
+                @i18n_stable = branch.text
+            end
+        end
+
 
         if @vcs.nil?
             return false
