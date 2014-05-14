@@ -49,6 +49,8 @@ class XzArchive
         tar = "#{directory}.tar"
         return false if not File.exists?(@directory)
         begin
+            FileUtils.rm_rf(tar)
+            FileUtils.rm_rf(tar + ".xz")
             # Note that system returns bool but only captures stdout.
             raise RuntimeError if not system("tar -cf #{tar} #{directory} 2> /dev/null")
             raise RuntimeError if not system("xz -#{level} #{tar} 2> /dev/null")
