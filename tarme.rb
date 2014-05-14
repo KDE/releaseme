@@ -41,13 +41,16 @@ if not project.resolve!
     puts "Failed to resolve project"
     exit 1
 end
+project.vcs.branch = project.i18n_trunk if options[:origin] == "trunk"
+project.vcs.branch = project.i18n_stable if options[:origin] == "stable"
 
-r = KdeGitRelease.new()
-# FIXME: fuck me running
-r.vcs.repository = project.vcs.repository
-r.source.target = "#{project_name}-#{options[:version]}"
+# FIXME: why not pass the project and have the release setup branches and stuff
+#        doing it here means all of this is not covered by actual unittests
+release = KdeGitRelease.new()
+release.vcs.repository = project.vcs.repository
+release.source.target = "#{project_name}-#{options[:version]}"
 
-r.get()
+release.get()
 
 # FIXME: this should be done in optparser
 l10n_origin = KdeL10n::TRUNK if (options[:origin] == "trunk")
@@ -55,7 +58,7 @@ l10n_origin = KdeL10n::STABLE if (options[:origin] == "stable")
 
 # FIXME: branches are not handled
 # FIXME: why not pass project itself? Oo
-l = KdeL10n.new(l10n_origin, project.component, project.module)
-l.get(r.source.target)
+l10n = KdeL10n.new(l10n_origin, project.component, project.module)
+l10n.get(release.source.target)
 
-r.archive()
+release.archive()
