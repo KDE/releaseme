@@ -116,11 +116,13 @@ public
         branches = doc.root.get_elements("#{@project_element.xpath}/repo/branch")
         branches.each do | branch |
             i18n = branch.attribute('i18n').to_s
+            text = branch.text
             next if i18n.nil? or i18n.empty?
+            next if text.nil? or text.empty? or text == 'none'
             if i18n == 'trunk'
-                @i18n_trunk = branch.text
+                @i18n_trunk = text
             elsif i18n == 'stable'
-                @i18n_stable = branch.text
+                @i18n_stable = text
             end
         end
 

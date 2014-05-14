@@ -64,5 +64,6 @@ class TestProject < Test::Unit::TestCase
         pr.resolve!
         vcs = pr.vcs
         assert_equal(vcs.repository, 'git://anongit.kde.org/yakuake')
+        assert_equal(vcs.branch, nil) # project on its own should not set a branch
     end
 end
