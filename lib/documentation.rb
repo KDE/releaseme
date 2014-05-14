@@ -114,10 +114,17 @@ class DocumentationL10n < Source
         docs = Array.new
 
         # On git a layout doc/{file,file,file} may appear, in this case we move stuff
-        # to en_US
-        puts dir
-        if File.exists?("#{dir}/index.docbook") and not File.exists?("#{dir}/en_US") then
-            files = Dir.glob("#{dir}/**/*")
+        # to en_US.
+        # A more complicated case would be doc/{dir,dir}/{file,file} which can happen for
+        # multisource repos such as plasma-workspace.
+        # FIXME: multi-source documentation is not tested
+        #        need new data set with something like
+        #        doc/foo/index.docbook
+        #        doc/bar/index.docbook
+        #        doc/foobar/meow.txt
+        unless Dir.glob("#{dir}/**/index.docbook").empty? or File.exists?("#{dir}/en_US") then
+            files = Dir.glob("#{dir}/*").uniq
+            p files
             Dir.mkdir("#{dir}/en_US")
             FileUtils.mv(files, "#{dir}/en_US")
             docs << "en_US" # We placed an en_US, make sure it is in the docs list.
