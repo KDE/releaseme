@@ -52,13 +52,10 @@ release.source.target = "#{project_name}-#{options[:version]}"
 
 release.get()
 
-# FIXME: this should be done in optparser
-l10n_origin = KdeL10n::TRUNK if (options[:origin] == :trunk)
-l10n_origin = KdeL10n::STABLE if (options[:origin] == :stable)
-
 # FIXME: branches are not handled
 # FIXME: why not pass project itself? Oo
-l10n = KdeL10n.new(l10n_origin, project.component, project.module)
+# FIXME: origin should be validated? technically optparse enforces proper values
+l10n = KdeL10n.new(options[:origin], project.component, project.module)
 l10n.get(release.source.target)
 
 release.archive()
