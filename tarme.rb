@@ -41,8 +41,8 @@ if not project.resolve!
     puts "Failed to resolve project"
     exit 1
 end
-project.vcs.branch = project.i18n_trunk if options[:origin] == "trunk"
-project.vcs.branch = project.i18n_stable if options[:origin] == "stable"
+project.vcs.branch = project.i18n_trunk if options[:origin] == :trunk
+project.vcs.branch = project.i18n_stable if options[:origin] == :stable
 
 # FIXME: why not pass the project and have the release setup branches and stuff
 #        doing it here means all of this is not covered by actual unittests
@@ -53,8 +53,8 @@ release.source.target = "#{project_name}-#{options[:version]}"
 release.get()
 
 # FIXME: this should be done in optparser
-l10n_origin = KdeL10n::TRUNK if (options[:origin] == "trunk")
-l10n_origin = KdeL10n::STABLE if (options[:origin] == "stable")
+l10n_origin = KdeL10n::TRUNK if (options[:origin] == :trunk)
+l10n_origin = KdeL10n::STABLE if (options[:origin] == :stable)
 
 # FIXME: branches are not handled
 # FIXME: why not pass project itself? Oo
