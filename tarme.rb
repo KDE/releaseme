@@ -35,6 +35,7 @@ p project_name
 require_relative 'lib/project'
 require_relative 'lib/kdegitrelease'
 require_relative 'lib/kdel10n'
+require_relative 'lib/documentation'
 
 project = Project.new(project_name)
 if not project.resolve!
@@ -57,5 +58,8 @@ release.get()
 # FIXME: origin should be validated? technically optparse enforces proper values
 l10n = KdeL10n.new(options[:origin], project.component, project.module)
 l10n.get(release.source.target)
+
+doc = DocumentationL10n.new(options[:origin], project.component, project.module)
+doc.get(release.source.target)
 
 release.archive()
