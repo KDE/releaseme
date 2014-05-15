@@ -22,6 +22,7 @@ require 'net/http'
 require 'rexml/document'
 
 require_relative 'git'
+require_relative 'projectsfile'
 
 class Project
     # The identifier to be resolved
@@ -74,13 +75,7 @@ public
     def resolve!()
         return false if id.nil? or id.empty?
 
-        xml_data = nil
-        if @xml_path.start_with?("http:") or @xml_path.start_with?("https:")
-            xml_data = Net::HTTP.get_response(URI.parse(@xml_path)).body
-        else # Assumed to be local.
-            xml_data = File.read(@xml_path)
-        end
-        doc = REXML::Document.new(xml_data)
+        doc = ProjectsFile.instance.xml_doc
 
         # Resolve project/module/component
         @project_element = nil
