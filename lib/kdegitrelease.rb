@@ -28,13 +28,13 @@ class KdeGitRelease
     # The source object from which the release is done
     attr_reader :source
     # The archive object which will create the archive
-    attr_reader :archive
+    attr_reader :archive_
 
     # Init
     def initialize()
         @vcs = Git.new()
         @source = Source.new()
-        @archive = XzArchive.new()
+        @archive_ = XzArchive.new()
     end
 
     # Get the source
@@ -43,11 +43,12 @@ class KdeGitRelease
         source.get(vcs)
     end
 
+    # FIXME: archive is an attr and a method, lovely
     # Create the final archive file
     def archive()
         source.clean(vcs)
-        @archive.directory = source.target
-        @archive.create()
+        @archive_.directory = source.target
+        @archive_.create()
     end
 
 end

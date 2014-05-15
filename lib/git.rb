@@ -27,6 +27,12 @@ class Git < Vcs
     # Git branch to get() from, when nil no explicit argument is passed to git
     attr :branch, true
 
+    # Git hash of the gotten source. This is nil unless get() finished successfully
+    # --
+    # FIXME: might need to move to Vcs base?
+    # ++
+    attr :hash, false
+
     # Clones repository into target directory
     # @param shallow whether or not to create a shallow clone
     def get(target, shallow = true)
@@ -34,6 +40,7 @@ class Git < Vcs
         args << "--depth 1" if shallow
         args << "--branch #{branch}" unless branch.nil? or branch.empty? # defaults to master
         system("git clone #{args.join(' ')} #{repository} #{target}")
+        @hash = %x[git rev-parse HEAD].chop()
     end
 
     # Removes target/.git.

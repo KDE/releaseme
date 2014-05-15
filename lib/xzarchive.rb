@@ -30,10 +30,15 @@ class XzArchive
     # result in an archive file)
     attr :level, true
 
+    # XZ compressed tarball file name (e.g. foobar-1.tar.xz)
+    # This is nil unless create() finished successfully.
+    attr :filename, false
+
     # Creates new XzArchive. @directory must be assigned seperately.
     def initialize()
         @directory = nil
         @level = 9
+        @filename = nil
     end
 
     ##
@@ -47,17 +52,19 @@ class XzArchive
     #++
     def create()
         tar = "#{directory}.tar"
+        xz = "#{tar}.xz"
         return false if not File.exists?(@directory)
         begin
             FileUtils.rm_rf(tar)
-            FileUtils.rm_rf(tar + ".xz")
+            FileUtils.rm_rf(xz)
             # Note that system returns bool but only captures stdout.
             raise RuntimeError if not system("tar -cf #{tar} #{directory} 2> /dev/null")
             raise RuntimeError if not system("xz -#{level} #{tar} 2> /dev/null")
+            @filename = xz
             return true
         rescue
             FileUtils.rm_rf(tar)
-            FileUtils.rm_rf(tar + ".xz")
+            FileUtils.rm_rf(xz)
             return false
         end
     end
