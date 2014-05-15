@@ -204,8 +204,13 @@ class KdeL10n < Source
 
             if templates.count > 1
                 files = get_multiple(language)
-            else
+            elsif templates.count == 1
                 files = get_single(language)
+            else
+                # FIXME: there must be a beter way
+                Dir.chdir(previous_pwd)
+                # FIXME: needs testcase
+                return # No translations need fetching
             end
 
             # No files obtained :(
