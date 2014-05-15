@@ -111,9 +111,10 @@ release_projects.each do | project |
 
     release.archive()
 
+    project = project.id
     branch = release.vcs.branch
     hash = release.vcs.hash
     tar = release.archive_.filename
     md5 = %x[md5sum #{tar}].split(' ')[0] unless tar.nil?
-    release_data_file.write("#{branch};#{hash};#{tar};#{md5}\n")
+    release_data_file.write("#{project};#{branch};#{hash};#{tar};#{md5}\n")
 end
