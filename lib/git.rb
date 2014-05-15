@@ -39,7 +39,7 @@ class Git < Vcs
         args = []
         args << "--depth 1" if shallow
         args << "--branch #{branch}" unless branch.nil? or branch.empty? # defaults to master
-        system("git clone #{args.join(' ')} #{repository} #{target}")
+        %x[git clone #{args.join(' ')} #{repository} #{target} 2>&1]
 
         # Set hash accordingly
         previous_wd = Dir.pwd
