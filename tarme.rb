@@ -111,6 +111,7 @@ release_projects.each do | project |
 
     release.archive()
 
+    # FIXME: technically we need to track SVN revs for l10n as well...........
     project = project.id
     branch = release.vcs.branch
     hash = release.vcs.hash
