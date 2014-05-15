@@ -40,7 +40,12 @@ class Git < Vcs
         args << "--depth 1" if shallow
         args << "--branch #{branch}" unless branch.nil? or branch.empty? # defaults to master
         system("git clone #{args.join(' ')} #{repository} #{target}")
+
+        # Set hash accordingly
+        previous_wd = Dir.pwd
+        Dir.chdir(target)
         @hash = %x[git rev-parse HEAD].chop()
+        Dir.chdir(previous_wd)
     end
 
     # Removes target/.git.
