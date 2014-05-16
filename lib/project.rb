@@ -40,11 +40,6 @@ class Project
     # Branch used for i18n stable
     attr :i18n_stable, false
 
-    ##
-    # XML URL to use for resolution (defaults to http://projects.kde.org/kde_projects.xml).
-    # Should not be changed unless you know what you are doing.
-    attr :xml_path, true
-
 private
     # XML element of the project (e.g. yakuake's).
     attr :project_element, false
@@ -64,7 +59,6 @@ public
         @vcs = nil
         @i18n_trunk = nil
         @i18n_stable = nil
-        @xml_path = 'http://projects.kde.org/kde_projects.xml'
     end
 
     ##
