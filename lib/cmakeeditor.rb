@@ -18,12 +18,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'fileutils'
+
 # General purpose CMakeLists.txt editing functions
 module CMakeEditor
     extend self
 
     # Creates the CMakeLists.txt for doc/$LANG/*
     def create_language_specific_doc_lists!(dir, language, software_name)
+        # In case of en_US there could be a CMakeLists already present, do not
+        # overwrite it as there may be fancy logic inside.
+        return if File.exist?("#{dir}/CMakeLists.txt")
+
         file = File.new("#{dir}/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC)
         if File.exist?('index.docbook')
             file << "kdoctools_create_handbook(index.docbook INSTALL_DESTINATION \${HTML_INSTALL_DIR}/#{language} SUBDIR #{software_name})\n"
@@ -31,13 +37,24 @@ module CMakeEditor
             # FIXME: needs test
             previous_wd = Dir.pwd
             Dir.chdir(dir)
-            Dir.glob('*/index.docbook').each do |docbook|
-                dirname = File.dirname(docbook)
-                file << "add_subdirectory(#{dirname})\n"
+            # FIXME: shitty hardcoding
+            # FIXME: this actually depends on the fact that en_US uses optional_add_subdir
+            #        as otherwise languages won't build when they have no translation for a subdir.
+            # Iff en_US has a CMakeLists.txt reuse it.
+            if File.exist?('../en_US/CMakeLists.txt')
+                file.close()
+                FileUtils.cp('../en_US/CMakeLists.txt', '.')
+            else
+                # If there is no file in en_US, simply write one manually.
+                Dir.glob('*/index.docbook').each do |docbook|
+                    dirname = File.dirname(docbook)
+                    file << "ecm_optional_add_subdirectory(#{dirname})\n"
+                    # FIXME: we need more nesting here... NOT :@
+                end
             end
             Dir.chdir(previous_wd)
         end
-        file.close
+        file.close()
     end
 
     # Creates the CMakeLists.txt for doc/*
