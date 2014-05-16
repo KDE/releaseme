@@ -24,9 +24,19 @@ module CMakeEditor
 
     # Creates the CMakeLists.txt for doc/$LANG/*
     def create_language_specific_doc_lists!(dir, language, software_name)
-        file = File.new("#{dir}/CMakeLists.txt",
-                        File::CREAT | File::RDWR | File::TRUNC)
-        file << "kde4_create_handbook(index.docbook INSTALL_DESTINATION \${HTML_INSTALL_DIR}/#{language} SUBDIR #{software_name})\n"
+        file = File.new("#{dir}/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC)
+        if File.exist?('index.docbook')
+            file << "kdoctools_create_handbook(index.docbook INSTALL_DESTINATION \${HTML_INSTALL_DIR}/#{language} SUBDIR #{software_name})\n"
+        else
+            # FIXME: needs test
+            previous_wd = Dir.pwd
+            Dir.chdir(dir)
+            Dir.glob('*/index.docbook').each do |docbook|
+                dirname = File.dirname(docbook)
+                file << "add_subdirectory(#{dirname})\n"
+            end
+            Dir.chdir(previous_wd)
+        end
         file.close
     end
 
