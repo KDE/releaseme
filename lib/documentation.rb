@@ -140,7 +140,7 @@ class DocumentationL10n < Source
         CMakeEditor::create_language_specific_doc_lists!("#{dir}/en_US", "en_US", project_name)
         for lang in availableLanguages
             lang.chomp!
-            next if lang == "x-test" or lang != "de"
+            next if lang == "x-test"
 
             FileUtils.rm_rf(temp_dir)
             vcs.get(temp_dir, vcs_l10n_path(lang))
