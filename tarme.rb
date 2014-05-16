@@ -103,7 +103,8 @@ release_projects.each do | project |
     l10n = KdeL10n.new(options[:origin], project.component, project.module)
     l10n.get(release.source.target)
 
-    doc = DocumentationL10n.new(options[:origin], project.component, project.module)
+    # FIXME: when one copies the l10n .new and adjust the class name arguments will be crap but nothing ever notices... lack of checks anyone?
+    doc = DocumentationL10n.new(options[:origin], project_name, project.component, project.module)
     doc.get(release.source.target)
 
     release.archive()
