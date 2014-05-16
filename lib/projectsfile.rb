@@ -32,7 +32,7 @@ class ProjectsFile
     ##
     # XML URL to use for resolution (defaults to http://projects.kde.org/kde_projects.xml).
     # Should not be changed unless you know what you are doing.
-    attr :xml_path, false
+    attr :xml_path, true
 
     # Retrieved XML data.
     attr :xml_data, false
