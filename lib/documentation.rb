@@ -76,7 +76,6 @@ class DocumentationL10n < Source
         @languages = Array.new
         @templates = Array.new
 
-
         @project_name = project_name
 
         initRepoUrl("svn://anonsvn.kde.org/home/kde/")
@@ -93,11 +92,18 @@ class DocumentationL10n < Source
         else
             repoUrl.concat("branches/stable/")
         end
-        repoUrl.concat("/l10n-kde4/")
+        repoUrl.concat("/l10n-kf5/")
 
         @vcs.repository = repoUrl
     end
 
+    # FIXME: this may actually be jolly wrong! while docs are a bit missing it
+    #        appears that in kf5 the construct is in fact component-module/$DOCNAME.
+    #        This is actually radically different from what this function expresses
+    #        because plasma-workspace (project) actually contains more than one binary
+    #        and more than one documentation. So ultimately what this here class
+    #        needs to do is: check all directories in doc/ and then fetch documentation
+    #        accordingly from svn, a static scheme involving project_name will not work.
     def vcs_l10n_path(lang)
         return "#{lang}/docs/#{@module}-#{@section}/#{@project_name}"
     end
@@ -141,7 +147,7 @@ class DocumentationL10n < Source
         CMakeEditor::create_language_specific_doc_lists!("#{dir}/en_US", "en_US", project_name)
         for lang in availableLanguages
             lang.chomp!
-            next if lang == "x-test"
+            next if lang == "x-test" or lang != "de"
 
             FileUtils.rm_rf(temp_dir)
             vcs.get(temp_dir, vcs_l10n_path(lang))
@@ -165,6 +171,7 @@ class DocumentationL10n < Source
             CMakeEditor::create_doc_meta_lists!(dir)
             CMakeEditor::append_optional_add_subdirectory!(sourceDirectory, 'doc')
         else
+            puts "no docs found :'<"
             FileUtils::rm_rf(dir)
         end
 
