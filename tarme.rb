@@ -71,15 +71,14 @@ def flat_project_resolver(project_id)
         module_element = find_element_from_xpath("#{component_element.xpath}/module", parts.shift)
         project_elements = find_element_from_xpath("#{module_element.xpath}/project")
         project_elements.each do | project_element |
-            # FIXME: we really should construct from elements here, otherwise project resolves again....
             p = Project.new(project_element.attribute('identifier').to_s)
-            p.resolve!
+            p.set_elements(component_element, module_element, project_element)
+            p.resolve_attributes!
             release_projects << p
         end
     else
         # Project release -> resolve through REXML query to project level
         project_element = find_element_from_xpath('/kdeprojects/component/module/project', project.id)
-        # FIXME: code copy from above, something is astray with the code layout ololol
         p = Project.new(project_element.attribute('identifier').to_s)
         p.resolve!
         release_projects << p

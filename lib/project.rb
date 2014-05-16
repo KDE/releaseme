@@ -68,10 +68,23 @@ public
     end
 
     ##
+    # Sets the REXML elements. This is the one and only way to set the elemnts.
+    # All elements must be valid.
+    # This function must be called before resolve_attributes!
+    #--
+    # FIXME: needs tests
+    #++
+    def set_elements(component_element, module_element, project_element)
+        @component_element = component_element
+        @module_element = module_element
+        @project_element = project_element
+    end
+
+    ##
     # call-seq:
     #  project.resolve() -> true or false
     #
-    # Resolves identifier, module and component of the project at hand.
+    # Resolves attributes, project name, module, and component of the project at hand.
     def resolve!()
         return false if id.nil? or id.empty?
 
@@ -88,10 +101,24 @@ public
                 break
             end
         end
+        return resolve_attributes!
+    end
 
+    ##
+    # call-seq:
+    #  project.resolve_attributes!() -> true or false
+    #
+    # Resolve project attributes by hand. All three REXML elements must be set before
+    # this function will do anything useful. Also see set_elements().
+    #--
+    # FIXME: needs tests
+    #++
+    def resolve_attributes!()
         if @project_element.nil? or @module_element.nil? or @component_element.nil?
             return false;
         end
+
+        doc = ProjectsFile.instance.xml_doc
 
         @identifier = @project_element.attribute('identifier').to_s
         @module = @module_element.attribute('identifier').to_s
