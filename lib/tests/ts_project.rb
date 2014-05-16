@@ -29,7 +29,10 @@ class TestProject < Test::Unit::TestCase
 
     def setup
         @pr = Project.new()
-        @pr.xml_path = Dir.pwd + '/data/kde_projects.xml'
+        # Project uses ProjectsFile to read data, so we need to make sure it
+        # uses our dummy file.
+        ProjectsFile.instance.xml_path = Dir.pwd + '/data/kde_projects.xml'
+        ProjectsFile.instance.load!
     end
 
     def teardown
