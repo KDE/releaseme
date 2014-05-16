@@ -97,13 +97,6 @@ class DocumentationL10n < Source
         @vcs.repository = repoUrl
     end
 
-    # FIXME: this may actually be jolly wrong! while docs are a bit missing it
-    #        appears that in kf5 the construct is in fact component-module/$DOCNAME.
-    #        This is actually radically different from what this function expresses
-    #        because plasma-workspace (project) actually contains more than one binary
-    #        and more than one documentation. So ultimately what this here class
-    #        needs to do is: check all directories in doc/ and then fetch documentation
-    #        accordingly from svn, a static scheme involving project_name will not work.
     def vcs_l10n_path(lang)
         return "#{lang}/docs/#{@module}-#{@section}/#{@project_name}"
     end
