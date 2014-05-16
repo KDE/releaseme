@@ -92,11 +92,11 @@ endif (NOT GETTEXT_MSGFMT_EXECUTABLE)
         data = file.read()
         file.rewind()
         file.truncate( 0 )
-        macro = "\ninclude(MacroOptionalAddSubdirectory)\nmacro_optional_add_subdirectory(#{subdir})\n"
+        macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory(#{subdir})\n"
         if data.include?("##{subdir.upcase}_SUBDIR")
             data = data.sub("##{subdir.upcase}_SUBDIR",macro)
         # TODO: should be a regex for whitespace lovers
-        elsif not data.include?("add_subdirectory(#{subdir})") and not data.include?("macro_optional_add_subdirectory(#{subdir})")
+        elsif not data.include?("add_subdirectory(#{subdir})") and not data.include?("ecm_optional_add_subdirectory(#{subdir})")
             data << macro
         end
         file << data
