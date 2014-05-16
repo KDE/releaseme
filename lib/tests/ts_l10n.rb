@@ -13,8 +13,8 @@ class TestL10n < Test::Unit::TestCase
         @module = "extragear"
         @section = "multimedia"
 
-        @trunkUrl = "trunk/l10n-kde4/"
-        @stableUrl = "branches/stable/l10n-kde4"
+        @trunkUrl = "trunk/l10n-kf5/"
+        @stableUrl = "branches/stable/l10n-kf5"
 
         @dir = "tmp_l10n_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         @svnTemplateDir = "tmp_l10n_repo_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
@@ -57,9 +57,9 @@ class TestL10n < Test::Unit::TestCase
         l = create_l10n()
         assert_equal(l.type, KdeL10n::TRUNK)
         l.initRepoUrl("file://a")
-        assert_equal(l.vcs.repository, "file://a/trunk//l10n-kde4/")
+        assert_equal(l.vcs.repository, "file://a/trunk//l10n-kf5/")
         l.initRepoUrl("file://a/")
-        assert_equal(l.vcs.repository, "file://a/trunk//l10n-kde4/")
+        assert_equal(l.vcs.repository, "file://a/trunk//l10n-kf5/")
     end
 
     def test_find_templates

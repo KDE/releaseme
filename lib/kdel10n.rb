@@ -84,7 +84,7 @@ class KdeL10n < Source
         else
             repoUrl.concat("branches/stable/")
         end
-        repoUrl.concat("/l10n-kde4/")
+        repoUrl.concat("/l10n-kf5/")
 
         @vcs.repository = repoUrl
     end
