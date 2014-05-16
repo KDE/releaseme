@@ -47,7 +47,7 @@ public
         if not path.nil? and not path.empty?
             url.concat("/#{path}")
         end
-        return system("svn co #{url} #{target}")
+        return %x[svn co #{url} #{target}]
     end
 
     # Removes .svn recursively from target.
