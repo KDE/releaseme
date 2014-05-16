@@ -21,6 +21,7 @@
 require 'fileutils'
 
 require_relative 'cmakeeditor'
+require_relative 'source'
 require_relative 'svn'
 
 class DocumentationL10n < Source
