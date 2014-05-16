@@ -14,8 +14,8 @@ OptionParser.new do |opts|
 
     opts.on("--version VERSION",
             "Version.",
-            "   Versions should be kept in purely numerical format (e.g. x.x.x).",
-            "   Alphanumerical version should be avoided if at all possible (e.g. x.x.xbeta1).") do |v|
+            "   Versions should be kept in purely numerical format (good: x.x.x).",
+            "   Alphanumerical version should be avoided if at all possible (bad: x.x.xbeta1).") do |v|
         options[:version] = v
     end
 end.parse!
@@ -31,13 +31,12 @@ p options
 p ARGV
 p project_name
 
+#################
 
-require_relative 'lib/project'
+require_relative 'lib/documentation'
 require_relative 'lib/kdegitrelease'
 require_relative 'lib/kdel10n'
-require_relative 'lib/documentation'
-
-
+require_relative 'lib/project'
 require_relative 'lib/projectsfile'
 
 # TODO: move this somewhere
@@ -89,7 +88,6 @@ def flat_project_resolver(project_id)
 end
 
 release_projects = flat_project_resolver(project_name)
-p release_projects
 
 release_data_file = File.open("release_data", "w")
 release_projects.each do | project |
@@ -112,6 +110,7 @@ release_projects.each do | project |
     release.archive()
 
     # FIXME: technically we need to track SVN revs for l10n as well...........
+    # FIXME FIXME FIXME FIXME: need version
     project = project.id
     branch = release.vcs.branch
     hash = release.vcs.hash
