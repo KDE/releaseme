@@ -48,6 +48,7 @@ module CMakeEditor
                 # If there is no file in en_US, simply write one manually.
                 Dir.glob('*/index.docbook').each do |docbook|
                     dirname = File.dirname(docbook)
+                    # TODO: use append_optional_add_subdirectory! maybe?
                     file << "ecm_optional_add_subdirectory(#{dirname})\n"
                     # FIXME: we need more nesting here... NOT :@
                 end
@@ -112,8 +113,11 @@ endif (NOT GETTEXT_MSGFMT_EXECUTABLE)
         macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory(#{subdir})\n"
         if data.include?("##{subdir.upcase}_SUBDIR")
             data = data.sub("##{subdir.upcase}_SUBDIR",macro)
-        # TODO: should be a regex for whitespace lovers
-        elsif not data.include?("add_subdirectory(#{subdir})") and not data.include?("ecm_optional_add_subdirectory(#{subdir})")
+        elsif (data =~ /^\s*(add_subdirectory|ecm_optional_add_subdirectory)\s*\(\s*#{subdir}\s*\).*$/).nil?
+            # TODO: needs test case
+            # Mighty fancy regex looking for existing add_subdir.
+            # Basically allows spaces everywhere one might want to put spaces.
+            # At the end we allow everything as there may be a comment for example.
             data << macro
         end
         file << data
