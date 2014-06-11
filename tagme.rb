@@ -85,7 +85,7 @@ tag_projects.each do | tag_project |
     source = Source.new
     source.target = "tmp-tagme"
     source.cleanup()
-    source.get(tag_project.project.vcs)
+    source.get(tag_project.project.vcs, false)
 
     Dir.chdir(source.target) do
         puts "::git tag -s -m 'Tagging #{options[:version]}' v#{options[:version]} #{tag_project.git_rev}"
