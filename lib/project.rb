@@ -112,6 +112,9 @@ public
             return false;
         end
 
+        # TODO: projects have an 'active' flag, if that is false we likely
+        #        should print a warnign and ask whether we really should continue
+
         doc = ProjectsFile.instance.xml_doc
 
         @identifier = @project_element.attribute('identifier').to_s
