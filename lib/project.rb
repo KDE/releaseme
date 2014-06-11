@@ -122,7 +122,11 @@ public
         @vcs = nil
         urls = doc.root.get_elements("#{@project_element.xpath}/repo/url")
         urls.each do | url |
-            if url.attribute('access').to_s == 'read-only' and
+            # FIXME: we need a way to switch between RO and RW as
+            # a) distros like to use it so they may not have RW access
+            # b) we need RW access for tagme, so tagme needs a way to explicitly
+            #    request the RW repo url rather than the RO one...
+            if url.attribute('access').to_s == 'read+write' and
                 url.attribute('protocol').to_s == 'git'
                 @vcs = Git.new()
                 @vcs.repository = url.text
