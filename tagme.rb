@@ -67,7 +67,10 @@ def read_release_data()
             # 2 = git rev
             project = TagProject.new
             project.project = Project.new(parts[0])
-            project.project.resolve!
+            while not project.project.resolve! do
+                puts "Resolving the project #{parts[0]} failed. Going to try again in 5 seconds"
+                sleep 5
+            end
             project.project.vcs.branch = parts[1]
             project.git_rev = parts[2]
             projects << project
