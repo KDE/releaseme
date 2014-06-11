@@ -35,8 +35,17 @@ class Source
     end
 
     # Gets the source
-    def get(vcs)
-        vcs.get(target)
+    def get(vcs, shallow = true)
+        # FIXME: this is a bloody warkaround for the fact that vcs itself
+        #        doesn't actually know about shallows, but git does and
+        #        for tarme shallow is desirable whereas for tagme we need a full
+        #        clone....
+        #        perhaps a bool:shallow attribute on the vcs would help?
+        begin
+            vcs.get(target, shallow)
+        rescue
+            vcs.get(target)
+        end
     end
 
 end
