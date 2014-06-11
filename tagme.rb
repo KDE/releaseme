@@ -89,9 +89,9 @@ tag_projects.each do | tag_project |
 
     Dir.chdir(source.target) do
         puts "::git tag -s -m 'Tagging #{options[:version]}' v#{options[:version]} #{tag_project.git_rev}"
-#         %x[git tag -s -m 'Tagging #{options[:version]}' v#{options[:version]} #{tag_project.git_rev}]
+        %x[git tag -s -m 'Tagging #{options[:version]}' v#{options[:version]} #{tag_project.git_rev}]
         puts "::git push --tags origin"
-#         %x[git push --tags origin]
+        %x[git push --tags origin]
     end
 
     # TODO: impl l10n and docs and what have you
