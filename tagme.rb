@@ -23,13 +23,7 @@ require 'optparse'
 
 options = {}
 OptionParser.new do |opts|
-    opts.banner = "Usage: tarme.rb [options] PROJECT_NAME"
-
-    opts.on("--origin trunk|stable", [:trunk, :stable],
-            "Origin.",
-            "   Used to deduce release branch and localization branches.") do |v|
-        options[:origin] = v
-    end
+    opts.banner = "Usage: tarme.rb [options]"
 
     opts.on("--version VERSION",
             "Version.",
@@ -39,8 +33,8 @@ OptionParser.new do |opts|
     end
 end.parse!
 
-if options[:origin].nil? or options[:version].nil? or ARGV.empty?
-    puts "error, you need to set origin and version"
+if options[:version].nil?
+    puts "error, you need to set version"
     exit 1
 end
 
@@ -91,10 +85,10 @@ tag_projects.each do | tag_project |
     source.get(tag_project.project.vcs)
 
     Dir.chdir(source.target) do
-        puts "::git tag #{options[:version]} #{tag_project.git_rev}"
+        puts "::git tag v#{options[:version]} #{tag_project.git_rev}"
 #         %x[git tag #{options[:version]} #{tag_project.git_rev}]
-        puts "::git push origin #{tag_project.project.vcs.branch}"
-#         %x[git push origin #{tag_project.project.vcs.branch}]
+        puts "::git push --tags origin #{tag_project.project.vcs.branch}"
+#         %x[git push --tags origin #{tag_project.project.vcs.branch}]
     end
 
     # TODO: impl l10n and docs and what have you
