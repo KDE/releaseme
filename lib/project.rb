@@ -84,6 +84,20 @@ public
 
         doc = ProjectsFile.instance.xml_doc
 
+        # TODO: if a project is not under component/module it cannot be resolved
+        #       This ultimately should:
+        #       try to find a node in component/module/project
+        #        -> match the path attribute as primary identifier (this allows
+        #           kde/workspace and kde/workspace/foo as valid ids)
+        #        -> match against the node 'identifier' property second (this allows
+        #           workspace and foo as valid ids)
+        #       if none was found traverese upwards until a match was found. i.e.
+        #        look in component/module and check for match as above, then in
+        #        component and check for match. if none was found resolution failed
+        #       if a match was found, try to resolve child nodes, this allows
+        #        meta ids such as kde/workspace to resolve to multiple actual
+        #        projects
+
         # Resolve project/module/component
         @project_element = nil
         projects = doc.root.get_elements('/kdeprojects/component/module/project')
