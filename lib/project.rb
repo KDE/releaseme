@@ -130,7 +130,7 @@ public
             # b) we need RW access for tagme, so tagme needs a way to explicitly
             #    request the RW repo url rather than the RO one...
             if url.attribute('access').to_s == 'read+write' and
-                url.attribute('protocol').to_s == 'git'
+                url.attribute('protocol').to_s == 'ssh'
                 @vcs = Git.new()
                 @vcs.repository = url.text
             end
