@@ -19,8 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 NAME      = "plasma-nm"
-COMPONENT = "playground"
-SECTION   = "network"
+COMPONENT = "extragear"
+SECTION   = "base"
 
 $: << File.dirname( __FILE__)
 $srcvcs   = "git"
