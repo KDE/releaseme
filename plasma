@@ -22,6 +22,7 @@ VERSION_LIBNM_QT=5.0.90
 # powerdevil/CMakeLists.txt                        POWERDEVIL_VERSION_MINOR 96
 # libmm-qt/CMakeLists.txt                          set(KF5_VERSION "5.0.90")
 # libnm-qt/CMakeLists.txt                          set(KF5_VERSION "5.0.90")
+# plasma-nm/CMakeLists.txt                         set(PLASMANM_VERSION_MINOR 97)
 
 ./tarme.rb --origin trunk --version $VERSION kde/workspace/
 cat release_data > $VERSION-release-data
@@ -60,6 +61,17 @@ cat release_data >> $VERSION-release-data
 #not in this release
 rm kwindowsaddons* -r
 sed -i '/kwindowsaddons/d' $VERSION-release-data
+
+#still in kdereview, need to do it by hand
+git clone --branch release-0.4 kde:oxygen-fonts
+cd oxygen-fonts; 
+REV=`git rev-parse HEAD`
+cd ..
+rm -rf oxygen-fonts/.git
+mv oxygen-fonts oxygen-fonts-$VERSION_OXYGEN_FONT
+tar Jcf oxygen-fonts-$VERSION_OXYGEN_FONT.tar.xz oxygen-fonts-$VERSION_OXYGEN_FONT
+SHA=`sha256sum oxygen-fonts-0.3.98.tar.xz | awk '{print $1}'`
+echo "oxygen-fonts;release-0.4;$REV;oxygen-fonts-$VERSION_OXYGEN_FONT.tar.xz;$SHA" >> $VERSION
 
 svn export svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $4}' | sed s,\\.,, >> $VERSION-release-data-plasma-workspace-wallpapers
 mv plasma-workspace-wallpapers/ plasma-workspace-wallpapers-$VERSION
