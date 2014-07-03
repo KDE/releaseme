@@ -74,7 +74,7 @@ module CMakeEditor
         file = File.new("#{dir}/CMakeLists.txt",
                         File::CREAT | File::RDWR | File::TRUNC)
         file << "file(GLOB _po_files *.po)\n"
-        file << "GETTEXT_PROCESS_PO_FILES(#{language} ALL INSTALL_DESTINATION ${LOCALE_INSTALL_DIR} ${_po_files})\n"
+        file << "GETTEXT_PROCESS_PO_FILES(#{language} ALL INSTALL_DESTINATION ${LOCALE_INSTALL_DIR} PO_FILES ${_po_files})\n"
         file.close
     end
 
