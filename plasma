@@ -1,0 +1,68 @@
+VERSION=4.98.0
+VERSION_OXYGEN_FONT=0.3.98
+VERSION_LIBKSCREEN=1.73
+VERSION_LIBNM_QT=5.0.90
+
+#Update versions of:
+# baloo/CMakeLists.txt                             set(BALOO_VERSION "4.97.0")
+# kfilemetadata/CMakeLists.txt                     ecm_setup_version(4.98.0
+# kwin/CMakeLists.txt                              KWIN_VERSION_MINOR 96
+# kio-extras/network/network/CMakeLists.txt        MOLLETNETWORK_VERSION_MINOR 96
+# kwrited/CMakeLists.txt                           KWRITED_VERSION 4.96.0
+# libksysguard/CMakeLists.txt                      LIBKSYSGUARD_VERSION_MINOR 96
+# systemsettings/CMakeLists.txt                    SYSTEMSETTINGS_VERSION 4.96.0
+# ksysguard/CMakeLists.txt                         KSYSGUARD_VERSION 4.96.0
+# plasma-workspace/libtaskmanager/CMakeLists.txt   VERSION 4.96.0
+# plasma-workspace/CMakeLists.txt                  PLASMAWORKSPACE_VERSION_MINOR 96
+# plasma-workspace/libkworkspace/CMakeLists.txt    VERSION 4.96.0
+# plasma-workspace/dataengines/geolocation/CMakeLists.txt  VERSION 4.97.0
+# khotkeys/CMakeLists.txt                          KHOTKEYS_VERSION_MINOR 96
+# plasma-desktop/CMakeLists.txt                    PLASMADESKTOP_VERSION_MINOR 96
+# milou/CMakeLists.txt                             set(MILOU_VERSION_MINOR 97)
+# powerdevil/CMakeLists.txt                        POWERDEVIL_VERSION_MINOR 96
+# libmm-qt/CMakeLists.txt                          set(KF5_VERSION "5.0.90")
+# libnm-qt/CMakeLists.txt                          set(KF5_VERSION "5.0.90")
+
+./tarme.rb --origin trunk --version $VERSION kde/workspace/
+cat release_data > $VERSION-release-data
+mv kfilemetadata-$VERSION.tar.xz kfilemetadata5-$VERSION.tar.xz
+sed -i s,kfilemetadata,kfilemetadata5, $VERSION-release-data
+
+./tarme.rb --origin trunk --version $VERSION_OXYGEN_FONT oxygen-fonts
+cat release_data >> $VERSION-release-data
+
+#frameworks branch set in projects.kde.org
+./tarme.rb --origin trunk --version $VERSION baloo
+cat release_data >> $VERSION-release-data
+mv baloo-$VERSION.tar.xz baloo5-$VERSION.tar.xz
+sed -i s,baloo,baloo5, $VERSION-release-data
+
+#frameworks branch set in projects.kde.org
+./tarme.rb --origin trunk --version $VERSION kfilemetadata
+cat release_data >> $VERSION-release-data
+
+#frameworks branch set in projects.kde.org
+./tarme.rb --origin trunk --version $VERSION milou
+cat release_data >> $VERSION-release-data
+mv milou-$VERSION.tar.xz milou5-$VERSION.tar.xz
+sed -i s,milou,milou5, $VERSION-release-data
+
+./tarme.rb --origin trunk --version $VERSION_LIBKSCREEN libkscreen
+cat release_data >> $VERSION-release-data
+mv libkscreen-$VERSION_LIBKSCREEN.tar.xz libkscreen2-$VERSION_LIBKSCREEN.tar.xz
+
+./tarme.rb --origin trunk --version $VERSION_LIBNM_QT libnm-qt
+cat release_data >> $VERSION-release-data
+
+./tarme.rb --origin trunk --version $VERSION_LIBNM_QT libmm-qt
+cat release_data >> $VERSION-release-data
+
+#not in this release
+rm kwindowsaddons* -r
+sed -i '/kwindowsaddons/d' $VERSION-release-data
+
+svn export svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $4}' | sed s,\\.,, >> $VERSION-release-data-plasma-workspace-wallpapers
+mv plasma-workspace-wallpapers/ plasma-workspace-wallpapers-$VERSION
+tar Jcf plasma-workspace-wallpapers-4.98.0.tar.xz plasma-workspace-wallpapers-4.98.0
+echo >> $VERSION-release-data
+sha256sum plasma-workspace-wallpapers-4.98.0.tar.xz >> $VERSION-release-data
