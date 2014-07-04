@@ -112,7 +112,7 @@ class KdeL10n < Source
         str = file.read
         file.rewind
         file.truncate(0)
-        str.gsub!(/#~.*/, "")
+        str.gsub!(/^#~.*/, "")
         str = str.strip
         file << str
         file.close
