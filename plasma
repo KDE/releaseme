@@ -26,8 +26,6 @@ VERSION_LIBNM_QT=5.0.90
 
 ./tarme.rb --origin trunk --version $VERSION kde/workspace/
 cat release_data > $VERSION-release-data
-mv milou-$VERSION.tar.xz milou5-$VERSION.tar.xz
-sed -i s,milou,milou5,g $VERSION-release-data
 
 ./tarme.rb --origin trunk --version $VERSION_OXYGEN_FONT oxygen-fonts
 cat release_data >> $VERSION-release-data
@@ -35,19 +33,13 @@ cat release_data >> $VERSION-release-data
 #frameworks branch set in projects.kde.org
 ./tarme.rb --origin trunk --version $VERSION baloo
 cat release_data >> $VERSION-release-data
-mv baloo-$VERSION.tar.xz baloo5-$VERSION.tar.xz
-sed -i s,baloo,baloo5,g $VERSION-release-data
 
 #frameworks branch set in projects.kde.org
 ./tarme.rb --origin trunk --version $VERSION kfilemetadata
 cat release_data >> $VERSION-release-data
-mv kfilemetadata-$VERSION.tar.xz kfilemetadata5-$VERSION.tar.xz
-sed -i s,kfilemetadata,kfilemetadata5,g $VERSION-release-data
 
 ./tarme.rb --origin trunk --version $VERSION_LIBKSCREEN libkscreen
 cat release_data >> $VERSION-release-data
-mv libkscreen-$VERSION_LIBKSCREEN.tar.xz libkscreen2-$VERSION_LIBKSCREEN.tar.xz
-sed -i s,libkscreen,libkscreen2,g $VERSION-release-data
 
 ./tarme.rb --origin trunk --version $VERSION_LIBNM_QT libnm-qt
 cat release_data >> $VERSION-release-data
