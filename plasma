@@ -24,6 +24,9 @@ VERSION_LIBNM_QT=5.0.90
 # libnm-qt/CMakeLists.txt                          set(KF5_VERSION "5.0.90")
 # plasma-nm/CMakeLists.txt                         set(PLASMANM_VERSION_MINOR 97)
 
+# tag plasma-workspace-wallpapers
+# svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/4.98.0 -m "Tagging 4.98.0 Plasma 5.0 RC"
+
 ./tarme.rb --origin trunk --version $VERSION kde/workspace/
 cat release_data > $VERSION-release-data
 
@@ -67,3 +70,4 @@ mv plasma-workspace-wallpapers/ plasma-workspace-wallpapers-$VERSION
 tar Jcf plasma-workspace-wallpapers-4.98.0.tar.xz plasma-workspace-wallpapers-4.98.0
 echo >> $VERSION-release-data
 sha256sum plasma-workspace-wallpapers-4.98.0.tar.xz >> $VERSION-release-data
+
