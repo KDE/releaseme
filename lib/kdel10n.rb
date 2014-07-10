@@ -119,7 +119,8 @@ class KdeL10n < Source
     end
 
     def po_file_dir(lang)
-        return "#{lang}/messages/#{@module}-#{@section}"
+        #return "#{lang}/messages/#{@module}-#{@section}"
+        return "#{lang}/messages/kde-workspace"
     end
 
     def retry_cmd?(exit_code, thing)

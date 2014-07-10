@@ -1,7 +1,7 @@
-VERSION=4.98.0
-VERSION_OXYGEN_FONT=0.3.98
-VERSION_LIBKSCREEN=1.73
-VERSION_LIBNM_QT=5.0.90
+VERSION=5.0.0
+VERSION_OXYGEN_FONT=0.4.0
+VERSION_LIBKSCREEN=5.0.91
+VERSION_LIBNM_QT=5.0.91
 
 #Update versions of:
 # baloo/CMakeLists.txt                             set(BALOO_VERSION "4.97.0")
@@ -30,8 +30,8 @@ VERSION_LIBNM_QT=5.0.90
 ./tarme.rb --origin trunk --version $VERSION kde/workspace/
 cat release_data > $VERSION-release-data
 
-./tarme.rb --origin trunk --version $VERSION_OXYGEN_FONT oxygen-fonts
-cat release_data >> $VERSION-release-data
+#./tarme.rb --origin trunk --version $VERSION_OXYGEN_FONT oxygen-fonts
+#cat release_data >> $VERSION-release-data
 
 #frameworks branch set in projects.kde.org
 ./tarme.rb --origin trunk --version $VERSION baloo
@@ -62,12 +62,13 @@ cd ..
 rm -rf oxygen-fonts/.git
 mv oxygen-fonts oxygen-fonts-$VERSION_OXYGEN_FONT
 tar Jcf oxygen-fonts-$VERSION_OXYGEN_FONT.tar.xz oxygen-fonts-$VERSION_OXYGEN_FONT
-SHA=`sha256sum oxygen-fonts-0.3.98.tar.xz | awk '{print $1}'`
-echo "oxygen-fonts;release-0.4;$REV;oxygen-fonts-$VERSION_OXYGEN_FONT.tar.xz;$SHA" >> $VERSION
+SHA=`sha256sum oxygen-fonts-$VERSION_OXYGEN_FONT.tar.xz | awk '{print $1}'`
+echo "oxygen-fonts;release-0.4;$REV;oxygen-fonts-$VERSION_OXYGEN_FONT.tar.xz;$SHA" >> $VERSION-release-data
 
-svn export svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $4}' | sed s,\\.,, >> $VERSION-release-data-plasma-workspace-wallpapers
+svn export svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $3}' | sed s,\\.,, > $VERSION-release-data-plasma-workspace-wallpapers
 mv plasma-workspace-wallpapers/ plasma-workspace-wallpapers-$VERSION
 tar Jcf plasma-workspace-wallpapers-4.98.0.tar.xz plasma-workspace-wallpapers-4.98.0
 echo >> $VERSION-release-data
+echo -n "rev $VERSION-release-data-plasma-workspace-wallpapers  " >> $VERSION-release-data
 sha256sum plasma-workspace-wallpapers-4.98.0.tar.xz >> $VERSION-release-data
-
+rm $VERSION-release-data-plasma-workspace-wallpapers
