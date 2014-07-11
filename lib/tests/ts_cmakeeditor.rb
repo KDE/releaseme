@@ -44,10 +44,15 @@ class TestCMakeEditor < Test::Unit::TestCase
     end
 
     def test_create_language_specific_handbook_lists
+        # Internally create attempts to find the most meaningful creation which
+        # involves checking whether the doc dir even is valid and possibly
+        # refusing to write anything when not, so make the doc dir the least bit
+        # valid by creating index.docbook.
+        FileUtils.touch('index.docbook')
         CMakeEditor::create_language_specific_doc_lists!(dir, lang, "yolo")
         assert(File::exists?(file))
         data = File.read(file)
-        assert(data.downcase.include?('kde4_create_handbook(index.docbook install_destination ${html_install_dir}/xx subdir yolo)'))
+        assert(data.downcase.include?('kdoctools_create_handbook(index.docbook install_destination ${html_install_dir}/xx subdir yolo)'))
         assert_has_terminal_newline(data)
     end
 
@@ -99,7 +104,6 @@ class TestCMakeEditor < Test::Unit::TestCase
         assert(File::exists?(file))
         data = File.read(file)
         assert(data.include?("#PO_SUBDIR\n"))
-        assert(data.include?("MacroOptionalAddSubdirectory"))
         assert(data.include?("add_subdirectory(append"))
         assert_has_terminal_newline(data)
     end
@@ -111,8 +115,8 @@ class TestCMakeEditor < Test::Unit::TestCase
         assert(File::exists?(file))
         data = File.read(file)
         assert(!data.include?("#PO_SUBDIR\n"))
-        assert(data.include?("MacroOptionalAddSubdirectory"))
-        assert(data.include?("add_subdirectory(po"))
+        assert(data.include?("ECMOptionalAddSubdirectory"))
+        assert(data.include?("ecm_optional_add_subdirectory(po"))
         assert_has_terminal_newline(data)
     end
 end
