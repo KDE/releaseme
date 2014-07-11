@@ -103,6 +103,7 @@ class KdeL10n < Source
         return pos.uniq
     end
 
+    # FIXME: this has no test backing right now
     def strip_comments(file)
         # Strip #~ lines, which once were sensible translations, but then the
         # strings got removed, so they now stick around in case the strings
@@ -112,7 +113,12 @@ class KdeL10n < Source
         str = file.read
         file.rewind
         file.truncate(0)
-        str.gsub!(/^#~.*/, "")
+        # Sometimes a fuzzy marker can precede an obsolete translation block, so
+        # first remove any fuzzy obsoletion in the file and then remove any
+        # additional obsoleted lines.
+        # This prevents the fuzzy markers from getting left over.
+        str.gsub!(/^#, fuzzy\n#~.*/, '')
+        str.gsub!(/^#~.*/, '')
         str = str.strip
         file << str
         file.close
