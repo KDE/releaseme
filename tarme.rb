@@ -115,6 +115,11 @@ release_projects.each do | project |
     release.vcs.branch = project.i18n_trunk if options[:origin] == :trunk
     release.vcs.branch = project.i18n_stable if options[:origin] == :stable
     release.source.target = "#{project_name}-#{options[:version]}"
+
+    # FIXME: ALL gets() need to have appropriate handling and must be able to
+    #        throw exceptions or return false when something goes wrong
+    #        possibly a general fork() function would be useful to a) control IO
+    #        better b) check the retvalue c) throw exception accordingly
     release.get()
 
     # FIXME: why not pass project itself? Oo
