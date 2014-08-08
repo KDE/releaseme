@@ -1,7 +1,11 @@
-VERSION=5.0.0
-VERSION_OXYGEN_FONT=0.4.0
-VERSION_LIBKSCREEN=5.0.91
-VERSION_LIBNM_QT=5.0.91
+LANG=en_US.UTF-8
+LANGUAGE=en
+LC_ALL=en_US.UTF-8
+
+VERSION=5.0.1
+VERSION_OXYGEN_FONT=0.4.1
+VERSION_LIBKSCREEN=5.0.92
+VERSION_LIBNM_QT=5.0.92
 
 #Update versions of:
 # baloo/CMakeLists.txt                             set(BALOO_VERSION "4.97.0")
@@ -17,58 +21,51 @@ VERSION_LIBNM_QT=5.0.91
 # plasma-workspace/libkworkspace/CMakeLists.txt    VERSION 4.96.0
 # plasma-workspace/dataengines/geolocation/CMakeLists.txt  VERSION 4.97.0
 # khotkeys/CMakeLists.txt                          KHOTKEYS_VERSION_MINOR 96
-# plasma-desktop/CMakeLists.txt                    PLASMADESKTOP_VERSION_MINOR 96
 # milou/CMakeLists.txt                             set(MILOU_VERSION_MINOR 97)
 # powerdevil/CMakeLists.txt                        POWERDEVIL_VERSION_MINOR 96
 # libmm-qt/CMakeLists.txt                          set(KF5_VERSION "5.0.90")
 # libnm-qt/CMakeLists.txt                          set(KF5_VERSION "5.0.90")
 # plasma-nm/CMakeLists.txt                         set(PLASMANM_VERSION_MINOR 97)
+# plasma-desktop/CMakeLists.txt                    set(PLASMADESKTOP_VERSION_MINOR 98)
 
-# tag plasma-workspace-wallpapers
-# svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/4.98.0 -m "Tagging 4.98.0 Plasma 5.0 RC"
-
-./tarme.rb --origin trunk --version $VERSION kde/workspace/
+# start off with all of kde/workspace
+./tarme.rb --origin stable --version $VERSION kde/workspace/
 cat release_data > $VERSION-release-data
 
-#./tarme.rb --origin trunk --version $VERSION_OXYGEN_FONT oxygen-fonts
-#cat release_data >> $VERSION-release-data
-
-#frameworks branch set in projects.kde.org
-./tarme.rb --origin trunk --version $VERSION baloo
-cat release_data >> $VERSION-release-data
-
-#frameworks branch set in projects.kde.org
-./tarme.rb --origin trunk --version $VERSION kfilemetadata
-cat release_data >> $VERSION-release-data
-
-./tarme.rb --origin trunk --version $VERSION_LIBKSCREEN libkscreen
-cat release_data >> $VERSION-release-data
-
-./tarme.rb --origin trunk --version $VERSION_LIBNM_QT libnm-qt
-cat release_data >> $VERSION-release-data
-
-./tarme.rb --origin trunk --version $VERSION_LIBNM_QT libmm-qt
-cat release_data >> $VERSION-release-data
-
 #not in this release
-rm kwindowsaddons* -r
+rm kwindowsaddons* -rf
 sed -i '/kwindowsaddons/d' $VERSION-release-data
 
-#still in kdereview, need to do it by hand
-git clone --branch release-0.4 kde:oxygen-fonts
-cd oxygen-fonts; 
-REV=`git rev-parse HEAD`
-cd ..
-rm -rf oxygen-fonts/.git
-mv oxygen-fonts oxygen-fonts-$VERSION_OXYGEN_FONT
-tar Jcf oxygen-fonts-$VERSION_OXYGEN_FONT.tar.xz oxygen-fonts-$VERSION_OXYGEN_FONT
-SHA=`sha256sum oxygen-fonts-$VERSION_OXYGEN_FONT.tar.xz | awk '{print $1}'`
-echo "oxygen-fonts;release-0.4;$REV;oxygen-fonts-$VERSION_OXYGEN_FONT.tar.xz;$SHA" >> $VERSION-release-data
+# oxygen-fonts gets a different version
+rm oxygen-fonts* -r
+sed -i '/oxygen-fonts/d' $VERSION-release-data
+./tarme.rb --origin stable --version $VERSION_OXYGEN_FONT oxygen-fonts
+cat release_data >> $VERSION-release-data
+
+#frameworks branch set in projects.kde.org
+./tarme.rb --origin stable --version $VERSION baloo
+cat release_data >> $VERSION-release-data
+
+#frameworks branch set in projects.kde.org
+./tarme.rb --origin stable --version $VERSION kfilemetadata
+cat release_data >> $VERSION-release-data
+
+./tarme.rb --origin stable --version $VERSION_LIBKSCREEN libkscreen
+cat release_data >> $VERSION-release-data
+
+./tarme.rb --origin stable --version $VERSION_LIBNM_QT libnm-qt
+cat release_data >> $VERSION-release-data
+
+./tarme.rb --origin stable --version $VERSION_LIBNM_QT libmm-qt
+cat release_data >> $VERSION-release-data
 
 svn export svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $3}' | sed s,\\.,, > $VERSION-release-data-plasma-workspace-wallpapers
 mv plasma-workspace-wallpapers/ plasma-workspace-wallpapers-$VERSION
-tar Jcf plasma-workspace-wallpapers-4.98.0.tar.xz plasma-workspace-wallpapers-4.98.0
+tar Jcf plasma-workspace-wallpapers-${VERSION}.tar.xz plasma-workspace-wallpapers-${VERSION}
 echo >> $VERSION-release-data
 echo -n "rev $VERSION-release-data-plasma-workspace-wallpapers  " >> $VERSION-release-data
-sha256sum plasma-workspace-wallpapers-4.98.0.tar.xz >> $VERSION-release-data
+sha256sum plasma-workspace-wallpapers-${VERSION}.tar.xz >> $VERSION-release-data
 rm $VERSION-release-data-plasma-workspace-wallpapers
+
+# tag plasma-workspace-wallpapers
+# svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/4.98.0 -m "Tagging 4.98.0 Plasma 5.0 RC"
