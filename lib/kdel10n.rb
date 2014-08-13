@@ -203,43 +203,44 @@ class KdeL10n < Source
         availableLanguages = vcs.cat("subdirs").split("\n")
         @templates = find_templates(sourceDirectory)
 
-        # TODO: fix chdiring to something better
-        Dir.chdir(sourceDirectory)
-        availableLanguages.each do | language |
-            next if language == "x-test"
+        Dir.chdir(sourceDirectory) do
+            availableLanguages.each do | language |
+                next if language == 'x-test'
 
-            if templates.count > 1
-                files = get_multiple(language)
-            elsif templates.count == 1
-                files = get_single(language)
-            else
-                # FIXME: there must be a beter way
-                Dir.chdir(previous_pwd)
-                # FIXME: needs testcase
-                return # No translations need fetching
+                puts "Downloading #{language} translations for #{sourceDirectory}"
+                if templates.count > 1
+                    files = get_multiple(language)
+                elsif templates.count == 1
+                    files = get_single(language)
+                else
+                    # FIXME: needs testcase
+                    return # No translations need fetching
+                end
+
+                # No files obtained :(
+                if files.empty?
+                    puts '  got no translations, skipping.'
+                    next
+                end
+
+                # TODO: path confusing with target
+                destinationDir = "po/" + language
+                Dir.mkdir(destinationDir)
+                FileUtils.mv(files, destinationDir)
+                #mv( ld + "/.svn", dest ) if $options[:tag] # Must be fatal iff tagging
+
+                CMakeEditor::create_language_specific_po_lists!(destinationDir, language)
+
+                # add to SVN in case we are tagging
+                #%x[svn add #{dest}/CMakeLists.txt] if $ptions[:tag]
+                @languages += [language]
             end
-
-            # No files obtained :(
-            next if files.empty?
-
-            # TODO: path confusing with target
-            destinationDir = "po/" + language
-            Dir.mkdir(destinationDir)
-            FileUtils.mv(files, destinationDir)
-            #mv( ld + "/.svn", dest ) if $options[:tag] # Must be fatal iff tagging
-
-            CMakeEditor::create_language_specific_po_lists!(destinationDir, language)
-
-            # add to SVN in case we are tagging
-            #%x[svn add #{dest}/CMakeLists.txt] if $ptions[:tag]
-            @languages += [language]
+            # Make sure the temp dir is cleaned up
+            FileUtils::rm_rf('l10n')
+            # Update CMakeLists.txt
+            CMakeEditor::create_po_meta_lists!('po/')
+            CMakeEditor::append_optional_add_subdirectory!(Dir.pwd, 'po')
         end
-        # Make sure the temp dir is cleaned up
-        FileUtils::rm_rf('l10n')
-        # Update CMakeLists.txt
-        CMakeEditor::create_po_meta_lists!('po/')
-        CMakeEditor::append_optional_add_subdirectory!(Dir.pwd, 'po')
-        Dir.chdir(previous_pwd)
     end
 
 end

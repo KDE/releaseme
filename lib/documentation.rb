@@ -107,9 +107,6 @@ class DocumentationL10n < Source
         temp_dir = "#{Dir.pwd}/#{sourceDirectory}/l10n"
         Dir.mkdir(dir) unless File.exists?(dir)
 
-        p dir
-        p temp_dir
-
         availableLanguages = vcs.cat("subdirs").split("\n")
         docs = Array.new
 
@@ -132,30 +129,35 @@ class DocumentationL10n < Source
 
         # No documentation avilable -> leave me alone
         if not File.exists?("#{dir}/en_US") then
-            puts("There is no documentation :(")
+            puts("There is no en_US documentation :(")
             puts("Leave me alone :(")
             return
         end
 
         CMakeEditor::create_language_specific_doc_lists!("#{dir}/en_US", "en_US", project_name)
-        for lang in availableLanguages
-            lang.chomp!
-            next if lang == "x-test"
+        for language in availableLanguages
+            language.chomp!
+            next if language == "x-test"
+
+            puts "Downloading #{language} documentation translations for #{sourceDirectory}"
 
             FileUtils.rm_rf(temp_dir)
-            vcs.get(temp_dir, vcs_l10n_path(lang))
-            next unless FileTest.exists?("#{temp_dir}/index.docbook") # without index the translation is not worth butter
+            vcs.get(temp_dir, vcs_l10n_path(language))
+            unless FileTest.exists?("#{temp_dir}/index.docbook") # without index the translation is not worth butter
+                puts '  no valid documentation translation found, skipping.'
+                next
+            end
 
-            dest_dir = "#{dir}/#{lang}"
-            puts("Copying #{lang}'s #{@project_name} documentation over...")
+            dest_dir = "#{dir}/#{language}"
+            puts("Copying #{language}'s #{@project_name} documentation over...")
             FileUtils.mv(temp_dir, dest_dir)
 
-            CMakeEditor::create_language_specific_doc_lists!("#{dir}/#{lang}", lang, project_name)
+            CMakeEditor::create_language_specific_doc_lists!("#{dir}/#{language}", language, project_name)
 
             # add to SVN in case we are tagging
             # FIXME: direct svn access
-            `svn add #{dir}/#{lang}/CMakeLists.txt`
-            docs += [lang]
+            `svn add #{dir}/#{language}/CMakeLists.txt`
+            docs += [language]
 
             puts( "done.\n" )
         end
