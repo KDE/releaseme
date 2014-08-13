@@ -2,6 +2,7 @@ require "fileutils"
 require "test/unit"
 
 require_relative "../kdel10n.rb"
+require_relative "../l10nstatistics.rb"
 require_relative "../documentation.rb"
 
 class TestL10n < Test::Unit::TestCase
@@ -98,6 +99,26 @@ class TestL10n < Test::Unit::TestCase
         assert(File::exists?("#{@dir}/po/de/CMakeLists.txt"))
         assert(File::exists?("#{@dir}/po/de/amarok.po"))
         assert(File::exists?("#{@dir}/po/de/amarokcollectionscanner_qt.po"))
+    end
+
+    def test_statistics
+        l = create_l10n()
+        l.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
+
+        FileUtils.rm_rf(@dir)
+        FileUtils.cp_r("data/multi-pot", @dir)
+        l.get(@dir)
+
+        statistics = L10nStatistics.new
+        statistics.gather!(@dir)
+        assert(statistics.stats == {"de"=>{:all=>4,
+                                           :shown=>3,
+                                           :notshown=>1,
+                                           :percentage=>75.0},
+                                    "fr"=>{:all=>4,
+                                           :shown=>4,
+                                           :notshown=>0,
+                                           :percentage=>100.0}})
     end
 
     def create_doc
