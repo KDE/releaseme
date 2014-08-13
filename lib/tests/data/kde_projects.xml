@@ -17,7 +17,12 @@
 <name>Yakuake</name>
 <description>
 <![CDATA[
-Yakuake is a drop-down terminal emulator based on KDE Konsole technology.   "Homepage":http://yakuake.kde.org/ "Bugs and wishes":http://bugs.kde.org/ "QuickGit":http://quickgit.kde.org/?p=yakuake.git&a=summary
+Yakuake is a drop-down terminal emulator based on KDE Konsole technology.
+ 
+ 
+ "Homepage":http://yakuake.kde.org/
+ "Bugs and wishes":http://bugs.kde.org/
+ "QuickGit":http://quickgit.kde.org/?p=yakuake.git&a=summary
 ]]>
 </description>
 <path>extragear/utils/yakuake</path>
@@ -38,8 +43,10 @@ http://anongit.kde.org/yakuake/yakuake-latest.tar.gz
 </url>
 <branch>notmaster</branch>
 <branch>master</branch>
-<branch i18n="trunk">master</branch>
-<branch i18n="stable">notmaster</branch>
+<branch i18n="trunk">invalidmaster</branch>
+<branch i18n="stable">invalidnotmaster</branch>
+<branch i18n="trunk_kf5">master</branch>
+<branch i18n="stable_kf5">notmaster</branch>
 <active>true</active>
 </repo>
 <member username="hein">Eike Hein</member>

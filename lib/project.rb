@@ -156,9 +156,9 @@ public
             text = branch.text
             next if i18n.nil? or i18n.empty?
             next if text.nil? or text.empty? or text == 'none'
-            if i18n == 'trunk'
+            if i18n == 'trunk_kf5'
                 @i18n_trunk = text
-            elsif i18n == 'stable'
+            elsif i18n == 'stable_kf5'
                 @i18n_stable = text
             end
         end
