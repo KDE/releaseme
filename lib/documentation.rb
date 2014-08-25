@@ -137,7 +137,7 @@ class DocumentationL10n < Source
         CMakeEditor::create_language_specific_doc_lists!("#{dir}/en_US", "en_US", project_name)
         for language in availableLanguages
             language.chomp!
-            next if language == "x-test"
+            next if language == "x-test" or language == "en_US"
 
             puts "Downloading #{language} documentation translations for #{sourceDirectory}"
 
