@@ -203,6 +203,7 @@ class KdeL10n < Source
         availableLanguages = vcs.cat("subdirs").split("\n")
         @templates = find_templates(sourceDirectory)
 
+        anyTranslations = false
         Dir.chdir(sourceDirectory) do
             availableLanguages.each do | language |
                 next if language == 'x-test'
@@ -222,6 +223,7 @@ class KdeL10n < Source
                     puts '  got no translations, skipping.'
                     next
                 end
+                anyTranslations = true
 
                 # TODO: path confusing with target
                 destinationDir = "po/" + language
@@ -229,17 +231,19 @@ class KdeL10n < Source
                 FileUtils.mv(files, destinationDir)
                 #mv( ld + "/.svn", dest ) if $options[:tag] # Must be fatal iff tagging
 
-                CMakeEditor::create_language_specific_po_lists!(destinationDir, language)
-
                 # add to SVN in case we are tagging
                 #%x[svn add #{dest}/CMakeLists.txt] if $ptions[:tag]
                 @languages += [language]
             end
             # Make sure the temp dir is cleaned up
             FileUtils::rm_rf('l10n')
-            # Update CMakeLists.txt
-            CMakeEditor::create_po_meta_lists!('po/')
-            CMakeEditor::append_optional_add_subdirectory!(Dir.pwd, 'po')
+            if anyTranslations
+                # Update CMakeLists.txt
+                CMakeEditor::append_po_install_instructions!(Dir.pwd, 'po')
+            else
+                # Remove the empty translations directory
+                Dir.delete('po')
+            end
         end
     end
 

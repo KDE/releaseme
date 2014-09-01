@@ -68,42 +68,19 @@ module CMakeEditor
         file.close
     end
 
-    # Creates the CMakeLists.txt for po/$LANG/*.po
-    def create_language_specific_po_lists!(dir, language)
-        file = File.new("#{dir}/CMakeLists.txt",
-                        File::CREAT | File::RDWR | File::TRUNC)
-        file << "file(GLOB _po_files *.po)\n"
-        file << "GETTEXT_PROCESS_PO_FILES(#{language} ALL INSTALL_DESTINATION ${LOCALE_INSTALL_DIR} PO_FILES ${_po_files})\n"
+    # Appends the install instructions for po/*
+    def append_po_install_instructions!(dir, subdir)
+        file = File.new("#{dir}/CMakeLists.txt", File::APPEND | File::RDWR )
+        data = file.read()
+        file.rewind()
+        file.truncate(0)
+        macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
+        data << macro
+        file << data
         file.close
     end
 
-    # Creates the CMakeLists.txt for po/*
-    def create_po_meta_lists!(dir)
-        file = File.new("#{dir}/CMakeLists.txt",
-                             File::CREAT | File::RDWR | File::TRUNC)
-        file.write <<-EOF
-# The pofiles macro creates in some versions same name targets
-# which since cmake 2.8 leads to target clashes.
-# Hence force the old policy for all po directories.
-# http://public.kitware.com/Bug/view.php?id=12952
-cmake_policy(SET CMP0002 OLD)
-
-find_package(Gettext REQUIRED)
-if (NOT GETTEXT_MSGMERGE_EXECUTABLE)
-MESSAGE(FATAL_ERROR "Please install msgmerge binary")
-endif (NOT GETTEXT_MSGMERGE_EXECUTABLE)
-if (NOT GETTEXT_MSGFMT_EXECUTABLE)
-MESSAGE(FATAL_ERROR "Please install msgmerge binary")
-endif (NOT GETTEXT_MSGFMT_EXECUTABLE)
-        EOF
-        Dir.foreach(dir) do |lang|
-            next if lang == '.' or lang == '..' or lang == 'CMakeLists.txt'
-            file << "add_subdirectory(#{lang})\n"
-        end
-        file.close
-    end
-
-    # Appends the inclusion of po/CMakeLists.txt
+    # Appends the inclusion of subdir/CMakeLists.txt
     def append_optional_add_subdirectory!(dir, subdir)
         file = File.new("#{dir}/CMakeLists.txt", File::APPEND | File::RDWR )
         data = file.read()

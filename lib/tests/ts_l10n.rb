@@ -84,8 +84,6 @@ class TestL10n < Test::Unit::TestCase
         assert(File::exists?("#{@dir}/CMakeLists.txt"))
         assert(!File::exists?("#{@dir}/l10n")) # temp dir must not be there
         assert(File::exists?("#{@dir}/po"))
-        assert(File::exists?("#{@dir}/po/CMakeLists.txt"))
-        assert(File::exists?("#{@dir}/po/de/CMakeLists.txt"))
         assert(File::exists?("#{@dir}/po/de/amarok.po"))
 
         FileUtils.rm_rf(@dir)
@@ -95,8 +93,6 @@ class TestL10n < Test::Unit::TestCase
         assert(File::exists?("#{@dir}/CMakeLists.txt"))
         assert(!File::exists?("#{@dir}/l10n")) # temp dir must not be there
         assert(File::exists?("#{@dir}/po"))
-        assert(File::exists?("#{@dir}/po/CMakeLists.txt"))
-        assert(File::exists?("#{@dir}/po/de/CMakeLists.txt"))
         assert(File::exists?("#{@dir}/po/de/amarok.po"))
         assert(File::exists?("#{@dir}/po/de/amarokcollectionscanner_qt.po"))
     end

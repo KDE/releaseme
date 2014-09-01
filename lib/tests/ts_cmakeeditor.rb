@@ -70,31 +70,18 @@ class TestCMakeEditor < Test::Unit::TestCase
         assert_has_terminal_newline(data)
     end
 
-    def test_create_language_specific_po_lists
-        CMakeEditor::create_language_specific_po_lists!(dir, lang)
+    def test_append_po_install_instructions
+        create_cmakelists!
+        CMakeEditor::append_po_install_instructions!(dir, 'po')
         assert(File::exists?(file))
         data = File.read(file)
-        assert(data.downcase.include?("gettext_process_po_files(#{lang}"))
-        assert_has_terminal_newline(data)
-    end
-
-    def test_create_po_meta_lists
-        Dir.mkdir("#{dir}/aa")
-        Dir.mkdir("#{dir}/bb")
-        Dir.mkdir("#{dir}/cc")
-        CMakeEditor::create_po_meta_lists!(dir)
-        assert(File::exists?(file))
-        data = File.read(file)
-        assert(data.downcase.include?("find_package(gettext"))
-        assert(data.downcase.include?("add_subdirectory(aa)"))
-        assert(data.downcase.include?("add_subdirectory(bb)"))
-        assert(data.downcase.include?("add_subdirectory(cc)"))
+        assert(data.downcase.include?("ki18n_install(po)"))
         assert_has_terminal_newline(data)
     end
 
     def create_cmakelists!
         f = File.new(@file, File::CREAT | File::RDWR | File::TRUNC)
-        f << "#PO_SUBDIR\n"
+        f << "#FOO_SUBDIR\n"
         f.close
     end
 
@@ -103,20 +90,19 @@ class TestCMakeEditor < Test::Unit::TestCase
         CMakeEditor::append_optional_add_subdirectory!(dir, 'append')
         assert(File::exists?(file))
         data = File.read(file)
-        assert(data.include?("#PO_SUBDIR\n"))
+        assert(data.include?("#FOO_SUBDIR\n"))
         assert(data.include?("add_subdirectory(append"))
         assert_has_terminal_newline(data)
     end
 
     def test_append_optional_add_subdirectory_substitute
-        return
         create_cmakelists!
-        CMakeEditor::append_optional_add_subdirectory!(dir, 'po')
+        CMakeEditor::append_optional_add_subdirectory!(dir, 'foo')
         assert(File::exists?(file))
         data = File.read(file)
-        assert(!data.include?("#PO_SUBDIR\n"))
+        assert(!data.include?("#FOO_SUBDIR\n"))
         assert(data.include?("ECMOptionalAddSubdirectory"))
-        assert(data.include?("ecm_optional_add_subdirectory(po"))
+        assert(data.include?("ecm_optional_add_subdirectory(foo"))
         assert_has_terminal_newline(data)
     end
 end
