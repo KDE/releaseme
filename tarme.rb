@@ -107,6 +107,9 @@ end
 
 release_projects = flat_project_resolver(project_name)
 
+# FIXME: runtime deps are not checked first
+# e.g. svn, git, xz...
+
 release_data_file = File.open("release_data", "w")
 release_projects.each do | project |
     project_name = project.id
