@@ -52,6 +52,5 @@ class L10nStatistics
     end
 
     def write(html_file_path)
-
     end
 end

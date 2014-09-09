@@ -1,3 +1,5 @@
+#!/bin/bash
+
 LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
