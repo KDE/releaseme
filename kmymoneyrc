@@ -1,0 +1,8 @@
+[main]
+customsrc=git@git.kde.org:kmymoney
+doc=true
+l10n=true
+protocol=anonsvn
+branch=trunk
+gitbranch=master
+barrier=75
