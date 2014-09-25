@@ -4,31 +4,7 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.0.1
-VERSION_OXYGEN_FONT=0.4.1
-VERSION_LIBKSCREEN=5.0.92
-VERSION_LIBNM_QT=5.0.92
-
-#Update versions of:
-# baloo/CMakeLists.txt                             set(BALOO_VERSION "4.97.0")
-# kfilemetadata/CMakeLists.txt                     ecm_setup_version(4.98.0
-# kwin/CMakeLists.txt                              KWIN_VERSION_MINOR 96
-# kio-extras/network/network/CMakeLists.txt        MOLLETNETWORK_VERSION_MINOR 96
-# kwrited/CMakeLists.txt                           KWRITED_VERSION 4.96.0
-# libksysguard/CMakeLists.txt                      LIBKSYSGUARD_VERSION_MINOR 96
-# systemsettings/CMakeLists.txt                    SYSTEMSETTINGS_VERSION 4.96.0
-# ksysguard/CMakeLists.txt                         KSYSGUARD_VERSION 4.96.0
-# plasma-workspace/libtaskmanager/CMakeLists.txt   VERSION 4.96.0
-# plasma-workspace/CMakeLists.txt                  PLASMAWORKSPACE_VERSION_MINOR 96
-# plasma-workspace/libkworkspace/CMakeLists.txt    VERSION 4.96.0
-# plasma-workspace/dataengines/geolocation/CMakeLists.txt  VERSION 4.97.0
-# khotkeys/CMakeLists.txt                          KHOTKEYS_VERSION_MINOR 96
-# milou/CMakeLists.txt                             set(MILOU_VERSION_MINOR 97)
-# powerdevil/CMakeLists.txt                        POWERDEVIL_VERSION_MINOR 96
-# libmm-qt/CMakeLists.txt                          set(KF5_VERSION "5.0.90")
-# libnm-qt/CMakeLists.txt                          set(KF5_VERSION "5.0.90")
-# plasma-nm/CMakeLists.txt                         set(PLASMANM_VERSION_MINOR 97)
-# plasma-desktop/CMakeLists.txt                    set(PLASMADESKTOP_VERSION_MINOR 98)
+VERSION=5.0.95
 
 # start off with all of kde/workspace
 ./tarme.rb --origin stable --version $VERSION kde/workspace/
@@ -41,7 +17,7 @@ sed -i '/kwindowsaddons/d' $VERSION-release-data
 # oxygen-fonts gets a different version
 rm oxygen-fonts* -r
 sed -i '/oxygen-fonts/d' $VERSION-release-data
-./tarme.rb --origin stable --version $VERSION_OXYGEN_FONT oxygen-fonts
+./tarme.rb --origin stable --version $VERSION oxygen-fonts
 cat release_data >> $VERSION-release-data
 
 #frameworks branch set in projects.kde.org
@@ -52,20 +28,23 @@ cat release_data >> $VERSION-release-data
 ./tarme.rb --origin stable --version $VERSION kfilemetadata
 cat release_data >> $VERSION-release-data
 
-./tarme.rb --origin stable --version $VERSION_LIBKSCREEN libkscreen
+./tarme.rb --origin stable --version $VERSION libkscreen
 cat release_data >> $VERSION-release-data
 
-./tarme.rb --origin stable --version $VERSION_LIBNM_QT libnm-qt
+./tarme.rb --origin stable --version $VERSION libnm-qt
 cat release_data >> $VERSION-release-data
 
-./tarme.rb --origin stable --version $VERSION_LIBNM_QT libmm-qt
+./tarme.rb --origin stable --version $VERSION libmm-qt
 cat release_data >> $VERSION-release-data
 
 svn export svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $3}' | sed s,\\.,, > $VERSION-release-data-plasma-workspace-wallpapers
+perl -i -pe 'chomp if eof' $VERSION-release-data-plasma-workspace-wallpapers
 mv plasma-workspace-wallpapers/ plasma-workspace-wallpapers-$VERSION
 tar Jcf plasma-workspace-wallpapers-${VERSION}.tar.xz plasma-workspace-wallpapers-${VERSION}
 echo >> $VERSION-release-data
-echo -n "rev $VERSION-release-data-plasma-workspace-wallpapers  " >> $VERSION-release-data
+echo -n "rev" >> $VERSION-release-data
+cat $VERSION-release-data-plasma-workspace-wallpapers >> $VERSION-release-data
+echo -n ";" >> $VERSION-release-data
 sha256sum plasma-workspace-wallpapers-${VERSION}.tar.xz >> $VERSION-release-data
 rm $VERSION-release-data-plasma-workspace-wallpapers
 
