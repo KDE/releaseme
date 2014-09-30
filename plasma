@@ -5,9 +5,10 @@ LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
 VERSION=5.0.95
+ORIGIN=trunk  # set to trunk or stable
 
 # start off with all of kde/workspace
-./tarme.rb --origin stable --version $VERSION kde/workspace/
+./tarme.rb --origin ${ORIGIN} --version $VERSION kde/workspace/
 cat release_data > $VERSION-release-data
 
 #not in this release
@@ -17,24 +18,30 @@ sed -i '/kwindowsaddons/d' $VERSION-release-data
 # oxygen-fonts gets a different version
 rm oxygen-fonts* -r
 sed -i '/oxygen-fonts/d' $VERSION-release-data
-./tarme.rb --origin stable --version $VERSION oxygen-fonts
+./tarme.rb --origin ${ORIGIN} --version $VERSION oxygen-fonts
+cat release_data >> $VERSION-release-data
+
+#baloo has the wrong translations set in projects.kde.org cos it's part of kdelibs too
+#so brute force it to kde-workspace translations
+#Harald: please do not read past here if you don't want to cry
+cp lib/kdel10n.rb lib/kdel10n.rb-orig
+sed -i "s,#{@module},kde," lib/kdel10n.rb
+sed -i "s,#{@section},workspace," lib/kdel10n.rb
+./tarme.rb --origin ${ORIGIN} --version $VERSION baloo
+cat release_data >> $VERSION-release-data
+mv lib/kdel10n.rb-orig lib/kdel10n.rb
+
+./tarme.rb --origin ${ORIGIN} --version $VERSION kfilemetadata
 cat release_data >> $VERSION-release-data
 
 #frameworks branch set in projects.kde.org
-./tarme.rb --origin stable --version $VERSION baloo
+./tarme.rb --origin ${ORIGIN} --version $VERSION libkscreen
 cat release_data >> $VERSION-release-data
 
-#frameworks branch set in projects.kde.org
-./tarme.rb --origin stable --version $VERSION kfilemetadata
+./tarme.rb --origin ${ORIGIN} --version $VERSION libnm-qt
 cat release_data >> $VERSION-release-data
 
-./tarme.rb --origin stable --version $VERSION libkscreen
-cat release_data >> $VERSION-release-data
-
-./tarme.rb --origin stable --version $VERSION libnm-qt
-cat release_data >> $VERSION-release-data
-
-./tarme.rb --origin stable --version $VERSION libmm-qt
+./tarme.rb --origin ${ORIGIN} --version $VERSION libmm-qt
 cat release_data >> $VERSION-release-data
 
 svn export svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $3}' | sed s,\\.,, > $VERSION-release-data-plasma-workspace-wallpapers
@@ -47,6 +54,10 @@ cat $VERSION-release-data-plasma-workspace-wallpapers >> $VERSION-release-data
 echo -n ";" >> $VERSION-release-data
 sha256sum plasma-workspace-wallpapers-${VERSION}.tar.xz >> $VERSION-release-data
 rm $VERSION-release-data-plasma-workspace-wallpapers
+
+# branch plasma-workspace-wallpapers
+# first make 5.1 directory then..
+# svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ -m "branch for 5.1"
 
 # tag plasma-workspace-wallpapers
 # svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/4.98.0 -m "Tagging 4.98.0 Plasma 5.0 RC"
