@@ -1,0 +1,22 @@
+
+tag:
+ run plasma script
+
+branch:
+ on a new 5.x release make branches Plasma/5.x :
+ run branchme
+ ensure translations are switched to correct branch in projects.kde.org
+
+prepare:
+ www/announcements/plasma-5.x.y.php
+ www/info/plasma-5.x.y.php
+ Dot story
+ tell sysadmins to fee the source
+
+on launch:
+ tag by running tagme
+ www/announcements/index.php
+ www/announcements/release_data.php
+ www/index.php
+ publish Dot story on front page
+ e-mail kde-announce@kde.org
