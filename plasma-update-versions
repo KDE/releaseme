@@ -2,24 +2,20 @@
 # does a clone, replaces PROJECT_VERSION in CMakeLists.txt and pushes
 # Author Jonathan Riddell 2014, this file is in the public domain and has no copyright restrictions
 
-VERSION=5.0.95
+VERSION=5.1.0
+BRANCH=Plasma/5.1
 
 rm -f kde_projects.xml
 wget http://projects.kde.org/kde_projects.xml
 WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//'`
-WORKSPACE="$WORKSPACE kscreen libkscreen baloo kfilemetadata libnm-qt libmm-qt"
+WORKSPACE="$WORKSPACE libkscreen baloo kfilemetadata libnm-qt libmm-qt"
 rm -rf version-update
 mkdir version-update
 cd version-update
-for asdf in $WORKSPACE; do
- echo ${asdf};
- git clone kde:${asdf};
-done
-
-for asdf in kscreen libkscreen; do cd ${asdf}; git checkout frameworks; cd ..; done
-for asdf in libmm-qt libnm-qt; do cd ${asdf}; git checkout framework; cd ..; done
-
 for project in $WORKSPACE; do
+ echo ${project};
+ git clone kde:${project};
+ cd ${project}; git branch ${BRANCH}; cd ..;
  cd ${project};
  pwd;
  sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;

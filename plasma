@@ -61,3 +61,5 @@ rm $VERSION-release-data-plasma-workspace-wallpapers
 
 # tag plasma-workspace-wallpapers
 # svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/4.98.0 -m "Tagging 4.98.0 Plasma 5.0 RC"
+
+./create_sources_inc $VERSION > source-plasma-${VERSION}.inc
