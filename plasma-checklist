@@ -1,17 +1,21 @@
 
-tag:
- run plasma script
+tar:
+ run plasma-update-versions (ensure it is using the right branches)
+ set ORIGIN=trunk or stable in ./plasma
+ run ./plasma script to make tars
+ tell sysadmins to make tars available to packagers
+ tell release-team@kde.org, plasma-devel@kde.org
 
 branch:
- on a new 5.x release make branches Plasma/5.x :
- run branchme
- ensure translations are switched to correct branch in projects.kde.org
+ on a new 5.x release make branches Plasma/5.x:
+  run branchme
+  ensure translations are switched to correct branch in projects.kde.org
 
 prepare:
  www/announcements/plasma-5.x.y.php
  www/info/plasma-5.x.y.php
  Dot story
- tell sysadmins to fee the source
+ tell sysadmins to free the source
 
 on launch:
  tag by running tagme
@@ -20,3 +24,5 @@ on launch:
  www/index.php
  publish Dot story on front page
  e-mail kde-announce@kde.org
+ update bugzilla version numbers
+
