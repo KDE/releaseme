@@ -109,7 +109,7 @@ class TestCMakeEditor < Test::Unit::TestCase
         assert(data.include?("add_subdirectory(append)"))
         assert_has_terminal_newline(data)
         # Make sure the editor doesn't append if it is already there...
-        CMakeEditor::append_po_install_instructions!(dir, 'po')
+        CMakeEditor::append_optional_add_subdirectory!(dir, 'po')
         data = File.read(file)
         assert(data.scan('add_subdirectory(append)').count == 1)
     end
