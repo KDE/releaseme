@@ -70,19 +70,34 @@ class TestCMakeEditor < Test::Unit::TestCase
         assert_has_terminal_newline(data)
     end
 
-    def test_append_po_install_instructions
-        create_cmakelists!
-        CMakeEditor::append_po_install_instructions!(dir, 'po')
-        assert(File::exists?(file))
-        data = File.read(file)
-        assert(data.downcase.include?("ki18n_install(po)"))
-        assert_has_terminal_newline(data)
-    end
-
     def create_cmakelists!
         f = File.new(@file, File::CREAT | File::RDWR | File::TRUNC)
         f << "#FOO_SUBDIR\n"
         f.close
+    end
+
+    def test_append_po_install_instructions_append
+        create_cmakelists!
+        CMakeEditor::append_po_install_instructions!(dir, 'po')
+        assert(File::exists?(file))
+        data = File.read(file)
+        assert(data.include?("#FOO_SUBDIR\n"))
+        assert(data.include?("ki18n_install(po)"))
+        assert_has_terminal_newline(data)
+        # Make sure the editor doesn't append if it is already there...
+        CMakeEditor::append_po_install_instructions!(dir, 'po')
+        data = File.read(file)
+        assert(data.scan('ki18n_install(po)').count == 1)
+    end
+
+    def test_append_po_install_instructions_substitute
+        create_cmakelists!
+        CMakeEditor::append_po_install_instructions!(dir, 'foo')
+        assert(File::exists?(file))
+        data = File.read(file)
+        assert(!data.include?("#FOO_SUBDIR\n"))
+        assert(data.include?("ki18n_install(foo)"))
+        assert_has_terminal_newline(data)
     end
 
     def test_append_optional_add_subdirectory_append
@@ -91,8 +106,12 @@ class TestCMakeEditor < Test::Unit::TestCase
         assert(File::exists?(file))
         data = File.read(file)
         assert(data.include?("#FOO_SUBDIR\n"))
-        assert(data.include?("add_subdirectory(append"))
+        assert(data.include?("add_subdirectory(append)"))
         assert_has_terminal_newline(data)
+        # Make sure the editor doesn't append if it is already there...
+        CMakeEditor::append_po_install_instructions!(dir, 'po')
+        data = File.read(file)
+        assert(data.scan('add_subdirectory(append)').count == 1)
     end
 
     def test_append_optional_add_subdirectory_substitute

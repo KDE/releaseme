@@ -75,7 +75,11 @@ module CMakeEditor
         file.rewind()
         file.truncate(0)
         macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
-        data << macro
+        if data.include?("##{subdir.upcase}_SUBDIR")
+            data = data.sub("##{subdir.upcase}_SUBDIR",macro)
+        elsif (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil?
+            data << macro
+        end
         file << data
         file.close
     end
