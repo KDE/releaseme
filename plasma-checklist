@@ -17,8 +17,16 @@ prepare:
  Dot story
  tell sysadmins to free the source
 
-on launch:
+tag pre-launch:
  tag by running tagme
+ branch plasma-workspace-wallpapers
+ first make 5.1 directory then..
+ svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ -m "branch for 5.1"
+
+ tag plasma-workspace-wallpapers
+ svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/4.98.0 -m "Tagging 4.98.0 Plasma 5.0 RC"
+
+launch:
  www/announcements/index.php
  www/announcements/release_data.php
  www/index.php

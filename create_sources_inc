@@ -22,8 +22,8 @@ process_folder()
             fi
         fi
         echo '   <td align="right">'$size'</td>'
-        sha1=`sha1sum $i | cut -f1 -d' '`
-        echo '   <td><tt>'$sha1'</tt></td>'
+        sha256=`sha256sum $i | cut -f1 -d' '`
+        echo '   <td><tt>'$sha256'</tt></td>'
         echo '</tr>'
         echo ''
     done
@@ -33,7 +33,7 @@ echo '<table border="0" cellpadding="4" cellspacing="0">'
 echo '<tr valign="top">'
 echo '  <th align="left">Location</th>'
 echo '  <th align="left">Size</th>'
-echo '  <th align="left">Sha1 Sum</th>'
+echo '  <th align="left">Sha256 Sum</th>'
 echo '</tr>'
 
 process_folder "."

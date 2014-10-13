@@ -4,8 +4,10 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.0.95
+VERSION=5.1.0
 ORIGIN=stable  # set to trunk or stable
+
+svn --version > /dev/null || { echo "Install subversion"; exit 1; }
 
 # start off with all of kde/workspace
 ./tarme.rb --origin ${ORIGIN} --version $VERSION kde/workspace/
@@ -14,6 +16,10 @@ cat release_data > $VERSION-release-data
 #not in this release
 rm kwindowsaddons* -rf
 sed -i '/kwindowsaddons/d' $VERSION-release-data
+rm muon* -rf
+sed -i '/muon/d' $VERSION-release-data
+rm kde-gtk-config* -rf
+sed -i '/kde-gtk-config/d' $VERSION-release-data
 
 #baloo has the wrong translations set in projects.kde.org cos it's part of kdelibs too
 #so brute force it to kde-workspace translations
@@ -38,22 +44,22 @@ cat release_data >> $VERSION-release-data
 ./tarme.rb --origin ${ORIGIN} --version $VERSION libmm-qt
 cat release_data >> $VERSION-release-data
 
-svn export svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $3}' | sed s,\\.,, > $VERSION-release-data-plasma-workspace-wallpapers
+#plasma-workspace-wallpapers is in svn, special case it here
+rm -rf plasma-workspace-wallpapers-$VERSION
+svn export svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $3}' | sed s,\\.,, > $VERSION-release-data-plasma-workspace-wallpapers
 perl -i -pe 'chomp if eof' $VERSION-release-data-plasma-workspace-wallpapers
 mv plasma-workspace-wallpapers/ plasma-workspace-wallpapers-$VERSION
 tar Jcf plasma-workspace-wallpapers-${VERSION}.tar.xz plasma-workspace-wallpapers-${VERSION}
 echo >> $VERSION-release-data
+echo -n "plasma-workspace-wallpapers;" >> $VERSION-release-data
 echo -n "rev" >> $VERSION-release-data
 cat $VERSION-release-data-plasma-workspace-wallpapers >> $VERSION-release-data
 echo -n ";" >> $VERSION-release-data
-sha256sum plasma-workspace-wallpapers-${VERSION}.tar.xz >> $VERSION-release-data
+echo -n "plasma-workspace-wallpapers-${VERSION}.tar.xz;" >> $VERSION-release-data
+sha256sum plasma-workspace-wallpapers-${VERSION}.tar.xz | awk '{print $1}' >> $VERSION-release-data
 rm $VERSION-release-data-plasma-workspace-wallpapers
 
-# branch plasma-workspace-wallpapers
-# first make 5.1 directory then..
-# svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ -m "branch for 5.1"
-
-# tag plasma-workspace-wallpapers
-# svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/4.98.0 -m "Tagging 4.98.0 Plasma 5.0 RC"
-
+mkdir -p 5.1.0
+cp *xz 5.1.0/
+cp 5.1.0-release-data 5.1.0
 ./create_sources_inc $VERSION > source-plasma-${VERSION}.inc
