@@ -10,6 +10,7 @@ branch:
  on a new 5.x release make branches Plasma/5.x:
   run branchme
   ensure translations are switched to correct branch in projects.kde.org
+  run plasma-update-versions to set 5.x.90 in master
 
 prepare:
  www/announcements/plasma-5.x.y.php
