@@ -1,5 +1,5 @@
 [main]
 customsrc=kde:konversation
 branch=stable
-gitbranch=1.5
+gitbranch=1.6
 protocol=svn+ssh
