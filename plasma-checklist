@@ -13,6 +13,7 @@ branch:
   run plasma-update-versions to set 5.x.90 in master
 
 prepare:
+ run plasma-changelog (update version numbers, manually edit file after)
  www/announcements/plasma-5.x.y.php
  www/info/plasma-5.x.y.php
  Dot story

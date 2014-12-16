@@ -3,24 +3,36 @@
 # Author Jonathan Riddell 2014, this file is in the public domain and has no copyright restrictions
 
 VERSION=5.1.2
+OLDVERSION=5.1.1
 BRANCH=Plasma/5.1
+
+IFS_BAK=$IFS
+IFS=$'\n'
 
 rm -f kde_projects.xml
 wget http://projects.kde.org/kde_projects.xml
 WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//'`
-WORKSPACE="$WORKSPACE libkscreen baloo kfilemetadata libnm-qt libmm-qt"
-rm -rf version-update
-mkdir version-update
-cd version-update
+WORKSPACE="$WORKSPACE
+libkscreen
+baloo
+kfilemetadata
+libnm-qt
+libmm-qt"
+rm -rf ${OLDVERSION}-${VERSION}-changelog
+rm -rf changelog
+mkdir changelog
+cd changelog
 for project in $WORKSPACE; do
  echo ${project};
  git clone kde:${project};
  cd ${project}; git checkout ${BRANCH}; cd ..;
  cd ${project};
  pwd;
- sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
- git diff;
- git commit -a -m "Update version number for ${VERSION}";
- git push;
+ echo "<h3> $project </h3><ul>" >> ../../${OLDVERSION}-${VERSION}-changelog
+ changes=$(git log v${OLDVERSION}..v${VERSION} --oneline | grep -v SVN_SILENT | grep -v "Update version number" | sed "s/^\w*\ *//")
+ for line in $changes; do
+  echo "<li>${line}</li>" >> ../../${OLDVERSION}-${VERSION}-changelog;
+ done
+ echo "</ul>" >> ../../${OLDVERSION}-${VERSION}-changelog
  cd ..;
 done
