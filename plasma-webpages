@@ -1,0 +1,27 @@
+INFOCHECKOUT="/home/jr/src/www/info"
+ANNOUNCECHECKOUT="/home/jr/src/www/announcements"
+VERSION=5.1.2
+OLDVERSION=5.1.1
+MINORVERSION=5.1
+LANG=C
+LC_ALL=C
+DATE=`LC_ALL=C date "+%A, %d %B %Y"`
+MONTH=`date "+%B"`
+
+
+./create_sources_inc ${VERSION} > ${INFOCHECKOUT}/source-plasma-${VERSION}.inc
+cp ${INFOCHECKOUT}/plasma-bugfix-template ${INFOCHECKOUT}/plasma-${VERSION}.php
+sed s,MINORVERSION,${MINORVERSION},g -i ${INFOCHECKOUT}/plasma-${VERSION}.php
+sed s,VERSION,${VERSION}, -i ${INFOCHECKOUT}/plasma-${VERSION}.php
+
+cp ${ANNOUNCECHECKOUT}/plasma-bugfix-template ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed s,MINORVERSION,${MINORVERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed s,VERSION,${VERSION}, -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed "s/DATE/${DATE}/" -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed "s,MONTH,${MONTH}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+cp ${OLDVERSION}-${VERSION}-changelog ${ANNOUNCECHECKOUT}/plasma-${OLDVERSION}-${VERSION}-changelog
+
+echo "check files and run"
+echo "cd ${INFOCHECKOUT}; svn add plasma-${VERSION}.php source-plasma-${VERSION}.inc"
+echo "cd ${ANNOUNCECHECKOUT}; svn add plasma-${VERSION}.php plasma-${OLDVERSION}-${VERSION}-changelog"
+
