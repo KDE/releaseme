@@ -5,4 +5,4 @@ stat=false
 l10n=true
 protocol=anonsvn
 branch=trunk
-gitbranch=master
+gitbranch=releng2.1
