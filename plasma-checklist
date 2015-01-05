@@ -12,28 +12,28 @@ branch:
   ensure translations are switched to correct branch in projects.kde.org
   run plasma-update-versions to set 5.x.90 in master
 
+ branch plasma-workspace-wallpapers:
+  svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ -m "branch for 5.1"
+
 prepare:
  run plasma-changelog (update version numbers, manually edit file after)
  www/announcements/plasma-5.x.y.php
  www/info/plasma-5.x.y.php
- Dot story
+ write a Dot story
+ run plasma-add-bugzilla-versions to update bugzilla version numbers
  tell sysadmins to free the source
 
 tag pre-launch:
- tag by running tagme
- branch plasma-workspace-wallpapers
- first make 5.1 directory then..
- svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ -m "branch for 5.1"
+ tag by copying 5.x.y-release-data to release_data and running tagme
 
- tag plasma-workspace-wallpapers
- svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/4.98.0 -m "Tagging 4.98.0 Plasma 5.0 RC"
+ tag plasma-workspace-wallpapers:
+  svn copy svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/5.1.2 -m "Tagging 5.1.2"
 
 launch:
- run plasma-webpages
+ run plasma-webpages, tidy up and commit
  www/announcements/index.php
  www/announcements/release_data.php
  www/index.php
  publish Dot story on front page
  e-mail kde-announce@kde.org
- run plasma-add-bugzilla-versions to update bugzilla version numbers
- post on twitter, g+, facebook
+ post on twitter, g+, facebook, reddit
