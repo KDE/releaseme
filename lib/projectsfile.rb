@@ -20,25 +20,28 @@
 
 require 'net/http'
 require 'rexml/document'
-require 'singleton'
 
 ##
 # KDE Projects XML data management class.
 # This class provides a singleton allowing easy access to the data provided by
 # a KDE-style XML projects data file.
-class ProjectsFile
-    include Singleton
+module ProjectsFile
+    extend self
+
+    @xml_path = 'http://projects.kde.org/kde_projects.xml'
+    @xml_data = nil
+    @xml_doc = nil
 
     ##
     # XML URL to use for resolution (defaults to http://projects.kde.org/kde_projects.xml).
     # Should not be changed unless you know what you are doing.
-    attr :xml_path, true
+    attr_accessor :xml_path
 
     # Retrieved XML data.
-    attr :xml_data, false
+    attr_reader :xml_data
 
     # XML REXML::Document.
-    attr :xml_doc, false
+    attr_reader :xml_doc
 
     # FIXME: for documentation purposes we want to use attr, but we also want to
     #        override the attr reader to on-demand load, find a way to not show this in docs
@@ -61,12 +64,5 @@ class ProjectsFile
             @xml_data = File.read(@xml_path)
         end
         @xml_doc = REXML::Document.new(@xml_data)
-    end
-
-private
-    def initialize()
-        @xml_path = 'http://projects.kde.org/kde_projects.xml'
-        @xml_data = nil
-        @xml_doc = nil
     end
 end

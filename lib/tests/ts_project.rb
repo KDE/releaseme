@@ -31,8 +31,8 @@ class TestProject < Test::Unit::TestCase
         @pr = Project.new()
         # Project uses ProjectsFile to read data, so we need to make sure it
         # uses our dummy file.
-        ProjectsFile.instance.xml_path = Dir.pwd + '/data/kde_projects.xml'
-        ProjectsFile.instance.load!
+        ProjectsFile.xml_path = Dir.pwd + '/data/kde_projects.xml'
+        ProjectsFile.load!
     end
 
     def teardown

@@ -82,7 +82,7 @@ public
     def resolve!()
         return false if id.nil? or id.empty?
 
-        doc = ProjectsFile.instance.xml_doc
+        doc = ProjectsFile.xml_doc
 
         # TODO: if a project is not under component/module it cannot be resolved
         #       This ultimately should:
@@ -129,7 +129,7 @@ public
         # TODO: projects have an 'active' flag, if that is false we likely
         #        should print a warnign and ask whether we really should continue
 
-        doc = ProjectsFile.instance.xml_doc
+        doc = ProjectsFile.xml_doc
 
         @identifier = @project_element.attribute('identifier').to_s
         @module = @module_element.attribute('identifier').to_s

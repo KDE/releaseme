@@ -60,7 +60,7 @@ require_relative 'lib/projectsfile'
 
 # TODO: move this somewhere
 def find_element_from_xpath(xpath, element_identifier = nil)
-    elements = ProjectsFile.instance.xml_doc.root.get_elements(xpath)
+    elements = ProjectsFile.xml_doc.root.get_elements(xpath)
     unless element_identifier.nil? or element_identifier.empty?
         elements.each do | element |
             if (element_identifier == element.attribute('identifier').to_s)
@@ -75,7 +75,7 @@ end
 
 # TODO: move this somewhere
 def flat_project_resolver(project_id)
-    doc = ProjectsFile.instance.xml_doc
+    doc = ProjectsFile.xml_doc
 
     release_projects = Array.new
     if project_id.include?('/')
