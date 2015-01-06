@@ -36,10 +36,6 @@ class Project
     # Path used for i18n.
     attr_reader :i18n_path
 
-private
-    # XML element of the project (e.g. yakuake's).
-    attr_accessor :project_element
-
 public
     # FIXME: test
     # Creates a new Project. Identifier can be nil but must be set manually
