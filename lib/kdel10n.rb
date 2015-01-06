@@ -173,7 +173,7 @@ class KdeL10n < Source
 
         return Array.new if vcs.list(vcsDirPath).empty?
         begin
-            ret = vcs.get(tempDir, vcsDirPath)
+            vcs.get(tempDir, vcsDirPath)
         end while retry_cmd?($?, vcsDirPath)
 
         files = Array.new
@@ -187,7 +187,6 @@ class KdeL10n < Source
     end
 
     def get(sourceDirectory)
-        previous_pwd = Dir.pwd
         target = sourceDirectory + "/po/"
         Dir.mkdir(target)
 
