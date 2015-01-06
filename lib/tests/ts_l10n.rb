@@ -11,8 +11,7 @@ class TestL10n < Test::Unit::TestCase
         @dataDir = "data/"
         @repoDataDir = "#{@dataDir}/l10nrepo/"
 
-        @module = "extragear"
-        @section = "multimedia"
+        @i18n_path = "extragear-multimedia"
 
         @trunkUrl = "trunk/l10n-kf5/"
         @stableUrl = "branches/stable/l10n-kf5"
@@ -40,7 +39,7 @@ class TestL10n < Test::Unit::TestCase
     end
 
     def create_l10n
-        l = KdeL10n.new(KdeL10n::TRUNK, @module, @section)
+        l = KdeL10n.new(KdeL10n::TRUNK, @i18n_path)
         l.target = "#{@dir}/l10n"
         return l
     end
@@ -50,8 +49,7 @@ class TestL10n < Test::Unit::TestCase
 
         assert_equal(l.target, "#{@dir}/l10n")
         assert_equal(l.type, KdeL10n::TRUNK)
-        assert_equal(l.module, "extragear")
-        assert_equal(l.section, "multimedia")
+        assert_equal(l.i18n_path, @i18n_path)
     end
 
     def test_0_repo_url_init
@@ -117,13 +115,14 @@ class TestL10n < Test::Unit::TestCase
                                            :percentage=>100.0}})
     end
 
+    # TODO: attributes of documentation are not tested....
     def create_doc
-        l = DocumentationL10n.new(DocumentationL10n::TRUNK, "amarok", @module, @section)
+        l = DocumentationL10n.new(DocumentationL10n::TRUNK, "amarok", @i18n_path)
         return l
     end
 
     def create_doc_without_translation
-        l = DocumentationL10n.new(DocumentationL10n::TRUNK, "frenchfries", @module, @section)
+        l = DocumentationL10n.new(DocumentationL10n::TRUNK, "frenchfries", @i18n_path)
         return l
     end
 

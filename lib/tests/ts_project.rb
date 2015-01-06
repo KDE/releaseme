@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2014 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2014-2015 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -23,12 +23,70 @@ require "test/unit"
 
 require_relative "../project"
 
-class TestProject < Test::Unit::TestCase
-
-    attr :pr, false
-
+class TestProjectResolver < Test::Unit::TestCase
     def setup
-        @pr = Project.new()
+        # Project uses ProjectsFile to read data, so we need to make sure it
+        # uses our dummy file.
+        ProjectsFile.xml_path = Dir.pwd + '/data/kde_projects_advanced.xml'
+        ProjectsFile.load!
+    end
+
+    def assert_valid_project(project_array, expected_identifier)
+        assert_not_nil(project_array)
+        assert_equal(project_array.size, 1)
+        assert_equal(project_array[0].identifier, expected_identifier)
+    end
+
+    def test_real_project
+        pr = Project::from_xpath("yakuake")
+        assert_valid_project(pr, "yakuake")
+    end
+
+    def test_real_project_with_full_path
+        pr = Project::from_xpath("extragear/utils/yakuake")
+        assert_valid_project(pr, "yakuake")
+    end
+
+    def test_module_as_project
+        pr = Project::from_xpath("networkmanager-qt")
+        assert_valid_project(pr, "networkmanager-qt")
+    end
+
+    def test_component_as_project
+        pr = Project::from_xpath("calligra")
+        assert_valid_project(pr, "calligra")
+    end
+
+    ####### nested resolution
+
+    def assert_valid_extragear_utils_array(project_array)
+        assert_not_nil(project_array)
+        matches = %w(yakuake krusader krecipes)
+        assert_equal(project_array.size, matches.size)
+        project_array.each do | project |
+            matches.delete(project.identifier)
+        end
+        assert(matches.empty?, "One or more sub-projects did not get resolved correctly")
+    end
+
+    def test_module
+        pr = Project::from_xpath("utils")
+        assert_valid_extragear_utils_array(pr)
+    end
+
+    def test_module_with_full_path
+        pr = Project::from_xpath("extragear/utils")
+        assert_valid_extragear_utils_array(pr)
+    end
+
+    def test_component
+        pr = Project::from_xpath("extragear")
+        assert_valid_extragear_utils_array(pr)
+    end
+end
+
+class TestProject < Test::Unit::TestCase
+    def setup
         # Project uses ProjectsFile to read data, so we need to make sure it
         # uses our dummy file.
         ProjectsFile.xml_path = Dir.pwd + '/data/kde_projects.xml'
@@ -39,34 +97,27 @@ class TestProject < Test::Unit::TestCase
     end
 
     def test_resolve_valid
-        pr.id = 'yakuake'
-        ret = pr.resolve!
-        assert_equal(ret, true)
-        assert_equal(pr.id, 'yakuake')
+        projects = Project::from_xpath('yakuake')
+        assert_equal(projects.size, 1)
+        pr = projects.shift
         assert_equal(pr.identifier, 'yakuake')
-        assert_equal(pr.module, 'utils')
-        assert_equal(pr.component, 'extragear')
         assert_equal(pr.i18n_trunk, 'master')
         assert_equal(pr.i18n_stable, 'notmaster')
     end
 
     def test_resolve_invalid
-        pr.id = 'kitten'
-        ret = pr.resolve!
-        assert_equal(ret, false)
-        assert_equal(pr.id, 'kitten')
-        assert_equal(pr.identifier, nil)
-        assert_equal(pr.module, nil)
-        assert_equal(pr.component, nil)
-        assert_equal(pr.i18n_trunk, nil)
-        assert_equal(pr.i18n_stable, nil)
+        projects = Project::from_xpath('kitten')
+        assert_equal(projects, nil)
     end
 
     def test_vcs
-        pr.id = 'yakuake'
-        pr.resolve!
+        projects = Project::from_xpath('yakuake')
+        assert_equal(projects.size, 1)
+        pr = projects.shift
         vcs = pr.vcs
         assert_equal(vcs.repository, 'git@git.kde.org:yakuake')
         assert_equal(vcs.branch, nil) # project on its own should not set a branch
     end
+
+    # FIXME: need to test i18n_path
 end

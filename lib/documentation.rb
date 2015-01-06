@@ -30,11 +30,8 @@ class DocumentationL10n < Source
     attr :vcs, false
     # The type of the release (stable,trunk)
     attr :type, false
-    # The application's module (used to build the checkout path - e.g. extragear)
-    attr :module, false
-    # The application's section within the module (e.g. multimedia for amarok)
-    # Can be empty
-    attr :section, false
+    # The i18n base path to use in SVN (e.g. extragear-utils/)
+    attr :i18n_path, false
 
     # Obtained and valid languages
     attr :languages, false
@@ -48,7 +45,7 @@ class DocumentationL10n < Source
 
     attr :project_name, false
 
-    def initialize(type, project_name, module_, section = "", vcs = nil)
+    def initialize(type, project_name, i18n_path, vcs = nil)
         if vcs.nil?
             @vcs = Svn.new()
         else
@@ -61,16 +58,10 @@ class DocumentationL10n < Source
             @type = type
         end
 
-        if module_.nil?
-            raise "Module cannot be nil"
+        if i18n_path.nil?
+            raise "i18n_path cannot be nil"
         else
-            @module = module_
-        end
-
-        if section.nil?
-            raise "Section cannot be nil, but an empty string"
-        else
-            @section = section
+            @i18n_path = i18n_path
         end
 
         @languages = Array.new
@@ -98,7 +89,7 @@ class DocumentationL10n < Source
     end
 
     def vcs_l10n_path(lang)
-        return "#{lang}/docs/#{@module}-#{@section}/#{@project_name}"
+        return "#{lang}/docs/#{@i18n_path}/#{@project_name}"
     end
 
     def get(sourceDirectory)

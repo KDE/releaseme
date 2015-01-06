@@ -30,11 +30,8 @@ class KdeL10n < Source
     attr :vcs, false
     # The type of the release (stable,trunk)
     attr :type, false
-    # The application's module (used to build the checkout path - e.g. extragear)
-    attr :module, false
-    # The application's section within the module (e.g. multimedia for amarok)
-    # Can be empty
-    attr :section, false
+    # The i18n base path to use in SVN (e.g. extragear-utils/)
+    attr :i18n_path, false
 
     # Obtained and valid languages
     attr :languages, false
@@ -45,7 +42,7 @@ class KdeL10n < Source
     TRUNK  = :trunk
     STABLE = :stable
 
-    def initialize(type, module_, section = "", vcs = nil)
+    def initialize(type, i18n_path, vcs = nil)
         if vcs.nil?
             @vcs = Svn.new()
         else
@@ -58,16 +55,10 @@ class KdeL10n < Source
             @type = type
         end
 
-        if module_.nil?
-            raise "Module cannot be nil"
+        if i18n_path.nil?
+            raise "i18n_path cannot be nil"
         else
-            @module = module_
-        end
-
-        if section.nil?
-            raise "Section cannot be nil, but an empty string"
-        else
-            @section = section
+            @i18n_path = i18n_path
         end
 
         @languages = Array.new
@@ -125,7 +116,7 @@ class KdeL10n < Source
     end
 
     def po_file_dir(lang)
-        return "#{lang}/messages/#{@module}-#{@section}"
+        return "#{lang}/messages/#{@i18n_path}"
     end
 
     def retry_cmd?(exit_code, thing)

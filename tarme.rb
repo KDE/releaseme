@@ -46,10 +46,6 @@ end
 
 project_name = ARGV.pop
 
-p options
-p ARGV
-p project_name
-
 #################
 
 require_relative 'lib/documentation'
@@ -58,61 +54,14 @@ require_relative 'lib/kdel10n'
 require_relative 'lib/project'
 require_relative 'lib/projectsfile'
 
-# TODO: move this somewhere
-def find_element_from_xpath(xpath, element_identifier = nil)
-    elements = ProjectsFile.xml_doc.root.get_elements(xpath)
-    unless element_identifier.nil? or element_identifier.empty?
-        elements.each do | element |
-            if (element_identifier == element.attribute('identifier').to_s)
-                return element
-            end
-        end
-    else
-        return elements
-    end
-    return nil
-end
-
-# TODO: move this somewhere
-def flat_project_resolver(project_id)
-    doc = ProjectsFile.xml_doc
-
-    release_projects = Array.new
-    if project_id.include?('/')
-        # Wildcard release -> resolve by hand
-        parts = project_id.split('/')
-        if (parts.size < 2)
-            puts "When using a wildcard project expression you must define component and module like component/module."
-            puts "Whether you append anything after the"
-            exit 1
-        end
-        component_element = find_element_from_xpath('/kdeprojects/component', parts.shift)
-        module_element = find_element_from_xpath("#{component_element.xpath}/module", parts.shift)
-        project_elements = find_element_from_xpath("#{module_element.xpath}/project")
-        project_elements.each do | project_element |
-            p = Project.new(project_element.attribute('identifier').to_s)
-            p.set_elements(component_element, module_element, project_element)
-            p.resolve_attributes!
-            release_projects << p
-        end
-    else
-        # Project release -> resolve through REXML query to project level
-        project_element = find_element_from_xpath('/kdeprojects/component/module/project', project_id)
-        p = Project.new(project_element.attribute('identifier').to_s)
-        p.resolve!
-        release_projects << p
-    end
-    return release_projects
-end
-
-release_projects = flat_project_resolver(project_name)
+release_projects = Project::from_xpath(project_name)
 
 # FIXME: runtime deps are not checked first
 # e.g. svn, git, xz...
 
 release_data_file = File.open("release_data", "w")
 release_projects.each do | project |
-    project_name = project.id
+    project_name = project.identifier
     release = KdeGitRelease.new()
     release.vcs.repository = project.vcs.repository
     release.vcs.branch = project.i18n_trunk if options[:origin] == :trunk
@@ -127,18 +76,18 @@ release_projects.each do | project |
 
     # FIXME: why not pass project itself? Oo
     # FIXME: origin should be validated? technically optparse enforces proper values
-    l10n = KdeL10n.new(options[:origin], project.component, project.module)
+    l10n = KdeL10n.new(options[:origin], project.i18n_path)
     l10n.get(release.source.target)
 
     # FIXME: when one copies the l10n .new and adjust the class name arguments will be crap but nothing ever notices... lack of checks anyone?
-    doc = DocumentationL10n.new(options[:origin], project_name, project.component, project.module)
+    doc = DocumentationL10n.new(options[:origin], project_name, project.i18n_path)
     doc.get(release.source.target)
 
     release.archive()
 
     # FIXME: technically we need to track SVN revs for l10n as well...........
     # FIXME FIXME FIXME FIXME: need version
-    project = project.id
+    project = project.identifier
     branch = release.vcs.branch
     hash = release.vcs.hash
     tar = release.archive_.filename
