@@ -24,9 +24,9 @@ require "test/unit"
 require_relative "../cmakeeditor"
 
 class TestCMakeEditor < Test::Unit::TestCase
-    attr :dir
-    attr :file
-    attr :lang
+    attr_accessor :dir
+    attr_accessor :file
+    attr_accessor :lang
 
     def setup
         @dir = Dir.pwd + "/tmp_cmakeeditor_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join

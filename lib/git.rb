@@ -25,13 +25,13 @@ require_relative 'vcs'
 # FIXME: git is not tested
 class Git < Vcs
     # Git branch to get() from, when nil no explicit argument is passed to git
-    attr :branch, true
+    attr_accessor :branch
 
     # Git hash of the gotten source. This is nil unless get() finished successfully
     # --
     # FIXME: might need to move to Vcs base?
     # ++
-    attr :hash, false
+    attr_reader :hash
 
     # Clones repository into target directory
     # @param shallow whether or not to create a shallow clone

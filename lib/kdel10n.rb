@@ -27,16 +27,16 @@ require_relative 'svn'
 # FIXME: doesn't write master cmake right now...
 class KdeL10n < Source
     # The VCS to use to obtain the l10n sources
-    attr :vcs, false
+    attr_reader :vcs
     # The type of the release (stable,trunk)
-    attr :type, false
+    attr_reader :type
     # The i18n base path to use in SVN (e.g. extragear-utils/)
-    attr :i18n_path, false
+    attr_reader :i18n_path
 
     # Obtained and valid languages
-    attr :languages, false
+    attr_reader :languages
     # Found templates
-    attr :templates, false
+    attr_reader :templates
 
     # Type identifiers
     TRUNK  = :trunk

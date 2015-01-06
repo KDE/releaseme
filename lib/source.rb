@@ -22,7 +22,7 @@ require 'fileutils'
 
 class Source
     # The target directory
-    attr :target, true
+    attr_accessor :target
 
     # Cleans the source for archiving (e.g. removes .git directory).
     def clean(vcs)

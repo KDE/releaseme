@@ -37,12 +37,6 @@ module ProjectsFile
     # Should not be changed unless you know what you are doing.
     attr_accessor :xml_path
 
-    # Retrieved XML data.
-    attr_reader :xml_data
-
-    # XML REXML::Document.
-    attr_reader :xml_doc
-
     # FIXME: for documentation purposes we want to use attr, but we also want to
     #        override the attr reader to on-demand load, find a way to not show this in docs
     def xml_doc()

@@ -24,15 +24,15 @@
 # Compression strength is set via @level.
 class XzArchive
     # The directory to archive
-    attr :directory, true
+    attr_accessor :directory
 
     # XZ compression level (must be between 1 and 9 - other values will not
     # result in an archive file)
-    attr :level, true
+    attr_accessor :level
 
     # XZ compressed tarball file name (e.g. foobar-1.tar.xz)
     # This is nil unless create() finished successfully.
-    attr :filename, false
+    attr_reader :filename
 
     # Creates new XzArchive. @directory must be assigned seperately.
     def initialize()

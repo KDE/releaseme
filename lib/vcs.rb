@@ -20,7 +20,7 @@
 
 class Vcs
     # The repository URL
-    attr :repository, true
+    attr_accessor :repository
 
     # Does a standard get operation. Obtaining repository.url into target.
     def get(target)
