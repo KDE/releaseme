@@ -131,6 +131,7 @@ class TestProject < Test::Unit::TestCase
         assert_equal(pr.identifier, 'yakuake')
         assert_equal(pr.i18n_trunk, 'master')
         assert_equal(pr.i18n_stable, 'notmaster')
+        assert_equal(pr.i18n_path, 'extragear-utils')
     end
 
     def test_resolve_invalid
@@ -146,6 +147,4 @@ class TestProject < Test::Unit::TestCase
         assert_equal(vcs.repository, 'git@git.kde.org:yakuake')
         assert_equal(vcs.branch, nil) # project on its own should not set a branch
     end
-
-    # FIXME: need to test i18n_path
 end
