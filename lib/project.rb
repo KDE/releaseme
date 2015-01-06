@@ -116,6 +116,23 @@ public
         return true
     end
 
+    # @return [Array<Project>] never empty, can be nil if resolution failed
+    def self.from_xpath(project_id)
+        release_projects = []
+
+        # Project release -> resolve through REXML query to project level
+        release_projects = from_xpath_and_subxpath('/kdeprojects/component/module/project', '/', project_id)
+        return release_projects unless release_projects.empty?
+        release_projects = from_xpath_and_subxpath('/kdeprojects/component/module', '/project', project_id)
+        return release_projects unless release_projects.empty?
+        release_projects = from_xpath_and_subxpath('/kdeprojects/component', '/module/project', project_id)
+        return release_projects unless release_projects.empty?
+
+        # FIXME: return nil but this is slightly
+        return nil
+    end
+
+private
     def self.find_element_from_xpath(xpath, element_identifier = nil)
         return ProjectsFile.xml_doc.root.get_elements(xpath)
     end
@@ -169,20 +186,5 @@ public
             end
         end
         return release_projects
-    end
-
-    def self.from_xpath(project_id)
-        release_projects = []
-
-        # Project release -> resolve through REXML query to project level
-        release_projects = from_xpath_and_subxpath('/kdeprojects/component/module/project', '/', project_id)
-        return release_projects unless release_projects.empty?
-        release_projects = from_xpath_and_subxpath('/kdeprojects/component/module', '/project', project_id)
-        return release_projects unless release_projects.empty?
-        release_projects = from_xpath_and_subxpath('/kdeprojects/component', '/module/project', project_id)
-        return release_projects unless release_projects.empty?
-
-        # FIXME: return nil but this is slightly
-        return nil
     end
 end
