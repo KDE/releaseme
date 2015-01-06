@@ -21,7 +21,7 @@
 require "fileutils"
 require "test/unit"
 
-require_relative "../xzarchive"
+require_relative "../lib/xzarchive"
 
 class TestXzArchive < Test::Unit::TestCase
     def setup

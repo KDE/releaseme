@@ -1,7 +1,7 @@
 require "fileutils"
 require "test/unit"
 
-require_relative "../source"
+require_relative "../lib/source"
 
 class TestSource < Test::Unit::TestCase
     def setup

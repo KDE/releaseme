@@ -1,9 +1,9 @@
 require "fileutils"
 require "test/unit"
 
-require_relative "../kdel10n.rb"
-require_relative "../l10nstatistics.rb"
-require_relative "../documentation.rb"
+require_relative "../lib/kdel10n.rb"
+require_relative "../lib/l10nstatistics.rb"
+require_relative "../lib/documentation.rb"
 
 class TestL10n < Test::Unit::TestCase
     def setup

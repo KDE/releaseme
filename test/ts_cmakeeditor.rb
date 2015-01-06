@@ -21,7 +21,7 @@
 require "fileutils"
 require "test/unit"
 
-require_relative "../cmakeeditor"
+require_relative "../lib/cmakeeditor"
 
 class TestCMakeEditor < Test::Unit::TestCase
     attr_accessor :dir

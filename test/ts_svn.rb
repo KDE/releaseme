@@ -21,7 +21,7 @@
 require "fileutils"
 require "test/unit"
 
-require_relative "../svn"
+require_relative "../lib/svn"
 
 class TestSvn < Test::Unit::TestCase
     def setup

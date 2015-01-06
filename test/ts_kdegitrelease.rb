@@ -1,5 +1,5 @@
 require "test/unit"
-require_relative "../kdegitrelease.rb"
+require_relative "../lib/kdegitrelease.rb"
 
 class TestKdeGitRelease < Test::Unit::TestCase
     def setup

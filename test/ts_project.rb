@@ -21,7 +21,7 @@
 require "fileutils"
 require "test/unit"
 
-require_relative "../project"
+require_relative "../lib/project"
 
 class TestProjectResolver < Test::Unit::TestCase
     def setup
@@ -94,6 +94,10 @@ class TestProject < Test::Unit::TestCase
     end
 
     def teardown
+    end
+
+    def test_manual_construction
+
     end
 
     def test_resolve_valid
