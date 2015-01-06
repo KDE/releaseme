@@ -36,16 +36,22 @@ class Project
     # Path used for i18n.
     attr_reader :i18n_path
 
-public
-    # FIXME: test
     # Creates a new Project. Identifier can be nil but must be set manually
     # before calling resolve.
-    def initialize(project_element: nil)
-        @identifier = nil
-        @vcs = nil
-        @i18n_trunk = nil
-        @i18n_stable = nil
-        @i18n_path = nil
+    def initialize(project_element: nil,
+                   identifier: nil,
+                   vcs: nil,
+                   i18n_trunk: nil,
+                   i18n_stable: nil,
+                   i18n_path: nil)
+        unless project_element || (identifier && vcs && i18n_trunk && i18n_stable && i18n_path)
+            raise "Project construction either needs to happen with a project_element or all other values being !nil"
+        end
+        @identifier = identifier
+        @vcs = vcs
+        @i18n_trunk = i18n_trunk
+        @i18n_stable = i18n_stable
+        @i18n_path = i18n_path
         @project_element = project_element
     end
 
@@ -131,6 +137,7 @@ public
         # FIXME: return nil but this is slightly
         return nil
     end
+
 
 private
     def self.find_element_from_xpath(xpath, element_identifier = nil)

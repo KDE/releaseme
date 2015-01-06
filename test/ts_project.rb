@@ -22,6 +22,7 @@ require "fileutils"
 require "test/unit"
 
 require_relative "../lib/project"
+require_relative "../lib/vcs"
 
 class TestProjectResolver < Test::Unit::TestCase
     def setup
@@ -96,8 +97,31 @@ class TestProject < Test::Unit::TestCase
     def teardown
     end
 
-    def test_manual_construction
+    def test_manual_construction_fail
+        assert_raise do
+            # Refuse to new because we need all arguments.
+            pr = Project.new(identifier: 'a', vcs: nil)
+        end
+    end
 
+    def test_manual_construction_success
+        data = {
+            :identifier => 'yakuake',
+            :vcs => Vcs.new,
+            :i18n_trunk => 'master',
+            :i18n_stable => 'master',
+            :i18n_path => 'extragear-utils'
+        }
+        assert_nothing_raised do
+            Project.new(data)
+        end
+        pr = Project.new(data)
+        assert_not_nil(pr)
+        assert_equal(pr.identifier, data[:identifier])
+        assert_equal(pr.vcs, data[:vcs])
+        assert_equal(pr.i18n_trunk, data[:i18n_trunk])
+        assert_equal(pr.i18n_stable, data[:i18n_stable])
+        assert_equal(pr.i18n_path, data[:i18n_path])
     end
 
     def test_resolve_valid
