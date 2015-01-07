@@ -39,7 +39,6 @@ class Git < Vcs
         args = []
         args << "--depth 1" if shallow
         args << "--branch #{branch}" unless branch.nil? or branch.empty? # defaults to master
-        puts "git clone #{args.join(' ')} #{repository} #{target} 2>&1"
         %x[git clone #{args.join(' ')} #{repository} #{target} 2>&1]
 
         # Set hash accordingly
