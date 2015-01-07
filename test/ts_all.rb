@@ -6,7 +6,7 @@ unless Kernel.respond_to?(:require_relative)
   end
 end
 
-Dir.glob("#{File.dirname(__FILE__)}/ts_*.rb").each do |testfile|
+Dir.glob("#{File.dirname(__FILE__)}/test_*.rb").each do |testfile|
     next if File.basename(testfile) == File.basename(__FILE__)
     next if File.basename(testfile).include?("blackbox")
     puts "Adding Test File: #{testfile}"
