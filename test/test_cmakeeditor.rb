@@ -19,11 +19,12 @@
 #++
 
 require "fileutils"
-require "test/unit"
+
+require_relative "lib/testme"
 
 require_relative "../lib/cmakeeditor"
 
-class TestCMakeEditor < Test::Unit::TestCase
+class TestCMakeEditor < Testme
     attr_accessor :dir
     attr_accessor :file
     attr_accessor :lang

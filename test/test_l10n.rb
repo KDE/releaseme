@@ -1,15 +1,16 @@
 require "fileutils"
-require "test/unit"
+
+require_relative "lib/testme"
 
 require_relative "../lib/kdel10n.rb"
 require_relative "../lib/l10nstatistics.rb"
 require_relative "../lib/documentation.rb"
 
-class TestL10n < Test::Unit::TestCase
+# FIXME: test stable
+
+class TestL10n < Testme
     def setup
-        puts "TODO NEED TO TEST STABLE>>>>>>>>>"
-        @dataDir = "data/"
-        @repoDataDir = "#{@dataDir}/l10nrepo/"
+        @repoDataDir = data("l10nrepo/")
 
         @i18n_path = "extragear-multimedia"
 
@@ -64,10 +65,10 @@ class TestL10n < Test::Unit::TestCase
     def test_find_templates
         l = create_l10n()
 
-        templates = l.find_templates("data/multi-pot")
+        templates = l.find_templates(data("multi-pot"))
         assert_equal(templates.count, 2)
 
-        templates = l.find_templates("data/single-pot")
+        templates = l.find_templates(data("single-pot"))
         assert_equal(templates.count, 1)
     end
 
@@ -76,7 +77,7 @@ class TestL10n < Test::Unit::TestCase
         l.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
 
         FileUtils.rm_rf(@dir)
-        FileUtils.cp_r("data/single-pot", @dir)
+        FileUtils.cp_r(data("single-pot"), @dir)
         l.get(@dir)
         assert(File::exists?("#{@dir}"))
         assert(File::exists?("#{@dir}/CMakeLists.txt"))
@@ -85,7 +86,7 @@ class TestL10n < Test::Unit::TestCase
         assert(File::exists?("#{@dir}/po/de/amarok.po"))
 
         FileUtils.rm_rf(@dir)
-        FileUtils.cp_r("data/multi-pot", @dir)
+        FileUtils.cp_r(data("multi-pot"), @dir)
         l.get(@dir)
         assert(File::exists?("#{@dir}"))
         assert(File::exists?("#{@dir}/CMakeLists.txt"))
@@ -100,7 +101,7 @@ class TestL10n < Test::Unit::TestCase
         l.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
 
         FileUtils.rm_rf(@dir)
-        FileUtils.cp_r("data/multi-pot", @dir)
+        FileUtils.cp_r(data("multi-pot"), @dir)
         l.get(@dir)
 
         statistics = L10nStatistics.new
@@ -131,7 +132,7 @@ class TestL10n < Test::Unit::TestCase
         d = create_doc()
         d.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
         FileUtils.rm_rf(@dir)
-        FileUtils.cp_r("data/single-pot", @dir)
+        FileUtils.cp_r(data("single-pot"), @dir)
         d.get(@dir)
         assert(File::exists?("#{@dir}/CMakeLists.txt"))
         assert(File::exists?("#{@dir}/doc/CMakeLists.txt"))
@@ -144,7 +145,7 @@ class TestL10n < Test::Unit::TestCase
         d = create_doc_without_translation()
         d.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
         FileUtils.rm_rf(@dir)
-        FileUtils.cp_r("data/single-pot", @dir)
+        FileUtils.cp_r(data("single-pot"), @dir)
         d.get(@dir)
         assert(File::exists?("#{@dir}/CMakeLists.txt"))
         assert(File::exists?("#{@dir}/doc/CMakeLists.txt"))

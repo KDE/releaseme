@@ -19,11 +19,12 @@
 #++
 
 require "fileutils"
-require "test/unit"
+
+require_relative "lib/testme"
 
 require_relative "../lib/xzarchive"
 
-class TestXzArchive < Test::Unit::TestCase
+class TestXzArchive < Testme
     def setup
         @dir = Dir.pwd + "/tmp_xz_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         teardown() # Make sure everything is clean...

@@ -19,11 +19,12 @@
 #++
 
 require "fileutils"
-require "test/unit"
+
+require_relative "lib/testme"
 
 require_relative "../lib/svn"
 
-class TestSvn < Test::Unit::TestCase
+class TestSvn < Testme
     def setup
         @svnCheckoutDir = Dir.pwd + "/tmp_check_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         @svnRepoDir = Dir.pwd + "/tmp_repo_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join

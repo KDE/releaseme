@@ -19,16 +19,17 @@
 #++
 
 require "fileutils"
-require "test/unit"
+
+require_relative "lib/testme"
 
 require_relative "../lib/project"
 require_relative "../lib/vcs"
 
-class TestProjectResolver < Test::Unit::TestCase
+class TestProjectResolver < Testme
     def setup
         # Project uses ProjectsFile to read data, so we need to make sure it
         # uses our dummy file.
-        ProjectsFile.xml_path = Dir.pwd + '/data/kde_projects_advanced.xml'
+        ProjectsFile.xml_path = data('kde_projects_advanced.xml')
         ProjectsFile.load!
     end
 
@@ -86,11 +87,11 @@ class TestProjectResolver < Test::Unit::TestCase
     end
 end
 
-class TestProject < Test::Unit::TestCase
+class TestProject < Testme
     def setup
         # Project uses ProjectsFile to read data, so we need to make sure it
         # uses our dummy file.
-        ProjectsFile.xml_path = Dir.pwd + '/data/kde_projects.xml'
+        ProjectsFile.xml_path = data('kde_projects.xml')
         ProjectsFile.load!
     end
 
