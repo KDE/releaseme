@@ -34,11 +34,11 @@ class TestBlackboxTarme < Test::Unit::TestCase
             po/de/libdebconf-kde.po
         ]
         expected_files.each do |expected_file|
-            assert(File.exist?("#{expected_dirname}/#{expected_file}"))
+            assert(File.exist?("#{expected_dirname}/#{expected_file}"), "File #{expected_file} not found in directory")
         end
 
         # Move base directory out of the way and extract a canonical version from
-        # the tar. Must have the same!
+        # the tar. Must have the same files!
         FileUtils.mv(expected_dirname, "#{expected_dirname}.old")
         assert(system("tar -xf #{expected_tarname}"))
         assert(File.exist?(expected_dirname))
