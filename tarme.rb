@@ -49,7 +49,7 @@ project_name = ARGV.pop
 #################
 
 require_relative 'lib/documentation'
-require_relative 'lib/kdegitrelease'
+require_relative 'lib/release'
 require_relative 'lib/kdel10n'
 require_relative 'lib/project'
 require_relative 'lib/projectsfile'
@@ -62,8 +62,7 @@ release_projects = Project::from_xpath(project_name)
 release_data_file = File.open("release_data", "w")
 release_projects.each do | project |
     project_name = project.identifier
-    release = KdeGitRelease.new()
-    release.vcs.repository = project.vcs.repository
+    release = Release.new(project.vcs.clone)
     release.vcs.branch = project.i18n_trunk if options[:origin] == :trunk
     release.vcs.branch = project.i18n_stable if options[:origin] == :stable
     release.source.target = "#{project_name}-#{options[:version]}"

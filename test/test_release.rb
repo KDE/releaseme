@@ -1,8 +1,10 @@
 require "test/unit"
-require_relative "../lib/kdegitrelease.rb"
+require_relative "../lib/git.rb"
+require_relative "../lib/release.rb"
 
-class TestKdeGitRelease < Test::Unit::TestCase
+class TestRelease < Test::Unit::TestCase
     def setup
+        Dir.chdir(File.dirname(__FILE__))
         @dir = "tmp_release_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         @gitTemplateDir = "tmp_release_git_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         %x[git init #{@gitTemplateDir}]
@@ -24,8 +26,10 @@ class TestKdeGitRelease < Test::Unit::TestCase
     end
 
     def test_kdegit
-        r = KdeGitRelease.new()
-        r.vcs.repository = @gitTemplateDir
+        vcs = Git.new
+        vcs.repository = @gitTemplateDir
+
+        r = Release.new(vcs)
         r.source.target = @dir
 
         assert(!File::exists?(@dir))

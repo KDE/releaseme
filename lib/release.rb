@@ -18,11 +18,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require_relative 'git'
 require_relative 'source'
 require_relative 'xzarchive'
 
-class KdeGitRelease
+# FIXME: with vcs construction outside the class scope there need to be tests
+#        that run a Release with all possible Vcs derivates!
+
+class Release
     # The vcs from which to get the source
     attr_reader :vcs
     # The source object from which the release is done
@@ -31,8 +33,9 @@ class KdeGitRelease
     attr_reader :archive_
 
     # Init
-    def initialize()
-        @vcs = Git.new()
+    # FIXME: take project + version + construct source target based on that
+    def initialize(vcs)
+        @vcs = vcs
         @source = Source.new()
         @archive_ = XzArchive.new()
     end
