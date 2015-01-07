@@ -38,10 +38,14 @@ class TestBlackboxTarme < Test::Unit::TestCase
 
         # Move base directory out of the way and extract a canonical version from
         # the tar. Must have the same files!
-        FileUtils.mv(expected_dirname, "#{expected_dirname}.old")
-        assert(system("tar -xf #{expected_tarname}"))
-        assert(File.exist?(expected_dirname))
-        assert_equal(Dir.glob("#{expected_dirname}/**/**").sort, Dir.glob("#{expected_dirname}.old/**/**"))
+        old_dirname = "#{expected_dirname}.old"
+        new_dirname = "#{expected_dirname}"
+        FileUtils.mv(new_dirname, old_dirname)
+        assert(system("tar -xf #{new_dirname}"))
+        assert(File.exist?(new_dirname))
+        old_file_list = Dir.chdir(old_dirname) { Dir.glob("**/**") }
+        new_file_list = Dir.chdir(new_dirname) { Dir.glob("**/**") }
+        assert_equal(old_file_list.sort, new_file_list.sort)
 
         # FIXME: check release_data
     end
