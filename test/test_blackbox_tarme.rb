@@ -30,7 +30,6 @@ class TestBlackboxTarme < Test::Unit::TestCase
             .
             CMakeLists.txt
             Messages.sh
-            po/CMakeLists.txt
             po/de/libdebconf-kde.po
         ]
         expected_files.each do |expected_file|
