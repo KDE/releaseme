@@ -1,21 +1,10 @@
 require "fileutils"
-require "test/unit"
 require "tmpdir"
 
-class TestBlackboxTarme < Test::Unit::TestCase
-    def setup
-        @tmpdir = Dir.mktmpdir("testme-#{self.class.to_s}")
-        @testdir = "#{File.dirname(__FILE__)}"
-        @datadir = "#{File.dirname(__FILE__)}/data"
-    end
+require_relative "lib/testme"
 
-    def teardown
-        FileUtils.rm_r(@tmpdir)
-    end
-
+class TestBlackboxTarme < Testme
     def test_git
-        Dir.chdir(@tmpdir)
-
         origin = "trunk"
         version = "1.1.1.1"
         name = "libdebconf-kde"
@@ -41,7 +30,7 @@ class TestBlackboxTarme < Test::Unit::TestCase
         old_dirname = "#{expected_dirname}.old"
         new_dirname = "#{expected_dirname}"
         FileUtils.mv(new_dirname, old_dirname)
-        assert(system("tar -xf #{new_dirname}"))
+        assert(system("tar -xf #{expected_tarname}"))
         assert(File.exist?(new_dirname))
         old_file_list = Dir.chdir(old_dirname) { Dir.glob("**/**") }
         new_file_list = Dir.chdir(new_dirname) { Dir.glob("**/**") }
