@@ -4,7 +4,7 @@ require "tmpdir"
 
 class TestBlackboxTarme < Test::Unit::TestCase
     def setup
-        @tmpdir = Dir.mktmpdir(self.class.to_s)
+        @tmpdir = Dir.mktmpdir("testme-#{self.class.to_s}")
         @testdir = "#{File.dirname(__FILE__)}"
         @datadir = "#{File.dirname(__FILE__)}/data"
     end
