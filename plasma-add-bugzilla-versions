@@ -2,7 +2,7 @@
 # maybe I need to re-learn perl but this seems easier
 # also I e-mailed python-bugzilla list but I'm not hopeful it's possible in python
 
-products="systemsettings Powerdevil plasma-nm Oxygen frameworks-networkmanager-qt frameworks-modemmanager-qt ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter plasma-addons kde-cli-tools Breeze Baloo plasmashell kdeplasma-addons"
+products="systemsettings Powerdevil plasma-nm Oxygen frameworks-modemmanager-qt ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter kde-cli-tools Breeze Baloo plasmashell kdeplasma-addons"
 
 for asdf in $products; do 
  firefox "https://bugs.kde.org/editversions.cgi?action=add&product=${asdf}";
