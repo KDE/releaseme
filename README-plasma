@@ -1,13 +1,15 @@
 
+Start off by making tars (from master for first beta or from branch for later versions)
+
 tar:
  run plasma-update-versions (ensure it is using the right branches)
- set ORIGIN=trunk or stable in ./plasma
+ set ORIGIN=trunk (for first beta) or stable (for later versions) in ./plasma
  run ./plasma script to make tars
  tell sysadmins to make tars available to packagers
  tell release-team@kde.org, plasma-devel@kde.org
 
 branch:
- on a new 5.x release make branches Plasma/5.x:
+ on a new 5.x release make branches Plasma/5.x after making the tars:
   run branchme
   ensure translations are switched to correct branch in projects.kde.org
   run plasma-update-versions to set 5.x.90 in master

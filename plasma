@@ -4,44 +4,58 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.1.2
-ORIGIN=stable  # set to trunk or stable
+VERSION=5.1.95
+BALOO_VERSION=5.5.95
+ORIGIN=trunk  # set to trunk or stable
 
 svn --version > /dev/null || { echo "Install subversion"; exit 1; }
 
+mkdir $VERSION
+cd $VERSION
+
+echo "kde/workspace"
 # start off with all of kde/workspace
-./tarme.rb --origin ${ORIGIN} --version $VERSION kde/workspace/
+../tarme.rb --origin ${ORIGIN} --version $VERSION kde/workspace/
 cat release_data > $VERSION-release-data
 
+echo "removing"
 #not in this release
 rm kwindowsaddons* -rf
 sed -i '/kwindowsaddons/d' $VERSION-release-data
-rm muon* -rf
-sed -i '/muon/d' $VERSION-release-data
-rm kde-gtk-config* -rf
-sed -i '/kde-gtk-config/d' $VERSION-release-data
+rm baloo* -rf
+sed -i '/baloo/d' $VERSION-release-data
+rm kfilemetadata* -rf
+sed -i '/kfilemetadata/d' $VERSION-release-data
 
-#baloo has the wrong translations set in projects.kde.org cos it's part of kdelibs too
-#so brute force it to kde-workspace translations
-#Harald: please do not read past here if you don't want to cry
-cp lib/kdel10n.rb lib/kdel10n.rb-orig
-sed -i "s,#{@module},kde," lib/kdel10n.rb
-sed -i "s,#{@section},workspace," lib/kdel10n.rb
-./tarme.rb --origin ${ORIGIN} --version $VERSION baloo
-cat release_data >> $VERSION-release-data
-mv lib/kdel10n.rb-orig lib/kdel10n.rb
-
-./tarme.rb --origin ${ORIGIN} --version $VERSION kfilemetadata
-cat release_data >> $VERSION-release-data
+echo "baloo"
+../tarme.rb --origin ${ORIGIN} --version $BALOO_VERSION baloo
+cat release_data > $VERSION-release-data
+../tarme.rb --origin ${ORIGIN} --version $BALOO_VERSION kfilemetadata
+cat release_data > $VERSION-release-data
 
 #frameworks branch set in projects.kde.org
-./tarme.rb --origin ${ORIGIN} --version $VERSION libkscreen
+../tarme.rb --origin ${ORIGIN} --version $VERSION libmm-qt
 cat release_data >> $VERSION-release-data
 
-./tarme.rb --origin ${ORIGIN} --version $VERSION libnm-qt
+../tarme.rb --origin ${ORIGIN} --version $VERSION libkscreen
 cat release_data >> $VERSION-release-data
 
-./tarme.rb --origin ${ORIGIN} --version $VERSION libmm-qt
+../tarme.rb --origin ${ORIGIN} --version $VERSION kscreen
+cat release_data >> $VERSION-release-data
+
+../tarme.rb --origin ${ORIGIN} --version $VERSION libbluedevil
+cat release_data >> $VERSION-release-data
+
+../tarme.rb --origin ${ORIGIN} --version $VERSION bluedevil
+cat release_data >> $VERSION-release-data
+
+../tarme.rb --origin ${ORIGIN} --version $VERSION user-manager
+cat release_data >> $VERSION-release-data
+
+../tarme.rb --origin ${ORIGIN} --version $VERSION kcm-touchpad
+cat release_data >> $VERSION-release-data
+
+../tarme.rb --origin ${ORIGIN} --version $VERSION ksshaskpass
 cat release_data >> $VERSION-release-data
 
 #plasma-workspace-wallpapers is in svn, special case it here
@@ -59,7 +73,4 @@ echo -n "plasma-workspace-wallpapers-${VERSION}.tar.xz;" >> $VERSION-release-dat
 sha256sum plasma-workspace-wallpapers-${VERSION}.tar.xz | awk '{print $1}' >> $VERSION-release-data
 rm $VERSION-release-data-plasma-workspace-wallpapers
 
-mkdir -p $VERSION
-cp *xz $VERSION/
-cp ${VERSION}-release-data $VERSION
-./create_sources_inc $VERSION > source-plasma-${VERSION}.inc
+../create_sources_inc $VERSION > source-plasma-${VERSION}.inc
