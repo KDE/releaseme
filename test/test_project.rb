@@ -81,6 +81,14 @@ class TestProjectResolver < Testme
         assert_valid_extragear_utils_array(pr)
     end
 
+    def test_module_with_full_path_and_trailing garbage
+        pr = Project::from_xpath("extragear/utils/")
+        assert_valid_extragear_utils_array(pr)
+
+        pr = Project::from_xpath("extragear/utils///**///")
+        assert_valid_extragear_utils_array(pr)
+    end
+
     def test_component
         pr = Project::from_xpath("extragear")
         assert_valid_extragear_utils_array(pr)

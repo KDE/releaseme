@@ -126,6 +126,12 @@ class Project
     def self.from_xpath(project_id)
         release_projects = []
 
+        # Cleanup project_id. Mustn't have trailing slashes or a
+        # wildcard asterisk. All not supported and in fact screwing with the
+        # parser.
+        project_id.chomp!("*") while project_id.end_with?("*")
+        project_id.chomp!("/") while project_id.end_with?("/")
+
         # Project release -> resolve through REXML query to project level
         release_projects = from_xpath_and_subxpath('/kdeprojects/component/module/project', '/', project_id)
         return release_projects unless release_projects.empty?
