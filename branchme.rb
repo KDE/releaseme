@@ -79,7 +79,7 @@ end
 
 tag_projects = read_release_data()
 tag_projects.each do | tag_project |
-    puts "--- #{tag_project.project.id} ---"
+    puts "--- #{tag_project.project.identifier} ---"
     source = Source.new
     source.target = "tmp-branchme"
     source.cleanup()
