@@ -37,6 +37,9 @@ if options[:branch].nil?
     exit 1
 end
 
+# FIXME: blackbox
+# ALL OF THIS!
+
 # TODO: single project tag
 # project_name = ARGV.pop
 #
@@ -52,7 +55,6 @@ require_relative 'lib/source'
 class TagProject
     attr :project, true
     attr :git_rev, true
-
 end
 
 # FIXME: move to lib :@
@@ -66,11 +68,7 @@ def read_release_data()
             # 1 = branch
             # 2 = git rev
             project = TagProject.new
-            project.project = Project.new(parts[0])
-            while not project.project.resolve! do
-                puts "Resolving the project #{parts[0]} failed. Going to try again in 5 seconds"
-                sleep 5
-            end
+            project.project = Project.from_xpath(parts[0])[0]
             project.project.vcs.branch = parts[1]
             project.git_rev = parts[2]
             projects << project
