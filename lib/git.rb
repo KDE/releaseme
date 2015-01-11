@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2014 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2007-2015 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -24,32 +24,32 @@ require_relative 'vcs'
 
 # FIXME: git is not tested
 class Git < Vcs
-    # Git branch to get() from, when nil no explicit argument is passed to git
-    attr_accessor :branch
+  # Git branch to get() from, when nil no explicit argument is passed to git
+  attr_accessor :branch
 
-    # Git hash of the gotten source. This is nil unless get() finished successfully
-    # --
-    # FIXME: might need to move to Vcs base?
-    # ++
-    attr_reader :hash
+  # Git hash of the gotten source. This is nil unless get() finished successfully
+  # --
+  # FIXME: might need to move to Vcs base?
+  # ++
+  attr_reader :hash
 
-    # Clones repository into target directory
-    # @param shallow whether or not to create a shallow clone
-    def get(target, shallow = true)
-        args = []
-        args << "--depth 1" if shallow
-        args << "--branch #{branch}" unless branch.nil? or branch.empty? # defaults to master
-        %x[git clone #{args.join(' ')} #{repository} #{target} 2>&1]
+  # Clones repository into target directory
+  # @param shallow whether or not to create a shallow clone
+  def get(target, shallow = true)
+    args = []
+    args << "--depth 1" if shallow
+    args << "--branch #{branch}" unless branch.nil? or branch.empty? # defaults to master
+    %x[git clone #{args.join(' ')} #{repository} #{target} 2>&1]
 
-        # Set hash accordingly
-        previous_wd = Dir.pwd
-        Dir.chdir(target)
-        @hash = %x[git rev-parse HEAD].chop()
-        Dir.chdir(previous_wd)
+    # Set hash accordingly
+    previous_wd = Dir.pwd
+    Dir.chdir(target) do
+      @hash = %x[git rev-parse HEAD].chop()
     end
+  end
 
-    # Removes target/.git.
-    def clean!(target)
-        FileUtils::rm_rf("#{target}/.git")
-    end
+  # Removes target/.git.
+  def clean!(target)
+    FileUtils::rm_rf("#{target}/.git")
+  end
 end
