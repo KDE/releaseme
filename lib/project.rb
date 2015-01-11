@@ -20,11 +20,14 @@
 
 require 'net/http'
 require 'rexml/document'
+require 'yaml'
 
 require_relative 'git'
 require_relative 'projectsfile'
 
 class Project
+  @@configdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}/projects/"
+
     # Project identifer found. nil if not resolved.
     attr_reader :identifier
     # VCS to use for this project
@@ -140,10 +143,42 @@ class Project
         release_projects = from_xpath_and_subxpath('/kdeprojects/component', '/module/project', project_id)
         return release_projects unless release_projects.empty?
 
-        # FIXME: return nil but this is slightly
+        # FIXME: return nil but this is slightly meh
         return nil
     end
 
+    def self.from_config(project_name)
+      ymlfile = "#{@@configdir}/#{project_name}.yml"
+      unless File.exist?(ymlfile)
+        raise "Project file for #{project_name} not found [#{ymlfile}]."
+      end
+
+      data = YAML.load(File.read(ymlfile))
+      data = data.inject({}) do |tmphsh, (key, value)|
+        key = key.downcase.to_sym
+        if key == :vcs
+          unless value.has_key?('type')
+            raise "Vcs configuration has no type key."
+          end
+          begin
+            vcs_type = value.delete('type')
+            require_relative "#{vcs_type.downcase}"
+            # FIXME: needs a from_hash
+            vcs = Object.const_get(vcs_type).new
+            value.each do |key, value|
+              vcs.send("#{key}=".to_sym, value)
+            end
+            value = vcs
+          rescue LoadError, RuntimeError => e
+            raise "Failed to resolve the Vcs values #{value} -->\n #{e}"
+          end
+        end
+        tmphsh[key] = value
+        next tmphsh
+      end
+
+      return Project.new(data)
+    end
 
 private
     def self.find_element_from_xpath(xpath, element_identifier = nil)

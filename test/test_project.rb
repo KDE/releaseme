@@ -95,6 +95,35 @@ class TestProjectResolver < Testme
     end
 end
 
+class TestProjectConfig < Testme
+  def test_invalid_name
+    name = "kittens"
+    assert_raise do
+      project = Project::from_config(name)
+    end
+  end
+
+  def test_construction
+    Project::class_variable_set(:@@configdir, data("projects/"))
+    name = 'valid'
+    pr = Project::from_config(name)
+    assert_not_nil(pr)
+    assert_equal('yakuake', pr.identifier)
+    assert_equal('git://anongit.kde.org/yakuake', pr.vcs.repository)
+    assert_equal('master', pr.i18n_trunk)
+    assert_equal('notmaster', pr.i18n_stable)
+    assert_equal('extragear-utils', pr.i18n_path)
+  end
+
+  def test_invalid_vcs
+    Project::class_variable_set(:@@configdir, data('projects/'))
+    name = 'invalid-vcs'
+    assert_raise NoMethodError do
+      pr = Project::from_config(name)
+    end
+  end
+end
+
 class TestProject < Testme
     def setup
         # Project uses ProjectsFile to read data, so we need to make sure it
