@@ -26,32 +26,45 @@ require 'rexml/document'
 # This class provides a singleton allowing easy access to the data provided by
 # a KDE-style XML projects data file.
 module ProjectsFile
-    extend self
+    # Resets all instance variables to deafault values
+    def reset!
+        @autoload = true
+        @xml_path = 'http://projects.kde.org/kde_projects.xml'
+        @xml_data = nil
+        @xml_doc = nil
+    end
 
-    @xml_path = 'http://projects.kde.org/kde_projects.xml'
-    @xml_data = nil
-    @xml_doc = nil
+    # @private
+    def self.extended(base)
+        super(base)
+        reset!
+    end
+
+    extend self
 
     ##
     # XML URL to use for resolution (defaults to http://projects.kde.org/kde_projects.xml).
     # Should not be changed unless you know what you are doing.
     attr_accessor :xml_path
 
+    # Bool on whether or not xml_doc and xml_data should automatically call load!
+    attr_accessor :autoload
+
     # FIXME: for documentation purposes we want to use attr, but we also want to
     #        override the attr reader to on-demand load, find a way to not show this in docs
-    def xml_doc()
-        load! if @xml_doc.nil?
+    def xml_doc
+        load! if @xml_doc.nil? && @autoload
         return @xml_doc
     end
 
-    def xml_data()
-        load! if @xml_data.nil?
+    def xml_data
+        load! if @xml_data.nil? && @autoload
         return @xml_data
     end
 
     ##
     # Loads the XML file at xml_path and creates a REXML::Document instance.
-    def load!()
+    def load!
         if @xml_path.start_with?("http:") or @xml_path.start_with?("https:")
             @xml_data = Net::HTTP.get_response(URI.parse(@xml_path)).body
         else # Assumed to be local.
