@@ -147,6 +147,12 @@ class Project
         return nil
     end
 
+    # Constructs a Project instance from the definition placed in projects/project_name.yml
+    # @param project_name name of the yml file to look for. This is not reflected
+    #   in the actual Project.identifier, just like the original xpath when using
+    #   from_xpath.
+    # @return Project never empty, raises exceptions when something goes wrong
+    # @raise RuntimeError on every occasion ever. Unless something goes wrong deep inside.
     def self.from_config(project_name)
       ymlfile = "#{@@configdir}/#{project_name}.yml"
       unless File.exist?(ymlfile)
@@ -179,20 +185,7 @@ private
     def self.find_element_from_xpath(xpath, element_identifier = nil)
         return ProjectsFile.xml_doc.root.get_elements(xpath)
     end
-        # TODO: if a project is not under component/module it cannot be resolved
-        #       This ultimately should:
-        #       try to find a node in component/module/project
-        #        -> match the path attribute as primary identifier (this allows
-        #           kde/workspace and kde/workspace/foo as valid ids)
-        #        -> match against the node 'identifier' property second (this allows
-        #           workspace and foo as valid ids)
-        #       if none was found traverese upwards until a match was found. i.e.
-        #        look in component/module and check for match as above, then in
-        #        component and check for match. if none was found resolution failed
-        #       if a match was found, try to resolve child nodes, this allows
-        #        meta ids such as kde/workspace to resolve to multiple actual
-        #        projects
-
+    
     # FIXME: testing
     def self.element_matches_path?(element, path)
         element.elements.each do |e|
