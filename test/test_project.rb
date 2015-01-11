@@ -103,7 +103,7 @@ class TestProjectConfig < Testme
     end
   end
 
-  def test_construction
+  def test_construction_git
     Project::class_variable_set(:@@configdir, data("projects/"))
     name = 'valid'
     pr = Project::from_config(name)
@@ -113,6 +113,14 @@ class TestProjectConfig < Testme
     assert_equal('master', pr.i18n_trunk)
     assert_equal('notmaster', pr.i18n_stable)
     assert_equal('extragear-utils', pr.i18n_path)
+  end
+
+  def test_valid_svn
+    Project::class_variable_set(:@@configdir, data("projects/"))
+    name = 'valid-svn'
+    pr = Project::from_config(name)
+    assert_not_nil(pr)
+    assert_equal('svn://anonsvn.kde.org/home/kde/plasma/plasma-workspace-wallpapers/', pr.vcs.repository)
   end
 
   def test_invalid_vcs
