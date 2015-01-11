@@ -163,12 +163,7 @@ class Project
           begin
             vcs_type = value.delete('type')
             require_relative "#{vcs_type.downcase}"
-            # FIXME: needs a from_hash
-            vcs = Object.const_get(vcs_type).new
-            value.each do |key, value|
-              vcs.send("#{key}=".to_sym, value)
-            end
-            value = vcs
+            value = Object.const_get(vcs_type).from_hash(value)
           rescue LoadError, RuntimeError => e
             raise "Failed to resolve the Vcs values #{value} -->\n #{e}"
           end

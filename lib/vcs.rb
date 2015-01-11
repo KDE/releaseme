@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2014 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2007-2015 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -19,16 +19,24 @@
 #++
 
 class Vcs
-    # The repository URL
-    attr_accessor :repository
+  # The repository URL
+  attr_accessor :repository
 
-    # Does a standard get operation. Obtaining repository.url into target.
-    def get(target)
-        raise "Pure virtual"
-    end
+  # Does a standard get operation. Obtaining repository.url into target.
+  def get(target)
+    raise "Pure virtual"
+  end
 
-    # Does a standard clean operation. Removing any VCS data from target (e.g. .git/.svn etc.)
-    def clean!(target)
-        raise "Pure virtual"
+  # Does a standard clean operation. Removing any VCS data from target (e.g. .git/.svn etc.)
+  def clean!(target)
+    raise "Pure virtual"
+  end
+
+  def self.from_hash(hash)
+    vcs = self.new
+    hash.each do |key, value|
+      vcs.send("#{key}=".to_sym, value)
     end
+    return vcs
+  end
 end
