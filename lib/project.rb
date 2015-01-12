@@ -116,6 +116,7 @@ class Project
                 raise "unknown path" unless path
                 parts = path.split('/')
                 parts.pop # ditch last part as that is our name
+                parts.pop while parts.size > 2
                 @i18n_path = parts.join("-")
             end
         end
