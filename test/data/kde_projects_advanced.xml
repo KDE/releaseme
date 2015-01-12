@@ -13,6 +13,18 @@
         <path>extragear/utils/krecipes</path>
       </project>
     </module>
+    <module identifier='network'>
+      <path>extragear/network</path>
+      <project identifier='telepathy'>
+        <path>extragear/network/telepathy</path>
+        <project identifier='ktp1'>
+          <path>extragear/network/telepathy/ktp1</path>
+        </project>
+        <project identifier='ktp2'>
+          <path>extragear/network/telepathy/ktp2</path>
+        </project>
+      </project>
+    </module>
   </component>
   <component identifier='frameworks'>
     <path>frameworks</path>

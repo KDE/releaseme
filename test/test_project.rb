@@ -59,21 +59,26 @@ class TestProjectResolver < Testme
         assert_valid_project(pr, "calligra")
     end
 
+    ####
+
+    def assert_valid_array(project_array, matches)
+      assert_not_nil(project_array)
+      assert_equal(matches.size, project_array.size)
+      project_array.each do | project |
+        matches.delete(project.identifier)
+      end
+      assert(matches.empty?, "One or more sub-projects did not get resolved correctly: #{matches}")
+    end
+
     ####### nested resolution
 
     def assert_valid_extragear_utils_array(project_array)
-        assert_not_nil(project_array)
-        matches = %w(yakuake krusader krecipes)
-        assert_equal(project_array.size, matches.size)
-        project_array.each do | project |
-            matches.delete(project.identifier)
-        end
-        assert(matches.empty?, "One or more sub-projects did not get resolved correctly")
+        assert_valid_array(project_array, %w(yakuake krusader krecipes))
     end
 
     def test_module
         pr = Project::from_xpath("utils")
-        assert_valid_extragear_utils_array(pr)
+        assert_equal([], pr)
     end
 
     def test_module_with_full_path
@@ -89,9 +94,28 @@ class TestProjectResolver < Testme
         assert_valid_extragear_utils_array(pr)
     end
 
+    ####### super nested resolution
+
+    def assert_valid_telepathy_array(project_array)
+      assert_valid_array(project_array, %w(ktp1 ktp2))
+    end
+
+    def test_project_with_subprojects
+      pr = Project::from_xpath("extragear/network/telepathy")
+      assert_valid_telepathy_array(pr)
+
+      pr = Project::from_xpath("extragear/network/telepathy/ktp1")
+      assert_not_nil(pr)
+      assert_equal("ktp1", pr[0].identifier)
+    end
+
+    def assert_valid_extragear_array(project_array)
+      assert_valid_array(project_array, %w(yakuake krusader krecipes ktp1 ktp2))
+    end
+
     def test_component
         pr = Project::from_xpath("extragear")
-        assert_valid_extragear_utils_array(pr)
+        assert_valid_extragear_array(pr)
     end
 end
 
@@ -182,7 +206,7 @@ class TestProject < Testme
 
     def test_resolve_invalid
         projects = Project::from_xpath('kitten')
-        assert_equal(projects, nil)
+        assert_equal(projects, [])
     end
 
     def test_vcs

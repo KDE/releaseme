@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2014-2015 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2014-2015 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -116,7 +116,6 @@ class Project
                 raise "unknown path" unless path
                 parts = path.split('/')
                 parts.pop # ditch last part as that is our name
-                p parts
                 @i18n_path = parts.join("-")
             end
         end
@@ -135,16 +134,12 @@ class Project
         project_id.chomp!("*") while project_id.end_with?("*")
         project_id.chomp!("/") while project_id.end_with?("/")
 
-        # Project release -> resolve through REXML query to project level
-        release_projects = from_xpath_and_subxpath('/kdeprojects/component/module/project', '/', project_id)
-        return release_projects unless release_projects.empty?
-        release_projects = from_xpath_and_subxpath('/kdeprojects/component/module', '/project', project_id)
-        return release_projects unless release_projects.empty?
-        release_projects = from_xpath_and_subxpath('/kdeprojects/component', '/module/project', project_id)
-        return release_projects unless release_projects.empty?
+        %w(component module project).each do |element_type|
+            release_projects += find_suitable_projects("//#{element_type}[@identifier]", project_id)
+        end
 
         # FIXME: return nil but this is slightly meh
-        return nil
+        return release_projects
     end
 
     # Constructs a Project instance from the definition placed in projects/project_name.yml
@@ -182,45 +177,31 @@ class Project
     end
 
 private
-    def self.find_element_from_xpath(xpath, element_identifier = nil)
-        return ProjectsFile.xml_doc.root.get_elements(xpath)
-    end
-    
-    # FIXME: testing
     def self.element_matches_path?(element, path)
         element.elements.each do |e|
-            if e.name == "path" && e.text == path
+            if e.name == "path" && (e.text == path || e.text.start_with?(path))
                 return true
             end
         end
         return false
     end
 
-    # FIXME: testing
-    def self.from_xpath_and_subxpath(xpath, subxpath, project_id)
-        # Make sure we construct a valid path by forcing the subxpath to start with
-        # a slash.
-        subxpath.prepend('/') unless subxpath.start_with?('/')
-
-        release_projects = []
-        find_element_from_xpath(xpath).each do |element|
-            if element.attribute("identifier").to_s == project_id || element_matches_path?(element, project_id)
-                element.each_element("/#{element.xpath}#{subxpath}") do |e|
-                    p = Project.new(project_element: e)
-                    # TODO: we should do something on parse fail but we can't because the tests use incomplete pseudo data
-#                     raise "failed to resolve attributes of #{project_id}"unless
-                    p.resolve_attributes!
-                    release_projects << p
-                end
-                if release_projects.empty? # Had no nested projects.
-                    p = Project.new(project_element: element)
-#                     raise "failed to resolve attributes of #{project_id}" unless
-                    p.resolve_attributes!
-                    release_projects << p
-                end
+    def self.find_suitable_projects(xpath, project_id)
+        ret = []
+        ProjectsFile.xml_doc.root.get_elements(xpath).each do |element|
+            has_children = false
+            element.each_element("/#{element.xpath}/*[@identifier]") do |_|
+                has_children = true
                 break
             end
+            next if has_children
+            if element.attribute("identifier").to_s == project_id || element_matches_path?(element, project_id)
+                pr = Project.new(project_element: element)
+                pr.resolve_attributes!
+                ret << pr
+            end
         end
-        return release_projects
+        return ret
     end
+
 end
