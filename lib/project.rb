@@ -134,7 +134,7 @@ class Project
         project_id.chomp!("*") while project_id.end_with?("*")
         project_id.chomp!("/") while project_id.end_with?("/")
 
-        %w(component module project).each do |element_type|
+        %w(project module component).each do |element_type|
             release_projects += find_suitable_projects("//#{element_type}[@identifier]", project_id)
         end
 
@@ -189,17 +189,21 @@ private
     def self.find_suitable_projects(xpath, project_id)
         ret = []
         ProjectsFile.xml_doc.root.get_elements(xpath).each do |element|
+            suitable = false
+            if element.attribute("identifier").to_s == project_id || element_matches_path?(element, project_id)
+                suitable = true
+            end
+            next unless suitable
             has_children = false
+            # FIXME: do we really need to xpath recursive here?
             element.each_element("/#{element.xpath}/*[@identifier]") do |_|
-                has_children = true
-                break
+              has_children = true
+              break
             end
             next if has_children
-            if element.attribute("identifier").to_s == project_id || element_matches_path?(element, project_id)
-                pr = Project.new(project_element: element)
-                pr.resolve_attributes!
-                ret << pr
-            end
+            pr = Project.new(project_element: element)
+            pr.resolve_attributes!
+            ret << pr
         end
         return ret
     end
