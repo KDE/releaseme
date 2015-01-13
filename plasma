@@ -15,7 +15,7 @@ cd $VERSION
 
 echo "kde/workspace"
 # start off with all of kde/workspace
-../tarme.rb --origin ${ORIGIN} --version $VERSION kde/workspace/
+../tarme.rb --origin ${ORIGIN} --version $VERSION kde/workspace
 cat release_data > $VERSION-release-data
 
 echo "removing"

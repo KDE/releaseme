@@ -2,13 +2,13 @@
 # does a clone, replaces PROJECT_VERSION in CMakeLists.txt and pushes
 # Author Jonathan Riddell 2014, this file is in the public domain and has no copyright restrictions
 
-VERSION=5.1.95
-BRANCH=Plasma/5.2
+VERSION=5.2.90
+BRANCH=master
 
 rm -f kde_projects.xml
 wget http://projects.kde.org/kde_projects.xml
 WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//'`
-WORKSPACE="$WORKSPACE libmm-qt bluedevil libbluedevil user-manager libkscreen kscreen libmm-qt kcm-touchpad ksshaskpass"
+# WORKSPACE="$WORKSPACE libmm-qt bluedevil libbluedevil user-manager libkscreen kscreen libmm-qt kcm-touchpad ksshaskpass"
 rm -rf version-update
 mkdir version-update
 cd version-update
