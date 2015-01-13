@@ -1,7 +1,7 @@
 INFOCHECKOUT="/home/jr/src/www/info"
 ANNOUNCECHECKOUT="/home/jr/src/www/announcements"
-VERSION=5.1.2
-OLDVERSION=5.1.1
+VERSION=5.1.95
+OLDVERSION=5.1.2
 MINORVERSION=5.1
 LANG=C
 LC_ALL=C
@@ -9,7 +9,8 @@ DATE=`LC_ALL=C date "+%A, %d %B %Y"`
 MONTH=`date "+%B"`
 
 
-./create_sources_inc ${VERSION} > ${INFOCHECKOUT}/source-plasma-${VERSION}.inc
+cp ./create_sources_inc ${VERSION}
+cd ${VERSION}; ./create_sources_inc > ${INFOCHECKOUT}/source-plasma-${VERSION}.inc; cd ..
 cp ${INFOCHECKOUT}/plasma-bugfix-template ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,MINORVERSION,${MINORVERSION},g -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,VERSION,${VERSION}, -i ${INFOCHECKOUT}/plasma-${VERSION}.php
