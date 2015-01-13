@@ -56,6 +56,7 @@ class TagProject
 
 end
 
+# FIXME: move to lib :@
 def read_release_data()
     projects = Array.new
     File.open('release_data', 'r') do | file |
@@ -66,11 +67,7 @@ def read_release_data()
             # 1 = branch
             # 2 = git rev
             project = TagProject.new
-            project.project = Project.new(parts[0])
-            while not project.project.resolve! do
-                puts "Resolving the project #{parts[0]} failed. Going to try again in 5 seconds"
-                sleep 5
-            end
+            project.project = Project::from_xpath(parts[0])[0]
             project.project.vcs.branch = parts[1]
             project.git_rev = parts[2]
             projects << project
@@ -81,7 +78,7 @@ end
 
 tag_projects = read_release_data()
 tag_projects.each do | tag_project |
-    puts "--- #{tag_project.project.id} ---"
+    puts "--- #{tag_project.project.identifier} ---"
     source = Source.new
     source.target = "tmp-tagme"
     source.cleanup()
