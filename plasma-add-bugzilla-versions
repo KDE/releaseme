@@ -1,8 +1,9 @@
+# open firefox tabs for each page to manually add a new version number to bugzill products
 # I can't find a way to script this
 # maybe I need to re-learn perl but this seems easier
 # also I e-mailed python-bugzilla list but I'm not hopeful it's possible in python
 
-products="systemsettings Powerdevil plasma-nm Oxygen frameworks-modemmanager-qt ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter kde-cli-tools Breeze Baloo plasmashell kdeplasma-addons Touchpad-KCM ksshaskpass solid user-manager"
+products="systemsettings Powerdevil plasma-nm Oxygen frameworks-modemmanager-qt ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter kde-cli-tools Breeze Baloo plasmashell kdeplasma-addons Touchpad-KCM ksshaskpass solid user-manager krunner muon kde-gtk-config"
 
 for asdf in $products; do 
  firefox "https://bugs.kde.org/editversions.cgi?action=add&product=${asdf}";
