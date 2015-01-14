@@ -7,14 +7,14 @@ Check for release critical bugs:
 
 Start off by making tars (from master for first beta or from branch for later versions)
 
-tar:
+on tar day tar:
  run plasma-update-versions (ensure it is using the right branches)
  set ORIGIN=trunk (for first beta) or stable (for later versions) in ./plasma
  run ./plasma script to make tars
  tell sysadmins to make tars available to packagers
  tell release-team@kde.org, plasma-devel@kde.org
 
-branch:
+on tar day branch:
  on a new 5.x release make branches Plasma/5.x after making the tars:
   run branchme
   ensure translations are switched to correct branch in projects.kde.org
@@ -23,22 +23,22 @@ branch:
  branch plasma-workspace-wallpapers:
   svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ -m "branch for 5.1"
 
-prepare:
+on tar day prepare:
  run plasma-changelog (update version numbers, manually edit file after)
- www/announcements/plasma-5.x.y.php
- www/info/plasma-5.x.y.php
+ run plasma-webpages, tidy up and commit for  www/announcements/plasma-5.x.y.php  www/info/plasma-5.x.y.php
+ ask devs for screenshots and list of features
+ on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata 
  write a Dot story
  run plasma-add-bugzilla-versions to update bugzilla version numbers
  tell sysadmins to free the source
 
-tag pre-launch:
+on release day tag pre-launch:
  tag by copying 5.x.y-release-data to release_data and running tagme
 
  tag plasma-workspace-wallpapers:
   svn copy svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/5.1.2 -m "Tagging 5.1.2"
 
-launch:
- run plasma-webpages, tidy up and commit
+on release day launch:
  www/announcements/index.php
  www/announcements/release_data.php
  www/index.php
