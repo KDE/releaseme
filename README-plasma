@@ -21,7 +21,9 @@ on tar day branch:
   run plasma-update-versions to set 5.x.90 in master
 
  branch plasma-workspace-wallpapers:
-  svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ -m "branch for 5.1"
+  export VERSION=5.2
+  svn mkdir svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${VERSION} -m
+  svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${VERSION}/plasma-workspace-wallpapers/ -m "branch for ${VERSION}"
 
 on tar day prepare:
  run plasma-changelog (update version numbers, manually edit file after)
