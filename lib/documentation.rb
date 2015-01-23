@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2014 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2007-2015 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -88,15 +88,15 @@ class DocumentationL10n < Source
   end
 
   def vcs_l10n_path(lang)
-    return "#{lang}/docs/#{@i18n_path}/#{@project_name}"
+    "#{lang}/docs/#{@i18n_path}/#{@project_name}"
   end
 
-  def get(sourceDirectory)
-    dir = "#{Dir.pwd}/#{sourceDirectory}/doc"
-    temp_dir = "#{Dir.pwd}/#{sourceDirectory}/l10n"
-    Dir.mkdir(dir) unless File.exists?(dir)
+  def get(source_dir)
+    dir = "#{Dir.pwd}/#{source_dir}/doc"
+    temp_dir = "#{Dir.pwd}/#{source_dir}/l10n"
+    Dir.mkdir(dir) unless File.exist?(dir)
 
-    availableLanguages = vcs.cat("subdirs").split("\n")
+    languages = vcs.cat('subdirs').split($RS)
     docs = []
 
     # On git a layout doc/{file,file,file} may appear, in this case we move
@@ -104,7 +104,7 @@ class DocumentationL10n < Source
     # A more complicated case would be doc/{dir,dir}/{file,file} which can
     # happen for multisource repos such as plasma-workspace.
     unless Dir.glob("#{dir}/**/index.docbook").empty? ||
-      File.exist?("#{dir}/en_US")
+           File.exist?("#{dir}/en_US")
       files = Dir.glob("#{dir}/*").uniq
       Dir.mkdir("#{dir}/en_US")
       FileUtils.mv(files, "#{dir}/en_US")
@@ -118,24 +118,25 @@ class DocumentationL10n < Source
       return
     end
 
-    CMakeEditor::create_language_specific_doc_lists!("#{dir}/en_US", "en_US", project_name)
-    availableLanguages.each do |language|
+    CMakeEditor.create_language_specific_doc_lists!("#{dir}/en_US", "en_US", project_name)
+    languages.each do |language|
       p language
       language.chomp!
-      next if language == "x-test" or language == "en_US"
+      # FIXME: this really should be filtered when the array is created...
+      next if language == 'x-test'|| language == 'en_US'
 
-      puts "Downloading #{language} documentation translations for #{sourceDirectory}"
+      puts "Downloading #{language} documentation translations for #{source_dir}"
       FileUtils.rm_rf(temp_dir)
 
       doc_dirs = Dir.chdir("#{dir}/en_US") do
-        Dir.glob("*").select { |f| File.directory?(f) }
+        Dir.glob('*').select { |f| File.directory?(f) }
       end
 
       dest_dir = "#{dir}/#{language}"
       done = false
 
-      puts "  Trying to copy..."
-      if !doc_dirs.empty?
+      puts '  Trying to copy...'
+      unless doc_dirs.empty?
         # FIXME: recyle for single-get?
         # FIXME: check cmake file for add_subdir that are not optional and warn if there are any
         vcs.get(temp_dir, "#{language}/docs/#{@i18n_path}")
@@ -150,22 +151,20 @@ class DocumentationL10n < Source
         end
         p not_translated_doc_dirs
         p doc_selection
-        if doc_selection.empty?
-          next
-        end
+        next if doc_selection.empty?
         Dir.mkdir(dest_dir) # Important otherwise first copy is dir itself...
         doc_selection.each do |d|
           FileUtils.mv(d, dest_dir, verbose: true)
         end
         puts `ls -lah #{dest_dir}`
-        CMakeEditor::create_language_specific_doc_lists!(dest_dir, language, project_name)
+        CMakeEditor.create_language_specific_doc_lists!(dest_dir, language, project_name)
         docs += [language]
         done = true
       end
       unless done
         # FIXME this also needs to act as fallback
         puts vcs.get(temp_dir, vcs_l10n_path(language))
-        unless FileTest.exists?("#{temp_dir}/index.docbook") # without index the translation is not worth butter
+        unless FileTest.exist?("#{temp_dir}/index.docbook") # without index the translation is not worth butter
           puts '  no valid documentation translation found, skipping.'
           next
         end
@@ -186,7 +185,7 @@ class DocumentationL10n < Source
 
     if !docs.empty?
       CMakeEditor.create_doc_meta_lists!(dir)
-      CMakeEditor.append_optional_add_subdirectory!(sourceDirectory, 'doc')
+      CMakeEditor.append_optional_add_subdirectory!(source_dir, 'doc')
     else
       puts 'no docs found !!!'
       FileUtils.rm_rf(dir)
