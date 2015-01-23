@@ -98,6 +98,7 @@ kdoctools_create_handbook(index.docbook
   end
 
   # Creates the CMakeLists.txt for doc/$LANG/*
+  # FIXME: don't overwrite en_US' CMakeLists.txt for a given subdir
   def create_language_specific_doc_lists!(dir, language, software_name)
     Dir.chdir(dir) do
       if File.exist?('index.docbook')
