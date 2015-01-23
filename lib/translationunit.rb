@@ -85,11 +85,13 @@ class TranslationUnit < Source
     @vcs.repository = repo_url
   end
 
-  def vcs_l10n_path(lang)
-    fail 'todo'
-  end
-
-  def get(source_dir)
-    fail 'todo'
-  end
+  # FIXME: should we just go full abstract and forget about the specifics
+  #   factory?
+  # def vcs_l10n_path(lang)
+  #   fail 'todo'
+  # end
+  #
+  # def get(source_dir)
+  #   fail 'todo'
+  # end
 end
