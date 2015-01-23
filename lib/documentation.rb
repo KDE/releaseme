@@ -88,14 +88,11 @@ class DocumentationL10n < TranslationUnit
           end
           next false
         end
-        p not_translated_doc_dirs
-        p doc_selection
         next if doc_selection.empty?
         Dir.mkdir(dest_dir) # Important otherwise first copy is dir itself...
         doc_selection.each do |d|
           FileUtils.mv(d, dest_dir, verbose: true)
         end
-        puts `ls -lah #{dest_dir}`
         CMakeEditor.create_language_specific_doc_lists!(dest_dir, language, project_name)
         docs += [language]
         done = true
@@ -103,13 +100,12 @@ class DocumentationL10n < TranslationUnit
       unless done
         # FIXME this also needs to act as fallback
         puts vcs.get(temp_dir, vcs_l10n_path(language))
-        unless FileTest.exist?("#{temp_dir}/index.docbook") # without index the translation is not worth butter
+        unless FileTest.exist?("#{temp_dir}/index.docbook")
           puts '  no valid documentation translation found, skipping.'
           next
         end
 
         FileUtils.mv(temp_dir, dest_dir)
-
         CMakeEditor.create_language_specific_doc_lists!("#{dir}/#{language}", language, project_name)
 
         # add to SVN in case we are tagging
