@@ -62,7 +62,7 @@ class DocumentationL10n < TranslationUnit
       p language
       language.chomp!
       # FIXME: this really should be filtered when the array is created...
-      next if language == 'x-test'|| language == 'en_US'
+      next if language == 'x-test' || language == 'en_US'
 
       puts "Downloading #{language} documentation translations for #{source_dir}"
       FileUtils.rm_rf(temp_dir)
