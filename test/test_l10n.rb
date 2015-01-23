@@ -154,4 +154,57 @@ class TestL10n < Testme
         assert(!File::exists?("#{@dir}/doc/de/index.docbook"))
         assert(!File::exists?("#{@dir}/doc/de/CMakeLists.txt"))
     end
+
+    def test_get_doc_multi_doc
+      d = DocumentationL10n.new(DocumentationL10n::TRUNK, "plasma-desktop", 'kde-workspace')
+      d.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
+      FileUtils.rm_rf(@dir)
+      FileUtils.cp_r(data("multi-doc"), @dir)
+      d.get(@dir)
+      # fr mustn't appear, it's empty
+      # FIXME: I am actually not sure CMakeLists ought to be generated
+      # recursively through 2->2.1->2.1.1 at all.
+      expected_files = %w(
+        CMakeLists.txt
+        en_US
+        en_US/CMakeLists.txt
+        en_US/doc-valid2
+        en_US/doc-valid2/CMakeLists.txt
+        en_US/doc-valid2/index.docbook
+        en_US/doc-valid2/doc-valid2.1
+        en_US/doc-valid2/doc-valid2.1/CMakeLists.txt
+        en_US/doc-valid2/doc-valid2.1/index.docbook
+        en_US/doc-valid2/doc-valid2.1/doc-valid2.1.1
+        en_US/doc-valid2/doc-valid2.1/doc-valid2.1.1/CMakeLists.txt
+        en_US/doc-valid2/doc-valid2.1/doc-valid2.1.1/index.docbook
+        en_US/doc-invalid1
+        en_US/doc-valid1
+        en_US/doc-valid1/CMakeLists.txt
+        en_US/doc-valid1/index.docbook
+        de
+        de/CMakeLists.txt
+        de/doc-valid2
+        de/doc-valid2/CMakeLists.txt
+        de/doc-valid2/index.docbook
+        de/doc-valid2/doc-valid2.1
+        de/doc-valid2/doc-valid2.1/CMakeLists.txt
+        de/doc-valid2/doc-valid2.1/index.docbook
+        de/doc-valid2/doc-valid2.1/doc-valid2.1.1
+        de/doc-valid2/doc-valid2.1/doc-valid2.1.1/CMakeLists.txt
+        de/doc-valid2/doc-valid2.1/doc-valid2.1.1/index.docbook
+        de/doc-valid1
+        de/doc-valid1/CMakeLists.txt
+        de/doc-valid1/index.docbook
+      )
+      present_files = Dir.chdir("#{@dir}/doc/") { Dir.glob('**/**') }
+      missing_files = []
+      expected_files.each do |f|
+        missing_files << f unless present_files.include?(f)
+        present_files.delete(f)
+      end
+      assert(missing_files.empty?, "missing file(S): #{missing_files}")
+      assert(present_files.empty?, "unexpected file(s): #{present_files}")
+
+      # FIXME: check contents?
+    end
 end
