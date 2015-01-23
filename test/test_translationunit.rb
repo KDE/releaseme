@@ -25,4 +25,16 @@ class TestTranslationUnit < Testme
     l.init_repo_url('file://a/')
     assert_equal(l.vcs.repository, 'file://a/trunk//l10n-kf5/')
   end
+
+  def test_invalid_inits
+    assert_raise do
+      TranslationUnit.new(nil, 'amarok', '/dev/null')
+    end
+    assert_raise do
+      TranslationUnit.new(TranslationUnit::TRUNK, nil, 'null')
+    end
+    assert_raise do
+      TranslationUnit.new(TranslationUnit::TRUNK, 'amarok', nil)
+    end
+  end
 end

@@ -45,23 +45,27 @@ class TranslationUnit < Source
 
   def initialize(type, project_name, i18n_path)
     if type.nil?
-      fail 'Type cannot be nil'
+      fail 'type must not be nil'
     else
       @type = type
     end
 
     if i18n_path.nil?
-      fail 'i18n_path cannot be nil'
+      fail 'i18n_path must not be nil'
     else
       @i18n_path = i18n_path
+    end
+
+    if project_name.nil?
+      fail 'project_name must not be nil'
+    else
+      @project_name = project_name
     end
 
     @vcs = Svn.new
 
     @languages = []
     @templates = []
-
-    @project_name = project_name
 
     init_repo_url('svn://anonsvn.kde.org/home/kde/')
   end
