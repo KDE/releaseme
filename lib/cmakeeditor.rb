@@ -22,40 +22,119 @@ require 'fileutils'
 
 # General purpose CMakeLists.txt editing functions
 module CMakeEditor
-    extend self
+  module_function
 
-    # Creates the CMakeLists.txt for doc/$LANG/*
-    def create_language_specific_doc_lists!(dir, language, software_name)
-        # In case of en_US there could be a CMakeLists already present, do not
-        # overwrite it as there may be fancy logic inside.
-        return if File.exist?("#{dir}/CMakeLists.txt")
+=begin
+  -git-
 
-        file = File.new("#{dir}/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC)
-        if File.exist?('index.docbook')
-            file << "kdoctools_create_handbook(index.docbook INSTALL_DESTINATION \${HTML_INSTALL_DIR}/#{language} SUBDIR #{software_name})\n"
-        else
-            Dir.chdir(dir) do
-                # FIXME: shitty hardcoding
-                # FIXME: this actually depends on the fact that en_US uses optional_add_subdir
-                #        as otherwise languages won't build when they have no translation for a subdir.
-                # Iff en_US has a CMakeLists.txt reuse it.
-                if File.exist?('../en_US/CMakeLists.txt')
-                    file.close()
-                    # Don't copy if we are working on en_US.
-                    FileUtils.cp('../en_US/CMakeLists.txt', '.') unless language == 'en_US'
-                else
-                    # If there is no file in en_US, simply write one manually.
-                    Dir.glob('*/index.docbook').each do |docbook|
-                        dirname = File.dirname(docbook)
-                        # TODO: use append_optional_add_subdirectory! maybe?
-                        file << "ecm_optional_add_subdirectory(#{dirname})\n"
-                        # FIXME: we need more nesting here... NOT :@
-                    end
-                end
+    doc/CMakeLists.txt
+    doc/index.docbook
+    doc/...
+
+      -> move doc/* to doc/en_US/*
+      -> get_translations_single
+      -> if translation && index.docbook -> move to doc/language/*
+        -> write a cmake file for doc/language/
+      -> write a cmake file doc/
+      -> add doc to main cmakelists
+
+    doc/CMakeLists.txt
+    doc/directory1/CMakeLists.txt
+    doc/directory1/index.docbook
+    doc/directory1/...
+    doc/directory2/CMakeLists.txt
+    doc/directory2/index.docbook
+    doc/directory2/...
+    doc/directory3/index.docbook                  [invalid?]
+    doc/directory4/CMakeLists.txt                 [invalid!]
+
+      -> move doc/* to doc/en_US/*
+      -> get_translatins_multi
+        -> get whole component-module dir
+        -> foreach en_USdir[that has an index.docbook] do;
+          -> if translation && index.docbook -> move to doc/language/dir/*
+          -> write a cmake file for doc/language/dir
+      -> write a cmake file for doc/language
+      -> write cmake file doc/
+      -> add doc to main cmakelists
+
+    doc/en_US/CMakeLists.txt
+    doc/en_US/index.docbook
+    doc/en_US/...
+
+    doc/en_US/CMakeLists.txt
+    doc/en_US/directory1/...
+    doc/en_US/directory2/...
+
+    ? what if there is no CMakeLists at all
+
+  -svn-
+
+    component-module/project/index.docbook
+
+    component-module/directory1/index.docbook
+
+    component-module/directory2/index.docbook
+
+    component/project/index.docbook
+
+    ? what if there is no translation
+=end
+
+  def add_subdirectory(file)
+    "add_subdirectory(#{File.basename(file)})\n"
+  end
+
+  def create_handbook(language, software_name)
+    <<-EOF
+kdoctools_create_handbook(index.docbook
+                          INSTALL_DESTINATION \${HTML_INSTALL_DIR}/#{language}
+                          SUBDIR #{File.basename(software_name)})\n
+    EOF
+  end
+
+  def write_handbook(language, software_name)
+    File.write('CMakeLists.txt', create_handbook(language, software_name))
+  end
+
+  # Creates the CMakeLists.txt for doc/$LANG/*
+  def create_language_specific_doc_lists!(dir, language, software_name)
+    Dir.chdir(dir) do
+      if File.exist?('index.docbook')
+        # When there is an index.docbook we mustn't copy the en_US version as
+        # we have to write our own CMakeLists in order to have things installed
+        # in the correct language directory! Also see kdoctools_create_handbook
+        # arguments.
+        write_handbook(language, software_name)
+      elsif !Dir.glob('*').select { |f| File.directory?(f) }.empty?
+        # -- Recyle en_US' CMakeLists --
+        enusdir = '../en_US/'
+        enuscmake = "#{enusdir}/CMakeLists.txt"
+        if File.exist?(enuscmake)
+          # FIXME: naughty
+          unless File.basename(Dir.pwd) == 'en_US'
+            FileUtils.cp(enuscmake, '.', verbose: true)
+          end
+          Dir.glob('**/index.docbook').each do |docbook|
+            dirname = File.dirname(docbook)
+            Dir.chdir(dirname) do
+              write_handbook(language, File.basename(dirname))
             end
+          end
+        else
+          fail 'there is no cmakelists in enUS and also no index.docbook'
         end
-        file.close() unless file.closed?
+      else
+        fail 'There is no index.docbook but also no directories'
+      end
+
+      # en_US may already have a super cmakelists, do not twiddle with it!
+      puts "Writing main cmakelists #{Dir.pwd}/../CMakeLists.txt"
+      File.open('../CMakeLists.txt', 'a') do |f|
+        f.write(add_subdirectory(dir))
+      end
     end
+  end
 
     # Creates the CMakeLists.txt for doc/*
     def create_doc_meta_lists!(dir)
