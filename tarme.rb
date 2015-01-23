@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #--
-# Copyright (C) 2014 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2014-2015 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -59,7 +59,7 @@ release_projects = Project::from_xpath(project_name)
 # FIXME: runtime deps are not checked first
 # e.g. svn, git, xz...
 
-release_data_file = File.open("release_data", "w")
+release_data_file = File.open('release_data', 'w')
 release_projects.each do | project |
     project_name = project.identifier
     release = Release.new(project.vcs.clone)
@@ -71,21 +71,25 @@ release_projects.each do | project |
     #        throw exceptions or return false when something goes wrong
     #        possibly a general fork() function would be useful to a) control IO
     #        better b) check the retvalue c) throw exception accordingly
-    release.get()
+    release.get
 
     # FIXME: why not pass project itself? Oo
-    # FIXME: origin should be validated? technically optparse enforces proper values
+    # FIXME: origin should be validated? technically optparse enforces proper
+    #   values
     l10n = L10n.new(options[:origin], project_name, project.i18n_path)
     l10n.get(release.source.target)
 
-    # FIXME: when one copies the l10n .new and adjust the class name arguments will be crap but nothing ever notices... lack of checks anyone?
-    doc = DocumentationL10n.new(options[:origin], project_name, project.i18n_path)
+    # FIXME: when one copies the l10n .new and adjust the class name arguments
+    #   will be crap but nothing ever notices... lack of checks anyone?
+    doc = DocumentationL10n.new(options[:origin],
+                                project_name,
+                                project.i18n_path)
     doc.get(release.source.target)
 
-    release.archive()
+    release.archive
 
     # FIXME: technically we need to track SVN revs for l10n as well...........
-    # FIXME FIXME FIXME FIXME: need version
+    # FIXME: need version
     project = project.identifier
     branch = release.vcs.branch
     hash = release.vcs.hash
