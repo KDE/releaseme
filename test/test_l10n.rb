@@ -40,7 +40,7 @@ class TestL10n < Testme
     end
 
     def create_l10n
-        l = KdeL10n.new(KdeL10n::TRUNK, @i18n_path)
+        l = KdeL10n.new(KdeL10n::TRUNK, 'amarok', @i18n_path)
         l.target = "#{@dir}/l10n"
         l
     end
@@ -56,9 +56,9 @@ class TestL10n < Testme
     def test_0_repo_url_init
         l = create_l10n
         assert_equal(l.type, KdeL10n::TRUNK)
-        l.initRepoUrl("file://a")
+        l.init_repo_url("file://a")
         assert_equal(l.vcs.repository, "file://a/trunk//l10n-kf5/")
-        l.initRepoUrl("file://a/")
+        l.init_repo_url("file://a/")
         assert_equal(l.vcs.repository, "file://a/trunk//l10n-kf5/")
     end
 
@@ -74,7 +74,7 @@ class TestL10n < Testme
 
     def test_get_po
         l = create_l10n
-        l.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
+        l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
 
         FileUtils.rm_rf(@dir)
         FileUtils.cp_r(data("single-pot"), @dir)
@@ -98,7 +98,7 @@ class TestL10n < Testme
 
     def test_statistics
         l = create_l10n
-        l.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
+        l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
 
         FileUtils.rm_rf(@dir)
         FileUtils.cp_r(data("multi-pot"), @dir)

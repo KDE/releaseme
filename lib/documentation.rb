@@ -23,70 +23,9 @@ require 'fileutils'
 require_relative 'cmakeeditor'
 require_relative 'source'
 require_relative 'svn'
+require_relative 'translationunit'
 
-class DocumentationL10n < Source
-  # FIXME: DUPS EVERYWHERE!
-  # The VCS to use to obtain the l10n sources
-  attr_reader :vcs
-  # The type of the release (stable,trunk)
-  attr_reader :type
-  # The i18n base path to use in SVN (e.g. extragear-utils/)
-  attr_reader :i18n_path
-
-  # Obtained and valid languages
-  attr_reader :languages
-  # Found templates
-  attr_reader :templates
-
-  # Type identifiers
-  TRUNK  = :trunk
-  STABLE = :stable
-
-  attr_reader :project_name
-
-  def initialize(type, project_name, i18n_path, vcs = nil)
-    if vcs.nil?
-      @vcs = Svn.new
-    else
-      @vcs = vcs
-    end
-
-    if type.nil?
-      fail 'Type cannot be nil'
-    else
-      @type = type
-    end
-
-    if i18n_path.nil?
-      fail 'i18n_path cannot be nil'
-    else
-      @i18n_path = i18n_path
-    end
-
-    @languages = []
-    @templates = []
-
-    @project_name = project_name
-
-    initRepoUrl('svn://anonsvn.kde.org/home/kde/')
-  end
-
-  # FIXME: code copy
-  def initRepoUrl(baseUrl)
-    puts 'code copy!!!'
-
-    repoUrl = baseUrl
-    repoUrl.concat("/") if not repoUrl.end_with?("/")
-    if type == TRUNK
-      repoUrl.concat("trunk/")
-    else
-      repoUrl.concat("branches/stable/")
-    end
-    repoUrl.concat("/l10n-kf5/")
-
-    @vcs.repository = repoUrl
-  end
-
+class DocumentationL10n < TranslationUnit
   def vcs_l10n_path(lang)
     "#{lang}/docs/#{@i18n_path}/#{@project_name}"
   end

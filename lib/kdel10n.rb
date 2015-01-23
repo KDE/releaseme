@@ -23,63 +23,10 @@ require 'fileutils'
 require_relative 'cmakeeditor'
 require_relative 'source'
 require_relative 'svn'
+require_relative 'translationunit'
 
 # FIXME: doesn't write master cmake right now...
-class KdeL10n < Source
-    # The VCS to use to obtain the l10n sources
-    attr_reader :vcs
-    # The type of the release (stable,trunk)
-    attr_reader :type
-    # The i18n base path to use in SVN (e.g. extragear-utils/)
-    attr_reader :i18n_path
-
-    # Obtained and valid languages
-    attr_reader :languages
-    # Found templates
-    attr_reader :templates
-
-    # Type identifiers
-    TRUNK  = :trunk
-    STABLE = :stable
-
-    def initialize(type, i18n_path, vcs = nil)
-        if vcs.nil?
-            @vcs = Svn.new()
-        else
-            @vcs = vcs
-        end
-
-        if type.nil?
-            raise "Type cannot be nil"
-        else
-            @type = type
-        end
-
-        if i18n_path.nil?
-            raise "i18n_path cannot be nil"
-        else
-            @i18n_path = i18n_path
-        end
-
-        @languages = Array.new
-        @templates = Array.new
-
-        initRepoUrl("svn://anonsvn.kde.org/home/kde/")
-    end
-
-    def initRepoUrl(baseUrl)
-        repoUrl = baseUrl
-        repoUrl.concat("/") if not repoUrl.end_with?("/")
-        if type == TRUNK
-            repoUrl.concat("trunk/")
-        else
-            repoUrl.concat("branches/stable/")
-        end
-        repoUrl.concat("/l10n-kf5/")
-
-        @vcs.repository = repoUrl
-    end
-
+class KdeL10n < TranslationUnit
     def find_templates(directory, pos=Array.new)
         Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
             File.readlines(file).each do |line|

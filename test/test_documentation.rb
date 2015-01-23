@@ -50,7 +50,7 @@ class TestDocumentation < Testme
   def test_get_doc
     # en_US & de
     d = create_doc
-    d.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     d.get(@dir)
@@ -64,7 +64,7 @@ class TestDocumentation < Testme
     # en_US only (everything works if only doc/ is present in git but not
     # translated)
     d = create_doc_without_translation
-    d.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     d.get(@dir)
@@ -80,7 +80,7 @@ class TestDocumentation < Testme
     d = DocumentationL10n.new(DocumentationL10n::TRUNK,
                               'plasma-desktop',
                               'kde-workspace')
-    d.initRepoUrl("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-doc'), @dir)
     d.get(@dir)
