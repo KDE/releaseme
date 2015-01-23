@@ -43,13 +43,7 @@ class TranslationUnit < Source
 
   attr_reader :project_name
 
-  def initialize(type, project_name, i18n_path, vcs = nil)
-    if vcs.nil?
-      @vcs = Svn.new
-    else
-      @vcs = vcs
-    end
-
+  def initialize(type, project_name, i18n_path)
     if type.nil?
       fail 'Type cannot be nil'
     else
@@ -61,6 +55,8 @@ class TranslationUnit < Source
     else
       @i18n_path = i18n_path
     end
+
+    @vcs = Svn.new
 
     @languages = []
     @templates = []
