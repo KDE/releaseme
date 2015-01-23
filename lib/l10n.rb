@@ -26,7 +26,7 @@ require_relative 'svn'
 require_relative 'translationunit'
 
 # FIXME: doesn't write master cmake right now...
-class KdeL10n < TranslationUnit
+class L10n < TranslationUnit
     def find_templates(directory, pos=Array.new)
         Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
             File.readlines(file).each do |line|

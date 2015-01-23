@@ -2,7 +2,7 @@ require "fileutils"
 
 require_relative "lib/testme"
 
-require_relative "../lib/kdel10n.rb"
+require_relative "../lib/l10n.rb"
 require_relative "../lib/l10nstatistics.rb"
 require_relative "../lib/documentation.rb"
 
@@ -40,7 +40,7 @@ class TestL10n < Testme
     end
 
     def create_l10n
-        l = KdeL10n.new(KdeL10n::TRUNK, 'amarok', @i18n_path)
+        l = L10n.new(L10n::TRUNK, 'amarok', @i18n_path)
         l.target = "#{@dir}/l10n"
         l
     end

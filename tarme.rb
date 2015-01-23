@@ -50,7 +50,7 @@ project_name = ARGV.pop
 
 require_relative 'lib/documentation'
 require_relative 'lib/release'
-require_relative 'lib/kdel10n'
+require_relative 'lib/l10n'
 require_relative 'lib/project'
 require_relative 'lib/projectsfile'
 
@@ -75,7 +75,7 @@ release_projects.each do | project |
 
     # FIXME: why not pass project itself? Oo
     # FIXME: origin should be validated? technically optparse enforces proper values
-    l10n = KdeL10n.new(options[:origin], project.i18n_path)
+    l10n = L10n.new(options[:origin], project_name, project.i18n_path)
     l10n.get(release.source.target)
 
     # FIXME: when one copies the l10n .new and adjust the class name arguments will be crap but nothing ever notices... lack of checks anyone?
