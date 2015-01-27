@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Remember to add a version
 version=$1
 
 process_folder()

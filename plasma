@@ -4,9 +4,10 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.1.95
-BALOO_VERSION=5.5.95
-ORIGIN=trunk  # set to trunk or stable
+VERSION=5.2.0
+SHORT_VERSION=5.2
+BALOO_VERSION=5.6.0
+ORIGIN=stable  # set to trunk or stable
 
 svn --version > /dev/null || { echo "Install subversion"; exit 1; }
 
@@ -26,41 +27,20 @@ rm baloo* -rf
 sed -i '/baloo/d' $VERSION-release-data
 rm kfilemetadata* -rf
 sed -i '/kfilemetadata/d' $VERSION-release-data
+rm kcm-touchpad* -rf
+sed -i '/kcm-touchpad/d' $VERSION-release-data
+rm user-manager* -rf
+sed -i '/user-manager/d' $VERSION-release-data
 
 echo "baloo"
 ../tarme.rb --origin ${ORIGIN} --version $BALOO_VERSION baloo
-cat release_data > $VERSION-release-data
+cat release_data >> $VERSION-release-data
 ../tarme.rb --origin ${ORIGIN} --version $BALOO_VERSION kfilemetadata
-cat release_data > $VERSION-release-data
-
-#frameworks branch set in projects.kde.org
-../tarme.rb --origin ${ORIGIN} --version $VERSION libmm-qt
-cat release_data >> $VERSION-release-data
-
-../tarme.rb --origin ${ORIGIN} --version $VERSION libkscreen
-cat release_data >> $VERSION-release-data
-
-../tarme.rb --origin ${ORIGIN} --version $VERSION kscreen
-cat release_data >> $VERSION-release-data
-
-../tarme.rb --origin ${ORIGIN} --version $VERSION libbluedevil
-cat release_data >> $VERSION-release-data
-
-../tarme.rb --origin ${ORIGIN} --version $VERSION bluedevil
-cat release_data >> $VERSION-release-data
-
-../tarme.rb --origin ${ORIGIN} --version $VERSION user-manager
-cat release_data >> $VERSION-release-data
-
-../tarme.rb --origin ${ORIGIN} --version $VERSION kcm-touchpad
-cat release_data >> $VERSION-release-data
-
-../tarme.rb --origin ${ORIGIN} --version $VERSION ksshaskpass
 cat release_data >> $VERSION-release-data
 
 #plasma-workspace-wallpapers is in svn, special case it here
 rm -rf plasma-workspace-wallpapers-$VERSION
-svn export svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $3}' | sed s,\\.,, > $VERSION-release-data-plasma-workspace-wallpapers
+svn export svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${SHORT_VERSION}/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $3}' | sed s,\\.,, > $VERSION-release-data-plasma-workspace-wallpapers
 perl -i -pe 'chomp if eof' $VERSION-release-data-plasma-workspace-wallpapers
 mv plasma-workspace-wallpapers/ plasma-workspace-wallpapers-$VERSION
 tar Jcf plasma-workspace-wallpapers-${VERSION}.tar.xz plasma-workspace-wallpapers-${VERSION}

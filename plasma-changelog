@@ -2,7 +2,7 @@
 # does a clone, replaces PROJECT_VERSION in CMakeLists.txt and pushes
 # Author Jonathan Riddell 2014, this file is in the public domain and has no copyright restrictions
 
-VERSION=5.1.95
+VERSION=5.2.0
 OLDVERSION=5.1.2
 BRANCH=Plasma/5.2
 
@@ -12,12 +12,6 @@ IFS=$'\n'
 rm -f kde_projects.xml
 wget http://projects.kde.org/kde_projects.xml
 WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//'`
-#WORKSPACE="$WORKSPACE
-#libkscreen
-#baloo
-#kfilemetadata
-#libnm-qt
-#libmm-qt"
 rm -rf ${OLDVERSION}-${VERSION}-changelog
 rm -rf tmp-changelog
 mkdir tmp-changelog
@@ -29,7 +23,7 @@ for project in $WORKSPACE; do
  cd ${project};
  pwd;
  echo "<h3> $project </h3><ul>" >> ../../${OLDVERSION}-${VERSION}-changelog
- changes=$(git log v${OLDVERSION}..v${VERSION} --oneline | grep -v SVN_SILENT | grep -v "Update version number" | grep -vi merge | sed "s/^\w*\ *//")
+ changes=$(git log v${OLDVERSION}.. --oneline | grep -v SVN_SILENT | grep -v "Update version number" | grep -vi merge | sed "s/^\w*\ *//")
  for line in $changes; do
   echo "<li>${line}</li>" >> ../../${OLDVERSION}-${VERSION}-changelog;
  done

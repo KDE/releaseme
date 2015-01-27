@@ -9,9 +9,9 @@ Start off by making tars (from master for first beta or from branch for later ve
 
 on tar day tar:
  run plasma-update-versions (ensure it is using the right branches)
- set ORIGIN=trunk (for first beta) or stable (for later versions) in ./plasma
+ review plasma script: set VERSIONs, ORIGIN=trunk (for first beta) or stable (for later versions) in ./plasma
  run ./plasma script to make tars
- tell sysadmins to make tars available to packagers
+ [tell sysadmins to] make tars available to packagers
  tell release-team@kde.org, plasma-devel@kde.org
 
 on tar day branch:
@@ -47,3 +47,7 @@ on release day launch:
  publish Dot story on front page
  e-mail kde-announce@kde.org
  post on twitter, g+, facebook, reddit (r/kde and r/linux)
+
+TODO
+ plasma-changelog to extract FEATURE tags
+ 
