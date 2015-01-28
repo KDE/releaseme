@@ -55,18 +55,18 @@ class TestSvn < Testme
   end
 
   def test_cat
-    populateRepo()
-    s = validRepo()
+    populateRepo
+    s = validRepo
 
     # Valid file.
-    ret = s.cat("/foo")
-    assert_equal($?.to_i, 0)
-    assert_equal(ret, "yolo\n")
+    ret = s.cat('/foo')
+    assert_equal(0, $?.to_i)
+    assert_equal("yolo\n", ret)
 
     # Invalid file.
-    ret = s.cat("/bar")
-    assert_not_equal($?.to_i, 0)
-    assert_equal(ret, "")
+    ret = s.cat('/bar')
+    assert_not_equal(0, $?.to_i)
+    assert_equal('', ret)
   end
 
   def test_exists
