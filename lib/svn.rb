@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2014 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2007-2015 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -23,86 +23,84 @@ require 'fileutils'
 require_relative 'vcs'
 
 class Svn < Vcs
-private
-    def url?(path)
-        if path.match('((\w|\W)+)://.*')
-            puts "SVN: possbily inversed argument order detected!"
-            return true
-        end
-        return false
-    end
+  private
 
-public
-    ##
-    # call-seq:
-    #  svn.get(target directory, path to check out) -> true or false
-    #
-    # Checkout a path from the remote repository.
-    # @param target is the target directory for the checkout
-    # @param path is an additional path to append to the repo URL
-    # @returns boolean whether the checkout was successful
-    def get(target, path = nil)
-        url?(target)
-        url = repository.dup # Deep copy since we will patch around
-        if not path.nil? and not path.empty?
-            url.concat("/#{path}")
-        end
-        return %x[svn co #{url} #{target}]
+  def url?(path)
+    if path.match('((\w|\W)+)://.*')
+      puts "SVN: possbily inversed argument order detected!"
+      return true
     end
+    false
+  end
 
-    # Removes .svn recursively from target.
-    def clean!(target)
-        Dir.glob("#{target}/**/**/.svn").each do |node|
-            FileUtils::rm_rf(node)
-        end
-    end
+  public
 
-    ##
-    # call-seq:
-    #  svn.list(path) -> string
-    #
-    # List content of a directory in the remote repository.
-    # If path is nil the ls will be run on the @repository url.
-    # Returns output of ls command if successful. $? is set to return value.
-    def list(path = nil)
-        url = repository.dup # Deep copy since we will patch around
-        if not path.nil? and not path.empty?
-            url.concat("/#{path}")
-        end
-        return %x[svn ls #{url}]
-    end
+  ##
+  # call-seq:
+  #  svn.get(target directory, path to check out) -> true or false
+  #
+  # Checkout a path from the remote repository.
+  # @param target is the target directory for the checkout
+  # @param path is an additional path to append to the repo URL
+  # @returns boolean whether the checkout was successful
+  def get(target, path = nil)
+    url?(target)
+    url = repository.dup # Deep copy since we will patch around
+    url.concat("/#{path}") if path && !path.empty?
+    %x[svn co #{url} #{target}]
+  end
 
-    ##
-    # call-seq:
-    #  svn.cat(file path to cat) -> string
-    #
-    # Concatenate to output.
-    # @param filePath filepath to append to the repository URL
-    # @returns content of cat'd file as string
-    def cat(filePath)
-        return %x[svn cat #{repository}/#{filePath}]
+  # Removes .svn recursively from target.
+  def clean!(target)
+    Dir.glob("#{target}/**/**/.svn").each do |node|
+      FileUtils::rm_rf(node)
     end
+  end
 
-    ##
-    # call-seq:
-    #  svn.export(target path/file, path to export) -> true or false
-    #
-    # Export single file from remote repository.
-    # @param path filepath to append to the repository URL
-    # @param targetFilePath target file path to write to
-    # @returns boolean whether or not the export was successful
-    def export(target, path)
-        url?(target)
-        return system("svn export #{repository}/#{path} #{target}")
-    end
-    ##
-    # call-seq:
-    #  svn.exists?(path) -> true or false
-    #
-    # Checks whether a file/dir exists on the remote repository
-    # @param filePath filepath to append to the repository URL
-    # @returns boolean whether or not the path exists
-    def exist?(path)
-        return system("svn info #{repository}/#{path}")
-    end
+  ##
+  # call-seq:
+  #  svn.list(path) -> string
+  #
+  # List content of a directory in the remote repository.
+  # If path is nil the ls will be run on the @repository url.
+  # Returns output of ls command if successful. $? is set to return value.
+  def list(path = nil)
+    url = repository.dup # Deep copy since we will patch around
+    url.concat("/#{path}") if path && !path.empty?
+    %x[svn ls #{url}]
+  end
+
+  ##
+  # call-seq:
+  #  svn.cat(file path to cat) -> string
+  #
+  # Concatenate to output.
+  # @param filePath filepath to append to the repository URL
+  # @returns content of cat'd file as string
+  def cat(filePath)
+    %x[svn cat #{repository}/#{filePath}]
+  end
+
+  ##
+  # call-seq:
+  #  svn.export(target path/file, path to export) -> true or false
+  #
+  # Export single file from remote repository.
+  # @param path filepath to append to the repository URL
+  # @param targetFilePath target file path to write to
+  # @returns boolean whether or not the export was successful
+  def export(target, path)
+    url?(target)
+    system("svn export #{repository}/#{path} #{target}")
+  end
+  ##
+  # call-seq:
+  #  svn.exists?(path) -> true or false
+  #
+  # Checks whether a file/dir exists on the remote repository
+  # @param filePath filepath to append to the repository URL
+  # @returns boolean whether or not the path exists
+  def exist?(path)
+    system("svn info #{repository}/#{path}")
+  end
 end
