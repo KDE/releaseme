@@ -140,7 +140,7 @@ class Project
         end
 
         # FIXME: return nil but this is slightly meh
-        return release_projects
+        release_projects
     end
 
     # Constructs a Project instance from the definition placed in projects/project_name.yml
@@ -152,16 +152,14 @@ class Project
     def self.from_config(project_name)
       ymlfile = "#{@@configdir}/#{project_name}.yml"
       unless File.exist?(ymlfile)
-        raise "Project file for #{project_name} not found [#{ymlfile}]."
+        fail "Project file for #{project_name} not found [#{ymlfile}]."
       end
 
       data = YAML.load(File.read(ymlfile))
       data = data.inject({}) do |tmphsh, (key, value)|
         key = key.downcase.to_sym
         if key == :vcs
-          unless value.has_key?('type')
-            raise "Vcs configuration has no type key."
-          end
+          fail 'Vcs configuration has no type key.' unless value.key?('type')
           begin
             vcs_type = value.delete('type')
             require_relative "#{vcs_type.downcase}"
@@ -174,10 +172,11 @@ class Project
         next tmphsh
       end
 
-      return Project.new(data)
+      Project.new(data)
     end
 
-private
+    private
+
     def self.element_matches_path?(element, path)
         element.elements.each do |e|
             if e.name == "path" && (e.text == path || e.text.start_with?(path))
