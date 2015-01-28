@@ -21,17 +21,20 @@
 require 'fileutils'
 
 require_relative 'cmakeeditor'
+require_relative 'logable'
 require_relative 'source'
 require_relative 'svn'
 require_relative 'translationunit'
 
 # FIXME: doesn't write master cmake right now...
 class L10n < TranslationUnit
+  prepend Logable
+
   def find_templates(directory, pos = [])
     Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
       File.readlines(file).each do |line|
         line.match(/[^\/]*\.pot/).to_a.each do |match|
-          pos << match.sub(".pot",".po")
+          pos << match.sub('.pot','.po')
         end
       end
     end
@@ -138,15 +141,18 @@ class L10n < TranslationUnit
     target = sourceDirectory + "/po/"
     Dir.mkdir(target)
 
-    availableLanguages = vcs.cat("subdirs").split("\n")
+    availableLanguages = vcs.cat('subdirs').split("\n")
     @templates = find_templates(sourceDirectory)
 
+    log_info "Downloading translations for #{sourceDirectory}"
+
+    languages_without_translation = []
     anyTranslations = false
     Dir.chdir(sourceDirectory) do
       availableLanguages.each do | language |
         next if language == 'x-test'
 
-        puts "Downloading #{language} translations for #{sourceDirectory}"
+        log_debug "#{sourceDirectory} - downloading #{language}"
         if templates.count > 1
           files = get_multiple(language)
         elsif templates.count == 1
@@ -158,7 +164,7 @@ class L10n < TranslationUnit
 
         # No files obtained :(
         if files.empty?
-          puts '  got no translations, skipping.'
+          languages_without_translation << language
           next
         end
         anyTranslations = true
@@ -174,14 +180,16 @@ class L10n < TranslationUnit
         @languages += [language]
       end
       # Make sure the temp dir is cleaned up
-      FileUtils::rm_rf('l10n')
+      FileUtils.rm_rf('l10n')
       if anyTranslations
         # Update CMakeLists.txt
-        CMakeEditor::append_po_install_instructions!(Dir.pwd, 'po')
+        CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
       else
         # Remove the empty translations directory
         Dir.delete('po')
       end
     end
+
+    log_info "No translations for: #{languages_without_translation.join(', ')}"
   end
 end
