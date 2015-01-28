@@ -18,12 +18,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require_relative "lib/testme"
+require_relative 'lib/testme'
 
-require_relative "../lib/logable"
+require_relative '../lib/logable'
 
 class FakeClass1
-  include Logable
+  prepend Logable
+
+  def create_logger
+    Logger.new('/dev/null')
+  end
 end
 
 class FakeClass2 < FakeClass1
@@ -33,10 +37,66 @@ class FakeClass2 < FakeClass1
   def create_logger
     logger = Logger.new(log_file)
     logger.level = log_level
-    logger.formatter = proc do |severity, datetime, progname, msg|
+    logger.formatter = proc do |_severity, _datetime, _progname, msg|
       "#{msg}\n"
     end
-    return logger
+    logger
+  end
+end
+
+module M
+  prepend Logable
+
+  attr_reader :log_file
+  module_function :log_file
+
+  module_function
+
+  def log_file=(file)
+    @log_file = file
+    logdev = Logger::LogDevice.new(file)
+    logger.instance_variable_set(:@logdev, logdev)
+  end
+
+  def logit
+    log_warn 'warn'
+    log_info 'info'
+  end
+
+  def create
+    logger.level = Logger::INFO
+    logger.formatter = proc do |_severity, _datetime, _progname, msg|
+      "#{msg}\n"
+    end
+  end
+end
+
+class C
+  prepend Logable
+  prepend M
+
+  def self.log(logfile)
+    logdev = Logger::LogDevice.new(logfile)
+    logger.instance_variable_set(:@logdev, logdev)
+
+    logger.level = Logger::INFO
+    logger.formatter = proc do |_severity, _datetime, _progname, msg|
+      "#{msg}\n"
+    end
+
+    log_warn 'warn'
+    log_info 'info'
+  end
+end
+
+class FakeClass3Prepend
+  prepend Logable
+
+  private
+
+  def create_logger
+    logger.level = Logger::WARN
+    logger
   end
 end
 
@@ -80,5 +140,39 @@ class TestLogable < Testme
     fake.send :log_debug, 'debug'
     assert_equal("warn\n", File.read(fake.log_file).lines[-2])
     assert_equal("info\n", File.read(fake.log_file).lines[-1])
+  end
+
+  def test_mixin_other_module
+    M.create
+    M.log_file = __callee__.to_s
+    M.logit
+    assert_equal("warn\n", File.read(M.log_file).lines[-2])
+    assert_equal("info\n", File.read(M.log_file).lines[-1])
+  end
+
+  def test_mixin_instance
+    c = C.new
+    # Prepended M is private in the class. This is a bit naughty but whatever.
+    c.send :create
+    c.send :log_file=, __callee__.to_s
+    c.send :logit
+    assert_equal("warn\n", File.read(c.send :log_file).lines[-2])
+    assert_equal("info\n", File.read(c.send :log_file).lines[-1])
+  end
+
+  def test_mixin_class
+    # Prepended M is private in the class. This is a bit naughty but whatever.
+    logfile = __callee__.to_s
+    C.send :log, logfile
+    assert_equal("warn\n", File.read(logfile).lines[-2])
+    assert_equal("info\n", File.read(logfile).lines[-1])
+  end
+
+  def test_super_prepend
+    fake = FakeClass3Prepend.new
+    fake.send :create_logger
+    logger = fake.send :logger
+    assert_not_nil(logger)
+    assert_equal(Logger::WARN, logger.level)
   end
 end

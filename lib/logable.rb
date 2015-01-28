@@ -19,30 +19,87 @@
 #++
 
 require 'logger'
-require 'logger/colors'
+begin
+  require 'logger/colors'
+rescue LoadError
+  puts 'Logging colors are not available. Install logger-colors gem if desired'
+end
 
+# Expands Objects by with logging capabilities.
+# This module can be included or prepended, prepend allows you to implement
+# your own {#create_logger} which can either create a completely new Logger
+# instance or can modify the existing one from {#logger}.
+# Logable can extend modules and classes alike and will also add class methods
+# if included in a class allowing logging from all possible vectors.
 module Logable
-private
-  def log_info(str)
-    logger.info(str)
+  # Methods extending the Object a {Logable} is included in. All methods are
+  # private by default.
+  module Methods
+    private
+
+    # @!visibility public
+
+    # Logs as info type
+    # @param str [String] the string to log
+    def log_info(str)
+      logger.info(str)
+    end
+
+    # Logs as warning type
+    # @param str [String] the string to log
+    def log_warn(str)
+      logger.warn(str)
+    end
+
+    # Logs as debug type
+    # @param str [String] the string to log
+    def log_debug(str)
+      logger.debug(str)
+    end
+
+    # Creates a new Logger instance.
+    # Default Loggers are set to INFO mode, log to stdout and use the context
+    # name as progname to distinguish output from different classes/modules/etc.
+    # @note This method will defer to super when used in a prepended context,
+    #   this allows prepending the module and adding a create_logger method
+    #   which can alter settings of the logger without having to create an
+    #   entirely new one.
+    # @return [Logger] instance {#logger} was set to
+    def create_logger
+      @__logger = Logger.new(STDOUT)
+      @__logger.level = Logger::INFO
+      # Module classes are not useful, use the actual module name if we are
+      # mixed into a module.
+      if self.class == Module || self.class == Class
+        @__logger.progname = "#{self.class.to_s}|#{self}"
+      else
+        @__logger.progname = self.class.to_s
+      end
+      @__logger = super if defined?(super)
+      @__logger
+    end
+
+    # Gets the logger.
+    # This method lazy-creates a logger if none exists yet in the present
+    # context.
+    # @return [Logger] as returned from {#create_logger} or cache
+    def logger
+      @__logger ||= create_logger
+    end
   end
 
-  def log_warn(str)
-    logger.warn(str)
+  extend Methods
+  # @!parse extend Methods
+
+  # @!visibility private
+  def self.prepended(base)
+    base.extend(Methods)
+    base.prepend(Methods)
   end
 
-  def log_debug(str)
-    logger.debug(str)
-  end
-
-  def create_logger
-    @__logger = Logger.new(STDOUT)
-    @__logger.level = Logger::INFO
-    @__logger.progname = self.class.to_s
-    return @__logger
-  end
-
-  def logger
-    return @__logger ||= create_logger
+  # @!visibility private
+  def self.included(base)
+    base.extend(Methods)
+    base.include(Methods)
   end
 end
