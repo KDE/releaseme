@@ -57,7 +57,7 @@ class Svn < Vcs
   # Checkout a path from the remote repository.
   # @param target is the target directory for the checkout
   # @param path is an additional path to append to the repo URL
-  # @return [Bool] whether the checkout was successful
+  # @return [Boolean] whether the checkout was successful
   def get(target, path = nil)
     url?(target)
     url = repository.dup # Deep copy since we will patch around
@@ -89,18 +89,18 @@ class Svn < Vcs
   # Export single file from remote repository.
   # @param path filepath to append to the repository URL
   # @param targetFilePath target file path to write to
-  # @return [Bool] whether or not the export was successful
+  # @return [Boolean] whether or not the export was successful
   def export(target, path)
     url?(target)
     run(['export', "#{repository}/#{path}", target])
-    $CHILD_STATUS == 0
+    $? == 0
   end
 
   # Checks whether a file/dir exists on the remote repository
   # @param filePath filepath to append to the repository URL
-  # @return [Bool] whether or not the path exists
+  # @return [Boolean] whether or not the path exists
   def exist?(path)
     run(['info', "#{repository}/#{path}"])
-    $CHILD_STATUS == 0
+    $? == 0
   end
 end
