@@ -61,14 +61,7 @@ class TranslationUnit < Source
   # FIXME: this name seems a bit meh
   def init_repo_url(base_url)
     repo_url = base_url
-    repo_url += '/' unless repo_url.end_with?('/')
-    # FIXME: outsource into own function
-    if type == TRUNK
-      repo_url += 'trunk/'
-    else
-      repo_url += 'branches/stable/'
-    end
-    repo_url += '/l10n-kf5/'
+    repo_url += "/#{url_type_suffix}/l10n-kf5/"
 
     @vcs.repository = repo_url
   end
@@ -84,6 +77,14 @@ class TranslationUnit < Source
   # end
 
   private
+
+  def url_type_suffix
+    if type == TRUNK
+      'trunk'
+    else
+      'branches/stable'
+    end
+  end
 
   def validate_instace_variables
     fail 'type must not be nil' unless @type
