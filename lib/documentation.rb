@@ -21,11 +21,14 @@
 require 'fileutils'
 
 require_relative 'cmakeeditor'
+require_relative 'logable'
 require_relative 'source'
 require_relative 'svn'
 require_relative 'translationunit'
 
 class DocumentationL10n < TranslationUnit
+  prepend Logable
+
   def vcs_l10n_path(lang)
     "#{lang}/docs/#{@i18n_path}/#{@project_name}"
   end
@@ -37,6 +40,8 @@ class DocumentationL10n < TranslationUnit
 
     languages = vcs.cat('subdirs').split($RS)
     docs = []
+
+    log_info "Downloading documentations for #{source_dir}"
 
     # On git a layout doc/{file,file,file} may appear, in this case we move
     # stuff to en_US.
@@ -52,19 +57,17 @@ class DocumentationL10n < TranslationUnit
 
     # No documentation avilable -> leave me alone
     unless File.exist?("#{dir}/en_US")
-      puts 'There is no en_US documentation :('
-      puts 'Leave me alone :('
+      log_warn 'There is no en_US documentation. Aborting :('
       return
     end
 
-    CMakeEditor.create_language_specific_doc_lists!("#{dir}/en_US", "en_US", project_name)
+    CMakeEditor.create_language_specific_doc_lists!("#{dir}/en_US", 'en_US', project_name)
+    languages_without_documentation = []
     languages.each do |language|
-      p language
       language.chomp!
       # FIXME: this really should be filtered when the array is created...
       next if language == 'x-test' || language == 'en_US'
 
-      puts "Downloading #{language} documentation translations for #{source_dir}"
       FileUtils.rm_rf(temp_dir)
 
       doc_dirs = Dir.chdir("#{dir}/en_US") do
@@ -74,7 +77,6 @@ class DocumentationL10n < TranslationUnit
       dest_dir = "#{dir}/#{language}"
       done = false
 
-      puts '  Trying to copy...'
       unless doc_dirs.empty?
         # FIXME: recyle for single-get?
         # FIXME: check cmake file for add_subdir that are not optional and warn if there are any
@@ -88,20 +90,23 @@ class DocumentationL10n < TranslationUnit
           end
           next false
         end
-        next if doc_selection.empty?
+        if doc_selection.empty?
+          languages_without_documentation << language
+          next
+        end
         Dir.mkdir(dest_dir) # Important otherwise first copy is dir itself...
         doc_selection.each do |d|
-          FileUtils.mv(d, dest_dir, verbose: true)
+          FileUtils.mv(d, dest_dir)
         end
         CMakeEditor.create_language_specific_doc_lists!(dest_dir, language, project_name)
-        docs += [language]
+        docs << language
         done = true
       end
       unless done
         # FIXME this also needs to act as fallback
-        puts vcs.get(temp_dir, vcs_l10n_path(language))
+        vcs.get(temp_dir, vcs_l10n_path(language))
         unless FileTest.exist?("#{temp_dir}/index.docbook")
-          puts '  no valid documentation translation found, skipping.'
+          languages_without_documentation << language
           next
         end
 
@@ -110,22 +115,21 @@ class DocumentationL10n < TranslationUnit
 
         # add to SVN in case we are tagging
         # FIXME: direct svn access
-        `svn add #{dir}/#{language}/CMakeLists.txt`
+        # `svn add #{dir}/#{language}/CMakeLists.txt`
         docs += [language]
       end
-
-      puts 'done.'
-      puts
     end
 
     if !docs.empty?
       CMakeEditor.create_doc_meta_lists!(dir)
       CMakeEditor.append_optional_add_subdirectory!(source_dir, 'doc')
     else
-      puts 'no docs found !!!'
+      log_warn 'There are no translations at all!'
       FileUtils.rm_rf(dir)
     end
 
     FileUtils.rm_rf(temp_dir)
+
+    log_info "No translations for: #{languages_without_documentation.join(', ')}" unless languages_without_documentation.empty?
   end
 end
