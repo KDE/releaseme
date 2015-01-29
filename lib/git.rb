@@ -52,4 +52,8 @@ class Git < Vcs
   def clean!(target)
     FileUtils::rm_rf("#{target}/.git")
   end
+
+  def to_s
+    "(git - #{repository} [#{branch || 'master'}])"
+  end
 end

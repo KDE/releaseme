@@ -103,4 +103,8 @@ class Svn < Vcs
     run(['info', "#{repository}/#{path}"])
     $? == 0
   end
+
+  def to_s
+    "(svn - #{repository})"
+  end
 end

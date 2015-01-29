@@ -156,4 +156,9 @@ class TestSvn < Testme
     assert_not_nil(s)
     assert_equal("kitten", s.repository)
   end
+
+  def test_to_s
+    s = Svn.from_hash({"repository" => "kitten"})
+    assert('(svn - kitten)', s.to_s)
+  end
 end
