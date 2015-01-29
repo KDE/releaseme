@@ -18,12 +18,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'fileutils'
-
 require_relative 'cmakeeditor'
 require_relative 'source'
 require_relative 'svn'
 
+# Base class for a {Source} that represents a translation unit. This notibly
+# are either message translations as obtained by {L10n} or documentation
+# translations as obtained by {Documentation}.
 class TranslationUnit < Source
   # The VCS to use to obtain the l10n sources
   attr_reader :vcs
@@ -44,28 +45,16 @@ class TranslationUnit < Source
   attr_reader :project_name
 
   def initialize(type, project_name, i18n_path)
-    if type.nil?
-      fail 'type must not be nil'
-    else
-      @type = type
-    end
-
-    if i18n_path.nil?
-      fail 'i18n_path must not be nil'
-    else
-      @i18n_path = i18n_path
-    end
-
-    if project_name.nil?
-      fail 'project_name must not be nil'
-    else
-      @project_name = project_name
-    end
+    @type = type
+    @i18n_path = i18n_path
+    @project_name = project_name
 
     @vcs = Svn.new
 
     @languages = []
     @templates = []
+
+    validate_instace_variables
 
     init_repo_url('svn://anonsvn.kde.org/home/kde/')
   end
@@ -94,4 +83,12 @@ class TranslationUnit < Source
   # def get(source_dir)
   #   fail 'todo'
   # end
+
+  private
+
+  def validate_instace_variables
+    fail 'type must not be nil' unless @type
+    fail 'i18n_path must not be nil' unless @i18n_path
+    fail 'project_name must not be nil' unless @project_name
+  end
 end
