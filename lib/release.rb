@@ -25,33 +25,32 @@ require_relative 'xzarchive'
 #        that run a Release with all possible Vcs derivates!
 
 class Release
-    # The vcs from which to get the source
-    attr_reader :vcs
-    # The source object from which the release is done
-    attr_reader :source
-    # The archive object which will create the archive
-    attr_reader :archive_
+  # The vcs from which to get the source
+  attr_reader :vcs
+  # The source object from which the release is done
+  attr_reader :source
+  # The archive object which will create the archive
+  attr_reader :archive_
 
-    # Init
-    # FIXME: take project + version + construct source target based on that
-    def initialize(vcs)
-        @vcs = vcs
-        @source = Source.new()
-        @archive_ = XzArchive.new()
-    end
+  # Init
+  # FIXME: take project + version + construct source target based on that
+  def initialize(vcs)
+    @vcs = vcs
+    @source = Source.new
+    @archive_ = XzArchive.new
+  end
 
-    # Get the source
-    def get()
-        source.cleanup()
-        source.get(vcs)
-    end
+  # Get the source
+  def get
+    source.cleanup
+    source.get(vcs)
+  end
 
-    # FIXME: archive is an attr and a method, lovely
-    # Create the final archive file
-    def archive()
-        source.clean(vcs)
-        @archive_.directory = source.target
-        @archive_.create()
-    end
-
+  # FIXME: archive is an attr and a method, lovely
+  # Create the final archive file
+  def archive
+    source.clean(vcs)
+    @archive_.directory = source.target
+    @archive_.create
+  end
 end
