@@ -18,7 +18,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require_relative 'cmakeeditor'
 require_relative 'source'
 require_relative 'svn'
 
