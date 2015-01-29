@@ -23,6 +23,8 @@ require_relative 'xzarchive'
 
 # FIXME: with vcs construction outside the class scope there need to be tests
 #        that run a Release with all possible Vcs derivates!
+# FIXME: because so much stuff happens outside this class is really incredibly
+#        useless
 
 class Release
   # The vcs from which to get the source
