@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require_relative 'logable'
 require_relative 'source'
 require_relative 'xzarchive'
 
@@ -27,6 +28,8 @@ require_relative 'xzarchive'
 #        useless
 
 class Release
+  prepend Logable
+
   # The vcs from which to get the source
   attr_reader :vcs
   # The source object from which the release is done
@@ -44,6 +47,7 @@ class Release
 
   # Get the source
   def get
+    log_info 'Getting source'
     source.cleanup
     source.get(vcs)
   end
@@ -51,6 +55,7 @@ class Release
   # FIXME: archive is an attr and a method, lovely
   # Create the final archive file
   def archive
+    log_info 'Archiving source'
     source.clean(vcs)
     @archive_.directory = source.target
     @archive_.create
