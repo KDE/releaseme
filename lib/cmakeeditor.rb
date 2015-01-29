@@ -114,7 +114,7 @@ kdoctools_create_handbook(index.docbook
         if File.exist?(enuscmake)
           # FIXME: naughty
           unless File.basename(Dir.pwd) == 'en_US'
-            FileUtils.cp(enuscmake, '.', verbose: true)
+            FileUtils.cp(enuscmake, '.')
           end
           Dir.glob('**/index.docbook').each do |docbook|
             dirname = File.dirname(docbook)
@@ -130,7 +130,8 @@ kdoctools_create_handbook(index.docbook
       end
 
       # en_US may already have a super cmakelists, do not twiddle with it!
-      puts "Writing main cmakelists #{Dir.pwd}/../CMakeLists.txt"
+      # FIXME: log
+      # puts "Writing main cmakelists #{Dir.pwd}/../CMakeLists.txt"
       File.open('../CMakeLists.txt', 'a') do |f|
         f.write(add_subdirectory(dir))
       end
