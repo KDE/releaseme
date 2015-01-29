@@ -190,6 +190,6 @@ class L10n < TranslationUnit
       end
     end
 
-    log_info "No translations for: #{languages_without_translation.join(', ')}"
+    log_info "No translations for: #{languages_without_translation.join(', ')}" unless languages_without_translation.empty?
   end
 end
