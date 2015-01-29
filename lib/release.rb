@@ -47,7 +47,7 @@ class Release
 
   # Get the source
   def get
-    log_info 'Getting source'
+    log_info "Getting source #{vcs}"
     source.cleanup
     source.get(vcs)
   end
@@ -55,7 +55,7 @@ class Release
   # FIXME: archive is an attr and a method, lovely
   # Create the final archive file
   def archive
-    log_info 'Archiving source'
+    log_info "Archiving source #{vcs}"
     source.clean(vcs)
     @archive_.directory = source.target
     @archive_.create
