@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2014 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2007-2015 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require_relative 'documentation'
+require_relative 'l10n'
 require_relative 'logable'
 require_relative 'source'
 require_relative 'xzarchive'
@@ -60,10 +62,22 @@ class Release
   end
 
   # Get the source
+  # FIXME: l10n and documentation have no test backing
   def get
     log_info "Getting source #{project.vcs}"
     source.cleanup
     source.get(project.vcs)
+
+    # FIXME: one would think that perhaps l10n could be disabled entirely
+    log_info ' Getting translations...'
+    # FIXME: why not pass project itself? Oo
+    # FIXME: origin should be validated? technically optparse enforces proper values
+    l10n = L10n.new(origin, project.identifier, project.i18n_path)
+    l10n.get(source.target)
+
+    log_info ' Getting documentation...'
+    doc = DocumentationL10n.new(origin, project.identifier, project.i18n_path)
+    doc.get(source.target)
   end
 
   # FIXME: archive is an attr and a method, lovely

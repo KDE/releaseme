@@ -96,16 +96,6 @@ release_projects.each do | project |
   #        possibly a general fork() function would be useful to a) control IO
   #        better b) check the retvalue c) throw exception accordingly
   release.get
-
-  # FIXME: why not pass project itself? Oo
-  # FIXME: origin should be validated? technically optparse enforces proper values
-  l10n = L10n.new(options[:origin], project_name, project.i18n_path)
-  l10n.get(release.source.target)
-
-  # FIXME: when one copies the l10n .new and adjust the class name arguments will be crap but nothing ever notices... lack of checks anyone?
-  doc = DocumentationL10n.new(options[:origin], project_name, project.i18n_path)
-  doc.get(release.source.target)
-
   release.archive
 
   # FIXME: technically we need to track SVN revs for l10n as well...........
