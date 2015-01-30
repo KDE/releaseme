@@ -30,7 +30,7 @@ class Source
   end
 
   # Cleans up data created
-  def cleanup()
+  def cleanup
     FileUtils.rm_rf(target)
   end
 
