@@ -20,10 +20,13 @@
 
 require 'fileutils'
 
+require_relative 'logable'
 require_relative 'vcs'
 
 # Wrapper around Git.
 class Git < Vcs
+  prepend Logable
+
   # Git branch to {#get} from, when nil no explicit argument is passed to git
   attr_accessor :branch
 
@@ -34,12 +37,15 @@ class Git < Vcs
 
   # Clones repository into target directory
   # @param shallow whether or not to create a shallow clone
+  # @return [Boolean] success
   def get(target, shallow = true)
     args = []
+    args << 'clone'
     args << '--depth 1' if shallow
     args << "--branch #{branch}" unless branch.nil? || branch.empty?
-    `git clone #{args.join(' ')} #{repository} #{target} 2>&1`
-
+    args << repository
+    args << target
+    run(args)
     # Set hash accordingly
     Dir.chdir(target) do
       @hash = `git rev-parse HEAD`.chop
@@ -53,5 +59,24 @@ class Git < Vcs
 
   def to_s
     "(git - #{repository} [#{branch || 'master'}])"
+  end
+
+  private
+
+  # @return [String] output of command
+  # FIXME: code dupe from svn, move to joint thingy, alas, logger is a bit in
+  #   the way
+  def run(args)
+    cmd = "git #{args.join(' ')} 2>&1"
+    log_debug cmd
+    output = `#{cmd}`
+    unless logger.level != Logger::DEBUG || output.empty?
+      log_debug '-- output --'
+      output.lines.each { |l| log_debug l.rstrip }
+      log_debug '------------'
+    end
+    # Do not return error output as it will screw with output processing.
+    output = '' if $? != 0
+    output
   end
 end
