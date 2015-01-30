@@ -159,6 +159,6 @@ class TestSvn < Testme
 
   def test_to_s
     s = Svn.from_hash({"repository" => "kitten"})
-    assert('(svn - kitten)', s.to_s)
+    assert_equal('(svn - kitten)', s.to_s)
   end
 end
