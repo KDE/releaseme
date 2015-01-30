@@ -19,29 +19,47 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'ostruct'
 require 'optparse'
 
-options = {}
+options = OpenStruct.new
 OptionParser.new do |opts|
-    opts.banner = "Usage: tarme.rb [options] PROJECT_NAME"
+  opts.banner = "Usage: tarme.rb [options] PROJECT_NAME"
 
-    opts.on("--origin trunk|stable", [:trunk, :stable],
-            "Origin.",
-            "   Used to deduce release branch and localization branches.") do |v|
-        options[:origin] = v
-    end
+  opts.separator ""
+  opts.separator "Automatic Project Definition via projects.kde.org:"
 
-    opts.on("--version VERSION",
-            "Version.",
-            "   Versions should be kept in purely numerical format (good: x.x.x).",
-            "   Alphanumerical version should be avoided if at all possible (bad: x.x.xbeta1).") do |v|
-        options[:version] = v
-    end
+  opts.on("--origin ORIGIN", [:trunk, :stable],
+  "Origin (trunk or stable).",
+  "   Used to deduce release branch and localization branches.") do |v|
+    options[:origin] = v
+  end
+
+  opts.on("--version VERSION",
+  "Version.",
+  "   Versions should be kept in purely numerical format (good: x.x.x).",
+  "   Alphanumerical version should be avoided if at all possible (bad: x.x-beta1).") do |v|
+    options[:version] = v
+  end
+
+  opts.separator ""
+  opts.separator "Manual Project Definition:"
+
+  opts.on("--from-config",
+  "Get configuration from projects/ directory.",) do |c|
+    options[:from_config] = c
+  end
 end.parse!
 
-if options[:origin].nil? or options[:version].nil? or ARGV.empty?
-    puts "error, you need to set origin and version"
-    exit 1
+if ARGV.empty?
+  warn "You need to define a PROJECT_NAME"
+  exit 1
+end
+
+unless (options.origin || options.from_config) && options.version
+  warn "error, you need to set origin and version"
+  warn "alternatively you can use a configuration file and use the --from-config switch"
+  exit 1
 end
 
 project_name = ARGV.pop
@@ -54,46 +72,53 @@ require_relative 'lib/l10n'
 require_relative 'lib/project'
 require_relative 'lib/projectsfile'
 
-release_projects = Project::from_xpath(project_name)
+release_projects = []
+if options[:from_config].nil?
+  release_projects = Project::from_xpath(project_name)
+  if release_projects.empty?
+    warn "The project #{project_name} could not be resolved." + \
+    " Please note that you need to provide a concret name or path."
+    exit 1
+  end
 
-# FIXME: runtime deps are not checked first
-# e.g. svn, git, xz...
+  # FIXME: runtime deps are not checked first
+  # e.g. svn, git, xz...
+else
+  release_projects << Project.from_config(project_name)
+end
 
 release_data_file = File.open('release_data', 'w')
 release_projects.each do | project |
-    project_name = project.identifier
-    release = Release.new(project.vcs.clone)
-    release.vcs.branch = project.i18n_trunk if options[:origin] == :trunk
-    release.vcs.branch = project.i18n_stable if options[:origin] == :stable
-    release.source.target = "#{project_name}-#{options[:version]}"
+  project_name = project.identifier
+  release = Release.new(project.vcs.clone)
+  # FIXME: depends on origines
+  # release.vcs.branch = project.i18n_trunk if options[:origin] == :trunk
+  # release.vcs.branch = project.i18n_stable if options[:origin] == :stable
+  release.source.target = "#{project_name}-#{options[:version]}"
 
-    # FIXME: ALL gets() need to have appropriate handling and must be able to
-    #        throw exceptions or return false when something goes wrong
-    #        possibly a general fork() function would be useful to a) control IO
-    #        better b) check the retvalue c) throw exception accordingly
-    release.get
+  # FIXME: ALL gets() need to have appropriate handling and must be able to
+  #        throw exceptions or return false when something goes wrong
+  #        possibly a general fork() function would be useful to a) control IO
+  #        better b) check the retvalue c) throw exception accordingly
+  release.get
 
-    # FIXME: why not pass project itself? Oo
-    # FIXME: origin should be validated? technically optparse enforces proper
-    #   values
-    l10n = L10n.new(options[:origin], project_name, project.i18n_path)
-    l10n.get(release.source.target)
+  # FIXME: why not pass project itself? Oo
+  # FIXME: origin should be validated? technically optparse enforces proper values
+  l10n = L10n.new(options[:origin], project_name, project.i18n_path)
+  l10n.get(release.source.target)
 
-    # FIXME: when one copies the l10n .new and adjust the class name arguments
-    #   will be crap but nothing ever notices... lack of checks anyone?
-    doc = DocumentationL10n.new(options[:origin],
-                                project_name,
-                                project.i18n_path)
-    doc.get(release.source.target)
+  # FIXME: when one copies the l10n .new and adjust the class name arguments will be crap but nothing ever notices... lack of checks anyone?
+  doc = DocumentationL10n.new(options[:origin], project_name, project.i18n_path)
+  doc.get(release.source.target)
 
-    release.archive
+  release.archive
 
-    # FIXME: technically we need to track SVN revs for l10n as well...........
-    # FIXME: need version
-    project = project.identifier
-    branch = release.vcs.branch
-    hash = release.vcs.hash
-    tar = release.archive_.filename
-    sha256 = %x[sha256sum #{tar}].split(' ')[0] unless tar.nil?
-    release_data_file.write("#{project};#{branch};#{hash};#{tar};#{sha256}\n")
+  # FIXME: technically we need to track SVN revs for l10n as well...........
+  # FIXME FIXME FIXME FIXME: need version
+  project = project.identifier
+  branch = release.vcs.branch
+  hash = release.vcs.hash
+  tar = release.archive_.filename
+  sha256 = `sha256sum #{tar}`.split(' ')[0] unless tar.nil?
+  release_data_file.write("#{project};#{branch};#{hash};#{tar};#{sha256}\n")
 end
