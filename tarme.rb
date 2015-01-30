@@ -24,41 +24,40 @@ require 'optparse'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
-  opts.banner = "Usage: tarme.rb [options] PROJECT_NAME"
+  opts.banner = 'Usage: tarme.rb [options] PROJECT_NAME'
 
-  opts.separator ""
-  opts.separator "Automatic Project Definition via projects.kde.org:"
+  opts.separator ''
+  opts.separator 'Automatic Project Definition via projects.kde.org:'
 
-  opts.on("--origin ORIGIN", [:trunk, :stable],
-  "Origin (trunk or stable).",
-  "   Used to deduce release branch and localization branches.") do |v|
+  opts.on('--origin ORIGIN', [:trunk, :stable], 'Origin (trunk or stable).',
+          '   Used to deduce release branch and localization branches.') do |v|
     options[:origin] = v
   end
 
-  opts.on("--version VERSION",
-  "Version.",
-  "   Versions should be kept in purely numerical format (good: x.x.x).",
-  "   Alphanumerical version should be avoided if at all possible (bad: x.x-beta1).") do |v|
+  opts.on('--version VERSION', 'Version.',
+          '   Versions should be kept in numerical format (good: x.x.x).',
+          '   Alphanumerical version should be avoided if at all possible' \
+            ' (bad: x.x-beta1).') do |v|
     options[:version] = v
   end
 
-  opts.separator ""
-  opts.separator "Manual Project Definition:"
+  opts.separator ''
+  opts.separator 'Manual Project Definition:'
 
-  opts.on("--from-config",
-  "Get configuration from projects/ directory.",) do |c|
+  opts.on('--from-config', 'Get configuration from projects/ directory.') do |c|
     options[:from_config] = c
   end
 end.parse!
 
 if ARGV.empty?
-  warn "You need to define a PROJECT_NAME"
+  warn 'You need to define a PROJECT_NAME'
   exit 1
 end
 
 unless (options.origin || options.from_config) && options.version
-  warn "error, you need to set origin and version"
-  warn "alternatively you can use a configuration file and use the --from-config switch"
+  warn 'error, you need to set origin and version'
+  warn 'alternatively you can use a configuration file and use the' \
+         ' --from-config switch'
   exit 1
 end
 
@@ -74,10 +73,10 @@ require_relative 'lib/projectsfile'
 
 release_projects = []
 if options[:from_config].nil?
-  release_projects = Project::from_xpath(project_name)
+  release_projects = Project.from_xpath(project_name)
   if release_projects.empty?
-    warn "The project #{project_name} could not be resolved." + \
-    " Please note that you need to provide a concret name or path."
+    warn 'The project #{project_name} could not be resolved.' \
+           ' Please note that you need to provide a concret name or path.'
     exit 1
   end
 
@@ -91,9 +90,9 @@ release_data_file = File.open('release_data', 'w')
 release_projects.each do | project |
   project_name = project.identifier
   release = Release.new(project.vcs.clone)
-  # FIXME: depends on origines
-  # release.vcs.branch = project.i18n_trunk if options[:origin] == :trunk
-  # release.vcs.branch = project.i18n_stable if options[:origin] == :stable
+  # FIXME: depends on origins
+  release.vcs.branch = project.i18n_trunk if options[:origin] == :trunk
+  release.vcs.branch = project.i18n_stable if options[:origin] == :stable
   release.source.target = "#{project_name}-#{options[:version]}"
 
   # FIXME: ALL gets() need to have appropriate handling and must be able to
