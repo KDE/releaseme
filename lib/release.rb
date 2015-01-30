@@ -31,7 +31,7 @@ class Release
   prepend Logable
 
   # The vcs from which to get the source
-  attr_reader :vcs
+  attr_reader :project
   # The source object from which the release is done
   attr_reader :source
   # The archive object which will create the archive
@@ -39,24 +39,24 @@ class Release
 
   # Init
   # FIXME: take project + version + construct source target based on that
-  def initialize(vcs)
-    @vcs = vcs
+  def initialize(project)
+    @project = project
     @source = Source.new
     @archive_ = XzArchive.new
   end
 
   # Get the source
   def get
-    log_info "Getting source #{vcs}"
+    log_info "Getting source #{project.vcs}"
     source.cleanup
-    source.get(vcs)
+    source.get(project.vcs)
   end
 
   # FIXME: archive is an attr and a method, lovely
   # Create the final archive file
   def archive
-    log_info "Archiving source #{vcs}"
-    source.clean(vcs)
+    log_info "Archiving source #{project.vcs}"
+    source.clean(project.vcs)
     @archive_.directory = source.target
     @archive_.create
   end
