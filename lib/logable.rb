@@ -42,19 +42,19 @@ module Logable
     # Logs as info type
     # @param str [String] the string to log
     def log_info(str)
-      logger.info(str)
+      logger.info(str) unless ENV['RELEASEME_SHUTUP']
     end
 
     # Logs as warning type
     # @param str [String] the string to log
     def log_warn(str)
-      logger.warn(str)
+      logger.warn(str) unless ENV['RELEASEME_SHUTUP']
     end
 
     # Logs as debug type
     # @param str [String] the string to log
     def log_debug(str)
-      logger.debug(str)
+      logger.debug(str) unless ENV['RELEASEME_SHUTUP']
     end
 
     # Creates a new Logger instance.

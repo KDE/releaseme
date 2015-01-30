@@ -101,6 +101,10 @@ class FakeClass3Prepend
 end
 
 class TestLogable < Testme
+  def setup
+    ENV['RELEASEME_SHUTUP'] = nil
+  end
+
   def test_privacy
     fake = FakeClass1.new
     assert_raise NoMethodError do

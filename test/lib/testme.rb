@@ -8,6 +8,7 @@ class Testme < Test::Unit::TestCase
   attr_reader :datadir
 
   def priority_setup
+    ENV['RELEASEME_SHUTUP'] = 'true'
     @tmpdir = Dir.mktmpdir("testme-#{self.class}")
     @testdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}"
     @datadir = "#{@testdir}/data"
