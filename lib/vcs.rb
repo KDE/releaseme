@@ -32,6 +32,8 @@ class Vcs
     raise "Pure virtual"
   end
 
+  # Construct a VCS instance from a hash defining its attributes.
+  # FIXME: why is this not simply an init? Oo
   def self.from_hash(hash)
     vcs = self.new
     hash.each do |key, value|
