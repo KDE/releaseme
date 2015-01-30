@@ -46,7 +46,7 @@ class TestRelease < Testme
     # Teardown happens automatically when the @tmpdir is torn down
   end
 
-  def test_get_archive_cleanup
+  def new_test_release
     data = {
       :identifier => 'clone',
       :vcs => Git.new,
@@ -57,10 +57,25 @@ class TestRelease < Testme
     project = Project.new(data)
     project.vcs.repository = @remotedir
 
-    @dir = "#{Dir.pwd}/clone"
-    r = Release.new(project)
-    r.source.target = @dir
+    r = Release.new(project, :trunk, '1.0')
 
+    assert_not_nil(r)
+    assert_equal(project, r.project)
+    assert_equal(:trunk, r.origin)
+    assert_equal('1.0', r.version)
+    assert_equal('clone-1.0', r.source.target)
+
+    r
+  end
+
+  def test_init
+    new_test_release
+  end
+
+  def test_get_archive_cleanup
+    r = new_test_release
+
+    @dir = r.source.target
     assert(!File.exist?(@dir))
     r.get
     assert(File.exist?(@dir))

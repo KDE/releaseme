@@ -32,17 +32,31 @@ class Release
 
   # The vcs from which to get the source
   attr_reader :project
+  # The origin to release from
+  attr_reader :origin
+  # The version to release
+  attr_reader :version
   # The source object from which the release is done
   attr_reader :source
   # The archive object which will create the archive
   attr_reader :archive_
 
   # Init
-  # FIXME: take project + version + construct source target based on that
-  def initialize(project)
+  # @param project [Project] the Project to release
+  # @param origin [Symbol] the origin to release from :trunk or :stable
+  # @param version [String] the versin to release as
+  def initialize(project, origin, version)
     @project = project
     @source = Source.new
     @archive_ = XzArchive.new
+    @origin = origin
+    @version = version
+
+    # FIXME: this possibly should be logic inside Project itself?
+    project.vcs.branch = project.i18n_trunk if origin == :trunk
+    project.vcs.branch = project.i18n_stable if origin == :stable
+
+    source.target = "#{project.identifier}-#{version}"
   end
 
   # Get the source
