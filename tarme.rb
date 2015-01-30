@@ -100,9 +100,9 @@ release_projects.each do | project |
 
   # FIXME: technically we need to track SVN revs for l10n as well...........
   # FIXME FIXME FIXME FIXME: need version
-  project = project.identifier
-  branch = release.vcs.branch
-  hash = release.vcs.hash
+  project = release.project.identifier
+  branch = release.project.vcs.branch
+  hash = release.project.vcs.hash
   tar = release.archive_.filename
   sha256 = `sha256sum #{tar}`.split(' ')[0] unless tar.nil?
   release_data_file.write("#{project};#{branch};#{hash};#{tar};#{sha256}\n")
