@@ -38,6 +38,7 @@ class Git < Vcs
   # Clones repository into target directory
   # @param shallow whether or not to create a shallow clone
   # @return [Boolean] success
+  # FIXME: return actually not implemented, hrrhrr
   def get(target, shallow = true)
     args = []
     args << 'clone'
