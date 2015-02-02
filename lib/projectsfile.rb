@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2014 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2014-2015 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'fileutils'
 require 'net/http'
 require 'rexml/document'
 
@@ -32,6 +33,9 @@ module ProjectsFile
     @xml_path = 'http://projects.kde.org/kde_projects.xml'
     @xml_data = nil
     @xml_doc = nil
+    @cache_dir = "#{ENV['HOME']}/.cache/releaseme"
+    @cache_file = "#{@cache_dir}/kde_projects.xml"
+    @cache_file_etag = "#{@cache_dir}/kde_projects.etag"
   end
 
   # @private
@@ -40,7 +44,7 @@ module ProjectsFile
     reset!
   end
 
-  module_function
+  extend self
 
   ##
   # XML URL to use for resolution (defaults to http://projects.kde.org/kde_projects.xml).
@@ -67,10 +71,36 @@ module ProjectsFile
   # Loads the XML file at xml_path and creates a REXML::Document instance.
   def load!
     if @xml_path.start_with?('http:') || @xml_path.start_with?('https:')
-      @xml_data = Net::HTTP.get_response(URI.parse(@xml_path)).body
+      @xml_data = load_from_network
     else # Assumed to be local.
       @xml_data = File.read(@xml_path)
     end
     @xml_doc = REXML::Document.new(@xml_data)
+  end
+
+  private
+
+  def http_get
+    uri = URI(@xml_path)
+    cache_etag = File.read(@cache_file_etag) if File.exist?(@cache_file_etag)
+
+    request = Net::HTTP::Get.new(uri)
+    request['If-None-Match'] = cache_etag if cache_etag
+    Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(request) }
+  end
+
+  # FIXME: test for cache stuff needed
+  def load_from_network
+    response = http_get
+
+    if response.is_a?(Net::HTTPSuccess)
+      data = response.body
+      FileUtils.mkpath(@cache_dir)
+      File.write(@cache_file_etag, response['etag']) if response.key?('etag')
+      File.write(@cache_file, data)
+    else
+      data = File.read(@cache_file) if File.exist?(@cache_file)
+    end
+    data
   end
 end
