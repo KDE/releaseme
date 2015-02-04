@@ -1,0 +1,9 @@
+[main]
+customsrc=git@git.kde.org:partitionmanager
+doc=true
+l10n=true
+protocol=svn+ssh
+branch=trunk
+gitbranch=master
+version=1.1.1
+barrier=67
