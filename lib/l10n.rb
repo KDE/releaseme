@@ -19,6 +19,7 @@
 #++
 
 require 'fileutils'
+require 'tmpdir'
 
 require_relative 'cmakeeditor'
 require_relative 'logable'
@@ -69,11 +70,7 @@ class L10n < TranslationUnit
     "#{lang}/messages/#{@i18n_path}"
   end
 
-  def get_single(lang)
-    tmpdir = 'l10n'
-    FileUtils.rm_rf(tmpdir)
-    Dir.mkdir(tmpdir)
-
+  def get_single(lang, tmpdir)
     # TODO: maybe class this
     po_file_name = templates[0]
     vcs_file_path = "#{po_file_dir(lang)}/#{po_file_name}"
@@ -89,11 +86,7 @@ class L10n < TranslationUnit
     files.uniq
   end
 
-  def get_multiple(lang)
-    tmpdir = 'l10n'
-    FileUtils.rm_rf(tmpdir)
-    Dir.mkdir(tmpdir)
-
+  def get_multiple(lang, tmpdir)
     vcs_path = po_file_dir(lang)
 
     return [] if @vcs.list(vcs_path).empty?
@@ -125,27 +118,29 @@ class L10n < TranslationUnit
       available_languages.each do | language |
         next if language == 'x-test'
 
-        log_debug "#{sourceDirectory} - downloading #{language}"
-        if templates.count > 1
-          files = get_multiple(language)
-        elsif templates.count == 1
-          files = get_single(language)
-        else
-          # FIXME: needs testcase
-          return # No translations need fetching
-        end
+        Dir.mktmpdir(self.class.to_s) do |tmpdir|
+          log_debug "#{sourceDirectory} - downloading #{language}"
+          if templates.count > 1
+            files = get_multiple(language, tmpdir)
+          elsif templates.count == 1
+            files = get_single(language, tmpdir)
+          else
+            # FIXME: needs testcase
+            return # No translations need fetching
+          end
 
-        # No files obtained :(
-        if files.empty?
-          languages_without_translation << language
-          next
-        end
-        has_translation = true
+          # No files obtained :(
+          if files.empty?
+            languages_without_translation << language
+            next
+          end
+          has_translation = true
 
-        # TODO: path confusing with target
-        destination = "po/#{language}"
-        Dir.mkdir(destination)
-        FileUtils.mv(files, destination)
+          # TODO: path confusing with target
+          destination = "po/#{language}"
+          Dir.mkdir(destination)
+          FileUtils.mv(files, destination)
+        end
 
         @languages += [language]
       end
