@@ -35,7 +35,7 @@ class L10n < TranslationUnit
     Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
       File.readlines(file).each do |line|
         line.match(/[^\/]*\.pot/).to_a.each do |match|
-          pos << match.sub('.pot','.po')
+          pos << match.sub('.pot', '.po')
         end
       end
     end
@@ -107,6 +107,7 @@ class L10n < TranslationUnit
     target = "#{srcdir}/po/"
     Dir.mkdir(target)
 
+    # FIXME: should move to base, along with filtering x-test
     available_languages = vcs.cat('subdirs').split("\n")
     @templates = find_templates(srcdir)
 
