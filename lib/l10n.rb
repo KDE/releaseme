@@ -69,18 +69,6 @@ class L10n < TranslationUnit
     "#{lang}/messages/#{@i18n_path}"
   end
 
-  def retry_cmd?(exit_code, thing)
-    if exit_code != 0
-      return false
-      fail 'dialog not implemented'
-      #retry_ = $dlg.yesnocancel("Fetching of #{thing} failed.", "Retry", "Skip")
-      puts retry_
-      exit 1 if retry_.nil?
-      return retry_
-    end
-    return false
-  end
-
   def get_single(lang)
     tempDir = "l10n"
     FileUtils.rm_rf(tempDir)
