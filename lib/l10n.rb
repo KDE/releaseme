@@ -90,18 +90,18 @@ class L10n < TranslationUnit
   end
 
   def get_multiple(lang)
-    temp_dir = 'l10n'
-    FileUtils.rm_rf(temp_dir)
-    Dir.mkdir(temp_dir)
+    tmpdir = 'l10n'
+    FileUtils.rm_rf(tmpdir)
+    Dir.mkdir(tmpdir)
 
     vcs_path = po_file_dir(lang)
 
     return [] if @vcs.list(vcs_path).empty?
-    @vcs.get(temp_dir, vcs_path)
+    @vcs.get(tmpdir, vcs_path)
 
     files = []
     templates.each do |po|
-      po_file_path = temp_dir.dup.concat("/#{po}")
+      po_file_path = tmpdir.dup.concat("/#{po}")
       next unless File.exist?(po_file_path)
       files << po_file_path
       strip_comments(po_file_path)
