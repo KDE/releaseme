@@ -126,7 +126,7 @@ class L10n < TranslationUnit
       vcs.get(tempDir, vcsDirPath)
     end while retry_cmd?($?, vcsDirPath)
 
-    files = Array.new
+    files = []
     templates.each do |po|
       poFilePath = tempDir.dup.concat("/#{po}")
       next if not File.exist?(poFilePath)
