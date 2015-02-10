@@ -103,23 +103,23 @@ class L10n < TranslationUnit
     files.uniq
   end
 
-  def get(sourceDirectory)
-    target = "#{sourceDirectory}/po/"
+  def get(srcdir)
+    target = "#{srcdir}/po/"
     Dir.mkdir(target)
 
     available_languages = vcs.cat('subdirs').split("\n")
-    @templates = find_templates(sourceDirectory)
+    @templates = find_templates(srcdir)
 
-    log_info "Downloading translations for #{sourceDirectory}"
+    log_info "Downloading translations for #{srcdir}"
 
     languages_without_translation = []
     has_translation = false
-    Dir.chdir(sourceDirectory) do
-      available_languages.each do | language |
+    Dir.chdir(srcdir) do
+      available_languages.each do |language|
         next if language == 'x-test'
 
         Dir.mktmpdir(self.class.to_s) do |tmpdir|
-          log_debug "#{sourceDirectory} - downloading #{language}"
+          log_debug "#{srcdir} - downloading #{language}"
           if templates.count > 1
             files = get_multiple(language, tmpdir)
           elsif templates.count == 1
