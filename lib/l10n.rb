@@ -114,15 +114,15 @@ class L10n < TranslationUnit
     target = "#{sourceDirectory}/po/"
     Dir.mkdir(target)
 
-    availableLanguages = vcs.cat('subdirs').split("\n")
+    available_languages = vcs.cat('subdirs').split("\n")
     @templates = find_templates(sourceDirectory)
 
     log_info "Downloading translations for #{sourceDirectory}"
 
     languages_without_translation = []
-    anyTranslations = false
+    has_translation = false
     Dir.chdir(sourceDirectory) do
-      availableLanguages.each do | language |
+      available_languages.each do | language |
         next if language == 'x-test'
 
         log_debug "#{sourceDirectory} - downloading #{language}"
@@ -140,21 +140,18 @@ class L10n < TranslationUnit
           languages_without_translation << language
           next
         end
-        anyTranslations = true
+        has_translation = true
 
         # TODO: path confusing with target
-        destinationDir = "po/" + language
-        Dir.mkdir(destinationDir)
-        FileUtils.mv(files, destinationDir)
-        #mv( ld + "/.svn", dest ) if $options[:tag] # Must be fatal iff tagging
+        destination = "po/#{language}"
+        Dir.mkdir(destination)
+        FileUtils.mv(files, destination)
 
-        # add to SVN in case we are tagging
-        #%x[svn add #{dest}/CMakeLists.txt] if $ptions[:tag]
         @languages += [language]
       end
       # Make sure the temp dir is cleaned up
       FileUtils.rm_rf('l10n')
-      if anyTranslations
+      if has_translation
         # Update CMakeLists.txt
         CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
       else
@@ -163,6 +160,7 @@ class L10n < TranslationUnit
       end
     end
 
-    log_info "No translations for: #{languages_without_translation.join(', ')}" unless languages_without_translation.empty?
+    return unless languages_without_translation.empty?
+    log_info "No translations for: #{languages_without_translation.join(', ')}"
   end
 end
