@@ -138,7 +138,7 @@ class L10n < TranslationUnit
   end
 
   def get(sourceDirectory)
-    target = sourceDirectory + "/po/"
+    target = "#{sourceDirectory}/po/"
     Dir.mkdir(target)
 
     availableLanguages = vcs.cat('subdirs').split("\n")
