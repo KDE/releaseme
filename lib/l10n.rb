@@ -80,19 +80,17 @@ class L10n < TranslationUnit
     po_file_path = "#{tempDir}/#{poFileName}"
 
     gotInfo = false
-    begin
-      ret = vcs.export(po_file_path, vcsFilePath)
-      # If the export failed, try to see if there is a file, if this command also
-      # fails then we have to assume the file is not present in SVN.
-      # Of course it still might, but the connection could be busted, but that
-      # is a lot less likely to be the case for 2 independent commands.
-      if not gotInfo and not ret
-        # If the info also failed, declare the file as not existent and
-        # prevent a retry dialog annoyance.
-        break if not vcs.exist?(vcsFilePath)
-        gotInfo = true
-      end
-    end while retry_cmd?(ret, "#{vcsFilePath}")
+    ret = vcs.export(po_file_path, vcsFilePath)
+    # If the export failed, try to see if there is a file, if this command also
+    # fails then we have to assume the file is not present in SVN.
+    # Of course it still might, but the connection could be busted, but that
+    # is a lot less likely to be the case for 2 independent commands.
+    if not gotInfo and not ret
+      # If the info also failed, declare the file as not existent and
+      # prevent a retry dialog annoyance.
+      break if not vcs.exist?(vcsFilePath)
+      gotInfo = true
+    end
 
     files = Array.new
     if File.exist?(po_file_path)
