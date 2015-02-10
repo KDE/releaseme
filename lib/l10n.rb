@@ -154,7 +154,7 @@ class L10n < TranslationUnit
       end
     end
 
-    return unless languages_without_translation.empty?
+    return if languages_without_translation.empty?
     log_info "No translations for: #{languages_without_translation.join(', ')}"
   end
 end
