@@ -19,6 +19,7 @@
 #++
 
 require 'fileutils'
+require 'thwait'
 require 'tmpdir'
 
 require_relative 'cmakeeditor'
@@ -26,6 +27,9 @@ require_relative 'logable'
 require_relative 'source'
 require_relative 'svn'
 require_relative 'translationunit'
+
+# anonsvn only allows 5 concurrent connections.
+THREAD_COUNT = 5
 
 # FIXME: doesn't write master cmake right now...
 class L10n < TranslationUnit
@@ -116,35 +120,55 @@ class L10n < TranslationUnit
     languages_without_translation = []
     has_translation = false
     Dir.chdir(srcdir) do
-      available_languages.each do |language|
+      queue = Queue.new
+      available_languages.each do | language |
         next if language == 'x-test'
-
-        Dir.mktmpdir(self.class.to_s) do |tmpdir|
-          log_debug "#{srcdir} - downloading #{language}"
-          if templates.count > 1
-            files = get_multiple(language, tmpdir)
-          elsif templates.count == 1
-            files = get_single(language, tmpdir)
-          else
-            # FIXME: needs testcase
-            return # No translations need fetching
-          end
-
-          # No files obtained :(
-          if files.empty?
-            languages_without_translation << language
-            next
-          end
-          has_translation = true
-
-          # TODO: path confusing with target
-          destination = "po/#{language}"
-          Dir.mkdir(destination)
-          FileUtils.mv(files, destination)
-        end
-
-        @languages += [language]
+        queue << language
       end
+
+      threads = []
+      THREAD_COUNT.times do
+        threads << Thread.new do
+          until queue.empty?
+            language = queue.pop(true)
+            begin
+              Dir.mktmpdir(self.class.to_s) do |tmpdir|
+                log_debug "#{srcdir} - downloading #{language}"
+                if templates.count > 1
+                  files = get_multiple(language, tmpdir)
+                elsif templates.count == 1
+                  files = get_single(language, tmpdir)
+                else
+                  # FIXME: needs testcase
+                  return # No translations need fetching
+                end
+
+                # No files obtained :(
+                if files.empty?
+                  # FIXME: not thread safe without GIL
+                  languages_without_translation << language
+                  next
+                end
+                # FIXME: not thread safe without GIL
+                has_translation = true
+
+                # TODO: path confusing with target
+                destination = "po/#{language}"
+                Dir.mkdir(destination)
+                FileUtils.mv(files, destination)
+              end
+
+              # FIXME: this is not thread safe without a GIL
+              @languages += [language]
+            rescue => e
+              log_fail e
+              p e
+              exit 1
+            end
+          end
+        end
+      end
+      ThreadsWait.all_waits(threads)
 
       if has_translation
         # Update CMakeLists.txt
