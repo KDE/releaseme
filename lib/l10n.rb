@@ -77,11 +77,11 @@ class L10n < TranslationUnit
     # TODO: maybe class this
     poFileName = templates[0]
     vcsFilePath = "#{po_file_dir(lang)}/#{poFileName}"
-    poFilePath = "#{tempDir}/#{poFileName}"
+    po_file_path = "#{tempDir}/#{poFileName}"
 
     gotInfo = false
     begin
-      ret = vcs.export(poFilePath, vcsFilePath)
+      ret = vcs.export(po_file_path, vcsFilePath)
       # If the export failed, try to see if there is a file, if this command also
       # fails then we have to assume the file is not present in SVN.
       # Of course it still might, but the connection could be busted, but that
@@ -95,31 +95,29 @@ class L10n < TranslationUnit
     end while retry_cmd?(ret, "#{vcsFilePath}")
 
     files = Array.new
-    if File.exist?(poFilePath)
-      files << poFilePath
-      strip_comments(poFilePath)
+    if File.exist?(po_file_path)
+      files << po_file_path
+      strip_comments(po_file_path)
     end
     return files.uniq
   end
 
   def get_multiple(lang)
-    tempDir = "l10n"
-    FileUtils.rm_rf(tempDir)
-    Dir.mkdir(tempDir)
+    temp_dir = 'l10n'
+    FileUtils.rm_rf(temp_dir)
+    Dir.mkdir(temp_dir)
 
-    vcsDirPath = po_file_dir(lang)
+    vcs_path = po_file_dir(lang)
 
-    return Array.new if vcs.list(vcsDirPath).empty?
-    begin
-      vcs.get(tempDir, vcsDirPath)
-    end while retry_cmd?($?, vcsDirPath)
+    return [] if @vcs.list(vcs_path).empty?
+    @vcs.get(temp_dir, vcs_path)
 
     files = []
     templates.each do |po|
-      poFilePath = tempDir.dup.concat("/#{po}")
-      next if not File.exist?(poFilePath)
-      files << poFilePath
-      strip_comments(poFilePath)
+      po_file_path = temp_dir.dup.concat("/#{po}")
+      next unless File.exist?(po_file_path)
+      files << po_file_path
+      strip_comments(po_file_path)
     end
 
     files.uniq
