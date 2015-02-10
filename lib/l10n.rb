@@ -144,8 +144,7 @@ class L10n < TranslationUnit
 
         @languages += [language]
       end
-      # Make sure the temp dir is cleaned up
-      FileUtils.rm_rf('l10n')
+
       if has_translation
         # Update CMakeLists.txt
         CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
