@@ -70,34 +70,23 @@ class L10n < TranslationUnit
   end
 
   def get_single(lang)
-    tempDir = "l10n"
-    FileUtils.rm_rf(tempDir)
-    Dir.mkdir(tempDir)
+    tmpdir = 'l10n'
+    FileUtils.rm_rf(tmpdir)
+    Dir.mkdir(tmpdir)
 
     # TODO: maybe class this
-    poFileName = templates[0]
-    vcsFilePath = "#{po_file_dir(lang)}/#{poFileName}"
-    po_file_path = "#{tempDir}/#{poFileName}"
+    po_file_name = templates[0]
+    vcs_file_path = "#{po_file_dir(lang)}/#{po_file_name}"
+    po_file_path = "#{tmpdir}/#{po_file_name}"
 
-    gotInfo = false
-    ret = vcs.export(po_file_path, vcsFilePath)
-    # If the export failed, try to see if there is a file, if this command also
-    # fails then we have to assume the file is not present in SVN.
-    # Of course it still might, but the connection could be busted, but that
-    # is a lot less likely to be the case for 2 independent commands.
-    if not gotInfo and not ret
-      # If the info also failed, declare the file as not existent and
-      # prevent a retry dialog annoyance.
-      break if not vcs.exist?(vcsFilePath)
-      gotInfo = true
-    end
+    vcs.export(po_file_path, vcs_file_path)
 
-    files = Array.new
+    files = []
     if File.exist?(po_file_path)
       files << po_file_path
       strip_comments(po_file_path)
     end
-    return files.uniq
+    files.uniq
   end
 
   def get_multiple(lang)
