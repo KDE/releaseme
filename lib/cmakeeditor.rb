@@ -92,18 +92,19 @@ module CMakeEditor
 
   # FIXME: INSTALL_DEST needs to take into account subdirs of language
   #        e.g. kcontrol/foo/ must install to language/kcontrol/foo/
-  def create_handbook(language, software_name, subpath = '')
-    install_destination = "#{language}/#{subpath}"
+  def create_handbook(language, subdir)
     <<-EOF
 kdoctools_create_handbook(index.docbook
-                          INSTALL_DESTINATION \${HTML_INSTALL_DIR}/#{install_destination}
-                          SUBDIR #{File.basename(software_name)})\n
+                          INSTALL_DESTINATION \${HTML_INSTALL_DIR}/#{language}
+                          SUBDIR #{subdir})\n
     EOF
   end
 
-  def write_handbook(dir, language, software_name)
-    p " --- Writing #{dir}/CMakeLists.txt for #{language} :: #{software_name}"
-    File.write("#{dir}/CMakeLists.txt", create_handbook(language, software_name))
+  # FIXME: this is getting an awful many arguments
+  def write_handbook(dir, language, subdir)
+    p " --- Writing #{dir}/CMakeLists.txt for #{language} :: #{subdir}"
+    File.write("#{dir}/CMakeLists.txt",
+               create_handbook(language, subdir))
   end
 
   # Creates the CMakeLists.txt for doc/$LANG/*
@@ -136,9 +137,24 @@ kdoctools_create_handbook(index.docbook
           FileUtils.cp(cmakefile, current_dir) if File.exist?(cmakefile)
         end
         Dir.glob("#{dir}/**/index.docbook").each do |docbook|
+          # FIXME: subdir logic needs testing through documentation class
+          # FIXME: this is not tested via our tests
           dirname = File.dirname(docbook)
-          # FXIME: this
-          write_handbook(dirname, language, File.basename(dirname))
+          basename = File.basename(dirname)
+
+          dir_pathname = Pathname.new(dir)
+          p dir_pathname
+          current_dir_pathname = Pathname.new(dirname)
+          p current_dir_pathname
+          relative_path = current_dir_pathname.relative_path_from(dir_pathname)
+          p relative_path
+          # relative_path = '' if relative_path.to_s == basename
+          p relative_path
+
+          subdir = File.join(relative_path)
+          subdir.chomp!(File::SEPARATOR)
+          # FIXME: no test backing
+          write_handbook(dirname, language, subdir)
         end
       else
         fail 'there is no cmakelists in enUS and also no index.docbook'

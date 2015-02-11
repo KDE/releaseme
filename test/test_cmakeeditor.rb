@@ -152,8 +152,9 @@ class TestCMakeEditor < Testme
   end
 
   def test_create_handbook_with_subpath
-    output = CMakeEditor.create_handbook('es', 'kittens', 'kittentroll')
-    assert(output.include?('${HTML_INSTALL_DIR}/es/kittentroll'))
+    output = CMakeEditor.create_handbook('es', 'kittens/kittentroll')
+    assert(output.include?('${HTML_INSTALL_DIR}/es'))
+    assert(output.include?('SUBDIR kittens/kittentroll'))
   end
 
   def test_create_doc_meta_lists
