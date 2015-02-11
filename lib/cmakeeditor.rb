@@ -102,6 +102,7 @@ kdoctools_create_handbook(index.docbook
 
     # en_US may already have a super cmakelists, do not twiddle with it!
     log_debug "Writing main cmakelists #{dir}/../CMakeLists.txt"
+    # FIXME: not thread safe
     File.open("#{dir}/../CMakeLists.txt", 'a') do |f|
       f.write(add_subdirectory(dir))
     end
