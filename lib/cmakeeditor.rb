@@ -19,6 +19,7 @@
 #++
 
 require 'fileutils'
+require 'pathname'
 
 # General purpose CMakeLists.txt editing functions
 module CMakeEditor
@@ -85,6 +86,8 @@ module CMakeEditor
     "add_subdirectory(#{File.basename(file)})\n"
   end
 
+  # FIXME: INSTALL_DEST needs to take into account subdirs of language
+  #        e.g. kcontrol/foo/ must install to language/kcontrol/foo/
   def create_handbook(language, software_name)
     <<-EOF
 kdoctools_create_handbook(index.docbook
@@ -93,48 +96,56 @@ kdoctools_create_handbook(index.docbook
     EOF
   end
 
-  def write_handbook(language, software_name)
-    File.write('CMakeLists.txt', create_handbook(language, software_name))
+  def write_handbook(dir, language, software_name)
+    p " --- Writing #{dir}/CMakeLists.txt for #{language} :: #{software_name}"
+    File.write("#{dir}/CMakeLists.txt", create_handbook(language, software_name))
   end
 
   # Creates the CMakeLists.txt for doc/$LANG/*
   # FIXME: don't overwrite en_US' CMakeLists.txt for a given subdir
   def create_language_specific_doc_lists!(dir, language, software_name)
-    Dir.chdir(dir) do
-      if File.exist?('index.docbook')
-        # When there is an index.docbook we mustn't copy the en_US version as
-        # we have to write our own CMakeLists in order to have things installed
-        # in the correct language directory! Also see kdoctools_create_handbook
-        # arguments.
-        write_handbook(language, software_name)
-      elsif !Dir.glob('*').select { |f| File.directory?(f) }.empty?
-        # -- Recyle en_US' CMakeLists --
-        enusdir = '../en_US/'
-        enuscmake = "#{enusdir}/CMakeLists.txt"
-        if File.exist?(enuscmake)
-          # FIXME: naughty
-          unless File.basename(Dir.pwd) == 'en_US'
-            FileUtils.cp(enuscmake, '.')
-          end
-          Dir.glob('**/index.docbook').each do |docbook|
-            dirname = File.dirname(docbook)
-            Dir.chdir(dirname) do
-              write_handbook(language, File.basename(dirname))
-            end
-          end
-        else
-          fail 'there is no cmakelists in enUS and also no index.docbook'
+    if File.exist?("#{dir}/index.docbook")
+      # When there is an index.docbook we mustn't copy the en_US version as
+      # we have to write our own CMakeLists in order to have things installed
+      # in the correct language directory! Also see kdoctools_create_handbook
+      # arguments.
+      write_handbook(dir, language, software_name)
+    elsif !Dir.glob("#{dir}/*").select { |f| File.directory?(f) }.empty?
+      # -- Recyle en_US' CMakeLists --
+      enusdir = "#{dir}/../en_US/"
+      enuscmake = "#{enusdir}/CMakeLists.txt"
+      if File.exist?(enuscmake)
+        # FIXME: naughty
+        FileUtils.cp(enuscmake, dir) unless File.basename(dir) == 'en_US'
+        Dir.glob("#{dir}/**/**").each do |current_dir|
+          next unless File.directory?(current_dir)
+          next if File.basename(dir) == 'en_US'
+          dir_pathname = Pathname.new(dir)
+          current_dir_pathname = Pathname.new(current_dir)
+          relative_path = current_dir_pathname.relative_path_from(dir_pathname)
+          # FIXME: this will fail if the cmakelists doesn't exist, which is
+          #        possible but also a bit odd
+          # FIXME: has no test backing I think
+          cmakefile = "#{enusdir}/#{relative_path}/CMakeLists.txt"
+          FileUtils.cp(cmakefile, current_dir) if File.exist?(cmakefile)
+        end
+        Dir.glob("#{dir}/**/index.docbook").each do |docbook|
+          dirname = File.dirname(docbook)
+          # FXIME: this
+          write_handbook(dirname, language, File.basename(dirname))
         end
       else
-        fail 'There is no index.docbook but also no directories'
+        fail 'there is no cmakelists in enUS and also no index.docbook'
       end
+    else
+      fail 'There is no index.docbook but also no directories'
+    end
 
-      # en_US may already have a super cmakelists, do not twiddle with it!
-      # FIXME: log
-      # puts "Writing main cmakelists #{Dir.pwd}/../CMakeLists.txt"
-      File.open('../CMakeLists.txt', 'a') do |f|
-        f.write(add_subdirectory(dir))
-      end
+    # en_US may already have a super cmakelists, do not twiddle with it!
+    # FIXME: log
+    # puts "Writing main cmakelists #{dir}/../CMakeLists.txt"
+    File.open("#{dir}/../CMakeLists.txt", 'a') do |f|
+      f.write(add_subdirectory(dir))
     end
   end
 
