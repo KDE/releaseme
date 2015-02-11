@@ -45,7 +45,6 @@ class TestCMakeEditor < Testme
   end
 
   def assert_valid_kdoctools(file)
-    p file
     parts = file.split('/')
     language = parts.first
     dir = parts[-2]
@@ -150,6 +149,11 @@ class TestCMakeEditor < Testme
     with_path = CMakeEditor.create_handbook(lang, '/tmp/kittens')
     with_name = CMakeEditor.create_handbook(lang, 'kittens')
     assert_equal(with_path, with_name)
+  end
+
+  def test_create_handbook_with_subpath
+    output = CMakeEditor.create_handbook('es', 'kittens', 'kittentroll')
+    assert(output.include?('${HTML_INSTALL_DIR}/es/kittentroll'))
   end
 
   def test_create_doc_meta_lists

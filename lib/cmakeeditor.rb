@@ -92,10 +92,11 @@ module CMakeEditor
 
   # FIXME: INSTALL_DEST needs to take into account subdirs of language
   #        e.g. kcontrol/foo/ must install to language/kcontrol/foo/
-  def create_handbook(language, software_name)
+  def create_handbook(language, software_name, subpath = '')
+    install_destination = "#{language}/#{subpath}"
     <<-EOF
 kdoctools_create_handbook(index.docbook
-                          INSTALL_DESTINATION \${HTML_INSTALL_DIR}/#{language}
+                          INSTALL_DESTINATION \${HTML_INSTALL_DIR}/#{install_destination}
                           SUBDIR #{File.basename(software_name)})\n
     EOF
   end
