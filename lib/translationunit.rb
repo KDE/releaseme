@@ -39,11 +39,12 @@ class TranslationUnit < Source
   # Found templates
   attr_reader :templates
 
+  # The project name this translation belongs to
+  attr_reader :project_name
+
   # Type identifiers
   TRUNK  = :trunk
   STABLE = :stable
-
-  attr_reader :project_name
 
   # anonsvn only allows 5 concurrent connections.
   THREAD_COUNT = 5
