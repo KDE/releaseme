@@ -21,8 +21,12 @@
 require 'fileutils'
 require 'pathname'
 
+require_relative 'logable'
+
 # General purpose CMakeLists.txt editing functions
 module CMakeEditor
+  include Logable
+
   module_function
 
 =begin
@@ -124,7 +128,8 @@ kdoctools_create_handbook(index.docbook
           current_dir_pathname = Pathname.new(current_dir)
           relative_path = current_dir_pathname.relative_path_from(dir_pathname)
           # FIXME: this will fail if the cmakelists doesn't exist, which is
-          #        possible but also a bit odd
+          #        possible but also a bit odd, not sure if we should just
+          #        ignore that...
           # FIXME: has no test backing I think
           cmakefile = "#{enusdir}/#{relative_path}/CMakeLists.txt"
           FileUtils.cp(cmakefile, current_dir) if File.exist?(cmakefile)
@@ -142,8 +147,7 @@ kdoctools_create_handbook(index.docbook
     end
 
     # en_US may already have a super cmakelists, do not twiddle with it!
-    # FIXME: log
-    # puts "Writing main cmakelists #{dir}/../CMakeLists.txt"
+    log_debug "Writing main cmakelists #{dir}/../CMakeLists.txt"
     File.open("#{dir}/../CMakeLists.txt", 'a') do |f|
       f.write(add_subdirectory(dir))
     end
