@@ -68,6 +68,7 @@ module Logable
     def create_logger
       @__logger = Logger.new(STDOUT)
       @__logger.level = Logger::INFO
+      @__logger.level = Logger::DEBUG if ENV['RELEASEME_DEBUG']
       @__logger.datetime_format = ''
       # Module classes are not useful, use the actual module name if we are
       # mixed into a module.
