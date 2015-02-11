@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 unless Kernel.respond_to?(:require_relative)
   module Kernel
     def require_relative(path)
