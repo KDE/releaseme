@@ -67,7 +67,6 @@ class DocumentationL10n < TranslationUnit
     queue = Queue.new
     languages.each do |language|
       next if language == 'x-test' || language == 'en_US'
-      p language
       queue << language
     end
 
@@ -95,20 +94,15 @@ class DocumentationL10n < TranslationUnit
                   not_translated_doc_dirs = doc_dirs.clone
                   # FIXME: for some reason with plasma-desktop /* didn't work
                   #        yet the tests passed, so the tests seem insufficient
-                  p Dir.glob("#{tmpdir}/**")
                   doc_selection = Dir.glob("#{tmpdir}/**").select do |d|
                     basename = File.basename(d)
-                    p basename
                     if doc_dirs.include?(basename)
                       not_translated_doc_dirs.delete(basename)
-                      p 'true'
                       next true
                     end
-                    p 'false'
                     next false
                   end
                   if doc_selection.empty?
-                    p 'doc_selection empty'
                     languages_without_documentation << language
                     next
                   end
@@ -137,9 +131,7 @@ class DocumentationL10n < TranslationUnit
                 end
 
               rescue => e
-                p e
                 log_fail e
-                p e
                 exit 1
               end
             end
