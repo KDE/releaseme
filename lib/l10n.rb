@@ -122,42 +122,39 @@ class L10n < TranslationUnit
       threads = []
       THREAD_COUNT.times do
         threads << Thread.new do
+          Thread.current.abort_on_exception = true
           until queue.empty?
             language = queue.pop(true)
-            begin
-              Dir.mktmpdir(self.class.to_s) do |tmpdir|
-                log_debug "#{srcdir} - downloading #{language}"
-                if templates.count > 1
-                  files = get_multiple(language, tmpdir)
-                elsif templates.count == 1
-                  files = get_single(language, tmpdir)
-                else
-                  # FIXME: needs testcase
-                  return # No translations need fetching
-                end
-
-                # No files obtained :(
-                if files.empty?
-                  # FIXME: not thread safe without GIL
-                  languages_without_translation << language
-                  next
-                end
-                # FIXME: not thread safe without GIL
-                has_translation = true
-
-                # TODO: path confusing with target
-                destination = "po/#{language}"
-                Dir.mkdir(destination)
-                FileUtils.mv(files, destination)
+            Dir.mktmpdir(self.class.to_s) do |tmpdir|
+              log_debug "#{srcdir} - downloading #{language}"
+              if templates.count > 1
+                files = get_multiple(language, tmpdir)
+              elsif templates.count == 1
+                files = get_single(language, tmpdir)
+              else
+                # FIXME: needs testcase
+                # TODO: this previously aborted entirely, not sure that makes
+                #       sense with threading
+                next # No translations need fetching
               end
 
-              # FIXME: this is not thread safe without a GIL
-              @languages += [language]
-            rescue => e
-              log_fail e
-              p e
-              exit 1
+              # No files obtained :(
+              if files.empty?
+                # FIXME: not thread safe without GIL
+                languages_without_translation << language
+                next
+              end
+              # FIXME: not thread safe without GIL
+              has_translation = true
+
+              # TODO: path confusing with target
+              destination = "po/#{language}"
+              Dir.mkdir(destination)
+              FileUtils.mv(files, destination)
             end
+
+            # FIXME: this is not thread safe without a GIL
+            @languages += [language]
           end
         end
       end

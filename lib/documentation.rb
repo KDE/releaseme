@@ -67,65 +67,61 @@ class DocumentationL10n < TranslationUnit
     threads = []
     THREAD_COUNT.times do
       threads << Thread.new do
+        Thread.current.abort_on_exception = true
         until queue.empty?
           language = queue.pop(true)
           Dir.mktmpdir(self.class.to_s) do |tmpdir|
-            begin
-              # FIXME: this really only should be computed once
-              doc_dirs = Dir.glob("#{dir}/en_US/*").collect do |f|
-                next nil unless File.directory?(f)
-                File.basename(f)
+            # FIXME: this really only should be computed once
+            doc_dirs = Dir.glob("#{dir}/en_US/*").collect do |f|
+              next nil unless File.directory?(f)
+              File.basename(f)
+            end
+            doc_dirs.compact!
+
+            dest_dir = "#{dir}/#{language}"
+            done = false
+            unless doc_dirs.empty?
+              # FIXME: recyle for single-get?
+              # FIXME: check cmake file for add_subdir that are not optional and warn if there are any
+              vcs.get(tmpdir, "#{language}/docs/#{@i18n_path}")
+              not_translated_doc_dirs = doc_dirs.clone
+              # FIXME: for some reason with plasma-desktop /* didn't work
+              #        yet the tests passed, so the tests seem insufficient
+              doc_selection = Dir.glob("#{tmpdir}/**").select do |d|
+                basename = File.basename(d)
+                if doc_dirs.include?(basename)
+                  not_translated_doc_dirs.delete(basename)
+                  next true
+                end
+                next false
               end
-              doc_dirs.compact!
-
-              dest_dir = "#{dir}/#{language}"
-              done = false
-              unless doc_dirs.empty?
-                # FIXME: recyle for single-get?
-                # FIXME: check cmake file for add_subdir that are not optional and warn if there are any
-                vcs.get(tmpdir, "#{language}/docs/#{@i18n_path}")
-                not_translated_doc_dirs = doc_dirs.clone
-                # FIXME: for some reason with plasma-desktop /* didn't work
-                #        yet the tests passed, so the tests seem insufficient
-                doc_selection = Dir.glob("#{tmpdir}/**").select do |d|
-                  basename = File.basename(d)
-                  if doc_dirs.include?(basename)
-                    not_translated_doc_dirs.delete(basename)
-                    next true
-                  end
-                  next false
-                end
-                if doc_selection.empty?
-                  languages_without_documentation << language
-                  next
-                end
-                Dir.mkdir(dest_dir) # Important otherwise first copy is dir itself...
-                doc_selection.each do |d|
-                  FileUtils.mv(d, dest_dir)
-                end
-                CMakeEditor.create_language_specific_doc_lists!(dest_dir, language, project_name)
-                # FIXME: not threadsafe without GIL
-                docs << language
-                done = true
+              if doc_selection.empty?
+                languages_without_documentation << language
+                next
               end
-              unless done
-                # FIXME this also needs to act as fallback
-                vcs.get(tmpdir, vcs_l10n_path(language))
-                unless FileTest.exist?("#{tmpdir}/index.docbook")
-                  languages_without_documentation << language
-                  next
-                end
-
-                FileUtils.mv(tmpdir, dest_dir)
-                CMakeEditor.create_language_specific_doc_lists!("#{dir}/#{language}", language, project_name)
-
-                # FIXME: not threadsafe without GIL
-                docs += [language]
+              FileUtils.mkpath(dest_dir) # Important otherwise first copy is dir itself...
+              doc_selection.each do |d|
+                FileUtils.mv(d, dest_dir)
+              end
+              CMakeEditor.create_language_specific_doc_lists!(dest_dir, language, project_name)
+              # FIXME: not threadsafe without GIL
+              docs << language
+              done = true
+            end
+            unless done
+              # FIXME this also needs to act as fallback
+              vcs.get(tmpdir, vcs_l10n_path(language))
+              unless FileTest.exist?("#{tmpdir}/index.docbook")
+                languages_without_documentation << language
+                next
               end
 
-            rescue => e
-              log_fail e
-              exit 1
+              FileUtils.mkpath(dest_dir)
+              FileUtils.cp_r(Dir.glob("#{tmpdir}/*"), dest_dir, verbose: true)
+              CMakeEditor.create_language_specific_doc_lists!("#{dest_dir}", language, project_name)
+
+              # FIXME: not threadsafe without GIL
+              docs += [language]
             end
           end
         end
