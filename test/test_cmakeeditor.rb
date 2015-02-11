@@ -180,7 +180,7 @@ class TestCMakeEditor < Testme
   def test_append_po_install_instructions_append
     create_cmakelists!
     CMakeEditor::append_po_install_instructions!(dir, 'po')
-    assert(File::exists?(file))
+    assert(File.exist?(file))
     data = File.read(file)
     assert(data.include?("#FOO_SUBDIR\n"))
     assert(data.include?("ki18n_install(po)"))
@@ -194,7 +194,7 @@ class TestCMakeEditor < Testme
   def test_append_po_install_instructions_substitute
     create_cmakelists!
     CMakeEditor::append_po_install_instructions!(dir, 'foo')
-    assert(File::exists?(file))
+    assert(File.exist?(file))
     data = File.read(file)
     assert(!data.include?("#FOO_SUBDIR\n"))
     assert(data.include?("ki18n_install(foo)"))
@@ -204,7 +204,7 @@ class TestCMakeEditor < Testme
   def test_append_optional_add_subdirectory_append
     create_cmakelists!
     CMakeEditor::append_optional_add_subdirectory!(dir, 'append')
-    assert(File::exists?(file))
+    assert(File.exist?(file))
     data = File.read(file)
     assert(data.include?("#FOO_SUBDIR\n"))
     assert(data.include?("add_subdirectory(append)"))
@@ -218,7 +218,7 @@ class TestCMakeEditor < Testme
   def test_append_optional_add_subdirectory_substitute
     create_cmakelists!
     CMakeEditor::append_optional_add_subdirectory!(dir, 'foo')
-    assert(File::exists?(file))
+    assert(File.exist?(file))
     data = File.read(file)
     assert(!data.include?("#FOO_SUBDIR\n"))
     assert(data.include?("ECMOptionalAddSubdirectory"))
