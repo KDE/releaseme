@@ -38,8 +38,8 @@ class DocumentationL10n < TranslationUnit
     dir = "#{Dir.pwd}/#{srcdir}/doc"
     Dir.mkdir(dir) unless File.exist?(dir)
 
-    languages = vcs.cat('subdirs').split($RS)
     docs = []
+    languages_without_documentation = []
 
     log_info "Downloading documentations for #{srcdir}"
 
@@ -62,14 +62,8 @@ class DocumentationL10n < TranslationUnit
     end
 
     CMakeEditor.create_language_specific_doc_lists!("#{dir}/en_US", 'en_US', project_name)
-    languages_without_documentation = []
 
-    queue = Queue.new
-    languages.each do |language|
-      next if language == 'x-test' || language == 'en_US'
-      queue << language
-    end
-
+    queue = languages_queue(%w(en_US))
     threads = []
     THREAD_COUNT.times do
       threads << Thread.new do

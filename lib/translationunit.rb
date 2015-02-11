@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'thread'
+
 require_relative 'source'
 require_relative 'svn'
 
@@ -69,6 +71,18 @@ class TranslationUnit < Source
     @vcs.repository = repo_url
   end
 
+  def languages(excluded = [])
+    excluded.concat(%w(x-test))
+    languages = self.class.languages(@vcs)
+    languages.delete_if { |l| excluded.include?(l) }
+  end
+
+  def languages_queue(excluded = [])
+    queue = Queue.new
+    languages(excluded).each { |l| queue << l }
+    queue
+  end
+
   # FIXME: should we just go full abstract and forget about the specifics
   #   factory?
   # def vcs_l10n_path(lang)
@@ -80,6 +94,14 @@ class TranslationUnit < Source
   # end
 
   private
+
+  # FIXME: not tested
+  def self.languages(vcs)
+    # Cache this bugger to avoid double lookup for messages and documentation.
+    # NOTE: this only is reasonable for as long as all derivaed classes have
+    #       the same vcs configuration, so this is potentially dangerous.
+    @languages ||= vcs.cat('subdirs').split($RS)
+  end
 
   def url_type_suffix
     if type == TRUNK

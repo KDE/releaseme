@@ -116,13 +116,9 @@ class L10n < TranslationUnit
 
     languages_without_translation = []
     has_translation = false
+    # FIXME: due to threading we do explicit pathing, so this probably can go
     Dir.chdir(srcdir) do
-      queue = Queue.new
-      available_languages.each do | language |
-        next if language == 'x-test'
-        queue << language
-      end
-
+      queue = languages_queue
       threads = []
       THREAD_COUNT.times do
         threads << Thread.new do
