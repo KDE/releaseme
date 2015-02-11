@@ -29,63 +29,6 @@ module CMakeEditor
 
   module_function
 
-=begin
-  -git-
-
-    doc/CMakeLists.txt
-    doc/index.docbook
-    doc/...
-
-      -> move doc/* to doc/en_US/*
-      -> get_translations_single
-      -> if translation && index.docbook -> move to doc/language/*
-        -> write a cmake file for doc/language/
-      -> write a cmake file doc/
-      -> add doc to main cmakelists
-
-    doc/CMakeLists.txt
-    doc/directory1/CMakeLists.txt
-    doc/directory1/index.docbook
-    doc/directory1/...
-    doc/directory2/CMakeLists.txt
-    doc/directory2/index.docbook
-    doc/directory2/...
-    doc/directory3/index.docbook                  [invalid?]
-    doc/directory4/CMakeLists.txt                 [invalid!]
-
-      -> move doc/* to doc/en_US/*
-      -> get_translatins_multi
-        -> get whole component-module dir
-        -> foreach en_USdir[that has an index.docbook] do;
-          -> if translation && index.docbook -> move to doc/language/dir/*
-          -> write a cmake file for doc/language/dir
-      -> write a cmake file for doc/language
-      -> write cmake file doc/
-      -> add doc to main cmakelists
-
-    doc/en_US/CMakeLists.txt
-    doc/en_US/index.docbook
-    doc/en_US/...
-
-    doc/en_US/CMakeLists.txt
-    doc/en_US/directory1/...
-    doc/en_US/directory2/...
-
-    ? what if there is no CMakeLists at all
-
-  -svn-
-
-    component-module/project/index.docbook
-
-    component-module/directory1/index.docbook
-
-    component-module/directory2/index.docbook
-
-    component/project/index.docbook
-
-    ? what if there is no translation
-=end
-
   def add_subdirectory(file)
     "add_subdirectory(#{File.basename(file)})\n"
   end
