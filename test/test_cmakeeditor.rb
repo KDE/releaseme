@@ -127,13 +127,6 @@ class TestCMakeEditor < Testme
     assert_has_terminal_newline(data)
   end
 
-  def test_create_handbook_uses_basename
-    lang = 'fr'
-    with_path = CMakeEditor.create_handbook(lang, '/tmp/kittens')
-    with_name = CMakeEditor.create_handbook(lang, 'kittens')
-    assert_equal(with_path, with_name)
-  end
-
   def test_create_handbook_with_subpath
     output = CMakeEditor.create_handbook('es', 'kittens/kittentroll')
     assert(output.include?('${HTML_INSTALL_DIR}/es'))
