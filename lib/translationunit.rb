@@ -43,6 +43,9 @@ class TranslationUnit < Source
 
   attr_reader :project_name
 
+  # anonsvn only allows 5 concurrent connections.
+  THREAD_COUNT = 5
+
   def initialize(type, project_name, i18n_path)
     @type = type
     @i18n_path = i18n_path

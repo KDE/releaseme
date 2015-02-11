@@ -28,9 +28,6 @@ require_relative 'source'
 require_relative 'svn'
 require_relative 'translationunit'
 
-# anonsvn only allows 5 concurrent connections.
-THREAD_COUNT = 5
-
 # FIXME: doesn't write master cmake right now...
 class L10n < TranslationUnit
   prepend Logable
