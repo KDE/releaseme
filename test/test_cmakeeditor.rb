@@ -97,11 +97,21 @@ class TestCMakeEditor < Testme
       en_US/doc2
       en_US/doc2/CMakeLists.txt
       en_US/doc2/index.docbook
+      en_US/doc3
+      en_US/doc3/CMakeLists.txt
+      en_US/doc3/doc3.1
+      en_US/doc3/doc3.1/CMakeLists.txt
+      en_US/doc3/doc3.1/index.docbook
       de
       de/CMakeLists.txt
       de/doc1
       de/doc1/CMakeLists.txt
       de/doc1/index.docbook
+      de/doc3
+      de/doc3/CMakeLists.txt
+      de/doc3/doc3.1
+      de/doc3/doc3.1/CMakeLists.txt
+      de/doc3/doc3.1/index.docbook
     )
     present_files = Dir.glob('**/**')
     missing_files = []
