@@ -19,6 +19,7 @@
 #++
 
 require 'fileutils'
+require 'thwait'
 
 require_relative 'cmakeeditor'
 require_relative 'logable'
@@ -33,15 +34,14 @@ class DocumentationL10n < TranslationUnit
     "#{lang}/docs/#{@i18n_path}/#{@project_name}"
   end
 
-  def get(source_dir)
-    dir = "#{Dir.pwd}/#{source_dir}/doc"
-    temp_dir = "#{Dir.pwd}/#{source_dir}/l10n"
+  def get(srcdir)
+    dir = "#{Dir.pwd}/#{srcdir}/doc"
     Dir.mkdir(dir) unless File.exist?(dir)
 
     languages = vcs.cat('subdirs').split($RS)
     docs = []
 
-    log_info "Downloading documentations for #{source_dir}"
+    log_info "Downloading documentations for #{srcdir}"
 
     # On git a layout doc/{file,file,file} may appear, in this case we move
     # stuff to en_US.
@@ -63,72 +63,98 @@ class DocumentationL10n < TranslationUnit
 
     CMakeEditor.create_language_specific_doc_lists!("#{dir}/en_US", 'en_US', project_name)
     languages_without_documentation = []
+
+    queue = Queue.new
     languages.each do |language|
-      language.chomp!
-      # FIXME: this really should be filtered when the array is created...
       next if language == 'x-test' || language == 'en_US'
+      p language
+      queue << language
+    end
 
-      FileUtils.rm_rf(temp_dir)
+    threads = []
+    THREAD_COUNT.times do
+      threads << Thread.new do
+        until queue.empty?
+          language = queue.pop(true)
+            Dir.mktmpdir(self.class.to_s) do |tmpdir|
+              begin
+                # FIXME: this really only should be computed once
+                doc_dirs = Dir.glob("#{dir}/en_US/*").collect do |f|
+                  next nil unless File.directory?(f)
+                  File.basename(f)
+                end
+                doc_dirs.compact!
 
-      doc_dirs = Dir.chdir("#{dir}/en_US") do
-        Dir.glob('*').select { |f| File.directory?(f) }
-      end
+                dest_dir = "#{dir}/#{language}"
+                done = false
+                log_info doc_dirs
+                unless doc_dirs.empty?
+                  # FIXME: recyle for single-get?
+                  # FIXME: check cmake file for add_subdir that are not optional and warn if there are any
+                  vcs.get(tmpdir, "#{language}/docs/#{@i18n_path}")
+                  not_translated_doc_dirs = doc_dirs.clone
+                  # FIXME: for some reason with plasma-desktop /* didn't work
+                  #        yet the tests passed, so the tests seem insufficient
+                  p Dir.glob("#{tmpdir}/**")
+                  doc_selection = Dir.glob("#{tmpdir}/**").select do |d|
+                    basename = File.basename(d)
+                    p basename
+                    if doc_dirs.include?(basename)
+                      not_translated_doc_dirs.delete(basename)
+                      p 'true'
+                      next true
+                    end
+                    p 'false'
+                    next false
+                  end
+                  if doc_selection.empty?
+                    p 'doc_selection empty'
+                    languages_without_documentation << language
+                    next
+                  end
+                  Dir.mkdir(dest_dir) # Important otherwise first copy is dir itself...
+                  doc_selection.each do |d|
+                    FileUtils.mv(d, dest_dir)
+                  end
+                  CMakeEditor.create_language_specific_doc_lists!(dest_dir, language, project_name)
+                  # FIXME: not threadsafe without GIL
+                  docs << language
+                  done = true
+                end
+                unless done
+                  # FIXME this also needs to act as fallback
+                  vcs.get(tmpdir, vcs_l10n_path(language))
+                  unless FileTest.exist?("#{tmpdir}/index.docbook")
+                    languages_without_documentation << language
+                    next
+                  end
 
-      dest_dir = "#{dir}/#{language}"
-      done = false
+                  FileUtils.mv(tmpdir, dest_dir)
+                  CMakeEditor.create_language_specific_doc_lists!("#{dir}/#{language}", language, project_name)
 
-      unless doc_dirs.empty?
-        # FIXME: recyle for single-get?
-        # FIXME: check cmake file for add_subdir that are not optional and warn if there are any
-        vcs.get(temp_dir, "#{language}/docs/#{@i18n_path}")
-        not_translated_doc_dirs = doc_dirs.clone
-        doc_selection = Dir.glob("#{temp_dir}/*").select do |d|
-          basename = File.basename(d)
-          if doc_dirs.include?(basename)
-            not_translated_doc_dirs.delete(basename)
-            next true
-          end
-          next false
+                  # FIXME: not threadsafe without GIL
+                  docs += [language]
+                end
+
+              rescue => e
+                p e
+                log_fail e
+                p e
+                exit 1
+              end
+            end
         end
-        if doc_selection.empty?
-          languages_without_documentation << language
-          next
-        end
-        Dir.mkdir(dest_dir) # Important otherwise first copy is dir itself...
-        doc_selection.each do |d|
-          FileUtils.mv(d, dest_dir)
-        end
-        CMakeEditor.create_language_specific_doc_lists!(dest_dir, language, project_name)
-        docs << language
-        done = true
-      end
-      unless done
-        # FIXME this also needs to act as fallback
-        vcs.get(temp_dir, vcs_l10n_path(language))
-        unless FileTest.exist?("#{temp_dir}/index.docbook")
-          languages_without_documentation << language
-          next
-        end
-
-        FileUtils.mv(temp_dir, dest_dir)
-        CMakeEditor.create_language_specific_doc_lists!("#{dir}/#{language}", language, project_name)
-
-        # add to SVN in case we are tagging
-        # FIXME: direct svn access
-        # `svn add #{dir}/#{language}/CMakeLists.txt`
-        docs += [language]
       end
     end
+    ThreadsWait.all_waits(threads)
 
     if !docs.empty?
       CMakeEditor.create_doc_meta_lists!(dir)
-      CMakeEditor.append_optional_add_subdirectory!(source_dir, 'doc')
+      CMakeEditor.append_optional_add_subdirectory!(srcdir, 'doc')
     else
       log_warn 'There are no translations at all!'
       FileUtils.rm_rf(dir)
     end
-
-    FileUtils.rm_rf(temp_dir)
 
     log_info "No translations for: #{languages_without_documentation.join(', ')}" unless languages_without_documentation.empty?
   end
