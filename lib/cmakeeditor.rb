@@ -102,7 +102,7 @@ kdoctools_create_handbook(index.docbook
 
   # FIXME: this is getting an awful many arguments
   def write_handbook(dir, language, subdir)
-    p " --- Writing #{dir}/CMakeLists.txt for #{language} :: #{subdir}"
+    log_debug " --- Writing #{dir}/CMakeLists.txt for #{language} :: #{subdir}"
     File.write("#{dir}/CMakeLists.txt",
                create_handbook(language, subdir))
   end
@@ -140,16 +140,10 @@ kdoctools_create_handbook(index.docbook
           # FIXME: subdir logic needs testing through documentation class
           # FIXME: this is not tested via our tests
           dirname = File.dirname(docbook)
-          basename = File.basename(dirname)
 
           dir_pathname = Pathname.new(dir)
-          p dir_pathname
           current_dir_pathname = Pathname.new(dirname)
-          p current_dir_pathname
           relative_path = current_dir_pathname.relative_path_from(dir_pathname)
-          p relative_path
-          # relative_path = '' if relative_path.to_s == basename
-          p relative_path
 
           subdir = File.join(relative_path)
           subdir.chomp!(File::SEPARATOR)

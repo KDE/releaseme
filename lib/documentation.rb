@@ -80,7 +80,6 @@ class DocumentationL10n < TranslationUnit
 
               dest_dir = "#{dir}/#{language}"
               done = false
-              log_info doc_dirs
               unless doc_dirs.empty?
                 # FIXME: recyle for single-get?
                 # FIXME: check cmake file for add_subdir that are not optional and warn if there are any
