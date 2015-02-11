@@ -89,11 +89,11 @@ class TestL10n < Testme
 
         statistics = L10nStatistics.new
         statistics.gather!(@dir)
-        assert(statistics.stats == {"de"=>{:all=>4,
+        assert_equal(statistics.stats, {"de"=>{:all=>4,
                                            :shown=>3,
                                            :notshown=>1,
                                            :percentage=>75.0},
-                                    "fr"=>{:all=>4,
+                                        "fr"=>{:all=>4,
                                            :shown=>4,
                                            :notshown=>0,
                                            :percentage=>100.0}})
