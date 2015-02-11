@@ -25,21 +25,6 @@ require_relative "lib/testme"
 require_relative "../lib/cmakeeditor"
 
 class TestCMakeEditor < Testme
-  attr_accessor :dir
-  attr_accessor :file
-  attr_accessor :lang
-
-  def setup
-    @dir = Dir.pwd + "/tmp_cmakeeditor_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
-    Dir.mkdir(@dir)
-    @file = @dir + "/CMakeLists.txt"
-    @lang = 'xx'
-  end
-
-  def teardown
-    FileUtils.rm_rf(@dir)
-  end
-
   def assert_has_terminal_newline(data)
     assert(data.end_with?("\n"))
   end
@@ -73,8 +58,6 @@ class TestCMakeEditor < Testme
   end
 
   def test_create_handbook_complex
-    # tmpdir now conflicts with testme...
-    FileUtils.rm_rf(@dir)
     origin_dir = "#{@datadir}/cmakeeditor/#{__method__}"
     FileUtils.cp_r(Dir.glob("#{origin_dir}/*"), '.', verbose: true)
     %w(en_US de fr).each do |lang|
@@ -136,11 +119,11 @@ class TestCMakeEditor < Testme
     # involves checking whether the doc dir even is valid and possibly
     # refusing to write anything when not, so make the doc dir the least bit
     # valid by creating index.docbook.
-    FileUtils.touch("#{dir}/index.docbook")
-    CMakeEditor.create_language_specific_doc_lists!(dir, lang, 'yolo')
-    assert(File.exist?(file))
-    data = File.read(file)
-    assert_equal(CMakeEditor.create_handbook(lang, 'yolo'), data)
+    FileUtils.touch('index.docbook')
+    CMakeEditor.create_language_specific_doc_lists!(Dir.pwd, 'xx', 'yolo')
+    assert(File.exist?('CMakeLists.txt'))
+    data = File.read('CMakeLists.txt')
+    assert_equal(CMakeEditor.create_handbook('xx', 'yolo'), data)
     assert_has_terminal_newline(data)
   end
 
@@ -158,71 +141,72 @@ class TestCMakeEditor < Testme
   end
 
   def test_create_doc_meta_lists
-    Dir.mkdir("#{dir}/aa")
-    Dir.mkdir("#{dir}/bb")
-    Dir.mkdir("#{dir}/cc")
-    CMakeEditor.create_doc_meta_lists!(dir)
-    assert(File.exist?(file))
-    data = File.read(file)
-    assert(!data.downcase.include?("find_package(gettext")) # PO-only!
-    assert(data.downcase.include?("add_subdirectory(aa)"))
-    assert(data.downcase.include?("add_subdirectory(bb)"))
-    assert(data.downcase.include?("add_subdirectory(cc)"))
+    Dir.mkdir("#{Dir.pwd}/aa")
+    Dir.mkdir("#{Dir.pwd}/bb")
+    Dir.mkdir("#{Dir.pwd}/cc")
+    CMakeEditor.create_doc_meta_lists!(Dir.pwd)
+    assert(File.exist?('CMakeLists.txt'))
+    data = File.read('CMakeLists.txt')
+    assert(!data.downcase.include?('find_package(gettext')) # PO-only!
+    assert(data.downcase.include?('add_subdirectory(aa)'))
+    assert(data.downcase.include?('add_subdirectory(bb)'))
+    assert(data.downcase.include?('add_subdirectory(cc)'))
     assert_has_terminal_newline(data)
   end
 
   def create_cmakelists!
-    f = File.new(@file, File::CREAT | File::RDWR | File::TRUNC)
+    f = File.new('CMakeLists.txt', File::CREAT | File::RDWR | File::TRUNC)
     f << "#FOO_SUBDIR\n"
     f.close
   end
 
   def test_append_po_install_instructions_append
     create_cmakelists!
-    CMakeEditor::append_po_install_instructions!(dir, 'po')
-    assert(File.exist?(file))
-    data = File.read(file)
+    CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
+    # FIXME: lots of code dup like this
+    assert(File.exist?('CMakeLists.txt'))
+    data = File.read('CMakeLists.txt')
     assert(data.include?("#FOO_SUBDIR\n"))
-    assert(data.include?("ki18n_install(po)"))
+    assert(data.include?('ki18n_install(po)'))
     assert_has_terminal_newline(data)
     # Make sure the editor doesn't append if it is already there...
-    CMakeEditor::append_po_install_instructions!(dir, 'po')
-    data = File.read(file)
+    CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
+    data = File.read('CMakeLists.txt')
     assert(data.scan('ki18n_install(po)').count == 1)
   end
 
   def test_append_po_install_instructions_substitute
     create_cmakelists!
-    CMakeEditor::append_po_install_instructions!(dir, 'foo')
-    assert(File.exist?(file))
-    data = File.read(file)
+    CMakeEditor.append_po_install_instructions!(Dir.pwd, 'foo')
+    assert(File.exist?('CMakeLists.txt'))
+    data = File.read('CMakeLists.txt')
     assert(!data.include?("#FOO_SUBDIR\n"))
-    assert(data.include?("ki18n_install(foo)"))
+    assert(data.include?('ki18n_install(foo)'))
     assert_has_terminal_newline(data)
   end
 
   def test_append_optional_add_subdirectory_append
     create_cmakelists!
-    CMakeEditor::append_optional_add_subdirectory!(dir, 'append')
-    assert(File.exist?(file))
-    data = File.read(file)
+    CMakeEditor.append_optional_add_subdirectory!(Dir.pwd, 'append')
+    assert(File.exist?('CMakeLists.txt'))
+    data = File.read('CMakeLists.txt')
     assert(data.include?("#FOO_SUBDIR\n"))
-    assert(data.include?("add_subdirectory(append)"))
+    assert(data.include?('add_subdirectory(append)'))
     assert_has_terminal_newline(data)
     # Make sure the editor doesn't append if it is already there...
-    CMakeEditor::append_optional_add_subdirectory!(dir, 'po')
-    data = File.read(file)
+    CMakeEditor.append_optional_add_subdirectory!(Dir.pwd, 'po')
+    data = File.read('CMakeLists.txt')
     assert(data.scan('add_subdirectory(append)').count == 1)
   end
 
   def test_append_optional_add_subdirectory_substitute
     create_cmakelists!
-    CMakeEditor::append_optional_add_subdirectory!(dir, 'foo')
-    assert(File.exist?(file))
-    data = File.read(file)
+    CMakeEditor.append_optional_add_subdirectory!(Dir.pwd, 'foo')
+    assert(File.exist?('CMakeLists.txt'))
+    data = File.read('CMakeLists.txt')
     assert(!data.include?("#FOO_SUBDIR\n"))
-    assert(data.include?("ECMOptionalAddSubdirectory"))
-    assert(data.include?("ecm_optional_add_subdirectory(foo"))
+    assert(data.include?('ECMOptionalAddSubdirectory'))
+    assert(data.include?('ecm_optional_add_subdirectory(foo'))
     assert_has_terminal_newline(data)
   end
 end
