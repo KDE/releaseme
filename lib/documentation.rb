@@ -156,6 +156,7 @@ class DocumentationL10n < TranslationUnit
       FileUtils.rm_rf(dir)
     end
 
-    log_info "No translations for: #{languages_without_documentation.join(', ')}" unless languages_without_documentation.empty?
+    return if languages_without_documentation.empty?
+    log_info "No translations for: #{languages_without_documentation.join(', ')}"
   end
 end
