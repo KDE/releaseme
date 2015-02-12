@@ -65,7 +65,7 @@ class DocumentationL10n < TranslationUnit
       end
     end
     ThreadsWait.all_waits(threads)
-p 'kitten'
+
     if !docs.empty?
       CMakeEditor.create_doc_meta_lists!(@docdir)
       CMakeEditor.append_optional_add_subdirectory!(srcdir, 'doc')
@@ -120,6 +120,7 @@ p 'kitten'
         # FIXME: recyle for single-get?
         # FIXME: check cmake file for add_subdir that are not optional and warn if there are any
         @vcs.get(tmpdir, "#{language}/docs/#{@i18n_path}")
+
         not_translated_doc_dirs = doc_dirs
         # FIXME: for some reason with plasma-desktop /* didn't work
         #        yet the tests passed, so the tests seem insufficient
@@ -131,19 +132,19 @@ p 'kitten'
           end
           next false
         end
-        log_warn "doc selection is #{doc_selection}"
         break if doc_selection.empty?
+
         FileUtils.mkpath(destdir)
-        doc_selection.each { |d| FileUtils.mv(d, destdir, verbose: true) }
+        doc_selection.each { |d| FileUtils.mv(d, destdir) }
         CMakeEditor.create_language_specific_doc_lists!(destdir, language, @project_name)
         return true
       end
-      p "fallback #{language}"
+
       @vcs.get(tmpdir, vcs_l10n_path(language))
       return false unless FileTest.exist?("#{tmpdir}/index.docbook")
 
       FileUtils.mkpath(destdir)
-      FileUtils.cp_r(Dir.glob("#{tmpdir}/*"), destdir, verbose: true)
+      FileUtils.cp_r(Dir.glob("#{tmpdir}/*"), destdir)
       CMakeEditor.create_language_specific_doc_lists!(destdir, language, @project_name)
     end
     true

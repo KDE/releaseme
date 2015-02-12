@@ -59,7 +59,7 @@ class TestCMakeEditor < Testme
 
   def test_create_handbook_complex
     origin_dir = "#{@datadir}/cmakeeditor/#{__method__}"
-    FileUtils.cp_r(Dir.glob("#{origin_dir}/*"), '.', verbose: true)
+    FileUtils.cp_r(Dir.glob("#{origin_dir}/*"), '.')
     %w(en_US de fr).each do |lang|
       CMakeEditor.create_language_specific_doc_lists!("#{Dir.pwd}/#{lang}", lang, 'yolo')
     end

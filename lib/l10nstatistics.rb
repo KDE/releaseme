@@ -65,7 +65,6 @@ class L10nStatistics
                         :notshown => notshown,
                         :percentage => percentage
                     }
-                    p @stats
                 end
             end
         end
