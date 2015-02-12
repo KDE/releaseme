@@ -73,7 +73,9 @@ module Logable
       @__logger = Logger.new(STDOUT)
       @__logger.level = Logger::INFO
       @__logger.level = Logger::DEBUG if ENV['RELEASEME_DEBUG']
-      @__logger.datetime_format = ''
+      logger.formatter = proc do |severity, _datetime, progname, msg|
+        "#{severity} -- #{progname}: #{msg}\n"
+      end
       # Module classes are not useful, use the actual module name if we are
       # mixed into a module.
       if self.class == Module || self.class == Class
