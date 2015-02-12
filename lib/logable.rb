@@ -39,22 +39,26 @@ module Logable
 
     # @!visibility public
 
+    def shutup?
+      ENV['RELEASEME_SHUTUP'] && !ENV['RELEASEME_DEBUG']
+    end
+
     # Logs as info type
     # @param str [String] the string to log
     def log_info(str)
-      logger.info(str) unless ENV['RELEASEME_SHUTUP']
+      logger.info(str) unless shutup?
     end
 
     # Logs as warning type
     # @param str [String] the string to log
     def log_warn(str)
-      logger.warn(str) unless ENV['RELEASEME_SHUTUP']
+      logger.warn(str) unless shutup?
     end
 
     # Logs as debug type
     # @param str [String] the string to log
     def log_debug(str)
-      logger.debug(str) unless ENV['RELEASEME_SHUTUP']
+      logger.debug(str) unless shutup?
     end
 
     # Creates a new Logger instance.
