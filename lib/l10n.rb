@@ -105,13 +105,11 @@ class L10n < TranslationUnit
   end
 
   def get(srcdir)
+    # FIXME: this is later used as destination for the weirdest of reasons...
     target = "#{srcdir}/po/"
     Dir.mkdir(target)
 
-    # FIXME: should move to base, along with filtering x-test
-    available_languages = vcs.cat('subdirs').split("\n")
     @templates = find_templates(srcdir)
-
     log_info "Downloading translations for #{srcdir}"
 
     languages_without_translation = []
