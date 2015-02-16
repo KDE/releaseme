@@ -121,10 +121,8 @@ kdoctools_create_handbook(index.docbook
 
     # Appends the install instructions for po/*
     def append_po_install_instructions!(dir, subdir)
-      file = File.new("#{dir}/CMakeLists.txt", File::APPEND | File::RDWR)
-      data = file.read
-      file.rewind
-      file.truncate(0)
+      file = "#{dir}/CMakeLists.txt"
+      data = File.read(file)
       macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
       if data.include?("##{subdir.upcase}_SUBDIR")
         data = data.sub("##{subdir.upcase}_SUBDIR", macro)
@@ -135,28 +133,24 @@ kdoctools_create_handbook(index.docbook
           data << macro
         end
       end
-      file << data
-      file.close
+      File.write(file, data)
     end
 
     # Appends the inclusion of subdir/CMakeLists.txt
     def append_optional_add_subdirectory!(dir, subdir)
-        file = File.new("#{dir}/CMakeLists.txt", File::APPEND | File::RDWR )
-        data = file.read()
-        file.rewind()
-        file.truncate( 0 )
-        macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory(#{subdir})\n"
-        if data.include?("##{subdir.upcase}_SUBDIR")
-            data = data.sub("##{subdir.upcase}_SUBDIR",macro)
-        elsif (data =~ /^\s*(add_subdirectory|ecm_optional_add_subdirectory)\s*\(\s*#{subdir}\s*\).*$/).nil?
-            # TODO: needs test case
-            # Mighty fancy regex looking for existing add_subdir.
-            # Basically allows spaces everywhere one might want to put spaces.
-            # At the end we allow everything as there may be a comment for example.
-            data << macro
-        end
-        file << data
-        file.close
+      file = "#{dir}/CMakeLists.txt"
+      data = File.read(file)
+      macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory(#{subdir})\n"
+      if data.include?("##{subdir.upcase}_SUBDIR")
+        data = data.sub("##{subdir.upcase}_SUBDIR",macro)
+      elsif (data =~ /^\s*(add_subdirectory|ecm_optional_add_subdirectory)\s*\(\s*#{subdir}\s*\).*$/).nil?
+        # TODO: needs test case
+        # Mighty fancy regex looking for existing add_subdir.
+        # Basically allows spaces everywhere one might want to put spaces.
+        # At the end we allow everything as there may be a comment for example.
+        data << macro
+      end
+      File.write(file, data)
     end
 
 private
