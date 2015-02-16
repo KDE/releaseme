@@ -205,15 +205,16 @@ class TestProject < Testme
     end
 
     def test_resolve_valid_i18n_path_with_sub_project
-      # ktp things are in extragear/network/telepathy/ktp*, yet their translation path
-      # is component-module. Make sure that we get the correct path for this.
-      projects = Project::from_xpath('ktp-contact-runner')
+      # ktp things are in extragear/network/telepathy/ktp*, yet their
+      # translation path is component-module. Make sure that we get the correct
+      # path for this.
+      # Other example would be extragear/graphics/libs/kdiagram.
+      projects = Project.from_xpath('ktp-contact-runner')
       assert_equal(1, projects.size)
       pr = projects.shift
       assert_equal('ktp-contact-runner', pr.identifier)
       assert_equal('extragear-utils', pr.i18n_path)
     end
-
 
     def test_resolve_invalid
         projects = Project::from_xpath('kitten')
