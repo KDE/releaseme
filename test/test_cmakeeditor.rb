@@ -153,7 +153,7 @@ class TestCMakeEditor < Testme
     f.close
   end
 
-  def test_append_po_install_instructions_append
+  def test_append_po_install_instructions
     create_cmakelists!
     CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
     # FIXME: lots of code dup like this
@@ -166,6 +166,13 @@ class TestCMakeEditor < Testme
     CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
     data = File.read('CMakeLists.txt')
     assert(data.scan('ki18n_install(po)').count == 1)
+  end
+
+  def test_append_po_install_instructions_with_ecm_to_qm
+    File.write('CMakeLists.txt', '   ecm_install_po_files_as_qm (    po    )  ')
+    CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
+    data = File.read('CMakeLists.txt')
+    assert(data.scan('ki18n_install(po)').count == 0)
   end
 
   def test_append_po_install_instructions_substitute

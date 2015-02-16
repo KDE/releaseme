@@ -121,18 +121,22 @@ kdoctools_create_handbook(index.docbook
 
     # Appends the install instructions for po/*
     def append_po_install_instructions!(dir, subdir)
-        file = File.new("#{dir}/CMakeLists.txt", File::APPEND | File::RDWR )
-        data = file.read()
-        file.rewind()
-        file.truncate(0)
-        macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
-        if data.include?("##{subdir.upcase}_SUBDIR")
-            data = data.sub("##{subdir.upcase}_SUBDIR",macro)
-        elsif (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil?
-            data << macro
+      file = File.new("#{dir}/CMakeLists.txt", File::APPEND | File::RDWR)
+      data = file.read
+      file.rewind
+      file.truncate(0)
+      macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
+      if data.include?("##{subdir.upcase}_SUBDIR")
+        data = data.sub("##{subdir.upcase}_SUBDIR", macro)
+      else
+        # FIXME: my eyes, my precious eyes!
+        if (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil? &&
+           (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
+          data << macro
         end
-        file << data
-        file.close
+      end
+      file << data
+      file.close
     end
 
     # Appends the inclusion of subdir/CMakeLists.txt
