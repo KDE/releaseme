@@ -108,16 +108,15 @@ kdoctools_create_handbook(index.docbook
     end
   end
 
-    # Creates the CMakeLists.txt for doc/*
-    def create_doc_meta_lists!(dir)
-        file = File.new("#{dir}/CMakeLists.txt",
-                             File::CREAT | File::RDWR | File::TRUNC)
-        Dir.foreach(dir) do |lang|
-            next if lang == '.' or lang == '..' or lang == 'CMakeLists.txt'
-            file << "add_subdirectory(#{lang})\n"
-        end
-        file.close
+  # Creates the CMakeLists.txt for doc/*
+  def create_doc_meta_lists!(dir)
+    file = File.new("#{dir}/CMakeLists.txt", 'w')
+    Dir.foreach(dir) do |lang|
+      next if %w(. .. CMakeLists.txt).include?(lang)
+      file << "add_subdirectory(#{lang})\n"
     end
+    file.close
+  end
 
     # Appends the install instructions for po/*
     def append_po_install_instructions!(dir, subdir)
