@@ -6,7 +6,7 @@ class RequirementChecker
   def check
     err = false
     unless ruby_compatible?
-      puts '- Ruby 2.2 or 2.2 required.'
+      puts '- Ruby 2.1 or 2.2 required.'
       err = true
     end
     missing_binaries.each do |m|
