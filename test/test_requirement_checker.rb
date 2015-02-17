@@ -49,10 +49,8 @@ class TestRequirementChecker < Testme
     incompatibles.each { |i| assert_ruby_version_not_compatible(i) }
   end
 
-  # FIXME: should be moved into checker as it actually has to know all names
-  #        as well
   def all_binaries
-    @all_binaries ||= %w(svn git tar xz msgfmt)
+    RequirementChecker.const_get(:REQUIRED_BINARIES)
   end
 
   def test_missing_binaries

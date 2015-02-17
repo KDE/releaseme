@@ -1,4 +1,7 @@
 class RequirementChecker
+  COMPATIBLE_RUBIES = %w(2.1.0 2.2.0)
+  REQUIRED_BINARIES = %w(svn git tar xz msgfmt)
+
   def initialize
     @ruby_version = RUBY_VERSION
   end
@@ -6,7 +9,8 @@ class RequirementChecker
   def check
     err = false
     unless ruby_compatible?
-      puts '- Ruby 2.1 or 2.2 required.'
+      puts "- Ruby #{COMPATIBLE_RUBIES.join(' or ')} required."
+      puts "  Currently using: #{@ruby_version}"
       err = true
     end
     missing_binaries.each do |m|
@@ -19,16 +23,17 @@ class RequirementChecker
   private
 
   def ruby_compatible?
-    compatible?('2.1.0') || compatible?('2.2.0')
+    COMPATIBLE_RUBIES.each do |v|
+      return true if compatible?(v)
+    end
+    false
   end
 
   def missing_binaries
     missing_binaries = []
-    missing_binaries << missing('svn')
-    missing_binaries << missing('git')
-    missing_binaries << missing('tar')
-    missing_binaries << missing('xz')
-    missing_binaries << missing('msgfmt') # for l10nstats
+    REQUIRED_BINARIES.each do |r|
+      missing_binaries << missing(r)
+    end
     missing_binaries.compact
   end
 
