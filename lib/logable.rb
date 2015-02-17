@@ -25,6 +25,8 @@ rescue LoadError
   puts 'Logging colors are not available. Install logger-colors gem if desired'
 end
 
+require_relative 'lib/requirements'
+
 # Expands Objects with logging capabilities.
 # This module can be included or prepended, prepend allows you to implement
 # your own {#create_logger} which can either create a completely new Logger

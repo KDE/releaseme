@@ -22,12 +22,13 @@
 require 'ostruct'
 require 'optparse'
 
+require_relative 'lib/requirements'
+
 require_relative 'lib/documentation'
 require_relative 'lib/release'
 require_relative 'lib/l10n'
 require_relative 'lib/project'
 require_relative 'lib/projectsfile'
-require_relative 'lib/requirements'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
