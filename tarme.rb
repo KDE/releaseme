@@ -22,6 +22,13 @@
 require 'ostruct'
 require 'optparse'
 
+require_relative 'lib/documentation'
+require_relative 'lib/release'
+require_relative 'lib/l10n'
+require_relative 'lib/project'
+require_relative 'lib/projectsfile'
+require_relative 'lib/requirements'
+
 options = OpenStruct.new
 OptionParser.new do |opts|
   opts.banner = 'Usage: tarme.rb [options] PROJECT_NAME'
@@ -62,14 +69,6 @@ unless (options.origin || options.from_config) && options.version
 end
 
 project_name = ARGV.pop
-
-#################
-
-require_relative 'lib/documentation'
-require_relative 'lib/release'
-require_relative 'lib/l10n'
-require_relative 'lib/project'
-require_relative 'lib/projectsfile'
 
 release_projects = []
 if options[:from_config].nil?
