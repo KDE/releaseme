@@ -2,7 +2,7 @@
 # does a clone, replaces PROJECT_VERSION in CMakeLists.txt and pushes
 # Author Jonathan Riddell 2014, this file is in the public domain and has no copyright restrictions
 
-VERSION=5.2.0
+VERSION=5.2.1
 BRANCH=Plasma/5.2
 
 rm -f kde_projects.xml
