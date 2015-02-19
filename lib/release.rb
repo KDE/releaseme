@@ -55,8 +55,10 @@ class Release
     @version = version
 
     # FIXME: this possibly should be logic inside Project itself?
-    project.vcs.branch = project.i18n_trunk if origin == :trunk
-    project.vcs.branch = project.i18n_stable if origin == :stable
+    if project.vcs.is_a? Git
+      project.vcs.branch = project.i18n_trunk if origin == :trunk
+      project.vcs.branch = project.i18n_stable if origin == :stable
+    end
 
     source.target = "#{project.identifier}-#{version}"
   end

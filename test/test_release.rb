@@ -68,8 +68,22 @@ class TestRelease < Testme
     r
   end
 
+  def new_test_release_svn
+    data = {
+      :identifier => 'clone',
+      :vcs => Svn.new,
+      :i18n_trunk => 'master',
+      :i18n_stable => 'master',
+      :i18n_path => ''
+    }
+    project = Project.new(data)
+    project.vcs.repository = @remotedir
+    Release.new(project, :trunk, '1.0')
+  end
+
   def test_init
     new_test_release
+    new_test_release_svn
   end
 
   def test_get_archive_cleanup
