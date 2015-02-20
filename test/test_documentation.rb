@@ -48,7 +48,7 @@ class TestDocumentation < Testme
   end
 
   def test_get_doc
-    # en_US & de
+    # en & de
     d = create_doc
     d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
     FileUtils.rm_rf(@dir)
@@ -56,12 +56,12 @@ class TestDocumentation < Testme
     d.get(@dir)
     assert(File.exist?("#{@dir}/CMakeLists.txt"))
     assert(File.exist?("#{@dir}/doc/CMakeLists.txt"))
-    assert(File.exist?("#{@dir}/doc/en_US/index.docbook"))
-    assert(File.exist?("#{@dir}/doc/en_US/CMakeLists.txt"))
+    assert(File.exist?("#{@dir}/doc/en/index.docbook"))
+    assert(File.exist?("#{@dir}/doc/en/CMakeLists.txt"))
     assert(File.exist?("#{@dir}/doc/de/index.docbook"))
     assert(File.exist?("#{@dir}/doc/de/CMakeLists.txt"))
 
-    # en_US only (everything works if only doc/ is present in git but not
+    # en only (everything works if only doc/ is present in git but not
     # translated)
     d = create_doc_without_translation
     d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
@@ -70,8 +70,8 @@ class TestDocumentation < Testme
     d.get(@dir)
     assert(File.exist?("#{@dir}/CMakeLists.txt"))
     assert(File.exist?("#{@dir}/doc/CMakeLists.txt"))
-    assert(File.exist?("#{@dir}/doc/en_US/index.docbook"))
-    assert(File.exist?("#{@dir}/doc/en_US/CMakeLists.txt"))
+    assert(File.exist?("#{@dir}/doc/en/index.docbook"))
+    assert(File.exist?("#{@dir}/doc/en/CMakeLists.txt"))
     assert(!File.exist?("#{@dir}/doc/de/index.docbook"))
     assert(!File.exist?("#{@dir}/doc/de/CMakeLists.txt"))
   end
@@ -89,21 +89,21 @@ class TestDocumentation < Testme
     # recursively through 2->2.1->2.1.1 at all.
     expected_files = %w(
       CMakeLists.txt
-      en_US
-      en_US/CMakeLists.txt
-      en_US/doc-valid2
-      en_US/doc-valid2/CMakeLists.txt
-      en_US/doc-valid2/index.docbook
-      en_US/doc-valid2/doc-valid2.1
-      en_US/doc-valid2/doc-valid2.1/CMakeLists.txt
-      en_US/doc-valid2/doc-valid2.1/index.docbook
-      en_US/doc-valid2/doc-valid2.1/doc-valid2.1.1
-      en_US/doc-valid2/doc-valid2.1/doc-valid2.1.1/CMakeLists.txt
-      en_US/doc-valid2/doc-valid2.1/doc-valid2.1.1/index.docbook
-      en_US/doc-invalid1
-      en_US/doc-valid1
-      en_US/doc-valid1/CMakeLists.txt
-      en_US/doc-valid1/index.docbook
+      en
+      en/CMakeLists.txt
+      en/doc-valid2
+      en/doc-valid2/CMakeLists.txt
+      en/doc-valid2/index.docbook
+      en/doc-valid2/doc-valid2.1
+      en/doc-valid2/doc-valid2.1/CMakeLists.txt
+      en/doc-valid2/doc-valid2.1/index.docbook
+      en/doc-valid2/doc-valid2.1/doc-valid2.1.1
+      en/doc-valid2/doc-valid2.1/doc-valid2.1.1/CMakeLists.txt
+      en/doc-valid2/doc-valid2.1/doc-valid2.1.1/index.docbook
+      en/doc-invalid1
+      en/doc-valid1
+      en/doc-valid1/CMakeLists.txt
+      en/doc-valid1/index.docbook
       de
       de/CMakeLists.txt
       de/doc-valid2

@@ -43,13 +43,13 @@ class DocumentationL10n < TranslationUnit
 
     log_info "Downloading documentations for #{srcdir}"
 
-    unless get_en_us('en_US')
-      log_warn 'There is no en_US documentation. Aborting :('
+    unless get_en('en')
+      log_warn 'There is no en documentation. Aborting :('
       return
     end
-    docs << 'en_US'
+    docs << 'en'
 
-    queue = languages_queue(%w(en_US))
+    queue = languages_queue(%w(en))
     threads = []
     THREAD_COUNT.times do
       threads << Thread.new do
@@ -84,19 +84,19 @@ class DocumentationL10n < TranslationUnit
     # FIXME: this could be put in the class instance assuming we never want to
     #        have different projects in the same ruby instance
     return @doc_dirs if defined? @doc_dirs
-    @doc_dirs = Dir.glob("#{@docdir}/en_US/*").collect do |f|
+    @doc_dirs = Dir.glob("#{@docdir}/en/*").collect do |f|
       next nil unless File.directory?(f)
       File.basename(f)
     end
     @doc_dirs = @doc_dirs.compact
   end
 
-  def get_en_us(language)
+  def get_en(language)
     # FIXME: code dup from regular get
     destdir = "#{@docdir}/#{language}"
 
     # On git a layout doc/{file,file,file} may appear, in this case we move
-    # stuff to en_US.
+    # stuff to en.
     # A more complicated case would be doc/{dir,dir}/{file,file} which can
     # happen for multisource repos such as plasma-workspace.
     unless Dir.glob("#{@docdir}/**/index.docbook").empty? ||

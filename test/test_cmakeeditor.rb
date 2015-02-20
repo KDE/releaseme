@@ -60,7 +60,7 @@ class TestCMakeEditor < Testme
   def test_create_handbook_complex
     origin_dir = "#{@datadir}/cmakeeditor/#{__method__}"
     FileUtils.cp_r(Dir.glob("#{origin_dir}/*"), '.')
-    %w(en_US de fr).each do |lang|
+    %w(en de fr).each do |lang|
       CMakeEditor.create_language_specific_doc_lists!("#{Dir.pwd}/#{lang}", lang, 'yolo')
     end
     # FIXME: put in testme as assert_files_exist
@@ -71,19 +71,19 @@ class TestCMakeEditor < Testme
       fr/doc2
       fr/doc2/CMakeLists.txt
       fr/doc2/index.docbook
-      en_US
-      en_US/CMakeLists.txt
-      en_US/doc1
-      en_US/doc1/CMakeLists.txt
-      en_US/doc1/index.docbook
-      en_US/doc2
-      en_US/doc2/CMakeLists.txt
-      en_US/doc2/index.docbook
-      en_US/doc3
-      en_US/doc3/CMakeLists.txt
-      en_US/doc3/doc3.1
-      en_US/doc3/doc3.1/CMakeLists.txt
-      en_US/doc3/doc3.1/index.docbook
+      en
+      en/CMakeLists.txt
+      en/doc1
+      en/doc1/CMakeLists.txt
+      en/doc1/index.docbook
+      en/doc2
+      en/doc2/CMakeLists.txt
+      en/doc2/index.docbook
+      en/doc3
+      en/doc3/CMakeLists.txt
+      en/doc3/doc3.1
+      en/doc3/doc3.1/CMakeLists.txt
+      en/doc3/doc3.1/index.docbook
       de
       de/CMakeLists.txt
       de/doc1
@@ -104,12 +104,12 @@ class TestCMakeEditor < Testme
     assert(missing_files.empty?, "missing file(S): #{missing_files}")
     assert(present_files.empty?, "unexpected file(s): #{present_files}")
     assert_equal_valid_meta_cmakelists('.')
-    assert_equal(File.read('en_US/CMakeLists.txt'),
+    assert_equal(File.read('en/CMakeLists.txt'),
                  File.read('fr/CMakeLists.txt'))
     assert_valid_kdoctools('fr/doc2/CMakeLists.txt')
-    assert_valid_kdoctools('en_US/doc1/CMakeLists.txt')
-    assert_valid_kdoctools('en_US/doc2/CMakeLists.txt')
-    assert_equal(File.read('en_US/CMakeLists.txt'),
+    assert_valid_kdoctools('en/doc1/CMakeLists.txt')
+    assert_valid_kdoctools('en/doc2/CMakeLists.txt')
+    assert_equal(File.read('en/CMakeLists.txt'),
                  File.read('de/CMakeLists.txt'))
     assert_valid_kdoctools('de/doc1/CMakeLists.txt')
   end

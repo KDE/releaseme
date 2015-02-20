@@ -51,24 +51,24 @@ kdoctools_create_handbook(index.docbook
   end
 
   # Creates the CMakeLists.txt for doc/$LANG/*
-  # FIXME: don't overwrite en_US' CMakeLists.txt for a given subdir
+  # FIXME: don't overwrite en' CMakeLists.txt for a given subdir
   def create_language_specific_doc_lists!(dir, language, software_name)
     if File.exist?("#{dir}/index.docbook")
-      # When there is an index.docbook we mustn't copy the en_US version as
+      # When there is an index.docbook we mustn't copy the en version as
       # we have to write our own CMakeLists in order to have things installed
       # in the correct language directory! Also see kdoctools_create_handbook
       # arguments.
       write_handbook(dir, language, software_name)
     elsif !Dir.glob("#{dir}/*").select { |f| File.directory?(f) }.empty?
-      # -- Recyle en_US' CMakeLists --
-      enusdir = "#{dir}/../en_US/"
+      # -- Recyle en' CMakeLists --
+      enusdir = "#{dir}/../en/"
       enuscmake = "#{enusdir}/CMakeLists.txt"
       if File.exist?(enuscmake)
         # FIXME: naughty
-        FileUtils.cp(enuscmake, dir) unless File.basename(dir) == 'en_US'
+        FileUtils.cp(enuscmake, dir) unless File.basename(dir) == 'en'
         Dir.glob("#{dir}/**/**").each do |current_dir|
           next unless File.directory?(current_dir)
-          next if File.basename(dir) == 'en_US'
+          next if File.basename(dir) == 'en'
           dir_pathname = Pathname.new(dir)
           current_dir_pathname = Pathname.new(current_dir)
           relative_path = current_dir_pathname.relative_path_from(dir_pathname)
@@ -100,7 +100,7 @@ kdoctools_create_handbook(index.docbook
       fail 'There is no index.docbook but also no directories'
     end
 
-    # en_US may already have a super cmakelists, do not twiddle with it!
+    # en may already have a super cmakelists, do not twiddle with it!
     log_debug "Writing main cmakelists #{dir}/../CMakeLists.txt"
     # FIXME: not thread safe
     File.open("#{dir}/../CMakeLists.txt", 'a') do |f|
