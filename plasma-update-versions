@@ -3,6 +3,7 @@
 # Author Jonathan Riddell 2014, this file is in the public domain and has no copyright restrictions
 
 VERSION=5.2.1
+BALOO-VERSION=5.6.1
 BRANCH=Plasma/5.2
 
 rm -f kde_projects.xml
@@ -17,7 +18,11 @@ for project in $WORKSPACE; do
  cd ${project}; git checkout ${BRANCH}; cd ..;
  cd ${project};
  pwd;
- sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
+ if [ $project = "baloo" ] || [ $project = "kfilemetadata" ]; then
+   sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${BALOO_VERSION}\"," CMakeLists.txt;
+ else
+   sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
+ fi
  git diff;
  git commit -a -m "Update version number for ${VERSION}";
  git push;

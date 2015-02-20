@@ -4,9 +4,9 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.2.0
+VERSION=5.2.1
 SHORT_VERSION=5.2
-BALOO_VERSION=5.6.0
+BALOO_VERSION=5.6.1
 ORIGIN=stable  # set to trunk or stable
 
 svn --version > /dev/null || { echo "Install subversion"; exit 1; }
@@ -40,7 +40,7 @@ cat release_data >> $VERSION-release-data
 
 #plasma-workspace-wallpapers is in svn, special case it here
 rm -rf plasma-workspace-wallpapers-$VERSION
-svn export svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${SHORT_VERSION}/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $3}' | sed s,\\.,, > $VERSION-release-data-plasma-workspace-wallpapers
+svn export svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${SHORT_VERSION}/plasma-workspace-wallpapers/ | tail -n 1 | awk '{print $3}#' | sed s,\\.,, > $VERSION-release-data-plasma-workspace-wallpapers
 perl -i -pe 'chomp if eof' $VERSION-release-data-plasma-workspace-wallpapers
 mv plasma-workspace-wallpapers/ plasma-workspace-wallpapers-$VERSION
 tar Jcf plasma-workspace-wallpapers-${VERSION}.tar.xz plasma-workspace-wallpapers-${VERSION}
@@ -52,5 +52,8 @@ echo -n ";" >> $VERSION-release-data
 echo -n "plasma-workspace-wallpapers-${VERSION}.tar.xz;" >> $VERSION-release-data
 sha256sum plasma-workspace-wallpapers-${VERSION}.tar.xz | awk '{print $1}' >> $VERSION-release-data
 rm $VERSION-release-data-plasma-workspace-wallpapers
+
+../tarme.rb --origin stable --version ${VERSION} --from-config plasma-workspace-wallpapers
+cat release_data >> $VERSION-release-data
 
 ../create_sources_inc $VERSION > source-plasma-${VERSION}.inc
