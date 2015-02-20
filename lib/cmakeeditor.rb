@@ -90,8 +90,11 @@ kdoctools_create_handbook(index.docbook
 
           subdir = File.join(relative_path)
           subdir.chomp!(File::SEPARATOR)
-          # FIXME: no test backing
-          write_handbook(dirname, language, subdir)
+          # FIXME: really naughty workaround to avoid overwriting existing lists
+          unless language == 'en' && File.exist?("#{dirname}/CMakeLists.txt")
+            # FIXME: no test backing
+            write_handbook(dirname, language, subdir)
+          end
         end
       else
         fail 'there is no cmakelists in enUS and also no index.docbook'
