@@ -93,7 +93,7 @@ class TestProjectFile < Testme
     stub.to_return do |_|
       {
         body: File.read(file),
-        headers: { 'etag': etag }
+        headers: { 'etag' => etag }
       }
     end
     ProjectsFile.load!
