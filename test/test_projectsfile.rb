@@ -18,23 +18,39 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require "fileutils"
+require 'fileutils'
 require 'rexml/document'
+require 'webmock/test_unit'
 
-require_relative "lib/testme"
+require_relative 'lib/testme'
 
-require_relative "../lib/projectsfile"
+require_relative '../lib/projectsfile'
 
 class TestProjectFile < Testme
+  def setup_caching
+    # Moving caching into tmp scope
+    @cache_dir = "#{Dir.pwd}/.cache/releaseme"
+    @cache_file = "#{@cache_dir}/kde_projects.xml"
+    @cache_file_etag = "#{@cache_dir}/kde_projects.etag"
+    ProjectsFile.instance_variable_set(:@cache_dir, @cache_dir)
+    ProjectsFile.instance_variable_set(:@cache_file, @cache_file)
+    ProjectsFile.instance_variable_set(:@cache_file_etag, @cache_file_etag)
+    FileUtils.mkpath(@cache_dir)
+  end
+
   def setup
+    WebMock.disable_net_connect!
     # Project uses ProjectsFile to read data, so we need to make sure it
     # uses our dummy file.
     ProjectsFile.reset!
     ProjectsFile.xml_path = data('kde_projects_advanced.xml')
+
+    setup_caching
   end
 
   def teardown
     ProjectsFile.reset!
+    WebMock.allow_net_connect!
   end
 
   def test_set_xml
@@ -58,6 +74,69 @@ class TestProjectFile < Testme
     ProjectsFile.load!
     assert_not_nil(ProjectsFile.xml_data)
     assert_not_nil(ProjectsFile.xml_doc)
+  end
+
+  def test_load_http
+    # Revert the xml twiddling from setup and only divert the cache.
+    # We need the canonical xml url for this test.
+    file = ProjectsFile.xml_path
+    ProjectsFile.reset!
+    setup_caching
+
+    etag = '123098'
+
+    assert(!File.exist?(@cache_file))
+    assert(!File.exist?(@cache_file_etag))
+
+    # Request against stub, we are expecting our cache files as a result.
+    stub = stub_request(:any, 'projects.kde.org/kde_projects.xml')
+    stub.to_return do |_|
+      {
+        body: File.read(file),
+        headers: { 'etag': etag }
+      }
+    end
+    ProjectsFile.load!
+    assert_not_nil(ProjectsFile.xml_data)
+    assert_not_nil(ProjectsFile.xml_doc)
+    assert(File.exist?(@cache_file), 'cache file missing')
+    assert(File.exist?(@cache_file_etag), 'etag cache missing')
+    remove_request_stub(stub)
+
+    # Now that we have a cache, try to use the cache.
+    prev_mtime = File.mtime(@cache_file)
+    stub = stub_request(:any, 'projects.kde.org/kde_projects.xml')
+    stub.to_return do |request|
+      assert(request.headers.key?('If-None-Match'))
+      { status: [304, 'Not Modified'] }
+    end
+    ProjectsFile.load!
+    assert_not_nil(ProjectsFile.xml_data)
+    assert_not_nil(ProjectsFile.xml_doc)
+    assert(File.exist?(@cache_file), 'cache file missing')
+    assert(File.exist?(@cache_file_etag), 'etag cache missing')
+    remove_request_stub(stub)
+    assert_equal(prev_mtime, File.mtime(@cache_file),
+                 'Cache file was modified but should not have been.')
+
+    # And again, but this time we want the cache to update.
+    prev_mtime = File.mtime(@cache_file)
+    stub = stub_request(:any, 'projects.kde.org/kde_projects.xml')
+    stub.to_return do |request|
+      assert(request.headers.key?('If-None-Match'))
+      {
+        body: File.read(file),
+        headers: { 'etag': etag }
+      }
+    end
+    ProjectsFile.load!
+    assert_not_nil(ProjectsFile.xml_data)
+    assert_not_nil(ProjectsFile.xml_doc)
+    assert(File.exist?(@cache_file), 'cache file missing')
+    assert(File.exist?(@cache_file_etag), 'etag cache missing')
+    remove_request_stub(stub)
+    assert_not_equal(prev_mtime, File.mtime(@cache_file),
+                     'Cache file should have been modified but was not.')
   end
 
   def test_parse

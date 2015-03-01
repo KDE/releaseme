@@ -33,7 +33,7 @@ module ProjectsFile
     @xml_path = 'http://projects.kde.org/kde_projects.xml'
     @xml_data = nil
     @xml_doc = nil
-    @cache_dir = "#{ENV['HOME']}/.cache/releaseme"
+    @cache_dir = "#{Dir.home}/.cache/releaseme"
     @cache_file = "#{@cache_dir}/kde_projects.xml"
     @cache_file_etag = "#{@cache_dir}/kde_projects.etag"
   end
