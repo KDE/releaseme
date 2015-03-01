@@ -5,6 +5,13 @@ rescue LoadError
   warn 'codeclimate reporter not available, not sending reports to server'
 end
 
+begin
+  require 'coveralls'
+  Coveralls.wear!
+rescue LoadError
+  warn 'coveralls reporter not available, not sending reports to server'
+end
+
 require 'simplecov'
 SimpleCov.start
 
