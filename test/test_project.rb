@@ -154,6 +154,14 @@ class TestProjectConfig < Testme
       Project.from_config(name)
     end
   end
+
+  def test_invalid_vcs_type
+    Project.class_variable_set(:@@configdir, data('projects/'))
+    name = 'invalid-vcs-type'
+    assert_raise RuntimeError do
+      Project.from_config(name)
+    end
+  end
 end
 
 class TestProject < Testme
