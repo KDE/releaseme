@@ -130,4 +130,34 @@ class TestDocumentation < Testme
 
     # FIXME: check contents?
   end
+
+  def test_divergent_lineup garbage
+    d = DocumentationL10n.new(DocumentationL10n::TRUNK, 'powerdevil', 'kde-workspace')
+    d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('test_divergent_lineup'), @dir)
+    d.get(@dir)
+    expected_files = %w(
+      CMakeLists.txt
+      en
+      en/CMakeLists.txt
+      en/kcm
+      en/kcm/CMakeLists.txt
+      en/kcm/index.docbook
+      de/CMakeLists.txt
+      de/kcontrol
+      de/kcontrol/CMakeLists.txt
+      de/kcontrol/powerdevil
+      de/kcontrol/powerdevil/CMakeLists.txt
+      de/kcontrol/powerdevil/index.docbook
+    )
+    present_files = Dir.chdir("#{@dir}/doc/") { Dir.glob('**/**') }
+    missing_files = []
+    expected_files.each do |f|
+      missing_files << f unless present_files.include?(f)
+      present_files.delete(f)
+    end
+    assert(missing_files.empty?, "missing file(S): #{missing_files}")
+    assert(present_files.empty?, "unexpected file(s): #{present_files}")
+  end
 end
