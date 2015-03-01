@@ -13,8 +13,9 @@ end
 
 group :test do
   gem 'test-unit'
-  gem 'simplecov', require: nil
-  gem 'codeclimate-test-reporter', require: nil
+  gem 'simplecov', require: false
+  gem 'coveralls', require: false
+  gem 'codeclimate-test-reporter', require: false
 end
 
 group :quality do
