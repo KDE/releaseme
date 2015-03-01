@@ -125,7 +125,7 @@ class TestDocumentation < Testme
       missing_files << f unless present_files.include?(f)
       present_files.delete(f)
     end
-    assert(missing_files.empty?, "missing file(S): #{missing_files}")
+    assert(missing_files.empty?, "missing file(s): #{missing_files}")
     assert(present_files.empty?, "unexpected file(s): #{present_files}")
 
     # FIXME: check contents?
