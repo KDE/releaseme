@@ -37,3 +37,5 @@ cond_require 'rubocop/rake_task' do
   end
   task :quality => :rubocop
 end
+
+task :default => :test
