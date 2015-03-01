@@ -114,7 +114,8 @@ projects.each do | project |
       log = Log.new
       log.parse
       html = LogHtmlFormatter.format(log)
-      File.write(File.join(output_dir, "#{project.project.identifier}.html", d)
+      File.write(File.join(output_dir, "#{project.project.identifier}.html"),
+                 html)
     end
   end
 end
