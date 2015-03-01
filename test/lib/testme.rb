@@ -12,10 +12,12 @@ class Testme < Test::Unit::TestCase
     @tmpdir = Dir.mktmpdir("testme-#{self.class}")
     @testdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}"
     @datadir = "#{@testdir}/data"
+    @pwdir = Dir.pwd
     Dir.chdir(@tmpdir)
   end
 
   def priority_teardown
+    Dir.chdir(@pwdir)
     FileUtils.rm_rf(@tmpdir)
   end
 
