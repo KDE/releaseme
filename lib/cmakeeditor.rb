@@ -144,7 +144,7 @@ kdoctools_create_handbook(index.docbook
       data = File.read(file)
       macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory(#{subdir})\n"
       if data.include?("##{subdir.upcase}_SUBDIR")
-        data = data.sub("##{subdir.upcase}_SUBDIR",macro)
+        data = data.sub("##{subdir.upcase}_SUBDIR", macro)
       elsif (data =~ /^\s*(add_subdirectory|ecm_optional_add_subdirectory)\s*\(\s*#{subdir}\s*\).*$/).nil?
         # TODO: needs test case
         # Mighty fancy regex looking for existing add_subdir.
