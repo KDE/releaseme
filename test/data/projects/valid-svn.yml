@@ -1,7 +1,7 @@
 identifier: yakuake
 vcs:
     type: Svn
-    repository: svn://anonsvn.kde.org/home/kde/plasma/plasma-workspace-wallpapers/
+    repository: svn://anonsvn.kde.org/home
 i18n_trunk: master
 i18n_stable: notmaster
 i18n_path: 'extragear-utils'

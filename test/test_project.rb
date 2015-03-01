@@ -121,16 +121,16 @@ end
 
 class TestProjectConfig < Testme
   def test_invalid_name
-    name = "kittens"
+    name = 'kittens'
     assert_raise do
-      project = Project::from_config(name)
+      Project.from_config(name)
     end
   end
 
   def test_construction_git
-    Project::class_variable_set(:@@configdir, data("projects/"))
+    Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'valid'
-    pr = Project::from_config(name)
+    pr = Project.from_config(name)
     assert_not_nil(pr)
     assert_equal('yakuake', pr.identifier)
     assert_equal('git://anongit.kde.org/yakuake', pr.vcs.repository)
@@ -140,18 +140,18 @@ class TestProjectConfig < Testme
   end
 
   def test_valid_svn
-    Project::class_variable_set(:@@configdir, data("projects/"))
+    Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'valid-svn'
-    pr = Project::from_config(name)
+    pr = Project.from_config(name)
     assert_not_nil(pr)
-    assert_equal('svn://anonsvn.kde.org/home/kde/plasma/plasma-workspace-wallpapers/', pr.vcs.repository)
+    assert_equal('svn://anonsvn.kde.org/home', pr.vcs.repository)
   end
 
   def test_invalid_vcs
-    Project::class_variable_set(:@@configdir, data('projects/'))
+    Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'invalid-vcs'
     assert_raise NoMethodError do
-      pr = Project::from_config(name)
+      Project.from_config(name)
     end
   end
 end
