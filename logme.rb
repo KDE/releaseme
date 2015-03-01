@@ -59,8 +59,9 @@ class Log
   attr_reader :entries
 
   # FIXME: shit name
-  def parse
-    lines = `git log v5.2.0 --oneline --no-merges`
+  def parse(rev)
+    ancestor = `git describe`.strip
+    lines = `git log #{ancestor}#{rev} --oneline --no-merges`
     lines = lines.split($/).collect(&:strip)
     @entries = []
     lines.each do |line|
@@ -111,8 +112,7 @@ projects.each do | project |
     source.cleanup
     source.get(project.project.vcs, false)
     Dir.chdir(tmpdir) do
-      log = Log.new
-      log.parse
+      log = Log.new.parse(project.git_rev)
       html = LogHtmlFormatter.format(log)
       File.write(File.join(output_dir, "#{project.project.identifier}.html"),
                  html)
