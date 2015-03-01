@@ -5,8 +5,10 @@
 [![Inline docs](http://inch-ci.org/github/apachelogger/releaseme.svg?branch=rewrite)](http://inch-ci.org/github/apachelogger/releaseme/branch/rewrite)
 
 > git clone kde:releaseme
-  cd releaseme
-  ./tarme.rb --version 1.0 --origin trunk libdebconf-kde
+
+> cd releaseme
+
+> ./tarme.rb --version 1.0 --origin trunk libdebconf-kde
 
 ## KDELibs 4.x
 
