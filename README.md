@@ -4,9 +4,9 @@
 [![PullReview stats](https://www.pullreview.com/github/apachelogger/releaseme/badges/rewrite.svg?)](https://www.pullreview.com/github/apachelogger/releaseme/reviews/rewrite)
 [![Inline docs](http://inch-ci.org/github/apachelogger/releaseme.svg?branch=rewrite)](http://inch-ci.org/github/apachelogger/releaseme/branch/rewrite)
 
-git clone kde:releaseme
-cd releaseme
-./tarme.rb --version 1.0 --origin trunk libdebconf-kde
+> git clone kde:releaseme
+  cd releaseme
+  ./tarme.rb --version 1.0 --origin trunk libdebconf-kde
 
 ## KDELibs 4.x
 
