@@ -126,7 +126,7 @@ class TestProjectFile < Testme
       assert(request.headers.key?('If-None-Match'))
       {
         body: File.read(file),
-        headers: { 'etag': etag }
+        headers: { 'etag' => etag }
       }
     end
     ProjectsFile.load!
