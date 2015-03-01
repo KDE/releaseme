@@ -1,0 +1,3 @@
+include(ECMOptionalAddSubdirectory)
+ecm_optional_add_subdirectory(doc-valid1)
+ecm_optional_add_subdirectory(doc-valid2)
