@@ -39,13 +39,14 @@ atomic control over the workflow (when to tag, when to branch etc.)
 The corner stone script to create a tarball is tarme.rb.
 
 Tarme requires three arguments
-  - **origin**: either trunk or stable referring to the i18n branch configured on
-    projects.kde.org
-  - **version**: the version you wish to release
-  - The name of the project you want to release. This technically can be the
-    full path as seen on projects.kde.org (e.g. kde/workspace/ksysguard) but
-    does not need to be in most cases as tarme will try to figure this out for
-    itself.
+
+- **origin**: either trunk or stable referring to the i18n branch configured on
+  projects.kde.org
+- **version**: the version you wish to release
+- The name of the project you want to release. This technically can be the
+  full path as seen on projects.kde.org (e.g. kde/workspace/ksysguard) but
+  does not need to be in most cases as tarme will try to figure this out for
+  itself.
 
 Tarme creates a tarball in the present working directory as well as release meta
 data file. Latter will in turn be used by other scripts to operate on the same
