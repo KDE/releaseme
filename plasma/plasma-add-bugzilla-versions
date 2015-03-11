@@ -3,7 +3,7 @@
 # maybe I need to re-learn perl but this seems easier
 # also I e-mailed python-bugzilla list but I'm not hopeful it's possible in python
 
-products="systemsettings Powerdevil plasma-nm Oxygen frameworks-modemmanager-qt ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter kde-cli-tools Breeze Baloo plasmashell kdeplasma-addons Touchpad-KCM ksshaskpass solid user-manager krunner muon kde-gtk-config kded-appmenu kstart ksplash Plasma%20Workspace%20Wallpapers policykit-kde-agent-1 kwrited drkonqi klipper knetattach kfontview"
+products="systemsettings Powerdevil plasma-nm Oxygen frameworks-modemmanager-qt ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter kde-cli-tools Breeze Baloo plasmashell kdeplasma-addons Touchpad-KCM ksshaskpass bluedevil user-manager krunner muon kde-gtk-config kded-appmenu kstart ksplash Plasma%20Workspace%20Wallpapers policykit-kde-agent-1 kwrited drkonqi klipper knetattach kfontview"
 
 for asdf in $products; do 
  firefox "https://bugs.kde.org/editversions.cgi?action=add&product=${asdf}";
