@@ -1,28 +1,27 @@
+#!/bin/bash
+
 INFOCHECKOUT="/home/jr/src/www/info"
 ANNOUNCECHECKOUT="/home/jr/src/www/announcements"
-VERSION=5.1.95
-OLDVERSION=5.1.2
-MINORVERSION=5.1
-LANG=C
-LC_ALL=C
+
+. VERSIONS.inc
+
 DATE=`LC_ALL=C date "+%A, %d %B %Y"`
-MONTH=`date "+%B"`
+MONTH=`LC_ALL=C date "+%B"`
 
-
-cp ./create_sources_inc ${VERSION}
-cd ${VERSION}; ./create_sources_inc > ${INFOCHECKOUT}/source-plasma-${VERSION}.inc; cd ..
+cp ${VERSION}/source-plasma-${VERSION}.inc ${INFOCHECKOUT}/source-plasma-${VERSION}.inc
 cp ${INFOCHECKOUT}/plasma-bugfix-template ${INFOCHECKOUT}/plasma-${VERSION}.php
-sed s,MINORVERSION,${MINORVERSION},g -i ${INFOCHECKOUT}/plasma-${VERSION}.php
+sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,VERSION,${VERSION}, -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 
 cp ${ANNOUNCECHECKOUT}/plasma-bugfix-template ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed s,MINORVERSION,${MINORVERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed s,OLD_VERSION,${OLD_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed s,VERSION,${VERSION}, -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s/DATE/${DATE}/" -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s,MONTH,${MONTH}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-cp ${OLDVERSION}-${VERSION}-changelog ${ANNOUNCECHECKOUT}/plasma-${OLDVERSION}-${VERSION}-changelog
+cp ${OLD_VERSION}-${VERSION}-changelog ${ANNOUNCECHECKOUT}/plasma-${OLD_VERSION}-${VERSION}-changelog
 
 echo "check files and run"
 echo "cd ${INFOCHECKOUT}; svn add plasma-${VERSION}.php source-plasma-${VERSION}.inc"
-echo "cd ${ANNOUNCECHECKOUT}; svn add plasma-${VERSION}.php plasma-${OLDVERSION}-${VERSION}-changelog"
+echo "cd ${ANNOUNCECHECKOUT}; svn add plasma-${VERSION}.php plasma-${OLD_VERSION}-${VERSION}-changelog"
 
