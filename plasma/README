@@ -8,10 +8,14 @@ Check for release critical bugs:
 Start off by making tars (from master for first beta or from branch for later versions)
 
 on tar day tar:
- run plasma-update-versions (ensure it is using the right branches)
- review plasma script: set VERSIONs, ORIGIN=trunk (for first beta) or stable (for later versions) in ./plasma
- run ./plasma script to make tars
- [tell sysadmins to] make tars available to packagers
+ update VERSIONS.inc
+ run ./plasma-update-versions (ensure it is using the right branches)
+ review plasma-tars script
+ run ./plasma-tars script to make tars
+ run ./plasma-upload
+ check tmp-tests output for important differences
+ run ./plasma-make-1-tar as needed for problems/late updates
+ [tell sysadmins to make tars available to packagers if you don't have permission]
  tell release-team@kde.org, plasma-devel@kde.org
 
 on tar day branch:

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Use this script to update 1 tar
+# ./plasma-make-1-tar plasma-workspace
+
+TAR=$1
+
+. VERSIONS.inc
+
+svn --version > /dev/null || { echo "Install subversion"; exit 1; }
+
+mkdir $VERSION
+cd $VERSION
+
+../../tarme.rb --origin ${ORIGIN} --version $VERSION ${TAR}
+sed s,${TAR}.*,`cat release_data`, ${VERSION}-release-data -i
+
+../create_sources_inc $VERSION > source-plasma-${VERSION}.inc
+
+echo now run ./plasma-upload
