@@ -16,7 +16,7 @@ sed s,OLD_VERSION,${OLD_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed s,VERSION,${VERSION}, -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s/DATE/${DATE}/" -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s,MONTH,${MONTH}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-cp ${OLD_VERSION}-${VERSION}-changelog ${ANNOUNCECHECKOUT}/plasma-${OLD_VERSION}-${VERSION}-changelog
+cp plasma-${OLD_VERSION}-${VERSION}-changelog ${ANNOUNCECHECKOUT}/plasma-${OLD_VERSION}-${VERSION}-changelog
 
 echo "check files and run"
 echo "cd ${INFOCHECKOUT}; svn add plasma-${VERSION}.php source-plasma-${VERSION}.inc"

@@ -7,11 +7,13 @@
 IFS_BAK=$IFS
 IFS=$'\n'
 
+FILE=plasma-${OLD_VERSION}-${VERSION}-changelog
+
 rm -f kde_projects.xml
 wget http://projects.kde.org/kde_projects.xml
 grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//' | sort > modules.git
 WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//' | sort`
-rm -rf ${OLD_VERSION}-${VERSION}-changelog
+rm -rf ${FILE}
 rm -rf tmp-changelog
 mkdir tmp-changelog
 cd tmp-changelog
@@ -24,8 +26,6 @@ for project in $WORKSPACE; do
  cd ..;
 done
 cd ..
-
-FILE=${OLD_VERSION}-${VERSION}-changelog
 
 ./create_log.py > ${FILE}
 
