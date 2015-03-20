@@ -57,5 +57,5 @@ on release day launch:
  post on twitter, g+, facebook, reddit (r/kde and r/linux)
 
 TODO
- plasma-changelog to extract FEATURE tags
- 
+ plasma-changelog to extract FEATURE/CHANGELOG tags
+ make changelog ordering more sane
