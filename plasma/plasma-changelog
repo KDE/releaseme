@@ -7,7 +7,7 @@
 IFS_BAK=$IFS
 IFS=$'\n'
 
-FILE=plasma-${OLD_VERSION}-${VERSION}-changelog
+FILE=plasma-${OLD_VERSION}-${VERSION}-changelog.php
 
 rm -f kde_projects.xml
 wget http://projects.kde.org/kde_projects.xml
@@ -27,7 +27,19 @@ for project in $WORKSPACE; do
 done
 cd ..
 
-./create_log.py > ${FILE}
+cat >${FILE} <<EOL
+<?php
+include_once ("functions.inc");
+\$translation_file = "www";
+\$page_title = i18n_noop("Plasma ${SHORT_VERSION} complete changelog");
+\$site_root = "../";
+\$release = 'plasma-${VERSION}';
+include "header.inc";
+?>
+<p><a href="plasma-${VERSION}.php">Plasma ${VERSION}</a> complete changelog</p>
+EOL
+
+./create_log.py >> ${FILE}
 
 sed "s,>kmenuedit,>KMenuEdit," ${FILE} -i
 sed "s,>user-manager,>User Manager," ${FILE} -i
@@ -57,5 +69,11 @@ sed "s,>kdecoration,>KDE Window Decoration Library," ${FILE} -i
 sed "s,>ksshaskpass,>KSSHAskPass," ${FILE} -i
 sed "s,>kdeplasma-addons,>Plasma Addons," ${FILE} -i
 sed "s,>kio-extras,>KIO Extras," ${FILE} -i
+
+cat >>${FILE} <<EOL
+<?php
+  include("footer.inc");
+?>
+EOL
 
 echo now edit manually  emacs ${FILE}
