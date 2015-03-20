@@ -9,7 +9,8 @@ IFS=$'\n'
 
 rm -f kde_projects.xml
 wget http://projects.kde.org/kde_projects.xml
-WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//'`
+grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//' | sort > modules.git
+WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//' | sort`
 rm -rf ${OLD_VERSION}-${VERSION}-changelog
 rm -rf tmp-changelog
 mkdir tmp-changelog
@@ -20,45 +21,41 @@ for project in $WORKSPACE; do
  cd ${project}; git checkout ${BRANCH}; cd ..;
  cd ${project};
  pwd;
- echo "<h3> $project </h3><ul>" >> ../../${OLD_VERSION}-${VERSION}-changelog
- changes=$(git log v${OLD_VERSION}.. --oneline | grep -v SVN_SILENT | grep -v "Update version number" | grep -vi merge | sed "s/^\w*\ *//")
- for line in $changes; do
-  echo "<li>${line}</li>" >> ../../${OLD_VERSION}-${VERSION}-changelog;
- done
- echo "</ul>" >> ../../${OLD_VERSION}-${VERSION}-changelog
  cd ..;
 done
-
 cd ..
 
 FILE=${OLD_VERSION}-${VERSION}-changelog
-sed s,kmenuedit,KMenuEdit, ${FILE} -i
-sed "s,user-manager,User Manager," ${FILE} -i
-sed s,baloo,Baloo, ${FILE} -i
-sed "s,plasma-nm,Plasma Networkmanager (plasma-nm)," ${FILE} -i
-sed s,khelpcenter,KHelpCenter, ${FILE} -i
-sed s,kinfocenter,KInfoCenter, ${FILE} -i
-sed "s,khotkeys,KDE Hotkeys," ${FILE} -i
-sed s,breeze,Breeze, ${FILE} -i
-sed "s,sddm-kcm,SDDM KCM," ${FILE} -i
-sed s,oxygen,Oxygen, ${FILE} -i
-sed "s,plasma-desktop,Plasma Desktop," ${FILE} -i
-sed s,powerdevil,Powerdevil, ${FILE} -i
-sed s,kscreen,KScreen, ${FILE} -i
-sed s,libKScreen,LibKScreen, ${FILE} -i
-sed "s,systemsettings,System Settings," ${FILE} -i
-sed s,kwin,KWin, ${FILE} -i
-sed s,ksysguard,KSysGuard, ${FILE} -i
-sed s,muon,Muon, ${FILE} -i
-sed "s,kde-gtk-config,KDE GTK Config," ${FILE} -i
-sed s,bluedevil,Bluedevil, ${FILE} -i
-sed s,kwayland,KWayland, ${FILE} -i
-sed "s,plasma-workspace,Plasma Workspace," ${FILE} -i
-sed s,milou,Milou, ${FILE} -i
-sed "s,oxygen-fonts,Oxygen Fonts," ${FILE} -i
-sed "s,kdecoration,KDE Window Decoration Library," ${FILE} -i
-sed s,ksshaskpass,KSSHAskPass, ${FILE} -i
-sed "s,kdeplasma-addons,Plasma Addons," ${FILE} -i
-sed "s,kio-extras,KIO Extras," ${FILE} -i
+
+./create_log.py > ${FILE}
+
+sed "s,>kmenuedit,>KMenuEdit," ${FILE} -i
+sed "s,>user-manager,>User Manager," ${FILE} -i
+sed "s,>baloo,>Baloo," ${FILE} -i
+sed "s,>plasma-nm,>Plasma Networkmanager (plasma-nm)," ${FILE} -i
+sed "s,>khelpcenter,>KHelpCenter," ${FILE} -i
+sed "s,>kinfocenter,>KInfoCenter," ${FILE} -i
+sed "s,>khotkeys,>KDE Hotkeys," ${FILE} -i
+sed "s,>breeze,>Breeze," ${FILE} -i
+sed "s,>sddm-kcm,>SDDM KCM," ${FILE} -i
+sed "s,>oxygen,>Oxygen," ${FILE} -i
+sed "s,>plasma-desktop,>Plasma Desktop," ${FILE} -i
+sed "s,>powerdevil,>Powerdevil," ${FILE} -i
+sed "s,>kscreen,>KScreen," ${FILE} -i
+sed "s,>libKScreen,>LibKScreen," ${FILE} -i
+sed "s,>systemsettings,>System Settings," ${FILE} -i
+sed "s,>kwin,>KWin," ${FILE} -i
+sed "s,>ksysguard,>KSysGuard," ${FILE} -i
+sed "s,>muon,>Muon," ${FILE} -i
+sed "s,>kde-gtk-config,>KDE GTK Config," ${FILE} -i
+sed "s,>bluedevil,>Bluedevil," ${FILE} -i
+sed "s,>kwayland,>KWayland," ${FILE} -i
+sed "s,>plasma-workspace,>Plasma Workspace," ${FILE} -i
+sed "s,>milou,>Milou," ${FILE} -i
+sed "s,>oxygen-fonts,>Oxygen Fonts," ${FILE} -i
+sed "s,>kdecoration,>KDE Window Decoration Library," ${FILE} -i
+sed "s,>ksshaskpass,>KSSHAskPass," ${FILE} -i
+sed "s,>kdeplasma-addons,>Plasma Addons," ${FILE} -i
+sed "s,>kio-extras,>KIO Extras," ${FILE} -i
 
 echo now edit manually  emacs ${FILE}
