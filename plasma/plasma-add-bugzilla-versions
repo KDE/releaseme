@@ -1,10 +1,23 @@
-# open firefox tabs for each page to manually add a new version number to bugzill products
-# I can't find a way to script this
-# maybe I need to re-learn perl but this seems easier
-# also I e-mailed python-bugzilla list but I'm not hopeful it's possible in python
+# Jonathan Riddell 2015 may be copied under GNU GPL v2 or later
+# Update Buzgilla versions
+# There seems to be no API to do this
+# so here we use curl to get the page with the magic token then update the version
+
+# look in your web browser settings for these cookies and put in bugzilla-cookies.inc
+# Bugzilla_logincookie=QskELeoUxx
+# Bugzilla_login=12345
+
+. bugzilla-cookies.inc
+
+. VERSIONS.inc
 
 products="systemsettings Powerdevil plasma-nm Oxygen frameworks-modemmanager-qt ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter kde-cli-tools Breeze Baloo plasmashell kdeplasma-addons Touchpad-KCM ksshaskpass bluedevil user-manager krunner muon kde-gtk-config kded-appmenu kstart ksplash Plasma%20Workspace%20Wallpapers policykit-kde-agent-1 kwrited drkonqi klipper knetattach kfontview plasma-mediacenter"
 
-for asdf in $products; do 
- firefox "https://bugs.kde.org/editversions.cgi?action=add&product=${asdf}";
+for PRODUCT in $products; do 
+ TOKEN=`curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep token | sed "s,.*value=\",," | sed "s,\".,,"`
+ echo token is: $TOKEN
+ echo curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" --data "version=${VERSION}&action=new&product=${PRODUCT}&token=${TOKEN}" https://bugs.kde.org/editversions.cgi -o curlpushout.html
+ curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" --data "version=${VERSION}&action=new&product=${PRODUCT}&token=${TOKEN}" https://bugs.kde.org/editversions.cgi -o curlpushout.html
+ echo "=== DONE"
+
 done

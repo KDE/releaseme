@@ -38,7 +38,7 @@ on tar day prepare:
  ask devs for screenshots and list of features
  on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata 
  write a Dot story
- run plasma-add-bugzilla-versions to update bugzilla version numbers
+ run plasma-add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
  tell release-team@kde.org, plasma-devel@kde.org
 
 on release day tag pre-launch:

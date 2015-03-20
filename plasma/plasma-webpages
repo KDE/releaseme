@@ -1,8 +1,5 @@
 #!/bin/bash
 
-INFOCHECKOUT="/home/jr/src/www/info"
-ANNOUNCECHECKOUT="/home/jr/src/www/announcements"
-
 . VERSIONS.inc
 
 DATE=`LC_ALL=C date "+%A, %d %B %Y"`
