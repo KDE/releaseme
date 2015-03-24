@@ -49,6 +49,7 @@ on release day tag pre-launch:
 
 
 on release day launch:
+ remove non-release notice and update date in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
  www/announcements/index.php
  www/announcements/release_data.php
  www/index.php
