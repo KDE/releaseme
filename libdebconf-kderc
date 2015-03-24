@@ -1,8 +1,0 @@
-[main]
-customsrc=git@git.kde.org:libdebconf-kde
-doc=false
-l10n=true
-protocol=anonsvn
-branch=trunk
-gitbranch=master
-version=0.3

@@ -1,5 +1,0 @@
-[main]
-customsrc=git@git.kde.org:mangonel
-branch=trunk
-gitbranch=master
-protocol=svn+ssh

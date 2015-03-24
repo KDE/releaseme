@@ -1,8 +1,0 @@
-[main]
-customsrc=git://anongit.kde.org/kwebkitpart
-doc=false
-l10n=true
-protocol=anonsvn
-branch=stable
-gitbranch=1.3
-version=1.3.4

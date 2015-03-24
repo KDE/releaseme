@@ -1,8 +1,0 @@
-[main]
-customsrc=git@git.kde.org:kamoso
-doc=true
-l10n=true
-protocol=anonsvn
-branch=trunk
-gitbranch=master
-version=2.0.2+git20130122

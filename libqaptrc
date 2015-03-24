@@ -1,5 +1,0 @@
-[main]
-customsrc=kde:libqapt
-branch=trunk
-gitbranch=master
-protocol=svn+ssh

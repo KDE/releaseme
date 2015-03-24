@@ -1,5 +1,0 @@
-[main]
-customsrc=kde:about-distro
-branch=trunk
-gitbranch=master
-protocol=svn+ssh

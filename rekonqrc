@@ -1,9 +1,0 @@
-[main]
-customsrc=git://anongit.kde.org/rekonq
-doc=true
-l10n=true
-protocol=anonsvn
-branch=trunk
-gitbranch=master
-version=2.3.1
-barrier=75
