@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/apachelogger/releaseme.svg?branch=rewrite)](https://travis-ci.org/apachelogger/releaseme)
-[![Coverage Status](https://coveralls.io/repos/apachelogger/releaseme/badge.svg?branch=rewrite)](https://coveralls.io/r/apachelogger/releaseme?branch=rewrite)
+[![Build Status](https://travis-ci.org/apachelogger/releaseme.svg?branch=master)](https://travis-ci.org/apachelogger/releaseme)
+[![Coverage Status](https://coveralls.io/repos/apachelogger/releaseme/badge.svg?branch=master)](https://coveralls.io/r/apachelogger/releaseme?branch=master)
 [![Code Climate](https://codeclimate.com/github/apachelogger/releaseme/badges/gpa.svg)](https://codeclimate.com/github/apachelogger/releaseme)
-[![PullReview stats](https://www.pullreview.com/github/apachelogger/releaseme/badges/rewrite.svg?)](https://www.pullreview.com/github/apachelogger/releaseme/reviews/rewrite)
-[![Inline docs](http://inch-ci.org/github/apachelogger/releaseme.svg?branch=rewrite)](http://inch-ci.org/github/apachelogger/releaseme/branch/rewrite)
+[![PullReview stats](https://www.pullreview.com/github/apachelogger/releaseme/badges/master.svg?)](https://www.pullreview.com/github/apachelogger/releaseme/reviews/master)
+[![Inline docs](http://inch-ci.org/github/apachelogger/releaseme.svg?branch=master)](http://inch-ci.org/github/apachelogger/releaseme/branch/master)
 
 ```
 git clone kde:releaseme
