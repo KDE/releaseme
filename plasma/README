@@ -1,0 +1,57 @@
+
+Check for build failures:
+ http://build.kde.org/view/Plasma%205%20stable/
+ or for a new version, http://build.kde.org/view/Plasma%205%20master/
+
+Check for release critical bugs:
+ tagged release_blocker:
+  https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&keywords=release_blocker%2C%20&keywords_type=allwords&list_id=1182328&product=Touchpad-KCM&product=ksshaskpass&product=Baloo&product=Breeze&product=frameworks-modemmanager-qt&product=kde-cli-tools&product=kdeplasma-addons&product=khelpcenter&product=khotkeys&product=kinfocenter&product=kio-extras&product=kmenuedit&product=KScreen&product=ksysguard&product=kwayland&product=kwin&product=kwrited&product=muon&product=Oxygen&product=plasma-nm&product=plasmashell&product=systemsettings&product=Touchpad%20KCM&product=user-manager&query_format=advanced
+ also search for critial and VHI bugs
+
+Start off by making tars (from master for first beta or from branch for later versions)
+
+on tar day tar:
+ update VERSIONS.inc
+ run ./plasma-update-versions (ensure it is using the right branches)
+ review plasma-tars script
+ run ./plasma-tars script to make tars
+ run ./plasma-upload
+ check tmp-tests output for important differences
+ run ./plasma-update-1-tar as needed for problems/late updates
+ [tell sysadmins to make tars available to packagers if you don't have permission]
+ run ./plasma-upload if you do have permission
+
+on tar day branch:
+ on a new 5.x release make branches Plasma/5.x after making the tars:
+  run branchme
+  ensure translations are switched to correct branch in projects.kde.org and ping tosky or kde-doc-i18n list to branch messages and docmessages
+  run plasma-update-versions to set 5.x.90 in master
+
+ branch plasma-workspace-wallpapers:
+  export VERSION=5.2
+  svn mkdir svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${VERSION} -m
+  svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${VERSION}/plasma-workspace-wallpapers/ -m "branch for ${VERSION}"
+
+on tar day prepare:
+ run plasma-changelog (manually edit file after)
+ run plasma-webpages, tidy up and commit for  www/announcements/plasma-5.x.y.php  www/info/plasma-5.x.y.php
+ ask devs for screenshots and list of features
+ on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata 
+ write a Dot story
+ run plasma-add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
+ tell release-team@kde.org, plasma-devel@kde.org
+
+on release day tag pre-launch:
+ chmod 755 the directory on depot (or ask sysadmin if you don't have permission)
+ tag by copying 5.x.y-release-data to release_data and running tagme
+ tag plasma-workspace-wallpapers:
+  svn copy svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/5.1/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/5.1.2 -m "Tagging 5.1.2"
+
+
+on release day launch:
+ www/announcements/index.php
+ www/announcements/release_data.php
+ www/index.php
+ publish Dot story on front page
+ e-mail kde-announce@kde.org
+ post on twitter, g+, facebook, reddit (r/kde and r/linux)

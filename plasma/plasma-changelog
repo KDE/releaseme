@@ -1,0 +1,79 @@
+# Quick script to update version numbers in Plasma 5 modules
+# does a clone, replaces PROJECT_VERSION in CMakeLists.txt and pushes
+# Author Jonathan Riddell 2014, this file is in the public domain and has no copyright restrictions
+
+. VERSIONS.inc
+
+IFS_BAK=$IFS
+IFS=$'\n'
+
+FILE=plasma-${OLD_VERSION}-${VERSION}-changelog.php
+
+rm -f kde_projects.xml
+wget http://projects.kde.org/kde_projects.xml
+grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//' | sort > modules.git
+WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//' | sort`
+rm -rf ${FILE}
+rm -rf tmp-changelog
+mkdir tmp-changelog
+cd tmp-changelog
+for project in $WORKSPACE; do
+ echo ${project};
+ git clone kde:${project};
+ cd ${project}; git checkout ${BRANCH}; cd ..;
+ cd ${project};
+ pwd;
+ cd ..;
+done
+cd ..
+
+cat >${FILE} <<EOL
+<?php
+include_once ("functions.inc");
+\$translation_file = "www";
+\$page_title = i18n_noop("Plasma ${SHORT_VERSION} complete changelog");
+\$site_root = "../";
+\$release = 'plasma-${VERSION}';
+include "header.inc";
+?>
+<p><a href="plasma-${VERSION}.php">Plasma ${VERSION}</a> complete changelog</p>
+EOL
+
+./create_log.py >> ${FILE}
+
+sed "s,>kmenuedit,>KMenuEdit," ${FILE} -i
+sed "s,>user-manager,>User Manager," ${FILE} -i
+sed "s,>baloo,>Baloo," ${FILE} -i
+sed "s,>plasma-nm,>Plasma Networkmanager (plasma-nm)," ${FILE} -i
+sed "s,>khelpcenter,>KHelpCenter," ${FILE} -i
+sed "s,>kinfocenter,>KInfoCenter," ${FILE} -i
+sed "s,>khotkeys,>KDE Hotkeys," ${FILE} -i
+sed "s,>breeze,>Breeze," ${FILE} -i
+sed "s,>sddm-kcm,>SDDM KCM," ${FILE} -i
+sed "s,>oxygen,>Oxygen," ${FILE} -i
+sed "s,>plasma-desktop,>Plasma Desktop," ${FILE} -i
+sed "s,>powerdevil,>Powerdevil," ${FILE} -i
+sed "s,>kscreen,>KScreen," ${FILE} -i
+sed "s,>libKScreen,>LibKScreen," ${FILE} -i
+sed "s,>systemsettings,>System Settings," ${FILE} -i
+sed "s,>kwin,>KWin," ${FILE} -i
+sed "s,>ksysguard,>KSysGuard," ${FILE} -i
+sed "s,>muon,>Muon," ${FILE} -i
+sed "s,>kde-gtk-config,>KDE GTK Config," ${FILE} -i
+sed "s,>bluedevil,>Bluedevil," ${FILE} -i
+sed "s,>kwayland,>KWayland," ${FILE} -i
+sed "s,>plasma-workspace,>Plasma Workspace," ${FILE} -i
+sed "s,>milou,>Milou," ${FILE} -i
+sed "s,>oxygen-fonts,>Oxygen Fonts," ${FILE} -i
+sed "s,>kdecoration,>KDE Window Decoration Library," ${FILE} -i
+sed "s,>ksshaskpass,>KSSHAskPass," ${FILE} -i
+sed "s,>kdeplasma-addons,>Plasma Addons," ${FILE} -i
+sed "s,>kio-extras,>KIO Extras," ${FILE} -i
+
+cat >>${FILE} <<EOL
+<?php
+  include("footer.inc");
+?>
+EOL
+
+echo now edit manually  emacs ${FILE}

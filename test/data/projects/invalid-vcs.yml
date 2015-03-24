@@ -1,0 +1,7 @@
+identifier: yakuake
+vcs:
+    type: Git
+    __wee__: git://anongit.kde.org/yakuake
+i18n_trunk: master
+i18n_stable: notmaster
+i18n_path: 'extragear-utils'

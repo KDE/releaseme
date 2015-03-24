@@ -1,6 +1,5 @@
-# Generic ruby library for KDE extragear/playground releases
-#
-# Copyright (C) 2007-2009 Harald Sitter <apachelogger@ubuntu.com>
+#--
+# Copyright (C) 2007-2015 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -17,185 +16,78 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#++
 
-def fetch_source()
-    rm_rf SRC
-    for f in Dir.glob("#{SRC}*.tar.xz")
-        rm_rf f
+require_relative 'documentation'
+require_relative 'l10n'
+require_relative 'logable'
+require_relative 'source'
+require_relative 'xzarchive'
+
+# FIXME: with vcs construction outside the class scope there need to be tests
+#        that run a Release with all possible Vcs derivates!
+# FIXME: because so much stuff happens outside this class is really incredibly
+#        useless
+
+class Release
+  prepend Logable
+
+  # The vcs from which to get the source
+  attr_reader :project
+  # The origin to release from
+  attr_reader :origin
+  # The version to release
+  attr_reader :version
+  # The source object from which the release is done
+  attr_reader :source
+  # The archive object which will create the archive
+  attr_reader :archive_
+
+  # Init
+  # @param project [Project] the Project to release
+  # @param origin [Symbol] the origin to release from :trunk or :stable
+  # @param version [String] the versin to release as
+  def initialize(project, origin, version)
+    @project = project
+    @source = Source.new
+    @archive_ = XzArchive.new
+    @origin = origin
+    @version = version
+
+    # FIXME: this possibly should be logic inside Project itself?
+    if project.vcs.is_a? Git
+      project.vcs.branch = project.i18n_trunk if origin == :trunk
+      project.vcs.branch = project.i18n_stable if origin == :stable
     end
 
-    SRCVCS.getSrc(@repo,SRC)
-    exit_checker($?,"the whole freaking source tree")
+    source.target = "#{project.identifier}-#{version}"
+  end
 
-    create_changelog()
-end
+  # Get the source
+  # FIXME: l10n and documentation have no test backing
+  def get
+    log_info "Getting source #{project.vcs}"
+    source.cleanup
+    source.get(project.vcs)
 
-# Creates a changelog using svn2cl.
-# Gets invoked from fetchSource once the SVN checkout is finished.
-# Adds a header afterwards and commits the updated changelog.
-# Expects the constant CHANGELOG to be set and svn2cl to be in your $PATH.
-def create_changelog()
-# TODO: not initialized
-    return unless @changelog
+    # FIXME: one would think that perhaps l10n could be disabled entirely
+    log_info ' Getting translations...'
+    # FIXME: why not pass project itself? Oo
+    # FIXME: origin should be validated? technically optparse enforces proper values
+    l10n = L10n.new(origin, project.identifier, project.i18n_path)
+    l10n.get(source.target)
 
-    src_dir()
+    log_info ' Getting documentation...'
+    doc = DocumentationL10n.new(origin, project.identifier, project.i18n_path)
+    doc.get(source.target)
+  end
 
-    if File.exist?(@changelog)
-        puts "using given changelog file"
-        copy(@changelog, Dir.pwd)
-        return
-    end
-
-    if not %x[which svn2cl.sh] == ""
-        svn2cl = "svn2cl.sh"
-    elsif not %x[which svn2cl] == ""
-        svn2cl = "svn2cl"
-    else
-        puts "NO svn2cl in your $PATH, can't generate CHANGELOG!"
-        return
-    end
-
-    puts("running svn2cl...")
-    cl = %x[#{svn2cl} --stdout]
-
-    puts("generating new changelog...")
-    file = File.new(@changelog, File::RDWR)
-    str  = file.read()
-
-# TODO: .include isn't precise enough, we need to have a complete match of linestart-version-whitespace-isodate
-#     if str.include?(@version)
-#         puts "ChangeLog already lists #{@version}, aborting svn2cl update!"
-#         file.close()
-#         return
-#     end
-
-    file.rewind()
-    file.truncate( 0 )
-
-    lines   = cl.split("\n")
-    escape  = lines.index(str.split("\n")[2])
-    counter = 1
-
-    file << "#{@version} #{Time.now.utc.strftime("%Y-%m-%d")}\n"
-    file << "--------------------------------------------------------------------------------\n\n"
-    for line in lines
-        if counter < escape
-            file << line + "\n"
-            counter += 1
-        end
-    end
-    file << "\n"
-    file << str
-
-    file.close()
-
-    puts("committing changelog...")
-    %x[svn ci ChangeLog "Update changelog for #{@version}."]
-end
-private :create_changelog
-
-# Removes all .svn directories, creates a tar.xz and removes the source folder.
-# You probably want to run this command as one of the last actions, since for
-# example tagging heavily depends on the presence of the .svn directories.
-def create_tar(suffix=nil,keep=false)
-    base_dir()
-    puts("creating tarball...")
-    if suffix
-        folder = SRC + "-" + suffix
-        rm_rf(folder)
-        cp_r(SRC,folder)
-    else
-        folder = SRC
-    end
-    for dot_svn in Dir.glob("#{folder}/**/.svn")
-        FileUtils.rm_rf(dot_svn)
-    end
-    for dot_git in Dir.glob("#{folder}/**/.gitignore")
-        FileUtils.rm_rf(dot_git)
-    end
-    for dot_krazy in Dir.glob("#{folder}/**/.krazy")
-        FileUtils.rm_rf(dot_krazy)
-    end
-    FileUtils.rm_rf("#{folder}/.git")
-    FileUtils.rm_rf("#{folder}/messages.mo")
-    system("tar -cf #{folder}.tar #{folder}")
-    system("xz -9 #{folder}.tar")
-    puts("tarball created for #{folder}...")
-    create_checksums("#{folder}.tar.xz")
-    rm_rf(folder) unless keep
-end
-
-# Create and output checksums for the created tarball
-# * SHA256
-# * SHA1
-# * MD5
-def create_checksums(tar)
-    @checksums = {} if @checksums == nil
-
-    sha256sum = %x[sha256sum #{tar}]
-    puts("SHA256Sum: #{sha256sum.split(" ")[0]}")
-
-    sha1sum = %x[sha1sum #{tar}]
-    puts("SHA1Sum: #{sha1sum.split(" ")[0]}")
-
-    md5sum = %x[md5sum #{tar}]
-    puts("MD5Sum: #{md5sum.split(" ")[0]}")
-
-
-    @checksums[tar] = {
-        "SHA256Sum" => sha256sum,
-        "SHA1Sum" => sha1sum,
-        "MD5Sum" => md5sum,
-    }
-end
-
-def create_packager_notification()
-    filename = "#{NAME}-PackagerNotification-#{@version}.txt"
-    puts "Writing #{filename}..."
-
-    file = File.new(filename, File::CREAT | File::RDWR | File::TRUNC)
-
-    # checksum string composer
-    unless @checksums == nil
-        puts "Parsing checksums..."
-        sumstring = "Checksums\n#{sharper}"
-        @checksums.each_key{|key|
-            @checksums[key].each_pair{|key,value|
-                sumstring += "#{key}: #{value.chomp}\n"
-            }
-            sumstring += "\n"
-        }
-        file << sumstring + "\n"
-    end
-
-    # doc string composer
-    unless @docs == nil
-        puts "Parsing documentation..."
-        docstring = "Documentation (#{@docs.count})\n#{sharper}"
-        for doc in @docs
-            docstring += doc + " "
-        end
-        file << docstring + "\n\n"
-    end
-
-    # translation string composer
-    unless @l10n == nil
-        puts "Parsing localization..."
-        l10nstring = "Translations (#{@l10n.count})\n#{sharper}"
-        for l10n in @l10n
-            l10nstring += l10n + " "
-        end
-        file << l10nstring + "\n\n"
-    end
-
-    file.close
-    puts "...done"
-end
-
-# TODO
-def create_mail_announcement()
-end
-
-# TODO
-def create_changelog_html()
+  # FIXME: archive is an attr and a method, lovely
+  # Create the final archive file
+  def archive
+    log_info "Archiving source #{project.vcs}"
+    source.clean(project.vcs)
+    @archive_.directory = source.target
+    @archive_.create
+  end
 end

@@ -1,0 +1,38 @@
+<kdeprojects version='1'>
+  <component identifier='extragear'>
+    <path>extragear</path>
+    <module identifier='utils'>
+      <path>extragear/utils</path>
+      <project identifier='yakuake'>
+        <path>extragear/utils/yakuake</path>
+      </project>
+      <project identifier='krusader'>
+        <path>extragear/utils/krusader</path>
+      </project>
+      <project identifier='krecipes'>
+        <path>extragear/utils/krecipes</path>
+      </project>
+    </module>
+    <module identifier='network'>
+      <path>extragear/network</path>
+      <project identifier='telepathy'>
+        <path>extragear/network/telepathy</path>
+        <project identifier='ktp1'>
+          <path>extragear/network/telepathy/ktp1</path>
+        </project>
+        <project identifier='ktp2'>
+          <path>extragear/network/telepathy/ktp2</path>
+        </project>
+      </project>
+    </module>
+  </component>
+  <component identifier='frameworks'>
+    <path>frameworks</path>
+    <module identifier='networkmanager-qt'>
+      <path>frameworks/networkmanager-qt</path>
+    </module>
+  </component>
+  <component identifier='calligra'>
+    <path>calligra</path>
+  </component>
+</kdeprojects>

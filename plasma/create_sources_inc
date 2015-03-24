@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Remember to add a version
+version=$1
+
+process_folder()
+{
+    for i in $1/*.tar.xz; do 
+        filename=`basename $i`
+        echo '<tr valign="top">'
+        l=`echo $filename | sed -e "s#.tar.xz##"`
+        echo '   <td><a href="http://download.kde.org/stable/plasma/'$version'/'$filename'">'$l'</a></td>'
+        size=`stat -c "%s" $i`
+        size=`echo "$size / 1024" | bc`
+        if test "$size" -lt 1024; then
+            size="$size"kB
+        else
+            size=`echo "($size * 10) / 1024" | bc`
+            if test "$size" -lt 100; then
+                size=`echo "$size"MB | sed -e "s#\(.\)MB#.\1MB#"`
+            else
+               size=`echo "$size"MB | sed -e "s#\(.\)MB#MB#"`
+            fi
+        fi
+        echo '   <td align="right">'$size'</td>'
+        sha256=`sha256sum $i | cut -f1 -d' '`
+        echo '   <td><tt>'$sha256'</tt></td>'
+        echo '</tr>'
+        echo ''
+    done
+}
+
+echo '<table border="0" cellpadding="4" cellspacing="0">'
+echo '<tr valign="top">'
+echo '  <th align="left">Location</th>'
+echo '  <th align="left">Size</th>'
+echo '  <th align="left">Sha256 Sum</th>'
+echo '</tr>'
+
+process_folder "."
+if [ -d "sources/kde-l10n" ]; then
+    process_folder "sources/kde-l10n" "src/kde-l10n"
+fi
+
+echo '</table>'
+

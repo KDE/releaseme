@@ -1,8 +1,0 @@
-[main]
-customsrc=git://anongit.kde.org/skrooge
-doc=true
-l10n=true
-protocol=anonsvn
-branch=trunk
-gitbranch=master
-

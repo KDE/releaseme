@@ -1,6 +1,5 @@
-# Generic ruby library for KDE extragear/playground releases
-#
-# Copyright © 2007-2010 Harald Sitter <apachelogger@ubuntu.com>
+#--
+# Copyright (C) 2007-2015 Harald Sitter <apachelogger@ubuntu.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -17,152 +16,158 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#++
 
-require 'lib/l10ncore'
-require 'lib/l10nstat'
+require 'fileutils'
+require 'thwait'
+require 'tmpdir'
 
-include L10nCore
+require_relative 'cmakeeditor'
+require_relative 'logable'
+require_relative 'source'
+require_relative 'svn'
+require_relative 'translationunit'
 
-def pofiledir?(lang)
-    if SECTION.nil? or SECTION.empty? # e.g. kdereview
-        return "l10n-kde4/#{lang}/messages/#{COMPONENT}"
+# FIXME: doesn't write master cmake right now...
+class L10n < TranslationUnit
+  prepend Logable
+
+  def find_templates(directory, pos = [])
+    Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
+      File.readlines(file).each do |line|
+        line.match(/[^\/]*\.pot/).to_a.each do |match|
+          pos << match.sub('.pot', '.po')
+        end
+      end
     end
-    return "l10n-kde4/#{lang}/messages/#{COMPONENT}-#{SECTION}"
-end
+    # Templates must be unique as multiple lines can contribute to the same
+    # template, as such it can happen that a.pot appears twice which can
+    # have unintended consequences by an outside user of the Array.
+    pos.uniq
+  end
 
-def strip_comments(file)
+  # FIXME: this has no test backing right now
+  def strip_comments(file)
     # Strip #~ lines, which once were sensible translations, but then the
-    # strings become removed, so they now stick around in case the strings
-    # return, poor souls, waiting forever :(
-    # Problem is that msgfmt does add those to the binary!
+    # strings got removed, so they now stick around in case the strings
+    # return, poor souls, waiting for a comeback, reminds me of Sunset Blvd :(
+    # Problem is that msgfmt adds those to the binary!
     file = File.new(file, File::RDWR)
     str = file.read
     file.rewind
     file.truncate(0)
-    str.gsub!(/#~.*/, "")
+    # Sometimes a fuzzy marker can precede an obsolete translation block, so
+    # first remove any fuzzy obsoletion in the file and then remove any
+    # additional obsoleted lines.
+    # This prevents the fuzzy markers from getting left over.
+    str.gsub!(/^#, fuzzy\n#~.*/, '')
+    str.gsub!(/^#~.*/, '')
     str = str.strip
     file << str
     file.close
-end
+  end
 
-def retry_cmd?(exit_code, thing)
-    if exit_code != 0
-        retry_ = $dlg.yesnocancel("Fetching of #{thing} failed.", "Retry", "Skip")
-        puts retry_
-        exit 1 if retry_.nil?
-        return retry_
+  def po_file_dir(lang)
+    "#{lang}/messages/#{@i18n_path}"
+  end
+
+  def get_single(lang, tmpdir)
+    # TODO: maybe class this
+    po_file_name = templates[0]
+    vcs_file_path = "#{po_file_dir(lang)}/#{po_file_name}"
+    po_file_path = "#{tmpdir}/#{po_file_name}"
+
+    vcs.export(po_file_path, vcs_file_path)
+
+    files = []
+    if File.exist?(po_file_path)
+      files << po_file_path
+      strip_comments(po_file_path)
     end
-    return false
-end
+    files.uniq
+  end
 
-def fetch_l10n_single(ld, pos, lang)
-    pofiledir = pofiledir?(lang)
-    pofilename = pos[0] #
-    rm_rf ld
-    Dir.mkdir(ld)
-    gotInfo = false
-    begin
-        system("svn export #{@repo}/#{pofiledir}/#{pofilename} #{ld}/#{pofilename}")
-        ret = $?
-        # If the export failed, try to see if there is a file, if this command also
-        # fails then we have to assume the file is not present in SVN.
-        # Of course it still might, but the connection could be busted, but that
-        # is a lot less likely to be the case for 2 independent commands.
-        if not gotInfo && ret != 0
-            system("svn info #{@repo}/#{pofiledir}/#{pofilename}")
-            # If the info also failed, declare the file as not existant and
-            # prevent a retry dialog annoyance.
-            break if $? != 0
-            gotInfo = true
+  def get_multiple(lang, tmpdir)
+    vcs_path = po_file_dir(lang)
+
+    return [] if @vcs.list(vcs_path).empty?
+    @vcs.get(tmpdir, vcs_path)
+
+    files = []
+    templates.each do |po|
+      po_file_path = tmpdir.dup.concat("/#{po}")
+      next unless File.exist?(po_file_path)
+      files << po_file_path
+      strip_comments(po_file_path)
+    end
+
+    files.uniq
+  end
+
+  def get(srcdir)
+    # FIXME: this is later used as destination for the weirdest of reasons...
+    target = "#{srcdir}/po/"
+    Dir.mkdir(target)
+
+    @templates = find_templates(srcdir)
+    log_info "Downloading translations for #{srcdir}"
+
+    languages_without_translation = []
+    has_translation = false
+    # FIXME: due to threading we do explicit pathing, so this probably can go
+    Dir.chdir(srcdir) do
+      queue = languages_queue
+      threads = []
+      THREAD_COUNT.times do
+        threads << Thread.new do
+          Thread.current.abort_on_exception = true
+          until queue.empty?
+            language = queue.pop(true)
+            Dir.mktmpdir(self.class.to_s) do |tmpdir|
+              log_debug "#{srcdir} - downloading #{language}"
+              if templates.count > 1
+                files = get_multiple(language, tmpdir)
+              elsif templates.count == 1
+                files = get_single(language, tmpdir)
+              else
+                # FIXME: needs testcase
+                # TODO: this previously aborted entirely, not sure that makes
+                #       sense with threading
+                next # No translations need fetching
+              end
+
+              # No files obtained :(
+              if files.empty?
+                # FIXME: not thread safe without GIL
+                languages_without_translation << language
+                next
+              end
+              # FIXME: not thread safe without GIL
+              has_translation = true
+
+              # TODO: path confusing with target
+              destination = "po/#{language}"
+              Dir.mkdir(destination)
+              FileUtils.mv(files, destination)
+            end
+
+            # FIXME: this is not thread safe without a GIL
+            @languages += [language]
+          end
         end
-    end while retry_cmd?(ret, "#{pofiledir}/#{pofilename}")
+      end
+      ThreadsWait.all_waits(threads)
 
-    files = Array.new
-    if File.exist?("#{ld}/#{pofilename}")
-        files << "#{ld}/#{pofilename}"
-        strip_comments("#{ld}/#{pofilename}")
-    end
-    return files
-end
-
-def fetch_l10n_multiple(ld, pos, lang)
-    pofiledir = pofiledir?(lang)
-    rm_rf ld
-    return Array.new if %x[svn ls #{@repo}/#{pofiledir}].empty?
-    begin
-        system("svn co #{@repo}/#{pofiledir} #{ld}")
-    end while retry_cmd?($?, pofiledir)
-
-    files = Array.new
-    pos.each do |po|
-        next if not File.exist?("#{ld}/#{po}")
-        files << "#{ld}/#{po}"
-        strip_comments("#{ld}/#{po}")
-    end
-    return files
-end
-
-def fetch_l10n
-    src_dir
-    ld    = "l10n"
-    pd    = "po"
-    Dir.mkdir pd
-
-    pos       = po_finder
-    l10nlangs = %x[svn cat #{@repo}/l10n-kde4/subdirs].split("\n")
-    @l10n     = Array.new
-
-    # Only do single fetches (svn export) if tagging is not used, or l10n could
-    # not be tagged.
-    if pos.length == 1 and not $options[:tag]
-        multiple = false
-    else
-        multiple = true
+      if has_translation
+        # Update CMakeLists.txt
+        CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
+      else
+        # Remove the empty translations directory
+        Dir.delete('po')
+      end
     end
 
-    for lang in l10nlangs
-        next if lang == "x-test"
-
-        if multiple
-            files = fetch_l10n_multiple(ld, pos, lang)
-        else
-           files = fetch_l10n_single(ld, pos, lang)
-        end
-
-        next if files.empty?
-
-        dest = pd + "/#{lang}"
-        Dir.mkdir dest
-
-        puts("Copying #{lang}\'s .po(s) over ...")
-        mv( files, dest )
-        mv( ld + "/.svn", dest ) if $options[:tag] # Must be fatal iff tagging
-
-        # create lang's cmake files
-        cmakefile = File.new( "#{dest}/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC )
-        cmakefile << "file(GLOB _po_files *.po)\n"
-        cmakefile << "GETTEXT_PROCESS_PO_FILES(#{lang} ALL INSTALL_DESTINATION ${LOCALE_INSTALL_DIR} ${_po_files} )\n"
-        cmakefile.close
-
-        # add to SVN in case we are tagging
-        %x[svn add #{dest}/CMakeLists.txt] if $options[:tag]
-        @l10n += [lang]
-
-        puts "done."
-    end
-
-    # the statistics depend on @l10n, so invoking it only within fetch_l10n makes most sense
-    l10nstat unless $options[:stat] == false or @l10n.empty?
-
-    if not @l10n.empty? # make sure we actually fetched languages
-        # create po's cmake file
-        cmake_creator(pd,true)
-
-        # change cmake file
-        cmake_add_sub(pd)
-    else
-        rm_rf pd
-    end
-
-    rm_rf ld
+    return if languages_without_translation.empty?
+    log_info "No translations for: #{languages_without_translation.join(', ')}"
+  end
 end
