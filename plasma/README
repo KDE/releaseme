@@ -57,3 +57,7 @@ on release day launch:
  e-mail kde-announce@kde.org
  post on twitter, g+, facebook, reddit (r/kde and r/linux)
  e-mail release-team@kde.org, plasma-devel@kde.org with the happy news
+
+TODO
+ in plasma-changelog escape HTML tags
+ in plasma-update-1-tar get a diff to the old tar
