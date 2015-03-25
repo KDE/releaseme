@@ -1,19 +1,30 @@
+formatters = []
+
 begin
   require 'codeclimate-test-reporter'
-  CodeClimate::TestReporter.start
+  formatters << CodeClimate::TestReporter::Formatter
 rescue LoadError
   warn 'codeclimate reporter not available, not sending reports to server'
 end
 
 begin
   require 'coveralls'
-  Coveralls.wear!
+  formatters << Coveralls::SimpleCov::Formatter
 rescue LoadError
   warn 'coveralls reporter not available, not sending reports to server'
 end
 
+begin
+  require 'pullreview/coverage_reporter'
+  formatters << PullReview::Coverage::Formatter
+rescue LoadError => e
+  warn 'pullreview reporter not available, not sending reports to server'
+end
+
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  formatter SimpleCov::Formatter::MultiFormatter[*formatters]
+end
 
 Dir.chdir(File.dirname(__FILE__)) do
   Dir.glob('test_*.rb').each do |testfile|
