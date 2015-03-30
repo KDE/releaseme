@@ -1,12 +1,10 @@
-
-Check for build failures:
+Check for build failures on CI:
  http://build.kde.org/view/Plasma%205%20stable/
- or for a new version, http://build.kde.org/view/Plasma%205%20master/
+or for a new version
+ http://build.kde.org/view/Plasma%205%20master/
 
-Check for release critical bugs:
- tagged release_blocker:
-  https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&keywords=release_blocker%2C%20&keywords_type=allwords&list_id=1182328&product=Touchpad-KCM&product=ksshaskpass&product=Baloo&product=Breeze&product=frameworks-modemmanager-qt&product=kde-cli-tools&product=kdeplasma-addons&product=khelpcenter&product=khotkeys&product=kinfocenter&product=kio-extras&product=kmenuedit&product=KScreen&product=ksysguard&product=kwayland&product=kwin&product=kwrited&product=muon&product=Oxygen&product=plasma-nm&product=plasmashell&product=systemsettings&product=Touchpad%20KCM&product=user-manager&query_format=advanced
- also search for critial and VHI bugs
+Check for critical bugs:
+ https://bugs.kde.org/buglist.cgi?cmdtype=runnamed&list_id=1237855&namedcmd=Plasma5-All-Critical
 
 Start off by making tars (from master for first beta or from branch for later versions)
 
