@@ -21,7 +21,7 @@ on tar day tar:
 on tar day branch:
  on a new 5.x release make branches Plasma/5.x after making the tars:
   run ./plasma-branch
-  ensure translations are switched to correct branch in projects.kde.org and ping tosky or kde-doc-i18n list to branch messages and docmessages
+  switch translations stable kf5_stable branch in projects.kde.org (this needs anongit to sync which takes 20 mins) and ping tosky or kde-doc-i18n list to branch messages and docmessages
   update versions directly in and run ./plasma-update-versions to set 5.x.90 in master
 
  branch plasma-workspace-wallpapers:
