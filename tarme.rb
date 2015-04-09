@@ -98,6 +98,10 @@ release_projects.each do | project |
   release.get
   release.archive
 
+  # FIXME: present release_data format assumes that everything is git, so we
+  # cannot add svn data
+  next if release.project.vcs.is_a?(Svn)
+
   # FIXME: technically we need to track SVN revs for l10n as well...........
   # FIXME FIXME FIXME FIXME: need version
   project = release.project.identifier
