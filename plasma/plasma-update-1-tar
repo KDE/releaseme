@@ -17,4 +17,12 @@ sed s,${TAR}.*,`cat release_data`, ${VERSION}-release-data -i
 
 ../create_sources_inc $VERSION > source-plasma-${VERSION}.inc
 
+echo == diff to previous tar
+cd tests-tmp
+scp ftpadmin@depot.kde.org:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
+tar xf old.tar.xz
+diff -urN ${TAR}-${VERSION}/ ../${VERSION/${TAR}-${VERSION}
+cd ..
+echo == end diff to previous tar
+
 echo now run ./plasma-upload

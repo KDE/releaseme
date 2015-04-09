@@ -5,9 +5,9 @@
 . VERSIONS.inc
 
 echo == making directory
-ssh ftpadmin@depot.kde.org mkdir stable/plasma/${VERSION}/ && chmod 750 stable/plasma/${VERSION}/
+ssh ftpadmin@depot.kde.org mkdir ${FTPSTABLE}/plasma/${VERSION}/ && chmod 750 ${FTPSTABLE}/plasma/${VERSION}/
 echo == uploading
-rsync -CvzapP --stats ${VERSION}/*xz ftpadmin@depot.kde.org:stable/plasma/${VERSION}/
+rsync -CvzapP --stats ${VERSION}/*xz ftpadmin@depot.kde.org:${FTPSTABLE}/plasma/${VERSION}/
 
 echo == uploading release-data file to http://starsky.19inch.net/~jr/tmp/${VERSION}-release-data
 scp ${VERSION}/${VERSION}-release-data jr@starsky.19inch.net:tmp/
@@ -15,24 +15,26 @@ scp ${VERSION}/${VERSION}-release-data jr@starsky.19inch.net:tmp/
 mkdir -p tests-tmp
 
 echo == start diff tarballs test, check for diff below
-ssh ftpadmin@depot.kde.org ls stable/plasma/${VERSION}/ | sed s,-5.*,, > tests-tmp/${VERSION}-tars
-ssh ftpadmin@depot.kde.org ls stable/plasma/${OLD_VERSION}/ | sed s,-5.*,, > tests-tmp/${OLD_VERSION}-tars
-diff -u tests-tmp/${OLD_VERSION} tests-tmp/${VERSION} | tee tests-tmp/${VERSION}-tars-testoutput
+ssh ftpadmin@depot.kde.org ls ${FTPSTABLE}/plasma/${VERSION}/ | sed s,-5.*,, > tests-tmp/${VERSION}-tars
+ssh ftpadmin@depot.kde.org ls ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/ | sed s,-5.*,, > tests-tmp/${OLD_VERSION}-tars
+diff -u tests-tmp/${OLD_VERSION}-tars tests-tmp/${VERSION}-tars | tee tests-tmp/${VERSION}-tars-testoutput
 echo == end diff tarballs test
 
 echo == start tarballs l10n probe test, check for diff below
-ssh ftpadmin@depot.kde.org "for asdf in stable/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-5..../,, | grep .po$; done " > tests-tmp/${VERSION}-po
-ssh ftpadmin@depot.kde.org "for asdf in stable/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-5..../,, | grep .po$; done " > tests-tmp/${OLD_VERSION}-po
+ssh ftpadmin@depot.kde.org "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$; done " > tests-tmp/${VERSION}-po
+ssh ftpadmin@depot.kde.org "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep .po$; done " > tests-tmp/${OLD_VERSION}-po
 diff -u tests-tmp/${OLD_VERSION}-po tests-tmp/${VERSION}-po | tee tests-tmp/${VERSION}-po-testoutput
 echo == end tarballs l10n probe test
 
 echo == start tarballs docs probe test, check for diff below
-ssh ftpadmin@depot.kde.org "for asdf in stable/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-5..../,, | grep -v /$; done " > tests-tmp/${VERSION}-doc
-ssh ftpadmin@depot.kde.org "for asdf in stable/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-5..../,, | grep -v /$; done " > tests-tmp/${OLD_VERSION}-doc
+ssh ftpadmin@depot.kde.org "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep -v /$; done " > tests-tmp/${VERSION}-doc
+ssh ftpadmin@depot.kde.org "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep -v /$; done " > tests-tmp/${OLD_VERSION}-doc
 diff -u tests-tmp/${OLD_VERSION}-doc tests-tmp/${VERSION}-doc | tee tests-tmp/${VERSION}-doc-testoutput
 echo == end tarballs l10n probe test
 
 echo == start updating info page source-plasma-${VERSION}.inc
 cp ${VERSION}/source-plasma-${VERSION}.inc ${INFOCHECKOUT}/source-plasma-${VERSION}.inc
-cd ${INFOCHECKOUT}; svn diff source-plasma-${VERSION}.inc; svn commit -m "update source-plasma-${VERSION}.inc"; cd -
+cd ${INFOCHECKOUT}; svn add source-plasma-${VERSION}.inc; svn diff source-plasma-${VERSION}.inc; svn commit -m "update source-plasma-${VERSION}.inc"; cd -
 echo == end updating info page source-plasma-${VERSION}.inc
+
+echo test output in tests-tmp/${VERSION}-doc-testoutput tests-tmp/${VERSION}-po-testoutput tests-tmp/${VERSION}-tars-testoutput

@@ -1,5 +1,3 @@
-TODO: add plasmate to beta
-
 Check for build failures on CI:
  http://build.kde.org/view/Plasma%205%20stable/
 or for a new version
@@ -18,8 +16,7 @@ on tar day tar:
  run ./plasma-upload
  check tmp-tests output for important differences
  run ./plasma-update-1-tar as needed for problems/late updates
- [tell sysadmins to make tars available to packagers if you don't have permission]
- run ./plasma-upload if you do have permission
+ [upload to upload.kde.org and tell sysadmins to make tars available to packagers if you don't have permission]
 
 on tar day branch:
  on a new 5.x release make branches Plasma/5.x after making the tars:
