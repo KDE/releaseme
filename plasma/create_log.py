@@ -9,7 +9,6 @@ import subprocess
 def getVersionFrom(repo):
         #jr changed to just return nothing (will diff to latest commit)
         return ""
-        return "v5.2.2"
 #	f = open(versionsDir + '/' + repo)
 #	return f.readlines()[1].strip()
 	
@@ -58,7 +57,7 @@ for repo in repos:
 	else:
 		fromVersion = "v14.12.1"
         # jr changed to set version
-        fromVersion="v5.2.1"
+        fromVersion="v5.2.2"
 
 	p = subprocess.Popen('git fetch', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	retval = p.wait()

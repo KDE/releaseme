@@ -31,7 +31,7 @@ cat >${FILE} <<EOL
 <?php
 include_once ("functions.inc");
 \$translation_file = "www";
-\$page_title = i18n_noop("Plasma ${SHORT_VERSION} complete changelog");
+\$page_title = i18n_noop("Plasma ${VERSION} complete changelog");
 \$site_root = "../";
 \$release = 'plasma-${VERSION}';
 include "header.inc";
