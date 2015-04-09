@@ -12,16 +12,19 @@ svn --version > /dev/null || { echo "Install subversion"; exit 1; }
 mkdir $VERSION
 cd $VERSION
 
+rm -r ${TAR}-${VERSION}/
 ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${TAR}
 sed s,${TAR}.*,`cat release_data`, ${VERSION}-release-data -i
 
 ../create_sources_inc $VERSION > source-plasma-${VERSION}.inc
+cd ..
 
 echo == diff to previous tar
 cd tests-tmp
 scp ftpadmin@depot.kde.org:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
 tar xf old.tar.xz
-diff -urN ${TAR}-${VERSION}/ ../${VERSION/${TAR}-${VERSION}
+echo diff -urN ${TAR}-${VERSION}/ ../${VERSION}/${TAR}-${VERSION}
+diff -urN ${TAR}-${VERSION}/ ../${VERSION}/${TAR}-${VERSION}
 cd ..
 echo == end diff to previous tar
 

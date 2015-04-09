@@ -1,0 +1,6 @@
+#!/bin/bash
+
+. VERSIONS.inc
+
+cd ${VERSION}
+../../branchme.rb --name Plasma/${SHORT_VERSION}
