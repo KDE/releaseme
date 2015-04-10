@@ -159,15 +159,20 @@ for repo in repos:
 								changelog = feature
 							
 					elif line.startswith("CHANGELOG:"):
-						raise NameError('Unhandled CHANGELOG')
+						extra += "CHANGELOG" + line
+                                                #edited jr don't break
+						#raise NameError('Unhandled CHANGELOG')
 				
 				commitHash = commit[0]
 				if not changelog.endswith("."):
 					changelog = changelog + "."
 				capitalizedChangelog = changelog[0].capitalize() + changelog[1:]
-				print "<li>" + capitalizedChangelog + " <a href='http://quickgit.kde.org/?p="+repo+".git&a=commit&h="+commitHash+"'>Commit.</a> " + extra + "</li>"
+                                #edited jr, escape & to &amp; and cgi.escape
+                                import cgi
+				print "<li>" + cgi.escape(capitalizedChangelog) + " <a href='http://quickgit.kde.org/?p="+repo+".git&amp;a=commit&amp;h="+commitHash+"'>Commit.</a> " + cgi.escape(extra) + "</li>"
 
-			print "</ul>"
+                        # edited jr, add newlines
+			print "</ul>\n\n"
 		retval = p.wait()
 		if retval != 0:
 			raise NameError('git log failed', repo, fromVersion, toVersion)
