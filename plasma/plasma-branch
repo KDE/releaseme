@@ -3,4 +3,5 @@
 . VERSIONS.inc
 
 cd ${VERSION}
+cp ${VERSION}-release-data release_data
 ../../branchme.rb --name Plasma/${SHORT_VERSION}
