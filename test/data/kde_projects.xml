@@ -1,4 +1,106 @@
 <kdeprojects version="1">
+  <component identifier="kde">
+    <name>KDE</name>
+    <description>
+      <![CDATA[]]>
+    </description>
+    <path>kde</path>
+    <web>http://projects.kde.org/projects/kde</web>
+    <module identifier="kdenetwork">
+      <name>KDE Network</name>
+      <description>
+        <![CDATA[]]>
+      </description>
+      <path>kde/kdenetwork</path>
+      <web>http://projects.kde.org/projects/kde/kdenetwork</web>
+      <project identifier="ktp-common-internals">
+        <name>Telepathy Common Internals</name>
+        <description>
+          <![CDATA[Library for KTp]]>
+        </description>
+        <path>kde/kdenetwork/ktp-common-internals</path>
+        <web>http://projects.kde.org/projects/kde/kdenetwork/ktp-common-internals</web>
+        <icon></icon>
+        <repo>
+          <web type="projects">http://projects.kde.org/projects/kde/kdenetwork/ktp-common-internals/repository</web>
+          <web type="gitweb">http://gitweb.kde.org/ktp-common-internals.git</web>
+          <url access="read-only" protocol="git">git://anongit.kde.org/ktp-common-internals</url>
+          <url access="read-only" protocol="http">http://anongit.kde.org/ktp-common-internals</url>
+          <url access="read+write" protocol="ssh">git@git.kde.org:ktp-common-internals</url>
+          <url access="read-only" protocol="tarball">http://anongit.kde.org/ktp-common-internals/ktp-common-internals-latest.tar.gz</url>
+          <branch>async_avatar_loading</branch>
+          <branch>contact_monitor</branch>
+          <branch>dave</branch>
+          <branch>declarative-backlog-loading</branch>
+          <branch>fix_message_proc</branch>
+          <branch>fixed_pinned_contacts_model</branch>
+          <branch>frameworks</branch>
+          <branch>grouping_proxy_debug</branch>
+          <branch>kde-telepathy-0.3</branch>
+          <branch>kde-telepathy-0.4</branch>
+          <branch>kde-telepathy-0.5</branch>
+          <branch>kde-telepathy-0.6</branch>
+          <branch>kde-telepathy-0.7</branch>
+          <branch>kde-telepathy-0.8</branch>
+          <branch>kde-telepathy-0.9</branch>
+          <branch>kpeople2</branch>
+          <branch>ktp-logger</branch>
+          <branch>nepomuk-feeder</branch>
+          <branch>next</branch>
+          <branch>no_sync_account_query</branch>
+          <branch>only_show_im_contacts</branch>
+          <branch>otr</branch>
+          <branch>qml_ready</branch>
+          <branch>telepathy-kde-0.2</branch>
+          <branch i18n="trunk">none</branch>
+          <branch i18n="stable">none</branch>
+          <branch i18n="trunk_kf5">master</branch>
+          <branch i18n="stable_kf5">Applications/15.04</branch>
+          <active>true</active>
+        </repo>
+        <member username="davidedmundson">David Edmundson</member>
+        <member username="gkiagia">George Kiagiadakis</member>
+        <member username="dvratil">Dan Vr&#225;til</member>
+        <member username="mklapetek">Martin Klapetek</member>
+      </project>
+    </module>
+    <module identifier="workspace">
+      <name>Workspace</name>
+      <description>
+        <![CDATA[]]>
+      </description>
+      <path>kde/workspace</path>
+      <web>http://projects.kde.org/projects/kde/workspace</web>
+      <project identifier="kfilemetadata">
+        <name>KFileMetaData</name>
+        <description>
+          <![CDATA[A library for extracting file metadata]]>
+        </description>
+        <path>kde/workspace/kfilemetadata</path>
+        <web>http://projects.kde.org/projects/kde/workspace/kfilemetadata</web>
+        <icon></icon>
+        <repo>
+          <web type="projects">http://projects.kde.org/projects/kde/workspace/kfilemetadata/repository</web>
+          <web type="gitweb">http://gitweb.kde.org/kfilemetadata.git</web>
+          <url access="read-only" protocol="git">git://anongit.kde.org/kfilemetadata</url>
+          <url access="read-only" protocol="http">http://anongit.kde.org/kfilemetadata</url>
+          <url access="read+write" protocol="ssh">git@git.kde.org:kfilemetadata</url>
+          <url access="read-only" protocol="tarball">http://anongit.kde.org/kfilemetadata/kfilemetadata-latest.tar.gz</url>
+          <branch>KDE/4.13</branch>
+          <branch>Plasma/5.0</branch>
+          <branch>Plasma/5.1</branch>
+          <branch>Plasma/5.2</branch>
+          <branch i18n="trunk">none</branch>
+          <branch i18n="stable">KDE/4.14</branch>
+          <branch i18n="trunk_kf5">master</branch>
+          <branch i18n="stable_kf5">Plasma/5.3</branch>
+          <active>true</active>
+        </repo>
+        <member username="jriddell">Jonathan Riddell</member>
+        <member username="vhanda">Vishesh Handa</member>
+      </project>
+    </module>
+  </component>
   <component identifier="extragear">
     <module identifier="utils">
       <name>Utils</name>

@@ -111,14 +111,21 @@ class Project
         # FIXME: needs a test
         # Figure out which i18n path to use.
         @project_element.elements.each do |e|
-            if e.name == "path"
-                path = e.text
-                raise "unknown path" unless path
-                parts = path.split('/')
-                parts.pop # ditch last part as that is our name
-                parts.pop while parts.size > 2
-                @i18n_path = parts.join("-")
+          if e.name == 'path'
+            path = e.text
+            fail 'unknown path' unless path
+            parts = path.split('/')
+            warn parts
+            if parts[0] == 'kde' && parts[1] != 'workspace'
+              # Everything but kde/workspace is flattend without the kde part.
+              # kde/workspace on the other hand is kde-workspace.
+              # So, for everything but workspace, drop the kde part.
+              parts.shift
             end
+            parts.pop # ditch last part as that is our name
+            parts.pop while parts.size > 2
+            @i18n_path = parts.join('-')
+          end
         end
         return false unless @i18n_path
 

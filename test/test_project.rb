@@ -224,6 +224,19 @@ class TestProject < Testme
       assert_equal('extragear-utils', pr.i18n_path)
     end
 
+    def assert_i18n_path(project_name, i18n_path)
+      projects = Project.from_xpath(project_name)
+      assert_equal(1, projects.size)
+      pr = projects.shift
+      assert_equal(i18n_path, pr.i18n_path)
+    end
+
+    def test_resolve_valid_i18n_path_all_garbage_combinations
+      assert_i18n_path('ktp-contact-runner', 'extragear-utils')
+      assert_i18n_path('kfilemetadata', 'kde-workspace')
+      assert_i18n_path('kde/kdenetwork/ktp-common-internal', 'kdenetwork')
+    end
+
     def test_resolve_invalid
         projects = Project::from_xpath('kitten')
         assert_equal(projects, [])
