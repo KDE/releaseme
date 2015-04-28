@@ -13,17 +13,14 @@ echo "kde/workspace"
 cat release_data >> $VERSION-release-data
 
 echo "removing"
-#not in this release
-rm libbluedevil* -rf
-sed -i '/libbluedevil/d' $VERSION-release-data
 #needs different version
 rm baloo* -rf
 sed -i '/baloo/d' $VERSION-release-data
 rm kfilemetadata* -rf
 sed -i '/kfilemetadata/d' $VERSION-release-data
 # TODO consider not including this or PMC in final?
-#rm user-manager* -rf
-#sed -i '/user-manager/d' $VERSION-release-data
+rm user-manager* -rf
+sed -i '/user-manager/d' $VERSION-release-data
 
 echo "baloo"
 ../../tarme.rb --origin ${ORIGIN} --version $BALOO_VERSION baloo

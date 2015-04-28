@@ -11,6 +11,9 @@
 rm -f kde_projects.xml
 wget http://projects.kde.org/kde_projects.xml
 WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//'`
+WORKSPACE="$WORKSPACE
+plasma-sdk"
+echo "updating versions for $WORKSPACE"
 rm -rf version-update
 mkdir version-update
 cd version-update

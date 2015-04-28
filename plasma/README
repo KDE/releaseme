@@ -6,8 +6,6 @@ or for a new version
 Check for critical bugs:
  https://bugs.kde.org/buglist.cgi?cmdtype=runnamed&list_id=1237855&namedcmd=Plasma5-All-Critical
 
-Start off by making tars (from master for first beta or from branch for later versions)
-
 before tar day:
  ask for changes to highlight on plasma-devel and ask for screenshots of them
 

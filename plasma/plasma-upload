@@ -5,7 +5,8 @@
 . VERSIONS.inc
 
 echo == making directory
-ssh ftpadmin@depot.kde.org mkdir ${FTPSTABLE}/plasma/${VERSION}/ && chmod 750 ${FTPSTABLE}/plasma/${VERSION}/
+ssh ftpadmin@depot.kde.org mkdir ${FTPSTABLE}/plasma/${VERSION}/
+ssh ftpadmin@depot.kde.org chmod 750 ${FTPSTABLE}/plasma/${VERSION}/
 echo == uploading
 rsync -CvzapP --stats ${VERSION}/*xz ftpadmin@depot.kde.org:${FTPSTABLE}/plasma/${VERSION}/
 

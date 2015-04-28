@@ -71,6 +71,7 @@ sed "s,>ksshaskpass,>KSSHAskPass," ${FILE} -i
 sed "s,>kdeplasma-addons,>Plasma Addons," ${FILE} -i
 sed "s,>kio-extras,>KIO Extras," ${FILE} -i
 sed "s,>plasma-sdk,>Plasma SDK," ${FILE} -i
+sed "s,>plasma-mediacenter,>Plasma Media Center," ${FILE} -i
 
 cat >>${FILE} <<EOL
 <?php
