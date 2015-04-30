@@ -1,7 +1,7 @@
 Check for build failures on CI:
-  http://build.kde.org/view/Plasma%205%20stable/
+ https://build.kde.org/view/Plasma5%20stable-kf5-qt5/
 or for a new version
- http://build.kde.org/view/Plasma%205%20master/
+ https://build.kde.org/view/Plasma5%20kf5-qt5/
 
 Check for critical bugs:
  https://bugs.kde.org/buglist.cgi?cmdtype=runnamed&list_id=1237855&namedcmd=Plasma5-All-Critical
