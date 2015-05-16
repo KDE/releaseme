@@ -38,7 +38,7 @@ def custom
 
     # Remove unnecessary stuff
     remover([
-        "testset", ".reviewboardrc"
+        "testset", ".gitignore", ".reviewboardrc", "create-apidox.sh", "create-git-release.sh", "create-release.sh", "download-po-files-from-websvn.sh", "format_source_files.sh", "Messages.sh"
     ])
 
     base_dir
