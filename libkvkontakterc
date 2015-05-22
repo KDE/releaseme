@@ -6,4 +6,4 @@ l10n=true
 barrier=75
 branch=trunk
 gitbranch=master
-version=4.10.90
+version=4.11.0
