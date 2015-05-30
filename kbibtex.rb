@@ -29,16 +29,59 @@ $srcvcs   = "git"
 def custom
     # Change version
     src_dir
-    file = File.new( "version.h", File::RDWR|File::CREAT|File::TRUNC, 0644 )
+    file = File.new( "src/version.h", File::RDWR|File::CREAT|File::TRUNC, 0644 )
     file.puts "#ifndef VERSION_H"
     file.puts "#define VERSION_H"
     file.puts  "const char *versionNumber = \"#{@version}\";"
     file.puts "#endif // VERSION_H"
     file.close
 
+    # Clean CMakeLists.txt files
+    file = File.new( "src/parts/CMakeLists.txt", File::RDWR )
+    str = file.read
+    file.rewind
+    file.truncate( 0 )
+    # Add dependency for in-source version.h file
+    str.sub!( /include_directories[(][ \n]+/, "include_directories(\n    ${CMAKE_SOURCE_DIR}/src\n    ");
+    # Remove GITrevision script
+    str.sub!( /# creates version.h using cmake script[ \n]+add_custom_target[(][ \n]+GITrevision[^)]+[)]/m, "")
+    # Do not require generating a version.h file
+    str.sub!( /# version.h is a generated file[ \n]+set_source_files_properties[(][^)]+version.h[^)]+[)]/m, "")
+    # Remove dependency to GITrevision to build part
+    str.sub!( /add_dependencies[ (\n]+kbibtexpart[ \n]+GITrevision[ )\n]+/m, "")
+    # Depend on shipped version.h file (generated above) instead of the one build by GITrevision
+    str.sub!( /\${CMAKE_CURRENT_BINARY_DIR}\/version.h/, "${CMAKE_SOURCE_DIR}/src/version.h")
+    file << str
+    file.close
+    file = File.new( "src/program/CMakeLists.txt", File::RDWR )
+    str = file.read
+    file.rewind
+    file.truncate( 0 )
+    # Add dependency for in-source version.h file
+    str.sub!( /include_directories[(][ \n]+/, "include_directories(\n    ${CMAKE_SOURCE_DIR}/src\n    ");
+    # Remove GITrevision script
+    str.sub!( /# creates version.h using cmake script[ \n]+add_custom_target[(][ \n]+GITrevision[^)]+[)]/m, "")
+    # Do not require generating a version.h file
+    str.sub!( /# version.h is a generated file[ \n]+set_source_files_properties[(][^)]+version.h[^)]+[)]/m, "")
+    # Remove dependency to GITrevision to build program
+    str.sub!( /add_dependencies[ (\n]+kbibtex[ \n]+GITrevision[ )\n]+/m, "")
+    # Depend on shipped version.h file (generated above) instead of the one build by GITrevision
+    str.sub!( /\${CMAKE_CURRENT_BINARY_DIR}\/version.h/, "${CMAKE_SOURCE_DIR}/src/version.h")
+    file << str
+    file.close
+    file = File.new( "src/CMakeLists.txt", File::RDWR )
+    str = file.read
+    file.rewind
+    file.truncate( 0 )
+    # Remove src/test as a subdirectory
+    str.sub!( /add_subdirectory[(][ \n]+test[ \n]+[)]/m, "")
+    file << str
+    file.close
+
+
     # Remove unnecessary stuff
     remover([
-        "testset", ".gitignore", ".reviewboardrc", "create-apidox.sh", "create-git-release.sh", "create-release.sh", "download-po-files-from-websvn.sh", "format_source_files.sh", "Messages.sh"
+        "testset", ".gitignore", ".reviewboardrc", "create-apidox.sh", "create-git-release.sh", "create-release.sh", "download-po-files-from-websvn.sh", "format_source_files.sh", "Messages.sh", "src/getgit.cmake", "src/test"
     ])
 
     base_dir
