@@ -11,6 +11,7 @@ before tar day:
 
 on tar day tar:
  update VERSIONS.inc
+ run ./plasma-git-repos to update list of things to package in git-repositories-for-release
  run ./plasma-update-versions (ensure it is using the right branches)
  review plasma-tars script
  run ./plasma-tars script to make tars
@@ -32,11 +33,12 @@ on tar day branch:
  ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages
  
 on tar day prepare:
- run plasma-changelog (manually edit file after)
- run plasma-webpages, ensure dates are set for release not today, tidy up and commit for  www/announcements/plasma-5.x.y.php  www/info/plasma-5.x.y.php
+ run ./plasma-changelog (manually edit file after)
+ Run ./update-web-svn
+ run ./plasma-webpages, ensure dates are set for release not today, tidy up and commit for  www/announcements/plasma-5.x.y.php  www/info/plasma-5.x.y.php
  update generate_release_data.py in http://websvn.kde.org/trunk/l10n-kde4/scripts/generate_release_data.py?view=log
  on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata 
- run plasma-add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
+ run ./plasma-add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
  tell release-team@kde.org, plasma-devel@kde.org
  tell vdg on forum about announce and get feedback
 

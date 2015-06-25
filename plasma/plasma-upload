@@ -2,13 +2,15 @@
 # upload plasma tars
 # Copyright Jonathan Riddell, may be copied under the GNU GPL v2 or later
 
+set -xe
+
 . VERSIONS.inc
 
 echo == making directory
-ssh ftpadmin@depot.kde.org mkdir ${FTPSTABLE}/plasma/${VERSION}/
+ssh ftpadmin@depot.kde.org mkdir -p ${FTPSTABLE}/plasma/${VERSION}/
 ssh ftpadmin@depot.kde.org chmod 750 ${FTPSTABLE}/plasma/${VERSION}/
 echo == uploading
-rsync -CvzapP --stats ${VERSION}/*xz ftpadmin@depot.kde.org:${FTPSTABLE}/plasma/${VERSION}/
+rsync -CvzaP --stats ${VERSION}/*xz ftpadmin@depot.kde.org:${FTPSTABLE}/plasma/${VERSION}/
 
 echo == uploading release-data file to http://starsky.19inch.net/~jr/tmp/${VERSION}-release-data
 scp ${VERSION}/${VERSION}-release-data jr@starsky.19inch.net:tmp/
@@ -22,14 +24,14 @@ diff -u tests-tmp/${OLD_VERSION}-tars tests-tmp/${VERSION}-tars | tee tests-tmp/
 echo == end diff tarballs test
 
 echo == start tarballs l10n probe test, check for diff below
-ssh ftpadmin@depot.kde.org "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$; done " > tests-tmp/${VERSION}-po
-ssh ftpadmin@depot.kde.org "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep .po$; done " > tests-tmp/${OLD_VERSION}-po
+ssh ftpadmin@depot.kde.org "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$ | sort; done " > tests-tmp/${VERSION}-po
+ssh ftpadmin@depot.kde.org "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep .po$ | sort; done " > tests-tmp/${OLD_VERSION}-po
 diff -u tests-tmp/${OLD_VERSION}-po tests-tmp/${VERSION}-po | tee tests-tmp/${VERSION}-po-testoutput
 echo == end tarballs l10n probe test
 
 echo == start tarballs docs probe test, check for diff below
-ssh ftpadmin@depot.kde.org "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep -v /$; done " > tests-tmp/${VERSION}-doc
-ssh ftpadmin@depot.kde.org "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep -v /$; done " > tests-tmp/${OLD_VERSION}-doc
+ssh ftpadmin@depot.kde.org "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep -v /$ | sort; done " > tests-tmp/${VERSION}-doc
+ssh ftpadmin@depot.kde.org "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep -v /$ | sort; done " > tests-tmp/${OLD_VERSION}-doc
 diff -u tests-tmp/${OLD_VERSION}-doc tests-tmp/${VERSION}-doc | tee tests-tmp/${VERSION}-doc-testoutput
 echo == end tarballs l10n probe test
 

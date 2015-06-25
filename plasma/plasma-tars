@@ -18,7 +18,7 @@ rm baloo* -rf
 sed -i '/baloo/d' $VERSION-release-data
 rm kfilemetadata* -rf
 sed -i '/kfilemetadata/d' $VERSION-release-data
-# TODO consider not including this or PMC in final?
+# TODO consider not including this in final?
 rm user-manager* -rf
 sed -i '/user-manager/d' $VERSION-release-data
 

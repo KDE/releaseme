@@ -2,17 +2,15 @@
 # does a clone, replaces PROJECT_VERSION in CMakeLists.txt and pushes
 # Author Jonathan Riddell 2014, this file is in the public domain and has no copyright restrictions
 
+set -xe
+
 . VERSIONS.inc
 
 # for updating version in master after branch override versions here
 #VERSION=5.3.90
 #BALOO_VERSION=5.9.90
 
-rm -f kde_projects.xml
-wget http://projects.kde.org/kde_projects.xml
-WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//'`
-WORKSPACE="$WORKSPACE
-plasma-sdk"
+WORKSPACE=`cat git-repositories-for-release`
 echo "updating versions for $WORKSPACE"
 rm -rf version-update
 mkdir version-update

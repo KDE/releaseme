@@ -5,6 +5,8 @@
 
 import os
 import subprocess
+#edited jr, escape & to &amp; and cgi.escape
+import cgi
 
 def getVersionFrom(repo):
         #jr changed to just return nothing (will diff to latest commit)
@@ -13,16 +15,14 @@ def getVersionFrom(repo):
 #	return f.readlines()[1].strip()
 	
 
-f = open('modules.git')
+f = open('git-repositories-for-release')
 #srcdir="/d/kde/src/5/"
 #changed jr different directory
 srcdir="/home/jr/src/releaseme/releaseme/plasma/tmp-changelog/"
 repos=[]
 
-for line in f:
-	line = line[:line.find(" ")]
-	repos.append(line)
-
+line = f.read().rstrip()
+repos = line.split(" ")
 repos.sort()
 
 versionsDir = os.getcwd() + "/versions"
@@ -54,10 +54,20 @@ for repo in repos:
 		fromVersion = "v4.14.4"
 	elif repo == "kde-workspace":
 		fromVersion = "v4.11.15"
+	elif repo == "baloo":
+		fromVersion = "v5.9.1"
+	elif repo == "kfilemetadata":
+		fromVersion = "v5.9.1"
 	else:
 		fromVersion = "v14.12.1"
-        # jr changed to set version
-        fromVersion="v5.2.2"
+    # jr changed to set version
+	versionsFile = open("../../VERSIONS.inc")
+	for line in versionsFile:
+		line = line.rstrip()
+		if line.startswith("OLD_VERSION="):
+			fromVersion = "v" + line[12:]
+		if line.startswith("OLD_BALOO_VERSION=") and (repo == "baloo" or repo == "kfilemetadata"):
+			fromVersion = "v" + line[18:]
 
 	p = subprocess.Popen('git fetch', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	retval = p.wait()
@@ -125,6 +135,7 @@ for repo in repos:
 				changelog = commit[1]
 				
 				for line in commit:
+					cgi.escape(line)
 					if line.startswith("BUGS:"):
 						bugNumbers = line[line.find(":") + 1:].strip()
 						for bugNumber in bugNumbers.split(","):
@@ -160,18 +171,16 @@ for repo in repos:
 							
 					elif line.startswith("CHANGELOG:"):
 						extra += "CHANGELOG" + line
-                                                #edited jr don't break
+						#edited jr don't break
 						#raise NameError('Unhandled CHANGELOG')
 				
 				commitHash = commit[0]
 				if not changelog.endswith("."):
 					changelog = changelog + "."
 				capitalizedChangelog = changelog[0].capitalize() + changelog[1:]
-                                #edited jr, escape & to &amp; and cgi.escape
-                                import cgi
-				print "<li>" + cgi.escape(capitalizedChangelog) + " <a href='http://quickgit.kde.org/?p="+repo+".git&amp;a=commit&amp;h="+commitHash+"'>Commit.</a> " + cgi.escape(extra) + "</li>"
+				print "<li>" + capitalizedChangelog + " <a href='http://quickgit.kde.org/?p="+repo+".git&amp;a=commit&amp;h="+commitHash+"'>Commit.</a> " + extra + "</li>"
 
-                        # edited jr, add newlines
+				# edited jr, add newlines
 			print "</ul>\n\n"
 		retval = p.wait()
 		if retval != 0:

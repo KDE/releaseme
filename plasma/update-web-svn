@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# checkout/update web svn bits for announcement
+
+set -xe
+
+cd ~/src/www
+
+svn checkout svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/info/
+cd info; svn update; cd ..
+svn checkout svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
+cd announcements; svn update; cd ..
+svn checkout -N svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/
+cd www; svn update; cd ..
+svn checkout svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kde4/scripts/
+cd scripts; svn update; cd ..

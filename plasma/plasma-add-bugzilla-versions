@@ -19,6 +19,7 @@ for PRODUCT in $products; do
  echo curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" --data "version=${VERSION}&action=new&product=${PRODUCT}&token=${TOKEN}" https://bugs.kde.org/editversions.cgi -o curlpushout.html
  curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" --data "version=${VERSION}&action=new&product=${PRODUCT}&token=${TOKEN}" https://bugs.kde.org/editversions.cgi -o curlpushout.html
  echo "=== DONE"
+done
 
 for PRODUCT in Baloo; do 
  TOKEN=`curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep token | sed "s,.*value=\",," | sed "s,\".,,"`
@@ -28,3 +29,6 @@ for PRODUCT in Baloo; do
  echo "=== DONE"
 
 done
+
+echo "opening plasma-mediacentre as example to verify"
+firefox https://bugs.kde.org/editproducts.cgi?action=edit&product=plasma-mediacenter

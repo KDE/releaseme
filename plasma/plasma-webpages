@@ -18,7 +18,18 @@ sed "s/DATE/${DATE}/" -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s,MONTH,${MONTH}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 cp plasma-${OLD_VERSION}-${VERSION}-changelog.php ${ANNOUNCECHECKOUT}/plasma-${OLD_VERSION}-${VERSION}-changelog.php
 
-echo "check files and run"
-echo "cd ${INFOCHECKOUT}; svn add plasma-${VERSION}.php source-plasma-${VERSION}.inc"
-echo "cd ${ANNOUNCECHECKOUT}; svn add plasma-${VERSION}.php plasma-${OLD_VERSION}-${VERSION}-changelog"
+cd ${INFOCHECKOUT}
+svn add plasma-${VERSION}.php source-plasma-${VERSION}.inc
+svn commit -m "start webpages for Plasma ${VERSION}"
 
+cd ${ANNOUNCECHECKOUT}
+svn add plasma-${VERSION}.php plasma-${OLD_VERSION}-${VERSION}-changelog.php
+svn commit -m "start webpages for Plasma ${VERSION}"
+firefox https://www.kde.org/announcements/plasma-${VERSION}.php
+firefox https://www.kde.org/announcements/plasma-${OLD_VERSION}-${VERSION}-changelog.php
+firefox https://www.kde.org/info/plasma-${VERSION}.php
+
+cd ${L10NSCRIPTSCHECKOUT}
+sed "s,release_files\[\"plasma-${OLD_VERSION}\"\] = \[\"plasma-${OLD_VERSION}.php\"\],release_files\[\"plasma-${OLD_VERSION}\"\] = \[\"plasma-${OLD_VERSION}.php\"\]\n  release_files\[\"plasma-${VERSION}\"\] = \[\"plasma-${VERSION}.php\"\]," generate_release_data.py -i
+svn diff
+svn commit -m "add Plasma ${VERSION} announcement"
