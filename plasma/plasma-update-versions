@@ -6,9 +6,8 @@ set -xe
 
 . VERSIONS.inc
 
-# for updating version in master after branch override versions here
-#VERSION=5.3.90
-#BALOO_VERSION=5.9.90
+#echo for updating version in master after branch override versions here
+#VERSION=5.4.90
 
 WORKSPACE=`cat git-repositories-for-release`
 echo "updating versions for $WORKSPACE"
@@ -21,13 +20,10 @@ for project in $WORKSPACE; do
  cd ${project}; git checkout ${BRANCH}; cd ..;
  cd ${project};
  pwd;
- if [ $project = "baloo" ] || [ $project = "kfilemetadata" ]; then
-   sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${BALOO_VERSION}\"," CMakeLists.txt;
- else
-   sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
- fi
+ sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
  git diff;
- git commit -a -m "Update version number for ${VERSION}";
+ git commit -a -m "Update version number for ${VERSION}
+GIT_SILENT";
  git push;
  cd ..;
 done

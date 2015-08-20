@@ -1,13 +1,14 @@
-Check for build failures on CI:
- https://build.kde.org/view/Plasma5%20stable-kf5-qt5/
-or for a new version
- https://build.kde.org/view/Plasma5%20kf5-qt5/
+1 week before tar day:
+ ask for changes to highlight on plasma-devel and ask for screenshots of them
+ on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata 
+
+check for build failures on CI:
+ https://build.kde.org/view/Plasma5/
+or for a stable version
+ https://build.kde.org/view/branchGroup%20stable-kf5-qt5/
 
 Check for critical bugs:
  https://bugs.kde.org/buglist.cgi?cmdtype=runnamed&list_id=1237855&namedcmd=Plasma5-All-Critical
-
-before tar day:
- ask for changes to highlight on plasma-devel and ask for screenshots of them
 
 on tar day tar:
  update VERSIONS.inc
@@ -20,15 +21,11 @@ on tar day tar:
  run ./plasma-update-1-tar as needed for problems/late updates
  [upload to upload.kde.org and tell sysadmins to make tars available to packagers if you don't have permission]
 
-on tar day branch:
+on beta tar day branch:
  on a new 5.x release make branches Plasma/5.x after making the tars:
   run ./plasma-branch
   switch translations stable kf5_stable branch in projects.kde.org (this needs anongit to sync which takes 20 mins)
   edit ./plasma-update-versions to override versions to set 5.x.90 and run it for master
-
- branch plasma-workspace-wallpapers:
-  svn mkdir svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${SHORT_VERSION} -m "branch for ${VERSION}"
-  svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${SHORT_VERSION}/plasma-workspace-wallpapers/ -m "branch for ${SHORT_VERSION}"
 
  ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages
  
@@ -46,6 +43,7 @@ on release day, tag pre-launch:
  chmod 755 the directory on depot (or ask sysadmin if you don't have permission)
  tag by running ./plasma-tag
 
+*TODO script all this*
 on release day launch:
  remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
  www/announcements/index.php

@@ -3,13 +3,14 @@
 # Use this script to update 1 tar
 # ./plasma-make-1-tar plasma-workspace
 
+set -xe
+
 TAR=$1
 
 . VERSIONS.inc
 
 svn --version > /dev/null || { echo "Install subversion"; exit 1; }
 
-mkdir $VERSION
 cd $VERSION
 
 rm -r ${TAR}-${VERSION}/
@@ -20,7 +21,7 @@ sed s,${TAR}.*,`cat release_data`, ${VERSION}-release-data -i
 cd ..
 
 echo == diff to previous tar
-cd tests-tmp
+cd tmp-tests
 scp ftpadmin@depot.kde.org:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
 tar xf old.tar.xz
 echo diff -urN ${TAR}-${VERSION}/ ../${VERSION}/${TAR}-${VERSION}

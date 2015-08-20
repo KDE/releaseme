@@ -7,6 +7,9 @@ set -xe
 
 . VERSIONS.inc
 
+# override old version for a feature release so we still include changes from last feature not from last beta
+OLD_VERSION=5.3.2
+
 FILE=plasma-${OLD_VERSION}-${VERSION}-changelog.php
 
 rm -rf ${FILE}
@@ -69,6 +72,8 @@ sed "s,>kdeplasma-addons,>Plasma Addons," ${FILE} -i
 sed "s,>kio-extras,>KIO Extras," ${FILE} -i
 sed "s,>plasma-sdk,>Plasma SDK," ${FILE} -i
 sed "s,>plasma-mediacenter,>Plasma Media Center," ${FILE} -i
+sed "s,>plasma-pa,>Plasma Audio Volume Control," ${FILE} -i
+sed "s,>kgamma5,>Gamma Monitor Calibration Tool," ${FILE} -i
 
 cat >>${FILE} <<EOL
 <?php

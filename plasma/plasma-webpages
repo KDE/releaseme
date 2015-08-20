@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -xe
+
 . VERSIONS.inc
 
 DATE=`LC_ALL=C date "+%A, %d %B %Y"`
@@ -9,6 +11,7 @@ cp ${VERSION}/source-plasma-${VERSION}.inc ${INFOCHECKOUT}/source-plasma-${VERSI
 cp ${INFOCHECKOUT}/plasma-bugfix-template ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,VERSION,${VERSION}, -i ${INFOCHECKOUT}/plasma-${VERSION}.php
+sed "s,RELEASETYPE,${RELEASETYPE}," -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 
 cp ${ANNOUNCECHECKOUT}/plasma-bugfix-template ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
@@ -16,6 +19,7 @@ sed s,OLD_VERSION,${OLD_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed s,VERSION,${VERSION}, -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s/DATE/${DATE}/" -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s,MONTH,${MONTH}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed "s,RELEASETYPE,${RELEASETYPE}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 cp plasma-${OLD_VERSION}-${VERSION}-changelog.php ${ANNOUNCECHECKOUT}/plasma-${OLD_VERSION}-${VERSION}-changelog.php
 
 cd ${INFOCHECKOUT}
