@@ -18,7 +18,7 @@ on tar day tar:
  run ./plasma-tars script to make tars
  run ./plasma-upload
  check tmp-tests output for important differences
- run ./plasma-update-1-tar as needed for problems/late updates
+ run ./plasma-update-1-tar as needed for problems/late updates # TODO make this print out git log changes
  [upload to upload.kde.org and tell sysadmins to make tars available to packagers if you don't have permission]
 
 on beta tar day branch:
