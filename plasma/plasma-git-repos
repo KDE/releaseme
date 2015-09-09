@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# get a list of git repositories we want to make part of the release
+
+set -xe
+
+rm -f kde_projects.xml*
+wget http://projects.kde.org/kde_projects.xml
+WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//'`
+WORKSPACE="$WORKSPACE
+plasma-sdk
+"
+
+mv git-repositories-for-release git-repositories-for-release-old
+echo $WORKSPACE > git-repositories-for-release
+wdiff git-repositories-for-release-old git-repositories-for-release
+echo == git-repositories-for-release updated

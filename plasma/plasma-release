@@ -1,0 +1,73 @@
+#!/bin/bash
+
+set -xe
+
+. VERSIONS.inc
+DATE=`LC_ALL=C date "+%d %B %Y"`
+
+ssh ftpadmin@depot.kde.org "chmod 755 stable/plasma/${VERSION}"
+
+# remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
+
+sed -i "/NOT OUT YET/d" ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed -i "/NOT OUT YET/d" ${INFOCHECKOUT}/plasma-${VERSION}.php
+
+# www/announcements/index.php
+
+ANNOUNCEINDEX="<\!-- Plasma ${VERSION} -->\n<strong>${DATE}<\/strong> - <a href=\"plasma-${VERSION}.php\">Plasma ${VERSION}<\/a>\n<br \/>\n\"<em>KDE Ships Plasma ${VERSION}.<\/em>\"\n<p \/>"
+
+sed -i "s/\(INSERT NEW ENTRIES.*\)/\1\n${ANNOUNCEINDEX}/" ${ANNOUNCECHECKOUT}/index.php
+
+# www/index.php
+
+sed -i s,plasma-${OLD_VERSION},plasma-${VERSION}, ${WWWCHECKOUT}/index.php
+sed -i "s,Plasma ${OLD_VERSION},Plasma ${VERSION}," ${WWWCHECKOUT}/index.php
+sed -i "s,.*\. Plasma ${OLD_VERSION} release.,${DATE}. Plasma ${VERSION} release.," ${WWWCHECKOUT}/index.php
+
+# commit to svn
+pushd ${ANNOUNCECHECKOUT}
+svn diff
+svn commit -m "release plasma ${VERSION}"
+
+cd ${INFOCHECKOUT}
+svn diff
+svn commit -m "release plasma ${VERSION}"
+
+cd ${WWWCHECKOUT}
+svn diff
+svn commit -m "release plasma ${VERSION}"
+
+# copy announce over to Dot for publishing
+
+popd
+
+firefox https://www.kde.org/info/plasma-${VERSION}.php
+firefox https://www.kde.org/announcements/plasma-${VERSION}.php
+firefox https://www.kde.org/announcements/index.php
+firefox https://www.kde.org/
+
+rm -rf tmp-announcements
+mkdir tmp-announcements
+
+./plasma-dot-story -v ${VERSION} > tmp-announcements/DOT-STORY.html
+kate tmp-announcements/DOT-STORY.html
+
+sudo apt install w3m
+w3m DOT-STORY.html  -dump > tmp-announcements/KDE-ANNOUNCE_TEXT.txt
+sed -i "s,Live Images.*,https://www.kde.org/announcements/plasma-${VERSION}.php\nhttps://www.kde.org/announcements/plasma-${OLD_VERSION}-${VERSION}-changelog.php," tmp-announcements/KDE-ANNOUNCE_TEXT.txt
+echo "e-mail me to kde-announce@kde.org" > tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
+cat tmp-announcements/KDE-ANNOUNCE_TEXT.txt >> tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
+kate tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
+
+# post on twitter, g+, facebook, reddit (r/kde and r/linux)
+echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://www.kde.org/announcements/plasma-${VERSION}.php" > tmp-announcements/twitter.text
+kate tmp-announcements/twitter.text
+firefox http://twitter.com
+firefox https://plus.google.com/b/105126786256705328374/dashboard/overview
+firefox https://www.reddit.com/r/kde/submit
+firefox https://dot.kde.org/#overlay=node/add/story
+
+# e-mail release-team@kde.org, plasma-devel@kde.org with the happy news
+echo "e-mail me to release-team@kde.org, plasma-devel@kde.org" > tmp-announcements/release-team
+echo "Plasma ${VERSION} is now released https://www.kde.org/announcements/plasma-${VERSION}.php" >> tmp-announcements/release-team
+kate tmp-announcements/release-team
