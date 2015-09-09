@@ -32,8 +32,7 @@ on beta tar day branch:
 on tar day prepare:
  run ./plasma-changelog (manually edit file after)
  Run ./update-web-svn
- run ./plasma-webpages, ensure dates are set for release not today, tidy up and commit for  www/announcements/plasma-5.x.y.php  www/info/plasma-5.x.y.php
- update generate_release_data.py in http://websvn.kde.org/trunk/l10n-kde4/scripts/generate_release_data.py?view=log
+ run ./plasma-webpages and check over output opened in firefox
  on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata 
  run ./plasma-add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
  tell release-team@kde.org, plasma-devel@kde.org
@@ -43,13 +42,8 @@ on release day, tag pre-launch:
  chmod 755 the directory on depot (or ask sysadmin if you don't have permission)
  tag by running ./plasma-tag
 
-*TODO script all this*
 on release day launch:
- remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
- www/announcements/index.php
- www/index.php
- copy announce over to Dot and publish
- e-mail kde-announce@kde.org with copy/paste from announce in plaintext
- post on twitter, g+, facebook, reddit (r/kde and r/linux)
- e-mail release-team@kde.org, plasma-devel@kde.org with the happy news
+ ./update-web-svn
+ ./plasma-release
+ this will open tabs in firefox and kate: check the web pages are good, e-mail out the texts, post the social media bits
  for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
