@@ -11,9 +11,9 @@ set -xe
 
 WORKSPACE=`cat git-repositories-for-release`
 echo "updating versions for $WORKSPACE"
-rm -rf version-update
-mkdir version-update
-cd version-update
+rm -rf tmp-version-update
+mkdir tmp-version-update
+cd tmp-version-update
 for project in $WORKSPACE; do
  echo ${project};
  git clone kde:${project};
