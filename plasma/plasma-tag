@@ -6,4 +6,3 @@ cd ${VERSION}
 cp ${VERSION}-release-data release_data
 
 ../../tagme.rb --version ${VERSION}
-svn copy svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${SHORT_VERSION}/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/tags/plasma-workspace-wallpapers/${VERSION} -m "Tagging ${VERSION}"

@@ -39,7 +39,6 @@ on tar day prepare:
  tell vdg on forum about announce and get feedback
 
 on release day, tag pre-launch:
- chmod 755 the directory on depot (or ask sysadmin if you don't have permission)
  tag by running ./plasma-tag
 
 on release day launch:

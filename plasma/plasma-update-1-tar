@@ -13,7 +13,7 @@ svn --version > /dev/null || { echo "Install subversion"; exit 1; }
 
 cd $VERSION
 
-rm -r ${TAR}-${VERSION}/
+rm -fr ${TAR}-${VERSION}/
 ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${TAR}
 sed s,${TAR}.*,`cat release_data`, ${VERSION}-release-data -i
 
