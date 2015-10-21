@@ -44,7 +44,7 @@ class DocumentationL10n < TranslationUnit
     log_info "Downloading documentations for #{srcdir}"
 
     unless get_en('en')
-      log_warn 'There is no en documentation. Aborting :('
+      log_warn 'There is no en documentation. Skipping documentation :('
       return
     end
     docs << 'en'
