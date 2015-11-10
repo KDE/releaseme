@@ -24,7 +24,7 @@ sed "s,RELEASETYPE,${RELEASETYPE}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 cp plasma-${OLD_VERSION}-${VERSION}-changelog.php ${ANNOUNCECHECKOUT}/plasma-${OLD_VERSION}-${VERSION}-changelog.php
 
 cd ${INFOCHECKOUT}
-svn add plasma-${VERSION}.php source-plasma-${VERSION}.inc
+svn add plasma-${VERSION}.php
 svn commit -m "start webpages for Plasma ${VERSION}"
 
 cd ${ANNOUNCECHECKOUT}

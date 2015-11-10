@@ -15,9 +15,4 @@ for project in $WORKSPACE; do
   cat release_data >> $VERSION-release-data
 done
 
-sed -i s,5.\d,${SHORT_VERSION}, ../projects/plasma-workspace-wallpapers-stable
-../../tarme.rb --origin ${ORIGIN} --version ${VERSION} --from-config plasma-workspace-wallpapers-${ORIGIN}
-# releaseme doesn't add release_data for svn currently
-#cat release_data >> $VERSION-release-data
-
 ../create_sources_inc $VERSION > source-plasma-${VERSION}.inc

@@ -6,31 +6,34 @@ set -xe
 
 . VERSIONS.inc
 
-echo == making directory
-ssh ftpadmin@depot.kde.org mkdir -p ${FTPSTABLE}/plasma/${VERSION}/
-ssh ftpadmin@depot.kde.org chmod 750 ${FTPSTABLE}/plasma/${VERSION}/
-echo == uploading
-rsync -CvzaP --stats ${VERSION}/*xz ftpadmin@depot.kde.org:${FTPSTABLE}/plasma/${VERSION}/
+#set this for alpha only
+UPLOADSERVER=embra 
 
-echo == uploading release-data file to http://starsky.19inch.net/~jr/tmp/${VERSION}-release-data
-scp ${VERSION}/${VERSION}-release-data jr@starsky.19inch.net:tmp/
+echo == making directory
+ssh ${UPLOADSERVER} mkdir -p ${FTPSTABLE}/plasma/${VERSION}/
+ssh ${UPLOADSERVER} chmod 750 ${FTPSTABLE}/plasma/${VERSION}/
+echo == uploading
+rsync -CvzaP --stats ${VERSION}/*xz ${UPLOADSERVER}:${FTPSTABLE}/plasma/${VERSION}/
+
+echo == uploading release-data file to http://embra.edinburghlinux.co.uk/~jr/tmp/${VERSION}-release-data
+scp ${VERSION}/${VERSION}-release-data embra:tmp/
 
 mkdir -p tmp-tests
 
 echo == start diff tarballs test, check for diff below
-ssh ftpadmin@depot.kde.org ls ${FTPSTABLE}/plasma/${VERSION}/ | sed s,-5.*,, > tmp-tests/${VERSION}-tars
+ssh ${UPLOADSERVER} ls ${FTPSTABLE}/plasma/${VERSION}/ | sed s,-5.*,, > tmp-tests/${VERSION}-tars
 ssh ftpadmin@depot.kde.org ls ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/ | sed s,-5.*,, > tmp-tests/${OLD_VERSION}-tars
 diff -u tmp-tests/${OLD_VERSION}-tars tmp-tests/${VERSION}-tars | tee tmp-tests/${VERSION}-tars-testoutput
 echo == end diff tarballs test
 
 echo == start tarballs l10n probe test, check for diff below
-ssh ftpadmin@depot.kde.org "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${VERSION}-po
+ssh ${UPLOADSERVER} "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${VERSION}-po
 ssh ftpadmin@depot.kde.org "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${OLD_VERSION}-po
 diff -u tmp-tests/${OLD_VERSION}-po tmp-tests/${VERSION}-po | tee tmp-tests/${VERSION}-po-testoutput
 echo == end tarballs l10n probe test
 
 echo == start tarballs docs probe test, check for diff below
-ssh ftpadmin@depot.kde.org "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${VERSION}-doc
+ssh ${UPLOADSERVER} "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${VERSION}-doc
 ssh ftpadmin@depot.kde.org "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${OLD_VERSION}-doc
 diff -u tmp-tests/${OLD_VERSION}-doc tmp-tests/${VERSION}-doc | tee tmp-tests/${VERSION}-doc-testoutput
 echo == end tarballs l10n probe test
