@@ -170,9 +170,10 @@ for repo in repos:
 								changelog = feature
 							
 					elif line.startswith("CHANGELOG:"):
-						extra += "CHANGELOG" + line
+						#extra += "CHANGELOG" + line
 						#edited jr don't break
 						#raise NameError('Unhandled CHANGELOG')
+                                                changelog = line
 				
 				commitHash = commit[0]
 				if not changelog.endswith("."):

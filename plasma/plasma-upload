@@ -7,7 +7,7 @@ set -xe
 . VERSIONS.inc
 
 #set this for alpha only
-UPLOADSERVER=embra 
+#UPLOADSERVER=embra 
 
 echo == making directory
 ssh ${UPLOADSERVER} mkdir -p ${FTPSTABLE}/plasma/${VERSION}/

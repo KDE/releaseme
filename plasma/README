@@ -46,3 +46,6 @@ on release day launch:
  ./plasma-release
  this will open tabs in firefox and kate: check the web pages are good, e-mail out the texts, post the social media bits
  for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
+
+TODO:
+ ensure kde-build-metadata is updated to Plasma/5.x new branch.  But when?

@@ -6,8 +6,8 @@ set -xe
 
 . VERSIONS.inc
 
-#echo for updating version in master after branch override versions here
-#VERSION=5.4.90
+echo for updating version in master after branch override versions here
+VERSION=5.5.90
 
 WORKSPACE=`cat git-repositories-for-release`
 echo "updating versions for $WORKSPACE"

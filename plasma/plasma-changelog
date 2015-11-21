@@ -74,6 +74,8 @@ sed "s,>plasma-sdk,>Plasma SDK," ${FILE} -i
 sed "s,>plasma-mediacenter,>Plasma Media Center," ${FILE} -i
 sed "s,>plasma-pa,>Plasma Audio Volume Control," ${FILE} -i
 sed "s,>kgamma5,>Gamma Monitor Calibration Tool," ${FILE} -i
+sed "s,>Breeze-gtk,>Breeze GTK," ${FILE} -i
+sed "s,>discover,>Discover," ${FILE} -i
 
 cat >>${FILE} <<EOL
 <?php

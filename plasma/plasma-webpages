@@ -11,6 +11,7 @@ cp ${VERSION}/source-plasma-${VERSION}.inc ${INFOCHECKOUT}/source-plasma-${VERSI
 cp ${INFOCHECKOUT}/plasma-bugfix-template ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,VERSION,${VERSION}, -i ${INFOCHECKOUT}/plasma-${VERSION}.php
+sed s,FTPSTABLE,${FTPSTABLE}, -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed "s,RELEASETYPE,${RELEASETYPE}," -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 
 cp ${ANNOUNCECHECKOUT}/plasma-bugfix-template ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
