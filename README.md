@@ -15,7 +15,19 @@
   - COMPONENT
   - SECTION
 
-## Support
+## Releasing
+
+```
+./yourthing.rb --version 1.0.0
+```
+
+You'll find a tarball in your PWD if there are no errors.
+
+## Help
+
+```
+./yourthing.rb --help
+```
 
 If you are having problems port your software to KF5 and use the master branch
 of releaseme. /s
