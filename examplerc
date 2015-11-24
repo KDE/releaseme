@@ -1,0 +1,5 @@
+[main]
+customsrc=kde:yourreponame
+gitbranch=master
+branch=trunk
+protocol=svn+ssh
