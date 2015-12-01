@@ -26,6 +26,7 @@ on beta tar day branch:
   run ./plasma-branch
   switch translations stable kf5_stable branch in projects.kde.org (this needs anongit to sync which takes 20 mins) (keep breeze-gtk set to none)
   edit ./plasma-update-versions to override versions to set 5.x.90 and run it for master
+  Update kde:kde-build-metadata/logical-module-structure top use new branch Plasma/5.x and build that branch in build.kde.org
 
  ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages
  
