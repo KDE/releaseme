@@ -1,0 +1,9 @@
+[main]
+customsrc=git@git.kde.org:alkimia
+doc=false
+l10n=false
+protocol=anonsvn
+branch=stable
+gitbranch=5.0.0
+version=5.0.0
+barrier=75
