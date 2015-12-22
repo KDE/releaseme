@@ -14,3 +14,6 @@ svn checkout -N svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/
 cd www; svn update; cd ..
 svn checkout svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kde4/scripts/
 cd scripts; svn update; cd ..
+
+cd ~/src/www/l10n-kde4/scripts
+svn update

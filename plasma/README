@@ -34,7 +34,8 @@ on tar day prepare:
  run ./plasma-changelog (manually edit file after)
  Run ./update-web-svn
  run ./plasma-webpages and check over output opened in firefox
- on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata 
+ on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata
+ run optipng on any new images
  run ./plasma-add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
  tell release-team@kde.org, plasma-devel@kde.org
  tell vdg on forum about announce and get feedback
