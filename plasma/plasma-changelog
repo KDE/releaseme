@@ -31,12 +31,12 @@ cat >${FILE} <<EOL
 <?php
 include_once ("functions.inc");
 \$translation_file = "www";
-\$page_title = i18n_noop("Plasma ${VERSION} complete changelog");
+\$page_title = i18n_noop("Plasma ${VERSION} Complete Changelog");
 \$site_root = "../";
 \$release = 'plasma-${VERSION}';
 include "header.inc";
 ?>
-<p><a href="plasma-${VERSION}.php">Plasma ${VERSION}</a> complete changelog</p>
+<p><a href="plasma-${VERSION}.php">Plasma ${VERSION}</a> Complete Changelog</p>
 EOL
 
 echo running create_log
