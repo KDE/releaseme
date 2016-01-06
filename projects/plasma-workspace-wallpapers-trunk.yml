@@ -1,7 +1,0 @@
-identifier: plasma-workspace-wallpapers
-vcs:
-    type: Svn
-    repository: svn://anonsvn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers
-i18n_trunk: master
-i18n_stable: notmaster
-i18n_path: 'kde-workspace'

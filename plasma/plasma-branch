@@ -5,6 +5,3 @@
 cd ${VERSION}
 cp ${VERSION}-release-data release_data
 ../../branchme.rb --name Plasma/${SHORT_VERSION}
-
-svn mkdir svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${SHORT_VERSION} -m "branch for ${VERSION}"
-svn copy svn+ssh://svn@svn.kde.org/home/kde/trunk/KDE/plasma-workspace-wallpapers/ svn+ssh://svn@svn.kde.org/home/kde/branches/plasma/${SHORT_VERSION}/plasma-workspace-wallpapers/ -m "branch for ${SHORT_VERSION}"
