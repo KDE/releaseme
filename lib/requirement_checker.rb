@@ -1,5 +1,5 @@
 class RequirementChecker
-  COMPATIBLE_RUBIES = %w(2.1.0 2.2.0)
+  COMPATIBLE_RUBIES = %w(2.1.0 2.2.0 2.3.0)
   REQUIRED_BINARIES = %w(svn git tar xz msgfmt)
 
   def initialize
