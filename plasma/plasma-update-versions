@@ -23,7 +23,7 @@ for project in $WORKSPACE; do
  sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
  git diff;
  git commit -a -m "Update version number for ${VERSION}
-GIT_SILENT";
+GIT_SILENT" || true;
  git push;
  cd ..;
 done

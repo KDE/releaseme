@@ -14,7 +14,6 @@ on tar day tar:
  update VERSIONS.inc
  run ./plasma-git-repos to update list of things to package in git-repositories-for-release
  run ./plasma-update-versions (ensure it is using the right branches)
- review plasma-tars script
  run ./plasma-tars script to make tars
  run ./plasma-upload
  check tmp-tests output for important differences
