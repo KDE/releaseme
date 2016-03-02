@@ -15,15 +15,17 @@ rm -rf tmp-version-update
 mkdir tmp-version-update
 cd tmp-version-update
 for project in $WORKSPACE; do
- echo ${project};
- git clone kde:${project};
- cd ${project}; git checkout ${BRANCH}; cd ..;
- cd ${project};
- pwd;
- sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
- git diff;
- git commit -a -m "Update version number for ${VERSION}
+  if [ $project != "breeze-grub" ]; then
+    echo ${project};
+    git clone kde:${project};
+    cd ${project}; git checkout ${BRANCH}; cd ..;
+    cd ${project};
+    pwd;
+    sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
+    git diff;
+    git commit -a -m "Update version number for ${VERSION}
 GIT_SILENT" || true;
- git push;
- cd ..;
+    git push;
+    cd ..;
+  fi
 done
