@@ -8,13 +8,13 @@ DATE=`LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 MONTH=`LC_ALL=C date "+%B" --date="next Tue"`
 
 cp ${VERSION}/source-plasma-${VERSION}.inc ${INFOCHECKOUT}/source-plasma-${VERSION}.inc
-cp ${INFOCHECKOUT}/plasma-bugfix-template ${INFOCHECKOUT}/plasma-${VERSION}.php
+cp ${INFOCHECKOUT}/plasma-template ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,VERSION,${VERSION}, -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,FTPSTABLE,${FTPSTABLE}, -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed "s,RELEASETYPE,${RELEASETYPE}," -i ${INFOCHECKOUT}/plasma-${VERSION}.php
 
-cp ${ANNOUNCECHECKOUT}/plasma-bugfix-template ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+cp ${ANNOUNCECHECKOUT}/plasma-template ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed s,OLD_VERSION,${OLD_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed s,VERSION,${VERSION}, -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
@@ -22,6 +22,9 @@ sed s,MINOR_RELEASE_MONTH,${MINOR_RELEASE_MONTH}, -i ${ANNOUNCECHECKOUT}/plasma-
 sed "s/DATE/${DATE}/" -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s,MONTH,${MONTH}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s,RELEASETYPE,${RELEASETYPE}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed "s,SHORTVERSION,${SHORTVERSION}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed "s,SHORTVERSION,${SHORTVERSION}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed "s,SHORTVERSION,${SHORTVERSION}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 cp plasma-${OLD_VERSION}-${VERSION}-changelog.php ${ANNOUNCECHECKOUT}/plasma-${OLD_VERSION}-${VERSION}-changelog.php
 
 cd ${INFOCHECKOUT}
