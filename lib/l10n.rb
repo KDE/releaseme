@@ -158,6 +158,14 @@ class L10n < TranslationUnit
       end
       ThreadsWait.all_waits(threads)
 
+      if completion_requirement = ENV.fetch('RELEASEME_L10N_REQUIREMENT', nil).to_i
+        require_relative 'l10nstatistics'
+        stats = L10nStatistics.new.tap { |l| l.gather!(Dir.pwd) }.stats
+        drop = stats.delete_if { |_, s| s[:percentage] >= completion_requirement }
+        drop.each { |language, _| FileUtils.rm_r("po/#{language}", verbose: true) }
+        has_translation = false if Dir.glob("po/*").empty?
+      end
+
       if has_translation
         # Update CMakeLists.txt
         CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
