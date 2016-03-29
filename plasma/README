@@ -39,10 +39,8 @@ on tar day prepare:
  tell release-team@kde.org, plasma-devel@kde.org
  tell vdg on forum about announce and get feedback
 
-on release day, tag pre-launch:
- tag by running ./plasma-tag
-
 on release day launch:
+ tag by running ./plasma-tag
  ./update-web-svn
  ./plasma-release
  this will open tabs in firefox and kate: check the web pages are good, e-mail out the texts, post the social media bits

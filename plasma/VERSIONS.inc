@@ -11,7 +11,7 @@ OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.6 # set to master or Plasma/5.x
 MINOR_RELEASE_MONTH=March # for announcement, when was 5.x.0 released
 
-RELEASETYPE=feature # for changelog, set to beta, feature or bugfix
+RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
 
 INFOCHECKOUT="/home/jr/src/www/info"
 ANNOUNCECHECKOUT="/home/jr/src/www/announcements"
