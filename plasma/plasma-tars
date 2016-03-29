@@ -11,11 +11,7 @@ WORKSPACE=`cat ../git-repositories-for-release`
 echo "making tars for $WORKSPACE"
 for project in $WORKSPACE; do
   echo ${project}
-  if [ ${project} == "simplesystray" ]; then
-      ../../tarme.rb simplesystray --from-config --origin trunk --version $VERSION
-  elif
-      ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${project}
-  fi
+  ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${project}
   cat release_data >> $VERSION-release-data
 done
 

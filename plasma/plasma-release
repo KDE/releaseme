@@ -50,7 +50,7 @@ rm -rf tmp-announcements
 mkdir tmp-announcements
 
 ./plasma-dot-story -v ${VERSION} > tmp-announcements/DOT-STORY.html
-kate tmp-announcements/DOT-STORY.html
+kate -n tmp-announcements/DOT-STORY.html
 
 sudo apt install w3m
 w3m tmp-announcements/DOT-STORY.html  -dump > tmp-announcements/KDE-ANNOUNCE_TEXT.txt

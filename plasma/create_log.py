@@ -173,7 +173,7 @@ for repo in repos:
 						#extra += "CHANGELOG" + line
 						#edited jr don't break
 						#raise NameError('Unhandled CHANGELOG')
-                                                changelog = line
+                                                changelog = line[11:] # remove word "CHANGELOG: "
 				
 				commitHash = commit[0]
 				if not changelog.endswith("."):

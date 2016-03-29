@@ -2,10 +2,10 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.6.0
+VERSION=5.6.1
 SHORT_VERSION=5.6
-OLD_VERSION=5.5.5
-ORIGIN=stable  # set to trunk or stable
+OLD_VERSION=5.6.0
+ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.6 # set to master or Plasma/5.x
