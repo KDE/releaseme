@@ -3,7 +3,6 @@
 set -xe
 
 . VERSIONS.inc
-DATE=`LC_ALL=C date "+%d %B %Y"`
 
 ssh ftpadmin@depot.kde.org "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
 
@@ -14,7 +13,7 @@ sed -i "/NOT OUT YET/d" ${INFOCHECKOUT}/plasma-${VERSION}.php
 
 # www/announcements/index.php
 
-ANNOUNCEINDEX="<\!-- Plasma ${VERSION} -->\n<strong>${DATE}<\/strong> - <a href=\"plasma-${VERSION}.php\">Plasma ${VERSION}<\/a>\n<br \/>\n\"<em>KDE Ships Plasma ${VERSION}.<\/em>\"\n<p \/>"
+ANNOUNCEINDEX="<\!-- Plasma ${VERSION} -->\n<strong>${RELEASEDATE}<\/strong> - <a href=\"plasma-${VERSION}.php\">Plasma ${VERSION}<\/a>\n<br \/>\n\"<em>KDE Ships Plasma ${VERSION}.<\/em>\"\n<p \/>"
 
 sed -i "s/\(INSERT NEW ENTRIES.*\)/\1\n${ANNOUNCEINDEX}/" ${ANNOUNCECHECKOUT}/index.php
 
@@ -22,7 +21,7 @@ sed -i "s/\(INSERT NEW ENTRIES.*\)/\1\n${ANNOUNCEINDEX}/" ${ANNOUNCECHECKOUT}/in
 
 sed -i s,plasma-${OLD_VERSION},plasma-${VERSION}, ${WWWCHECKOUT}/index.php
 sed -i "s,Plasma ${OLD_VERSION},Plasma ${VERSION}," ${WWWCHECKOUT}/index.php
-sed -i "s,.*\. Plasma ${OLD_VERSION} release.,${DATE}. Plasma ${VERSION} release.," ${WWWCHECKOUT}/index.php
+sed -i "s,.*\. Plasma ${OLD_VERSION} release.,${RELEASEDATE}. Plasma ${VERSION} release.," ${WWWCHECKOUT}/index.php
 
 # commit to svn
 pushd ${ANNOUNCECHECKOUT}

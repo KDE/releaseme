@@ -19,3 +19,6 @@ L10NSCRIPTSCHECKOUT="/home/jr/src/www/l10n-kde4/scripts"
 WWWCHECKOUT="/home/jr/src/www/www"
 UPLOADSERVER="ftpadmin@depot.kde.org"
 #UPLOADSERVER="weegie"
+
+RELEASEDATE="Tuesday, 05 April 2016" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEMONTH="April" # usually `LC_ALL=C date "+%B" --date="next Tue"`

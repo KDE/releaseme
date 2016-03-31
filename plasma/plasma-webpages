@@ -4,9 +4,6 @@ set -xe
 
 . VERSIONS.inc
 
-DATE=`LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-MONTH=`LC_ALL=C date "+%B" --date="next Tue"`
-
 cp ${VERSION}/source-plasma-${VERSION}.inc ${INFOCHECKOUT}/source-plasma-${VERSION}.inc
 cp ${INFOCHECKOUT}/plasma-template ${INFOCHECKOUT}/plasma-${VERSION}.php
 sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${INFOCHECKOUT}/plasma-${VERSION}.php
@@ -19,8 +16,8 @@ sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.
 sed s,OLD_VERSION,${OLD_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed s,VERSION,${VERSION}, -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed s,MINOR_RELEASE_MONTH,${MINOR_RELEASE_MONTH}, -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed "s/DATE/${DATE}/" -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed "s,MONTH,${MONTH}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed "s/DATE/${RELEASEDATE}/" -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
+sed "s,MONTH,${RELEASEMONTH}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s,RELEASETYPE,${RELEASETYPE}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s,SHORT_VERSION,${SHORT_VERSION}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
 sed "s,SHORT_VERSION,${SHORT_VERSION}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
