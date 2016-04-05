@@ -2,9 +2,9 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.6.1
+VERSION=5.6.2
 SHORT_VERSION=5.6
-OLD_VERSION=5.6.0
+OLD_VERSION=5.6.1
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -22,3 +22,4 @@ UPLOADSERVER="ftpadmin@depot.kde.org"
 
 RELEASEDATE="Tuesday, 05 April 2016" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="April" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
