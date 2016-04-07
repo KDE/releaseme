@@ -20,8 +20,8 @@ sed -i "s/\(INSERT NEW ENTRIES.*\)/\1\n${ANNOUNCEINDEX}/" ${ANNOUNCECHECKOUT}/in
 # www/index.php
 
 sed -i s,plasma-${OLD_VERSION},plasma-${VERSION}, ${WWWCHECKOUT}/index.php
-sed -i "s,Plasma ${OLD_VERSION},Plasma ${VERSION}," ${WWWCHECKOUT}/index.php
-sed -i "s,.*\. Plasma ${OLD_VERSION} release.,${RELEASEDATE}. Plasma ${VERSION} release.," ${WWWCHECKOUT}/index.php
+sed -i "s,Plasma ${OLD_VERSION} Released,Plasma ${VERSION} Released," ${WWWCHECKOUT}/index.php
+sed -i "s/.*\. Plasma ${OLD_VERSION} release./${RELEASEDATE}. Plasma ${VERSION} release./" ${WWWCHECKOUT}/index.php
 
 # commit to svn
 pushd ${ANNOUNCECHECKOUT}
@@ -49,7 +49,7 @@ rm -rf tmp-announcements
 mkdir tmp-announcements
 
 ./plasma-dot-story -v ${VERSION} > tmp-announcements/DOT-STORY.html
-kate -n tmp-announcements/DOT-STORY.html
+kate tmp-announcements/DOT-STORY.html
 
 sudo apt install w3m
 w3m tmp-announcements/DOT-STORY.html  -dump > tmp-announcements/KDE-ANNOUNCE_TEXT.txt
