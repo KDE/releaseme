@@ -13,7 +13,7 @@ set -ex
 
 . VERSIONS.inc
 
-products="systemsettings Powerdevil plasma-nm Oxygen ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter kde-cli-tools Breeze plasmashell kdeplasma-addons ksshaskpass bluedevil user-manager krunner kde-gtk-config kded-appmenu kstart ksplash Plasma%20Workspace%20Wallpapers policykit-kde-agent-1 kwrited drkonqi klipper knetattach kfontview plasma-mediacenter Plasma%20SDK kwallet-pam plasma-pa kgamma ksmserver kactivitymanagerd Discover"
+products="systemsettings Powerdevil plasma-nm Oxygen ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter kde-cli-tools Breeze plasmashell kdeplasma-addons ksshaskpass bluedevil user-manager krunner kde-gtk-config kded-appmenu kstart ksplash Plasma%20Workspace%20Wallpapers policykit-kde-agent-1 kwrited drkonqi klipper knetattach kfontview plasma-mediacenter Plasma%20SDK kwallet-pam plasma-pa kgamma ksmserver kactivitymanagerd Discover plasma-integration"
 
 for PRODUCT in $products; do 
  TOKEN=`curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep token | sed "s,.*value=\",," | sed "s,\".,,"`
