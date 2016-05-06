@@ -30,7 +30,7 @@ module ProjectsFile
   # Resets all instance variables to deafault values
   def reset!
     @autoload = true
-    @xml_path = 'http://projects.kde.org/kde_projects.xml'
+    @xml_path = 'https://projects.kde.org/kde_projects.xml'
     @xml_data = nil
     @xml_doc = nil
     @cache_dir = "#{Dir.home}/.cache/releaseme"
