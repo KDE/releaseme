@@ -1,9 +1,9 @@
 <?php
   include_once ("functions.inc");
   $translation_file = "www";
-  $page_title = i18n_noop("KDE Plasma <%= version %>, <%= release_type %> Release for <%= month %>");
+  $page_title = i18n_noop("KDE Plasma <%= version %>, <%= releasetype %> Release for <%= releasemonth %>");
   $site_root = "../";
-  $release = 'plasma-VERSION';
+  $release = 'plasma-<%= version %>';
   include "header.inc";
 ?>
 
@@ -34,8 +34,8 @@ figcaption {font-style: italic;}
 <h1>NOT OUT YET</h1>
 
 <p>
-<?php i18n("<%= date %>. "); ?>
-<?php i18n("Today KDE releases a <%= release_type %> update to KDE Plasma 5, versioned <%= version %>.
+<?php i18n("<%= releasedate %>. "); ?>
+<?php i18n("Today KDE releases a <%= releasetype %> update to KDE Plasma 5, versioned <%= version %>.
 <a
 href='https://www.kde.org/announcements/plasma-<%= short_version %>.0.php'>Plasma <%= short_version %></a>
 was released in <%= minor_release_month %> with many feature refinements and new modules to complete the desktop experience.
@@ -44,7 +44,7 @@ was released in <%= minor_release_month %> with many feature refinements and new
 
 <p>
 <?php i18n("
-This release adds <%= time_since_last_release %> worth of new
+This release adds <%= timesincelastrelease %> worth of new
 translations and fixes from KDE's contributors.  The bugfixes are
 typically small but important and include:
 ");?>

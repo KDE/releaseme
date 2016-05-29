@@ -39,7 +39,7 @@ class TestPlasmaWebpages < Testme
     assert_not_equal('', ref)
     template = PlasmaAnnounceTemplate.new
     output = template.render
-    assert_equal(ref, output)
+    assert_equal(ref.split($/), output.split($/))
   end
 
   def test_versions

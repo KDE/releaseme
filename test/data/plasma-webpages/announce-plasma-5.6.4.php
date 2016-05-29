@@ -35,7 +35,7 @@ figcaption {font-style: italic;}
 
 <p>
 <?php i18n("Tuesday, 10 May 2016. "); ?>
-<?php i18n("Today KDE releases a bugfix update to KDE Plasma 5, versioned 5.6.4.  
+<?php i18n("Today KDE releases a bugfix update to KDE Plasma 5, versioned 5.6.4.
 <a
 href='https://www.kde.org/announcements/plasma-5.6.0.php'>Plasma 5.6</a>
 was released in March with many feature refinements and new modules to complete the desktop experience.
@@ -52,9 +52,7 @@ typically small but important and include:
 
 <ul>
 <?php i18n("
-<li>Make sure kcrash is initialized for discover. <a href='http://quickgit.kde.org/?p=discover.git&amp;a=commit&amp;h=63879411befc50bfd382d014ca2efa2cd63e0811'>Commit.</a> </li>
-<li>Build Breeze Plymouth and Breeze Grub tars from correct branch</li>
-<li>[digital-clock] Fix display of seconds with certain locales. <a href='http://quickgit.kde.org/?p=plasma-workspace.git&amp;a=commit&amp;h=a7a22de14c360fa5c975e0bae30fc22e4cd7cc43'>Commit.</a> Code review <a href='https://git.reviewboard.kde.org/r/127623'>#127623</a></li>
+<li> ADD FIX HERE</li>
 ");?>
 </ul>
 
