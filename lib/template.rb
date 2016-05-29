@@ -24,6 +24,6 @@ require 'erb'
 class Template
   def render(path)
     renderer = ERB.new(File.read(path))
-    renderer.result(binding)
+    renderer.result(respond_to?(:render_binding) ? render_binding : binding)
   end
 end
