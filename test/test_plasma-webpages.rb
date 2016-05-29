@@ -24,6 +24,11 @@ require_relative '../plasma/lib/plasma_announce_template'
 
 class TestPlasmaWebpages < Testme
   def setup
+    PlasmaVersion.versions_path = data('plasma-webpages/VERSIONS.inc')
+  end
+
+  def teardown
+    PlasmaVersion.versions_path = nil
   end
 
   def test_info_render

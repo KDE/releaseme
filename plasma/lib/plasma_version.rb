@@ -23,9 +23,17 @@ require 'shellwords'
 class PlasmaVersion
   attr_reader :values
 
+  def self.versions_path
+      @versions_path ||= "#{__dir__}/../VERSIONS.inc"
+  end
+
+  def versions_path=(value)
+    @versions_path = value
+  end
+
   def initialize
     @values = {}
-    versions = File.read("#{__dir__}/../VERSIONS.inc")
+    versions = File.read(self.class.versions_path)
     versions.split($/).each do |line|
       parse_line(line)
     end
