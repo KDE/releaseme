@@ -18,6 +18,9 @@
 
 require 'erb'
 
+# Open a .erb file and bind to current object,
+# intended to be overloaded by an object which sets the values uesd ub the
+# .erb file
 class Template
   def render(path)
     renderer = ERB.new(File.read(path))

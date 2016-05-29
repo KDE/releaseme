@@ -18,6 +18,8 @@
 
 require 'shellwords'
 
+# Read the VERSIONS.inc file used by releaseme/plasma scripts to set various
+# values which differ between Plasma releases
 class PlasmaVersion
   attr_reader :values
 
@@ -25,14 +27,18 @@ class PlasmaVersion
     @values = {}
     versions = File.read("#{__dir__}/../VERSIONS.inc")
     versions.split($/).each do |line|
-      line.strip!
-      next if line.empty?
-      next if line[0] == '#'
-      line = line.split('#', 2)[0]
-      key, value = line.split('=')
-      value = Shellwords.split(value)
-      value = value[0] if value.size == 1
-      @values[key] = value
+      parse_line(line)
     end
+  end
+
+  def parse_line(line)
+    line.strip!
+    next if line.empty?
+    next if line[0] == '#'
+    line = line.split('#', 2)[0]
+    key, value = line.split('=')
+    value = Shellwords.split(value)
+    value = value[0] if value.size == 1
+    @values[key] = value
   end
 end

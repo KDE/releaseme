@@ -19,6 +19,7 @@
 require_relative '../../lib/template'
 require_relative 'plasma_version'
 
+# Use to create an info page for display at e.g. https://www.kde.org/info/plasma-5.6.4.php
 class PlasmaInfoTemplate < Template
   attr_reader :version
   attr_reader :release_type
