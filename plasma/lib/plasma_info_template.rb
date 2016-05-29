@@ -34,6 +34,6 @@ class PlasmaInfoTemplate < Template
   end
 
   def render
-    super('/home/jr/src/releaseme/releaseme/test/plasma-template-info.php.erb')
+    super("#{__dir__}/../templates/plasma_info_template.php.erb")
   end
 end

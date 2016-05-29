@@ -23,7 +23,7 @@ class PlasmaVersion
 
   def initialize
     @values = {}
-    versions = File.read('/home/jr/src/releaseme/releaseme/plasma/VERSIONS.inc')
+    versions = File.read("#{__dir__}/../VERSIONS.inc")
     versions.split($/).each do |line|
       line.strip!
       next if line.empty?
