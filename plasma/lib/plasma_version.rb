@@ -33,8 +33,8 @@ class PlasmaVersion
 
   def parse_line(line)
     line.strip!
-    next if line.empty?
-    next if line[0] == '#'
+    return if line.empty?
+    return if line[0] == '#'
     line = line.split('#', 2)[0]
     key, value = line.split('=')
     value = Shellwords.split(value)
