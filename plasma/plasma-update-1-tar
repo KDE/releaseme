@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Use this script to update 1 tar
-# ./plasma-make-1-tar plasma-workspace
+# ./plasma-update-1-tar plasma-workspace
 
 set -xe
 
