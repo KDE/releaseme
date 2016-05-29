@@ -1,42 +1,40 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 
-set -xe
+require 'fileutils'
 
-. VERSIONS.inc
+require_relative 'lib/plasma_info_template'
+require_relative 'lib/plasma_announce_template'
+require_relative 'lib/plasma_version'
 
-cp ${VERSION}/source-plasma-${VERSION}.inc ${INFOCHECKOUT}/source-plasma-${VERSION}.inc
-cp ${INFOCHECKOUT}/plasma-template ${INFOCHECKOUT}/plasma-${VERSION}.php
-sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${INFOCHECKOUT}/plasma-${VERSION}.php
-sed s,VERSION,${VERSION}, -i ${INFOCHECKOUT}/plasma-${VERSION}.php
-sed s,FTPSTABLE,${FTPSTABLE}, -i ${INFOCHECKOUT}/plasma-${VERSION}.php
-sed "s,RELEASETYPE,${RELEASETYPE}," -i ${INFOCHECKOUT}/plasma-${VERSION}.php
+plasma_versions = PlasmaVersion.new
+version = plasma_versions.version
 
-cp ${ANNOUNCECHECKOUT}/plasma-template ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed s,SHORT_VERSION,${SHORT_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed s,OLD_VERSION,${OLD_VERSION},g -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed s,VERSION,${VERSION}, -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed s,MINOR_RELEASE_MONTH,${MINOR_RELEASE_MONTH}, -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed "s/DATE/${RELEASEDATE}/" -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed "s,MONTH,${RELEASEMONTH}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed "s,RELEASETYPE,${RELEASETYPE}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed "s,SHORT_VERSION,${SHORT_VERSION}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed "s,SHORT_VERSION,${SHORT_VERSION}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed "s,SHORT_VERSION,${SHORT_VERSION}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed "s,TIMESINCELASTRELEASE,${TIMESINCELASTRELEASE}," -i ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-cp plasma-${OLD_VERSION}-${VERSION}-changelog.php ${ANNOUNCECHECKOUT}/plasma-${OLD_VERSION}-${VERSION}-changelog.php
+info_template = PlasmaInfoTemplate.new
+info_output = info_template.render
+File.write(format('%s/plasma-%s.php', plasma_versions.infocheckout, version), info_output)
 
-cd ${INFOCHECKOUT}
-svn add plasma-${VERSION}.php
-svn commit -m "start webpages for Plasma ${VERSION}"
+announce_template = PlasmaAnnounceTemplate.new
+announce_output = announce_template.render
+File.write(format('%s/plasma-%s.php', plasma_versions.announcecheckout, version), info_output)
 
-cd ${ANNOUNCECHECKOUT}
-svn add plasma-${VERSION}.php plasma-${OLD_VERSION}-${VERSION}-changelog.php
-svn commit -m "start webpages for Plasma ${VERSION}"
-firefox https://www.kde.org/announcements/plasma-${VERSION}.php
-firefox https://www.kde.org/announcements/plasma-${OLD_VERSION}-${VERSION}-changelog.php
-firefox https://www.kde.org/info/plasma-${VERSION}.php
+changelog_file = format('plasma-%s-%s-changelog.php',
+                        plasma_versions.old_version,
+                        version)
+FileUtils.cp(changelog_file,
+             format('%s/%s', plasma_versions.announcecheckout, changelog_file))
 
-cd ${L10NSCRIPTSCHECKOUT}
-sed "s,release_files\[\"plasma-${OLD_VERSION}\"\] = \[\"plasma-${OLD_VERSION}.php\"\],release_files\[\"plasma-${OLD_VERSION}\"\] = \[\"plasma-${OLD_VERSION}.php\"\]\n  release_files\[\"plasma-${VERSION}\"\] = \[\"plasma-${VERSION}.php\"\]," generate_release_data.py -i
-svn diff
-svn commit -m "add Plasma ${VERSION} announcement"
+system('svn', 'add', "plasma-#{version}.php", chdir: plasma_versions.infocheckout)
+system('svn', 'commit', '-m', "start webpages for Plasma #{version}",
+       chdir: plasma_versions.infocheckout)
+system('svn', 'add', "plasma-#{version}.php", chdir: plasma_versions.announcecheckout)
+system('svn', 'commit', '-m', "start webpages for Plasma #{version}",
+       chdir: plasma_versions.announcecheckout)
+system('firefox', "https://www.kde.org/announcements/plasma-#{version}.php")
+system('firefox', "https://www.kde.org/announcements/plasma-#{plasma_versions.old_version}-#{version}-changelog.php")
+system('firefox', "https://www.kde.org/info/plasma-#{version}.php")
+
+system('sed'
+       "s,release_files\[\"plasma-#{plasma_versions.old_version}\"\] = \[\"plasma-#{plasma_versions.old_version}.php\"\],release_files\[\"plasma-#{plasma_versions.old_version}\"\] = \[\"plasma-#{plasma_versions.old_version}.php\"\]\n  release_files\[\"plasma-#{version}\"\] = \[\"plasma-#{version}.php\"\], generate_release_data.py -i",
+       chdir: plasma_versions.l10nscriptscheckout)
+system('svn', 'diff', chdir: plasma_versions.l10nscriptscheckout)
+system('svn', 'commit', '-m', "add Plasma #{version} announcement")
