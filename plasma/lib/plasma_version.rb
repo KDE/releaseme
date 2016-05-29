@@ -21,7 +21,7 @@ require 'shellwords'
 
 # Read the VERSIONS.inc file used by releaseme/plasma scripts to set various
 # values which differ between Plasma releases
-class PlasmaVersion < OpenStruct
+class PlasmaVersion
   attr_reader :values
 
   def initialize
@@ -30,11 +30,17 @@ class PlasmaVersion < OpenStruct
     versions.split($/).each do |line|
       parse_line(line)
     end
-    marshal_load(@values.map { |k, v| [k.downcase.to_sym, v] }.to_h)
+    @mapped_values = @values.map { |k, v| [k.downcase.to_sym, v] }.to_h
   end
 
   def the_binding
     binding
+  end
+
+  def method_missing(*args, **kwords)
+    meth = args[0]
+    return @mapped_values.fetch(meth) if @mapped_values.key?(meth)
+    super
   end
 
   private
