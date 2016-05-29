@@ -16,29 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require 'fileutils'
+require 'erb'
 
-require_relative 'lib/testme'
-
-require_relative '../lib/git'
-
-class TestPlasmaWebpages < Testme
-  def setup
+class Template
+  def render(path)
+    renderer = ERB.new(File.read(path))
+    renderer.result(binding)
   end
-
-  def test_render
-    ref = File.read(data('plasma-webpages/plasma-5.6.4.php'))
-    assert_not_equal('', ref)
-    template = PlasmaInfoTemplate.new
-    output = template.render
-    assert_equal(ref, output)
-  end
-
-  def test_versions
-    plasma_versions = PlasmaVersion.new
-    assert_not_equal({}, plasma_versions.values)
-    assert_equal('5.6.4', plasma_versions.values['VERSION'])
-    assert_equal('bugfix', plasma_versions.values['RELEASETYPE'])
-  end
-
 end

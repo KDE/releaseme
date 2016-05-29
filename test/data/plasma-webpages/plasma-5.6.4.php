@@ -5,6 +5,7 @@
   include "header.inc";
 ?>
 
+<h1>NOT OUT YET</h1>
 
 <p>This is a bugfix release of KDE Plasma, featuring Plasma Desktop and
 other essential software for your computer.  Details in the <a

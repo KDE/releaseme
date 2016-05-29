@@ -16,29 +16,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require 'fileutils'
+require 'template'
 
-require_relative 'lib/testme'
+require_relative 'plasma_version'
 
-require_relative '../lib/git'
+class PlasmaInfoTemplate < Template
+  attr_reader :version
+  attr_reader :release_type
+  attr_reader :short_version
+  attr_reader :ftpstable
 
-class TestPlasmaWebpages < Testme
-  def setup
-  end
-
-  def test_render
-    ref = File.read(data('plasma-webpages/plasma-5.6.4.php'))
-    assert_not_equal('', ref)
-    template = PlasmaInfoTemplate.new
-    output = template.render
-    assert_equal(ref, output)
-  end
-
-  def test_versions
+  def initialize
     plasma_versions = PlasmaVersion.new
-    assert_not_equal({}, plasma_versions.values)
-    assert_equal('5.6.4', plasma_versions.values['VERSION'])
-    assert_equal('bugfix', plasma_versions.values['RELEASETYPE'])
+    @version = plasma_versions.values.fetch('VERSION')
+    @release_type = plasma_versions.values.fetch('RELEASETYPE')
+    @short_version = plasma_versions.values.fetch('SHORT_VERSION')
+    @ftpstable = plasma_versions.values.fetch('FTPSTABLE')
   end
 
+  def render
+    super('/home/jr/src/releaseme/releaseme/test/plasma-template-info.php.erb')
+  end
 end
