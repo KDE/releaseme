@@ -16,11 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+require 'ostruct'
 require 'shellwords'
 
 # Read the VERSIONS.inc file used by releaseme/plasma scripts to set various
 # values which differ between Plasma releases
-class PlasmaVersion
+class PlasmaVersion < OpenStruct
   attr_reader :values
 
   def initialize
@@ -29,7 +30,10 @@ class PlasmaVersion
     versions.split($/).each do |line|
       parse_line(line)
     end
+    marshal_load(@values.map { |k, v| [k.downcase.to_sym, v] }.to_h)
   end
+
+  private
 
   def parse_line(line)
     line.strip!

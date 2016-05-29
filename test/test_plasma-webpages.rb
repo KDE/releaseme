@@ -46,7 +46,9 @@ class TestPlasmaWebpages < Testme
     plasma_versions = PlasmaVersion.new
     assert_not_equal({}, plasma_versions.values)
     assert_equal('5.6.4', plasma_versions.values['VERSION'])
+    assert_equal('5.6.4', plasma_versions.version)
     assert_equal('bugfix', plasma_versions.values['RELEASETYPE'])
+    assert_equal('bugfix', plasma_versions.releasetype)
   end
 
 end
