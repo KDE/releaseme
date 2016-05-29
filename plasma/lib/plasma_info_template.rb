@@ -21,17 +21,8 @@ require_relative 'plasma_version'
 
 # Use to create an info page for display at e.g. https://www.kde.org/info/plasma-5.6.4.php
 class PlasmaInfoTemplate < Template
-  attr_reader :version
-  attr_reader :release_type
-  attr_reader :short_version
-  attr_reader :ftpstable
-
-  def initialize
-    plasma_versions = PlasmaVersion.new
-    @version = plasma_versions.values.fetch('VERSION')
-    @release_type = plasma_versions.values.fetch('RELEASETYPE')
-    @short_version = plasma_versions.values.fetch('SHORT_VERSION')
-    @ftpstable = plasma_versions.values.fetch('FTPSTABLE')
+  def render_binding
+    PlasmaVersion.new.the_binding
   end
 
   def render

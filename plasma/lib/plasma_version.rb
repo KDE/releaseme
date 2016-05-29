@@ -33,6 +33,10 @@ class PlasmaVersion < OpenStruct
     marshal_load(@values.map { |k, v| [k.downcase.to_sym, v] }.to_h)
   end
 
+  def the_binding
+    binding
+  end
+
   private
 
   def parse_line(line)
