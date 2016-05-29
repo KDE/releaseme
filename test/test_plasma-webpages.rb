@@ -19,8 +19,7 @@
 require 'fileutils'
 
 require_relative 'lib/testme'
-
-require_relative '../lib/git'
+require_relative '../plasma/lib/plasma_info_template'
 
 class TestPlasmaWebpages < Testme
   def setup

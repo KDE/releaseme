@@ -16,8 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require 'template'
-
+require_relative '../../lib/template'
 require_relative 'plasma_version'
 
 class PlasmaInfoTemplate < Template
