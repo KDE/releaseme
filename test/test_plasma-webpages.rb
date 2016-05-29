@@ -20,15 +20,24 @@ require 'fileutils'
 
 require_relative 'lib/testme'
 require_relative '../plasma/lib/plasma_info_template'
+require_relative '../plasma/lib/plasma_announce_template'
 
 class TestPlasmaWebpages < Testme
   def setup
   end
 
-  def test_render
-    ref = File.read(data('plasma-webpages/plasma-5.6.4.php'))
+  def test_info_render
+    ref = File.read(data('plasma-webpages/info-plasma-5.6.4.php'))
     assert_not_equal('', ref)
     template = PlasmaInfoTemplate.new
+    output = template.render
+    assert_equal(ref, output)
+  end
+
+  def test_announce_render
+    ref = File.read(data('plasma-webpages/announce-plasma-5.6.4.php'))
+    assert_not_equal('', ref)
+    template = PlasmaAnnounceTemplate.new
     output = template.render
     assert_equal(ref, output)
   end
