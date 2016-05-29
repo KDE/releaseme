@@ -1,4 +1,5 @@
 # Copyright (C) 2016 Jonathan Riddell <jr@jriddell.org>
+# Copyright (C) 2016 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -16,16 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require_relative '../../lib/template'
-require_relative 'plasma_version'
+require_relative 'plasma_template'
 
 # Use to create an info page for display at e.g. https://www.kde.org/info/plasma-5.6.4.php
-class PlasmaInfoTemplate < Template
-  def render_binding
-    PlasmaVersion.new.the_binding
-  end
-
-  def render
-    super("#{__dir__}/../templates/plasma_info_template.php.erb")
+class PlasmaInfoTemplate < PlasmaTemplate
+  def initialize
+    super('plasma_info_template')
   end
 end

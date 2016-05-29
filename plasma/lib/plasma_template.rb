@@ -17,10 +17,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require_relative 'plasma_template'
+require_relative '../../lib/template'
+require_relative 'plasma_version'
 
-class PlasmaAnnounceTemplate < PlasmaTemplate
-  def initialize
-    super('plasma_announce_template')
+# Base plasma template.
+class PlasmaTemplate < Template
+  def initialize(template_name)
+    @name = template_name
+  end
+
+  def render_binding
+    PlasmaVersion.new.the_binding
+  end
+
+  def render
+    super("#{__dir__}/../templates/#{@name}.php.erb")
   end
 end
