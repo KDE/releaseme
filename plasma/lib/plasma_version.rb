@@ -24,10 +24,10 @@ class PlasmaVersion
   attr_reader :values
 
   def self.versions_path
-      @versions_path ||= "#{__dir__}/../VERSIONS.inc"
+    @versions_path ||= "#{__dir__}/../VERSIONS.inc"
   end
 
-  def versions_path=(value)
+  def self.versions_path=(value)
     @versions_path = value
   end
 
