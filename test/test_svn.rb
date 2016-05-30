@@ -128,7 +128,8 @@ class TestSvn < Testme
   def test_get_repo_valid
     s = Svn.new
     s.repository = "file://#{@svn_repo_dir}"
-    s.get(@svn_checkout_dir)
+    ret = s.get(@svn_checkout_dir)
+    assert_equal(true, ret)
     assert(File.exist?(@svn_checkout_dir))
     FileUtils.rm_rf(@svn_checkout_dir)
   end

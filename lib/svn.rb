@@ -63,6 +63,7 @@ class Svn < Vcs
     url = repository.dup # Deep copy since we will patch around
     url.concat("/#{path}") if path && !path.empty?
     run(['co', url, target])
+    $? == 0
   end
 
   # Removes .svn recursively from target.
