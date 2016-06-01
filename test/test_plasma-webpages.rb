@@ -54,6 +54,9 @@ class TestPlasmaWebpages < Testme
     assert_equal('5.6.4', plasma_versions.version)
     assert_equal('bugfix', plasma_versions.values['RELEASETYPE'])
     assert_equal('bugfix', plasma_versions.releasetype)
+    assert_raises NoMethodError do
+      plasma_versions.yolo
+    end
   end
 
 end
