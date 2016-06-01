@@ -58,5 +58,4 @@ class TestPlasmaWebpages < Testme
       plasma_versions.yolo
     end
   end
-
 end
