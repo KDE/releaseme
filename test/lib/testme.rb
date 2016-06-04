@@ -7,6 +7,13 @@ class Testme < Test::Unit::TestCase
   attr_reader :testdir
   attr_reader :datadir
 
+  def initialize(*args)
+    @dir = nil
+    @git_config_name = nil
+    @git_config_email = nil
+    super
+  end
+
   def setup_git
     if `git config --global user.email`.strip.empty?
       @git_config_email = true
