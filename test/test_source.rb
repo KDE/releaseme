@@ -35,16 +35,16 @@ class TestSource < Testme
         v.repository = @gitTemplateDir
 
         s.get(v)
-        assert(File::exists?(@dir))
+        assert(File::exist?(@dir))
 
         # Also do not fail on subsequent gets
         s.get(v)
-        assert(File::exists?(@dir))
+        assert(File::exist?(@dir))
 
         # Finally... we still can get
         FileUtils.rm_rf(@dir)
         s.get(v)
-        assert(File::exists?(@dir))
+        assert(File::exist?(@dir))
     end
 
     def test_target
@@ -65,9 +65,9 @@ class TestSource < Testme
         FileUtils.rm_rf(@dir)
         Dir.mkdir(@dir)
         s.cleanup()
-        assert(!File::exists?(@dir))
+        assert(!File::exist?(@dir))
 
         s.cleanup()
-        assert(!File::exists?(@dir))
+        assert(!File::exist?(@dir))
     end
 end

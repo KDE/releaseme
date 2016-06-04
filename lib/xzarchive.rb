@@ -53,7 +53,7 @@ class XzArchive
     def create()
         tar = "#{directory}.tar"
         xz = "#{tar}.xz"
-        return false if not File.exists?(@directory)
+        return false if not File.exist?(@directory)
         begin
             FileUtils.rm_rf(tar)
             FileUtils.rm_rf(xz)
