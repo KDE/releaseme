@@ -30,6 +30,10 @@ class Testme < Test::Unit::TestCase
     `git config --global --unset user.name` unless @git_config_name.nil?
   end
 
+  def setup_env
+    ENV['GNUPGHOME'] = data('keyring')
+  end
+
   def priority_setup
     ENV['RELEASEME_SHUTUP'] = 'true'
     @tmpdir = Dir.mktmpdir("testme-#{self.class}")
@@ -38,6 +42,7 @@ class Testme < Test::Unit::TestCase
     @pwdir = Dir.pwd
     Dir.chdir(@tmpdir)
     setup_git
+    setup_env
   end
 
   def priority_teardown

@@ -98,6 +98,7 @@ class TestRelease < Testme
     assert(!File.exist?("#{@dir}.tar.xz"))
     r.archive
     assert(File.exist?("#{@dir}.tar.xz"))
+    assert_path_exist("#{@dir}.tar.xz.sig")
 
     assert(File.exist?(@dir))
     r.source.cleanup

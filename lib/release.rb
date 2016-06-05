@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require_relative 'archive_signer'
 require_relative 'documentation'
 require_relative 'l10n'
 require_relative 'logable'
@@ -89,5 +90,6 @@ class Release
     source.clean(project.vcs)
     @archive_.directory = source.target
     @archive_.create
+    ArchiveSigner.new.sign(@archive_)
   end
 end
