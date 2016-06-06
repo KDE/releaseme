@@ -23,3 +23,6 @@ UPLOADSERVER="ftpadmin@depot.kde.org"
 RELEASEDATE="Tuesday, 10 May 2016" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="May" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
+
+GPG_KEY=0xa506e6d4dd4d5088
+RELEASE_DUDE="Jonathan Riddell"

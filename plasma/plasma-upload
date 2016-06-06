@@ -13,7 +13,7 @@ echo == making directory
 ssh ${UPLOADSERVER} mkdir -p ${FTPSTABLE}/plasma/${VERSION}/
 ssh ${UPLOADSERVER} chmod 750 ${FTPSTABLE}/plasma/${VERSION}/
 echo == uploading
-rsync -CvzaP --stats ${VERSION}/*xz ${UPLOADSERVER}:${FTPSTABLE}/plasma/${VERSION}/
+rsync -CvzaP --stats ${VERSION}/*xz ${VERSION}/*xz.sig ${UPLOADSERVER}:${FTPSTABLE}/plasma/${VERSION}/
 
 echo == uploading release-data file to http://embra.edinburghlinux.co.uk/~jr/tmp/${VERSION}-release-data
 scp ${VERSION}/${VERSION}-release-data embra:tmp/
