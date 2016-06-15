@@ -15,13 +15,14 @@ File.write(format('%s/plasma-%s.php', plasma_versions.infocheckout, version), in
 
 announce_template = PlasmaAnnounceTemplate.new
 announce_output = announce_template.render
-File.write(format('%s/plasma-%s.php', plasma_versions.announcecheckout, version), info_output)
+File.write(format('%s/plasma-%s.php', plasma_versions.announcecheckout, version), announce_output)
 
 changelog_file = format('plasma-%s-%s-changelog.php',
                         plasma_versions.old_version,
                         version)
 FileUtils.cp(changelog_file,
              format('%s/%s', plasma_versions.announcecheckout, changelog_file))
+system('svn', 'add', "changelog_file", chdir: plasma_versions.announcecheckout)
 
 system('svn', 'add', "plasma-#{version}.php", chdir: plasma_versions.infocheckout)
 system('svn', 'commit', '-m', "start webpages for Plasma #{version}",
@@ -33,8 +34,8 @@ system('firefox', "https://www.kde.org/announcements/plasma-#{version}.php")
 system('firefox', "https://www.kde.org/announcements/plasma-#{plasma_versions.old_version}-#{version}-changelog.php")
 system('firefox', "https://www.kde.org/info/plasma-#{version}.php")
 
-system('sed'
-       "s,release_files\[\"plasma-#{plasma_versions.old_version}\"\] = \[\"plasma-#{plasma_versions.old_version}.php\"\],release_files\[\"plasma-#{plasma_versions.old_version}\"\] = \[\"plasma-#{plasma_versions.old_version}.php\"\]\n  release_files\[\"plasma-#{version}\"\] = \[\"plasma-#{version}.php\"\], generate_release_data.py -i",
+system('sed',
+       "s,release_files\\[\"plasma-#{plasma_versions.old_version}\"\] = \\[\"plasma-#{plasma_versions.old_version}.php\"\],release_files[\"plasma-#{plasma_versions.old_version}\"] = [\"plasma-#{plasma_versions.old_version}.php\"]\\n  release_files[\"plasma-#{version}\"] = [\"plasma-#{version}.php\"],", "generate_release_data.py", "-i",
        chdir: plasma_versions.l10nscriptscheckout)
 system('svn', 'diff', chdir: plasma_versions.l10nscriptscheckout)
 system('svn', 'commit', '-m', "add Plasma #{version} announcement")

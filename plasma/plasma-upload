@@ -21,8 +21,8 @@ scp ${VERSION}/${VERSION}-release-data embra:tmp/
 mkdir -p tmp-tests
 
 echo == start diff tarballs test, check for diff below
-ssh ${UPLOADSERVER} ls ${FTPSTABLE}/plasma/${VERSION}/ | sed s,-5.*,, > tmp-tests/${VERSION}-tars
-ssh ftpadmin@depot.kde.org ls ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/ | sed s,-5.*,, > tmp-tests/${OLD_VERSION}-tars
+ssh ${UPLOADSERVER} ls ${FTPSTABLE}/plasma/${VERSION}/ | sed s,-5.*xz,, > tmp-tests/${VERSION}-tars
+ssh ftpadmin@depot.kde.org ls ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/ | sed s,-5.*xz,, > tmp-tests/${OLD_VERSION}-tars
 diff -u tmp-tests/${OLD_VERSION}-tars tmp-tests/${VERSION}-tars | tee tmp-tests/${VERSION}-tars-testoutput
 echo == end diff tarballs test
 
