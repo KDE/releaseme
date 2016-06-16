@@ -70,11 +70,11 @@ module ProjectsFile
   ##
   # Loads the XML file at xml_path and creates a REXML::Document instance.
   def load!
-    if @xml_path.start_with?('http:') || @xml_path.start_with?('https:')
-      @xml_data = load_from_network
-    else # Assumed to be local.
-      @xml_data = File.read(@xml_path)
-    end
+    @xml_data = if @xml_path.start_with?('http:', 'https:')
+                  load_from_network
+                else # Assumed to be local.
+                  File.read(@xml_path)
+                end
     @xml_doc = REXML::Document.new(@xml_data)
   end
 
