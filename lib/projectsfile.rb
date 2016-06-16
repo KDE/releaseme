@@ -86,7 +86,9 @@ module ProjectsFile
 
     request = Net::HTTP::Get.new(uri)
     request['If-None-Match'] = cache_etag if cache_etag
-    Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(request) }
+    Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+      http.request(request)
+    end
   end
 
   # FIXME: test for cache stuff needed

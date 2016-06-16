@@ -89,7 +89,9 @@ class TestProjectFile < Testme
     assert(!File.exist?(@cache_file_etag))
 
     # Request against stub, we are expecting our cache files as a result.
-    stub = stub_request(:any, 'projects.kde.org:443/kde_projects.xml')
+    # We EXPECT https://! anything else means the request is malformed.
+    # This also includes http requests against 443
+    stub = stub_request(:any, 'https://projects.kde.org/kde_projects.xml')
     stub.to_return do |_|
       {
         body: File.read(file),
@@ -105,7 +107,7 @@ class TestProjectFile < Testme
 
     # Now that we have a cache, try to use the cache.
     prev_mtime = File.mtime(@cache_file)
-    stub = stub_request(:any, 'projects.kde.org:443/kde_projects.xml')
+    stub = stub_request(:any, 'https://projects.kde.org/kde_projects.xml')
     stub.to_return do |request|
       assert(request.headers.key?('If-None-Match'))
       { status: [304, 'Not Modified'] }
@@ -121,7 +123,7 @@ class TestProjectFile < Testme
 
     # And again, but this time we want the cache to update.
     prev_mtime = File.mtime(@cache_file)
-    stub = stub_request(:any, 'projects.kde.org:443/kde_projects.xml')
+    stub = stub_request(:any, 'https://projects.kde.org/kde_projects.xml')
     stub.to_return do |request|
       assert(request.headers.key?('If-None-Match'))
       {
