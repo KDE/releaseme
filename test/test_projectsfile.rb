@@ -131,6 +131,19 @@ class TestProjectFile < Testme
     remove_request_stub(stub)
     assert_not_equal(prev_mtime, File.mtime(@cache_file),
                      'Cache file should have been modified but was not.')
+
+    # Last time, we'll let this one fall into cache.
+    prev_mtime = File.mtime(@cache_file)
+    stub = stub_request(:any, 'https://projects.kde.org/kde_projects.xml')
+    stub.to_return(status: 500)
+    ProjectsFile.load!
+    assert_not_nil(ProjectsFile.xml_data)
+    assert_not_nil(ProjectsFile.xml_doc)
+    assert_path_exist(@cache_file, 'cache file missing')
+    assert_path_exist(@cache_file_date, 'date cache missing')
+    remove_request_stub(stub)
+    assert_equal(prev_mtime, File.mtime(@cache_file),
+                 'Cache file should not have been modified but was.')
   end
 
   def test_parse
