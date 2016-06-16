@@ -101,7 +101,7 @@ module ProjectsFile
       File.write(@cache_file_etag, response['etag']) if response.key?('etag')
       File.write(@cache_file, data)
     else
-      print("Couldn't fetch ", @xml_path, ", using ", @cache_file, "\n")
+      puts "Couldn't fetch #{@xml_path} using #{@cache_file}"
       data = File.read(@cache_file) if File.exist?(@cache_file)
     end
     data
