@@ -76,6 +76,7 @@ sed "s,>plasma-pa,>Plasma Audio Volume Control," ${FILE} -i
 sed "s,>kgamma5,>Gamma Monitor Calibration Tool," ${FILE} -i
 sed "s,>Breeze-gtk,>Breeze GTK," ${FILE} -i
 sed "s,>discover,>Discover," ${FILE} -i
+sed "s,>Breeze-plymouth,>Breeze Plymouth," ${FILE} -i
 
 cat >>${FILE} <<EOL
 <?php
