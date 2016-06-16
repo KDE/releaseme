@@ -10,7 +10,6 @@ WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/
 WORKSPACE="$WORKSPACE
 breeze-grub
 breeze-plymouth
-scratch/mart/simplesystray
 "
 
 mv git-repositories-for-release git-repositories-for-release-old
