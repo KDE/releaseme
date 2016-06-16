@@ -99,8 +99,8 @@ class TestProjectFile < Testme
     ProjectsFile.load!
     assert_not_nil(ProjectsFile.xml_data)
     assert_not_nil(ProjectsFile.xml_doc)
-    assert(File.exist?(@cache_file), 'cache file missing')
-    assert(File.exist?(@cache_file_etag), 'etag cache missing')
+    assert_path_exist(@cache_file, 'cache file missing')
+    assert_path_exist(@cache_file_etag, 'etag cache missing')
     remove_request_stub(stub)
 
     # Now that we have a cache, try to use the cache.
