@@ -122,7 +122,14 @@ class L10n < TranslationUnit
         threads << Thread.new do
           Thread.current.abort_on_exception = true
           until queue.empty?
-            language = queue.pop(true)
+            begin
+              language = queue.pop(true)
+            rescue
+              # When pop runs into an empty queue with non_block=true it raises
+              # an exception. We'll simply continue with it as our loop should
+              # naturally end anyway.
+              continue
+            end
             Dir.mktmpdir(self.class.to_s) do |tmpdir|
               log_debug "#{srcdir} - downloading #{language}"
               if templates.count > 1
