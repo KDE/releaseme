@@ -34,8 +34,6 @@ module ProjectsFile
     @xml_data = nil
     @xml_doc = nil
     @cache_dir = "#{Dir.home}/.cache/releaseme"
-    @cache_file = "#{@cache_dir}/kde_projects.xml"
-    @cache_file_etag = "#{@cache_dir}/kde_projects.etag"
   end
 
   # @private
@@ -80,29 +78,51 @@ module ProjectsFile
 
   private
 
+  def cache_file
+    "#{@cache_dir}/kde_projects.xml"
+  end
+
+  def cache_file_date
+    "#{@cache_dir}/kde_projects.date"
+  end
+
+  # Only here for compat-cleanup. We used etag at some point but since moved
+  # to .date, we want the etag to be gone all the same so there's no
+  # confusion.
+  def cache_file_etag
+    "#{@cache_dir}/kde_projects.etag"
+  end
+
   def http_get
     uri = URI(@xml_path)
-    cache_etag = File.read(@cache_file_etag) if File.exist?(@cache_file_etag)
 
     request = Net::HTTP::Get.new(uri)
-    request['If-None-Match'] = cache_etag if cache_etag
+    if File.exist?(cache_file_date)
+      request['If-Modified-Since'] = File.read(cache_file_date)
+    end
     Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
       http.request(request)
     end
   end
 
+  def update_cache(response)
+    FileUtils.mkpath(@cache_dir)
+    FileUtils.rm_f([cache_file, cache_file_date, cache_file_etag])
+    File.write(cache_file_date, response['date']) if response.key?('date')
+    File.write(cache_file, response.body)
+    response.body
+  end
+
   # FIXME: test for cache stuff needed
   def load_from_network
     response = http_get
-
     if response.is_a?(Net::HTTPSuccess)
-      data = response.body
-      FileUtils.mkpath(@cache_dir)
-      File.write(@cache_file_etag, response['etag']) if response.key?('etag')
-      File.write(@cache_file, data)
+      data = update_cache(response)
     else
-      puts "Couldn't fetch #{@xml_path} using #{@cache_file}"
-      data = File.read(@cache_file) if File.exist?(@cache_file)
+      unless response.is_a?(Net::HTTPNotModified)
+        puts "Couldn't fetch #{@xml_path} using #{cache_file}"
+      end
+      data = File.read(cache_file) if File.exist?(cache_file)
     end
     data
   end

@@ -30,12 +30,11 @@ class TestProjectFile < Testme
   def setup_caching
     # Moving caching into tmp scope
     @cache_dir = "#{Dir.pwd}/.cache/releaseme"
-    @cache_file = "#{@cache_dir}/kde_projects.xml"
-    @cache_file_etag = "#{@cache_dir}/kde_projects.etag"
     ProjectsFile.instance_variable_set(:@cache_dir, @cache_dir)
-    ProjectsFile.instance_variable_set(:@cache_file, @cache_file)
-    ProjectsFile.instance_variable_set(:@cache_file_etag, @cache_file_etag)
     FileUtils.mkpath(@cache_dir)
+
+    @cache_file = ProjectsFile.send(:cache_file)
+    @cache_file_date = ProjectsFile.send(:cache_file_date)
   end
 
   def setup
@@ -83,10 +82,10 @@ class TestProjectFile < Testme
     ProjectsFile.reset!
     setup_caching
 
-    etag = '123098'
+    date = 'Thu, 16 Jun 2016 10:55:16 GMT'
 
     assert(!File.exist?(@cache_file))
-    assert(!File.exist?(@cache_file_etag))
+    assert(!File.exist?(@cache_file_date))
 
     # Request against stub, we are expecting our cache files as a result.
     # We EXPECT https://! anything else means the request is malformed.
@@ -95,28 +94,26 @@ class TestProjectFile < Testme
     stub.to_return do |_|
       {
         body: File.read(file),
-        headers: { 'etag' => etag }
+        headers: { 'date' => date }
       }
     end
     ProjectsFile.load!
     assert_not_nil(ProjectsFile.xml_data)
     assert_not_nil(ProjectsFile.xml_doc)
     assert_path_exist(@cache_file, 'cache file missing')
-    assert_path_exist(@cache_file_etag, 'etag cache missing')
+    assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)
 
     # Now that we have a cache, try to use the cache.
     prev_mtime = File.mtime(@cache_file)
     stub = stub_request(:any, 'https://projects.kde.org/kde_projects.xml')
-    stub.to_return do |request|
-      assert(request.headers.key?('If-None-Match'))
-      { status: [304, 'Not Modified'] }
-    end
+    stub.with(headers: { 'If-Modified-Since' => date })
+    stub.to_return(status: [304, 'Not Modified'])
     ProjectsFile.load!
     assert_not_nil(ProjectsFile.xml_data)
     assert_not_nil(ProjectsFile.xml_doc)
-    assert(File.exist?(@cache_file), 'cache file missing')
-    assert(File.exist?(@cache_file_etag), 'etag cache missing')
+    assert_path_exist(@cache_file, 'cache file missing')
+    assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)
     assert_equal(prev_mtime, File.mtime(@cache_file),
                  'Cache file was modified but should not have been.')
@@ -124,18 +121,13 @@ class TestProjectFile < Testme
     # And again, but this time we want the cache to update.
     prev_mtime = File.mtime(@cache_file)
     stub = stub_request(:any, 'https://projects.kde.org/kde_projects.xml')
-    stub.to_return do |request|
-      assert(request.headers.key?('If-None-Match'))
-      {
-        body: File.read(file),
-        headers: { 'etag' => etag }
-      }
-    end
+    stub.with(headers: { 'If-Modified-Since' => date })
+    stub.to_return(body: File.read(file), headers: { 'date' => date })
     ProjectsFile.load!
     assert_not_nil(ProjectsFile.xml_data)
     assert_not_nil(ProjectsFile.xml_doc)
-    assert(File.exist?(@cache_file), 'cache file missing')
-    assert(File.exist?(@cache_file_etag), 'etag cache missing')
+    assert_path_exist(@cache_file, 'cache file missing')
+    assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)
     assert_not_equal(prev_mtime, File.mtime(@cache_file),
                      'Cache file should have been modified but was not.')
