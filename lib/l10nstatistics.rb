@@ -38,7 +38,7 @@ class L10nStatistics
           untranslated = 0
 
           Dir.glob('*.po').each do |file|
-            data = `LC_ALL=C LANG=C msgfmt --statistics #{file} > /dev/stdout 2>&1`
+            data = `LC_ALL=C LANG=C msgfmt --statistics #{file} -o /dev/null > /dev/stdout 2>&1`
 
             # tear the data apart and create some variables
             data.split(',').each do |x|
