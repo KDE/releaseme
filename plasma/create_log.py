@@ -17,8 +17,7 @@ def getVersionFrom(repo):
 
 f = open('git-repositories-for-release')
 #srcdir="/d/kde/src/5/"
-#changed jr different directory
-srcdir="/home/jr/src/releaseme/releaseme/plasma/tmp-changelog/"
+srcdir=os.getcwd() + "/tmp-changelog/"
 repos=[]
 
 line = f.read().rstrip()
