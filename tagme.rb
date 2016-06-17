@@ -89,7 +89,6 @@ unless dupes.empty?
         ' broken. Best start from scratch or manually repair the data to only' \
         " contain each entity once.\nDuplicates:\n#{dupes.join(', ')}"
 end
-exit
 tag_projects.each do |tag_project|
   puts "--- #{tag_project.project.identifier} ---"
   source = Source.new
