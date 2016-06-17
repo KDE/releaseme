@@ -76,6 +76,20 @@ def read_release_data
 end
 
 tag_projects = read_release_data
+tag_project_names = tag_projects.collect { |x| x.project.identifier }
+if tag_project_names.include?(nil)
+  raise 'Failed to resolve one or more releae_data entries'
+end
+dupes = tag_project_names.group_by { |x| x }
+                         .select { |_, v| v.size > 1 }
+                         .map(&:first)
+unless dupes.empty?
+  raise 'The following entities appear more than once in the release data!' \
+        ' This should absolutely not happen and indicates that your data is' \
+        ' broken. Best start from scratch or manually repair the data to only' \
+        " contain each entity once.\nDuplicates:\n#{dupes.join(', ')}"
+end
+exit
 tag_projects.each do |tag_project|
   puts "--- #{tag_project.project.identifier} ---"
   source = Source.new
