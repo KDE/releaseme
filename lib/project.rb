@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2014-2015 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2014-2016 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -134,20 +134,20 @@ class Project
 
     # @return [Array<Project>] never empty, can be nil if resolution failed
     def self.from_xpath(project_id)
-        release_projects = []
+      release_projects = []
 
-        # Cleanup project_id. Mustn't have trailing slashes or a
-        # wildcard asterisk. All not supported and in fact screwing with the
-        # parser.
-        project_id.chomp!("*") while project_id.end_with?("*")
-        project_id.chomp!("/") while project_id.end_with?("/")
+      # Cleanup project_id. Mustn't have trailing slashes or a
+      # wildcard asterisk. All not supported and in fact screwing with the
+      # parser.
+      project_id = project_id.chomp('*') while project_id.end_with?('*')
+      project_id = project_id.chomp('/') while project_id.end_with?('/')
 
-        %w(project module component).each do |element_type|
-            release_projects += find_suitable_projects("//#{element_type}[@identifier]", project_id)
-        end
+      %w(project module component).each do |element_type|
+        release_projects += find_suitable_projects("//#{element_type}[@identifier]", project_id)
+      end
 
-        # FIXME: return nil but this is slightly meh
-        release_projects
+      # FIXME: return nil but this is slightly meh
+      release_projects
     end
 
     # Constructs a Project instance from the definition placed in projects/project_name.yml
