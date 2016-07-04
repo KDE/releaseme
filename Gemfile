@@ -22,5 +22,4 @@ end
 
 group :quality do
   gem 'rubocop'
-  gem 'metric_fu'
 end
