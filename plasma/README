@@ -43,3 +43,8 @@ on release day launch:
  ./plasma-release
  this will open tabs in firefox and kate: check the web pages are good, e-mail out the texts, post the social media bits
  for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
+
+TODO:
+ remove apt from plasma-release
+ update-web-svn has hardcoded paths src/www
+ 
