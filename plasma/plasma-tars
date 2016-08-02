@@ -11,7 +11,11 @@ WORKSPACE=`cat ../git-repositories-for-release`
 echo "making tars for $WORKSPACE"
 for project in $WORKSPACE; do
   echo ${project}
-  ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${project}
+  if [ $project = "plasma-mediacenter" ]; then
+    ../../tarme.rb --origin ${ORIGIN} --version $VERSION --from-config plasma-mediacenter
+  else
+    ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${project}
+  fi
   cat release_data >> $VERSION-release-data
 done
 

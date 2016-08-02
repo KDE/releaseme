@@ -1,0 +1,7 @@
+identifier: plasma-mediacenter
+vcs:
+    type: Git
+    repository: kde:plasma-mediacenter
+i18n_trunk: master
+i18n_stable: Plasma/5.7
+i18n_path: 'kde-workspace'
