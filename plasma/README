@@ -51,4 +51,4 @@ on release day launch:
 TODO:
  remove apt from plasma-release
  update-web-svn has hardcoded paths src/www
- 
+ check .sig matches the key in VERSION
