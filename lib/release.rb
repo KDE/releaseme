@@ -68,6 +68,7 @@ class Release
   # FIXME: l10n and documentation have no test backing
   def get
     log_info "Getting source #{project.vcs}"
+    play if ENV.key?('RELEASE_THE_BEAT')
     source.cleanup
     source.get(project.vcs)
 
@@ -91,5 +92,28 @@ class Release
     @archive_.directory = source.target
     @archive_.create
     ArchiveSigner.new.sign(@archive_)
+  end
+
+  private
+
+  def play
+    url = case ENV.fetch('RELEASE_THE_BEAT', '')
+          when 'jam'
+            'https://www.youtube.com/watch?v=EpkYIy6UhI4'
+          else
+            'https://www.youtube.com/watch?v=fNNdOFwQjcU'
+          end
+    return unless url
+    play_thread(url)
+  end
+
+  def play_thread(url)
+    Thread.new do
+      loop do
+        ret = system(*(%w(vlc --no-video --play-and-exit --intf dummy) << url),
+                     pgroup: Process.pid)
+        break unless ret
+      end
+    end
   end
 end
