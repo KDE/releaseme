@@ -47,7 +47,7 @@ that might describe or fix your problem.</p>
 
 <p>GPG signatures are available alongside the source code for
 verification. They are signed by release manager <a
-href="https://sks-keyservers.net/pks/lookup?op=vindex&search=0xa506e6d4dd4d5088">Jonathan Riddell</a>.  Git tags are also signed by the
+href="https://sks-keyservers.net/pks/lookup?op=vindex&search=0xa506e6d4dd4d5088">Jonathan Riddell with 0xa506e6d4dd4d5088</a>.  Git tags are also signed by the
 same key.</p>
 
 <?php
