@@ -32,7 +32,7 @@ def custom
     file = File.new( "src/version.h", File::RDWR|File::CREAT|File::TRUNC, 0644 )
     file.puts "#ifndef VERSION_H"
     file.puts "#define VERSION_H"
-    file.puts  "const char *versionNumber = \"#{@version}\";"
+    file.puts "static const char *versionNumber = \"#{@version}\";"
     file.puts "#endif // VERSION_H"
     file.close
 
