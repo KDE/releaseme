@@ -108,4 +108,14 @@ class TestL10n < Testme
       l.get(@dir)
     end
   end
+
+  def test_space_and_declared_multi_pot
+    l = create_l10n
+    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('space-and-declared-multi-pot'), @dir)
+    l.get(@dir)
+    assert_path_exist("#{@dir}/po/de/amarok.po")
+    assert_path_exist("#{@dir}/po/de/amarokcollectionscanner_qt.po")
+  end
 end

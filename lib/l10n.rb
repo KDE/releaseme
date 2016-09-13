@@ -41,7 +41,7 @@ class L10n < TranslationUnit
   def find_templates(directory, pos = [])
     Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
       File.readlines(file).each do |line|
-        line.match(/[^\/]*\.pot/).to_a.each do |match|
+        line.match(/[^\/\s=]*\.pot/).to_a.each do |match|
           verify_pot(match)
           pos << match.sub('.pot', '.po')
         end
