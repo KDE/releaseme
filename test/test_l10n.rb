@@ -118,4 +118,10 @@ class TestL10n < Testme
     assert_path_exist("#{@dir}/po/de/amarok.po")
     assert_path_exist("#{@dir}/po/de/amarokcollectionscanner_qt.po")
   end
+
+  def test_find_templates_bogus
+    l = create_l10n
+    templates = l.find_templates(data("bogus-pot"))
+    assert_equal(templates, [])
+  end
 end
