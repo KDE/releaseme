@@ -98,4 +98,14 @@ class TestL10n < Testme
                                            :notshown=>0,
                                            :percentage=>100.0}})
     end
+
+  def test_variable_potname
+    l = create_l10n
+    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('variable-pot'), @dir)
+    assert_raises RuntimeError do
+      l.get(@dir)
+    end
+  end
 end

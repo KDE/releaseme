@@ -32,10 +32,17 @@ require_relative 'translationunit'
 class L10n < TranslationUnit
   prepend Logable
 
+  def verify_pot(potname)
+    if potname.include?('$')
+      raise "l10n pot appears to be a variable. cannot resolve #{potname}"
+    end
+  end
+
   def find_templates(directory, pos = [])
     Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
       File.readlines(file).each do |line|
         line.match(/[^\/]*\.pot/).to_a.each do |match|
+          verify_pot(match)
           pos << match.sub('.pot', '.po')
         end
       end
