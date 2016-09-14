@@ -81,7 +81,7 @@ module Logable
       # Module classes are not useful, use the actual module name if we are
       # mixed into a module.
       if self.class == Module || self.class == Class
-        @__logger.progname = "#{self.class.to_s}|#{self}"
+        @__logger.progname = "#{self.class}|#{self}"
       else
         @__logger.progname = self.class.to_s
       end
