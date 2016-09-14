@@ -190,6 +190,16 @@ class L10n < TranslationUnit
     end
 
     return if languages_without_translation.empty?
-    log_info "No translations for: #{languages_without_translation.join(', ')}"
+    print_missing_languages(languages_without_translation)
+  end
+
+  def print_missing_languages(missing)
+    if (languages - missing).empty?
+      path = po_file_dir('$lang')
+      log_warn "!!! No translations found at SVN path #{path} !!!"
+      log_warn "Looked for templates: #{@templates}"
+    else
+      log_info "No translations for: #{missing.join(', ')}"
+    end
   end
 end

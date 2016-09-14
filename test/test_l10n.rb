@@ -124,4 +124,38 @@ class TestL10n < Testme
     templates = l.find_templates(data("bogus-pot"))
     assert_equal(templates, [])
   end
+
+  def test_diff_output_some_not_found_all_not_found
+    # When no translations were found we expect different output versus when
+    # only some were not found.
+
+    l = create_l10n
+    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data("multi-pot"), @dir)
+    l.get(@dir)
+
+    ENV.delete('RELEASEME_SHUTUP') # Reset by testme setup
+
+    some_missing_stdout = StringIO.open do |io|
+      $stdout = io
+      l.instance_variable_set(:@__logger, nil) # Reset
+      l.print_missing_languages([l.languages.pop])
+      io.string.strip
+    end
+
+    all_missing_stdout = StringIO.open do |io|
+      $stdout = io
+      l.instance_variable_set(:@__logger, nil) # Reset
+      l.print_missing_languages(l.languages)
+      io.string.strip
+    end
+    $stdout = STDOUT
+
+    assert_not_empty(some_missing_stdout)
+    assert_not_empty(all_missing_stdout)
+    assert_not_equal(some_missing_stdout, all_missing_stdout)
+  ensure
+    $stdout = STDOUT
+  end
 end
