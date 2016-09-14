@@ -72,7 +72,7 @@ module Logable
     #   entirely new one.
     # @return [Logger] instance {#logger} was set to
     def create_logger
-      @__logger = Logger.new(STDOUT)
+      @__logger = Logger.new($stdout)
       @__logger.level = Logger::INFO
       @__logger.level = Logger::DEBUG if ENV['RELEASEME_DEBUG']
       logger.formatter = proc do |severity, _datetime, progname, msg|
