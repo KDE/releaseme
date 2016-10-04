@@ -23,6 +23,8 @@ sed -i s,plasma-${OLD_VERSION},plasma-${VERSION}, ${WWWCHECKOUT}/index.php
 sed -i "s,Plasma ${OLD_VERSION} Released,Plasma ${VERSION} Released," ${WWWCHECKOUT}/index.php
 sed -i "s/.*\. Plasma ${OLD_VERSION} release./${RELEASEDATE}. Plasma ${VERSION} release./" ${WWWCHECKOUT}/index.php
 
+sed -i s,${OLD_VERSION},${SHORT_VERSION}, ${WWWCHECKOUT}/images/teaser/teaser.json
+
 # commit to svn
 pushd ${ANNOUNCECHECKOUT}
 svn diff

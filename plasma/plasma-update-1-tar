@@ -15,7 +15,8 @@ cd $VERSION
 
 rm -fr ${TAR}-${VERSION}/
 ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${TAR}
-sed s,${TAR};.*,`cat release_data`, ${VERSION}-release-data -i
+RELEASE_DATA=`cat release_data`
+sed "s,${TAR};.*,$RELEASE_DATA," ${VERSION}-release-data -i
 
 ../create_sources_inc $VERSION > source-plasma-${VERSION}.inc
 cd ..

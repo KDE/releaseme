@@ -22,7 +22,7 @@ changelog_file = format('plasma-%s-%s-changelog.php',
                         version)
 FileUtils.cp(changelog_file,
              format('%s/%s', plasma_versions.announcecheckout, changelog_file))
-system('svn', 'add', "changelog_file", chdir: plasma_versions.announcecheckout)
+system('svn', 'add', changelog_file, chdir: plasma_versions.announcecheckout)
 
 system('svn', 'add', "plasma-#{version}.php", chdir: plasma_versions.infocheckout)
 system('svn', 'commit', '-m', "start webpages for Plasma #{version}",
