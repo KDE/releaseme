@@ -47,6 +47,7 @@ on release day launch:
  ./plasma-release
  this will open tabs in firefox and kate: check the web pages are good, e-mail out the texts, post the social media bits
  check if www/images/teaser teaser image needs an update
+ [tell a KDE neon person to update forks/base-files and neon/settings to show new version before making ISOs]
  for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
 
 TODO:
