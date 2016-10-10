@@ -16,9 +16,20 @@ set -ex
 products="systemsettings Powerdevil plasma-nm Oxygen ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter kde-cli-tools Breeze plasmashell kdeplasma-addons ksshaskpass bluedevil user-manager krunner kde-gtk-config kded-appmenu kstart ksplash Plasma%20Workspace%20Wallpapers policykit-kde-agent-1 kwrited drkonqi klipper knetattach kfontview plasma-mediacenter Plasma%20SDK kwallet-pam plasma-pa kgamma ksmserver kactivitymanagerd Discover plasma-integration"
 
 for PRODUCT in $products; do 
- TOKEN=`curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep token | sed "s,.*value=\",," | sed "s,\".,,"`
+
+ tokenline=`curl -s --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep 'name="token"'`
+ if [ -z "$tokenline" ]; then
+     echo 'No id="token" line in the bugzilla HTML output'
+     exit 1
+ fi
+ TOKEN=`echo $tokenline | sed "s,.*value=\",," | sed "s,\".,,"`
  echo token is: $TOKEN
+
  curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" --data "version=${VERSION}&action=new&product=${PRODUCT}&token=${TOKEN}" https://bugs.kde.org/editversions.cgi -o curlpushout.html
+ if grep -q 'needs a legitimate login and password to continue' curlpushout.html; then
+   echo "Login failure"
+   exit 1
+ fi
  echo "=== DONE"
 done
 
