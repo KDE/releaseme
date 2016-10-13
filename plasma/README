@@ -42,7 +42,7 @@ on tar day prepare:
  tell vdg on forum about announce and get feedback
 
 on release day launch:
- tag by running ./plasma-tag
+ ./plasma-tag to push tags
  ./update-web-svn
  ./plasma-release
  this will open tabs in firefox and kate: check the web pages are good, e-mail out the texts, post the social media bits
