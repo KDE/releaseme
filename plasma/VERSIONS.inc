@@ -2,9 +2,9 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.8.1
+VERSION=5.8.2
 SHORT_VERSION=5.8
-OLD_VERSION=5.8.0
+OLD_VERSION=5.8.1
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
