@@ -38,4 +38,4 @@ system('sed',
        "s,release_files\\[\"plasma-#{plasma_versions.old_version}\"\] = \\[\"plasma-#{plasma_versions.old_version}.php\"\],release_files[\"plasma-#{plasma_versions.old_version}\"] = [\"plasma-#{plasma_versions.old_version}.php\"]\\n  release_files[\"plasma-#{version}\"] = [\"plasma-#{version}.php\"],", "generate_release_data.py", "-i",
        chdir: plasma_versions.l10nscriptscheckout)
 system('svn', 'diff', chdir: plasma_versions.l10nscriptscheckout)
-system('svn', 'commit', '-m', "add Plasma #{version} announcement")
+system('svn', 'commit', '-m', "add Plasma #{version} announcement", chdir: plasma_versions.l10nscriptscheckout)
