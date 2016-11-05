@@ -45,6 +45,7 @@ class DocumentationL10n < TranslationUnit
 
     unless get_en('en')
       log_warn 'There is no en documentation. Skipping documentation :('
+      FileUtils.rmdir(@docdir)
       return
     end
     docs << 'en'

@@ -47,6 +47,19 @@ class TestDocumentation < Testme
     DocumentationL10n.new(DocumentationL10n::TRUNK, 'frenchfries', @i18n_path)
   end
 
+  def test_no_doc
+    # no doc present
+    d = DocumentationL10n.new(DocumentationL10n::TRUNK,
+                              'frenchfries',
+                              @i18n_path)
+    d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('variable-pot'), @dir)
+    d.get(@dir)
+    assert(File.exist?("#{@dir}/Messages.sh"))
+    assert(!File.exist?("#{@dir}/doc"))
+  end
+
   def test_get_doc
     # en & de
     d = create_doc
