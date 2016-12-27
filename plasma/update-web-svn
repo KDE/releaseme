@@ -4,16 +4,16 @@
 
 set -xe
 
-cd ~/src/www
+. VERSIONS.inc
 
-svn checkout svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/info/
-cd info; svn update; cd ..
-svn checkout svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
-cd announcements; svn update; cd ..
-svn checkout -N svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/
-cd www; svn update; cd ..
-svn checkout svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kde4/scripts/
-cd scripts; svn update; cd ..
+cd ${INFOCHECKOUT}
+svn update
 
-cd ~/src/www/l10n-kde4/scripts
+cd ${ANNOUNCECHECKOUT}
+svn update
+
+cd ${L10NSCRIPTSCHECKOUT}
+svn update
+
+cd ${WWWCHECKOUT}
 svn update

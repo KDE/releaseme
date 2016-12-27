@@ -78,7 +78,7 @@ for repo in repos:
 	if retval != 0:
                 #jr changed to not have show line
 		#print "<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a> <a href='#" + repo + "' onclick='toggle(\"ul" + repo +"\", this)'>[Show]</a></h3>"
-		print "<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a></h3>"
+		print "<h3><a name='" + repo + "' href='https://cgit.kde.org/"+repo+".git'>" + repo + "</a></h3>"
 		print "<ul id='ul" + repo + "' style='display: block'><li>New in this release</li></ul>"
 		continue
 
@@ -127,7 +127,7 @@ for repo in repos:
 		if len(commits):
                         # jr changed to now have show line
 			#print "<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a> <a href='#" + repo + "' onclick='toggle(\"ul" + repo +"\", this)'>[Show]</a></h3>"
-			print "<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a> </h3>" 
+			print "<h3><a name='" + repo + "' href='https://cgit.kde.org/?p="+repo+".git'>" + repo + "</a> </h3>" 
 			print "<ul id='ul" + repo + "' style='display: block'>"
 			for commit in commits:
 				extra = ""
@@ -178,7 +178,7 @@ for repo in repos:
 				if not changelog.endswith("."):
 					changelog = changelog + "."
 				capitalizedChangelog = changelog[0].capitalize() + changelog[1:]
-				print "<li>" + capitalizedChangelog + " <a href='http://quickgit.kde.org/?p="+repo+".git&amp;a=commit&amp;h="+commitHash+"'>Commit.</a> " + extra + "</li>"
+				print "<li>" + capitalizedChangelog + " <a href='https://cgit.kde.org/"+repo+".git/commit?id="+commitHash+"'>Commit.</a> " + extra + "</li>"
 
 				# edited jr, add newlines
 			print "</ul>\n\n"
