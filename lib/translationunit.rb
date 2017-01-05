@@ -117,7 +117,7 @@ class TranslationUnit < Source
 
   # special translations for Plasma LTS
   def url_l10n_dir
-    if type == LTS and i18n_path == 'kde-workspace'
+    if type == LTS && i18n_path == 'kde-workspace'
       'l10n-kf5-plasma-lts'
     else
       'l10n-kf5'

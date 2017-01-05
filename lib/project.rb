@@ -133,9 +133,8 @@ class Project
         end
         return false unless @i18n_path
 
-        # LTS branch only used for Plasma so unless it's set in a config file just use stable branch
-        branch = plasma_lts()
-
+        # LTS branch only used for Plasma so unless it's set in a config file
+        # just use stable branch
         if @i18n_path == 'kde-workspace'
           @i18n_lts = plasma_lts()
         else
