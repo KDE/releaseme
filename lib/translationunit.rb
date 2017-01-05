@@ -45,6 +45,7 @@ class TranslationUnit < Source
   # Type identifiers
   TRUNK  = :trunk
   STABLE = :stable
+  LTS = :lts
 
   # anonsvn only allows 5 concurrent connections.
   THREAD_COUNT = 5
@@ -67,7 +68,7 @@ class TranslationUnit < Source
   # FIXME: this name seems a bit meh
   def init_repo_url(base_url)
     repo_url = base_url
-    repo_url += "/#{url_type_suffix}/l10n-kf5/"
+    repo_url += "/#{url_type_suffix}/#{url_l10n_dir}/"
 
     @vcs.repository = repo_url
   end
@@ -107,8 +108,19 @@ class TranslationUnit < Source
   def url_type_suffix
     if type == TRUNK
       'trunk'
+    elsif type == STABLE
+      'branches/stable'
     else
       'branches/stable'
+    end
+  end
+
+  # special translations for Plasma LTS
+  def url_l10n_dir
+    if type == LTS and i18n_path == 'kde-workspace'
+      'l10n-kf5-plasma-lts'
+    else
+      'l10n-kf5'
     end
   end
 

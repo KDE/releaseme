@@ -59,6 +59,7 @@ class Release
     if project.vcs.is_a? Git
       project.vcs.branch = project.i18n_trunk if origin == :trunk
       project.vcs.branch = project.i18n_stable if origin == :stable
+      project.vcs.branch = project.i18n_lts if origin == :lts
     end
 
     source.target = "#{project.identifier}-#{version}"

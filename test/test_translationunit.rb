@@ -9,12 +9,26 @@ class TestTranslationUnit < Testme
     l
   end
 
+  def create_plasma(type)
+    l = TranslationUnit.new(type, 'khotkeys', 'kde-workspace')
+    l.target = "#{@dir}/l10n"
+    l
+  end
+
   def create_trunk
     create(TranslationUnit::TRUNK)
   end
 
   def create_stable
     create(TranslationUnit::STABLE)
+  end
+
+  def create_lts
+    create(TranslationUnit::LTS)
+  end
+
+  def create_lts_plasma
+    create_plasma(TranslationUnit::LTS)
   end
 
   def test_0_attr
@@ -37,6 +51,21 @@ class TestTranslationUnit < Testme
     assert_equal(TranslationUnit::STABLE, l.type)
     l.init_repo_url('file://a')
     assert_equal(l.vcs.repository, 'file://a/branches/stable/l10n-kf5/')
+  end
+
+  # LTS translations should be used but only for Plasma repos
+  def test_0_repo_url_init_lts
+    l = create_lts
+    assert_equal(TranslationUnit::LTS, l.type)
+    l.init_repo_url('file://a')
+    assert_equal(l.vcs.repository, 'file://a/branches/stable/l10n-kf5/')
+  end
+
+  def test_0_repo_url_init_lts_plasma
+    l = create_lts_plasma
+    assert_equal(TranslationUnit::LTS, l.type)
+    l.init_repo_url('file://a')
+    assert_equal(l.vcs.repository, 'file://a/branches/stable/l10n-kf5-plasma-lts/')
   end
 
   def test_invalid_inits

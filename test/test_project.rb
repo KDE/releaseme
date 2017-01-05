@@ -136,6 +136,7 @@ class TestProjectConfig < Testme
     assert_equal('git://anongit.kde.org/yakuake', pr.vcs.repository)
     assert_equal('master', pr.i18n_trunk)
     assert_equal('notmaster', pr.i18n_stable)
+    assert_equal(nil, pr.i18n_lts)
     assert_equal('extragear-utils', pr.i18n_path)
   end
 
@@ -250,4 +251,12 @@ class TestProject < Testme
         assert_equal(vcs.repository, 'git@git.kde.org:yakuake')
         assert_equal(vcs.branch, nil) # project on its own should not set a branch
     end
+
+    def test_plasma_lts
+        projects = Project::from_xpath('yakuake')
+        assert_equal(projects.size, 1)
+        pr = projects.shift
+        assert_equal(pr.plasma_lts(), 'Plasma/5.8')
+    end
+
 end

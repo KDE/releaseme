@@ -36,6 +36,8 @@ class Project
     attr_reader :i18n_trunk
     # Branch used for i18n stable
     attr_reader :i18n_stable
+    # Branch used for i18n lts (same as stable except for Plasma)
+    attr_reader :i18n_lts
     # Path used for i18n.
     attr_reader :i18n_path
 
@@ -46,6 +48,7 @@ class Project
                    vcs: nil,
                    i18n_trunk: nil,
                    i18n_stable: nil,
+                   i18n_lts: nil,
                    i18n_path: nil)
         unless project_element || (identifier && vcs && i18n_trunk && i18n_stable && i18n_path)
             raise "Project construction either needs to happen with a project_element or all other values being !nil"
@@ -54,6 +57,7 @@ class Project
         @vcs = vcs
         @i18n_trunk = i18n_trunk
         @i18n_stable = i18n_stable
+        @i18n_lts = i18n_lts
         @i18n_path = i18n_path
         @project_element = project_element
     end
@@ -129,6 +133,15 @@ class Project
         end
         return false unless @i18n_path
 
+        # LTS branch only used for Plasma so unless it's set in a config file just use stable branch
+        branch = plasma_lts()
+
+        if @i18n_path == 'kde-workspace'
+          @i18n_lts = plasma_lts()
+        else
+          @i18n_lts == @i18n_stable
+        end
+
         return true
     end
 
@@ -180,6 +193,16 @@ class Project
       end
 
       Project.new(data)
+    end
+
+    def plasma_lts()
+      ymlfile = "#{@@configdir}/plasma.yml"
+      unless File.exist?(ymlfile)
+        fail "Project file for Plasma not found [#{ymlfile}]."
+      end
+
+      data = YAML.load_file(ymlfile)
+      data['i18n_lts']
     end
 
     private
