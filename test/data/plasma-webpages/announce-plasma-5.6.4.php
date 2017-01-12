@@ -65,8 +65,10 @@ typically small but important and include:
 
 <p><?php print i18n_var("
 The easiest way to try it out is with a live image booted off a
-USB disk. You can find a list of <a href='%1'>Live Images with Plasma 5</a> on the KDE Community Wiki.
-", "https://community.kde.org/Plasma/Live_Images");?></p>
+USB disk. You can find a list of <a href='%1'>Live Images with Plasma 5</a> on the KDE Community Wiki.", "https://community.kde.org/Plasma/Live_Images");?></p>
+
+<p><?php print i18n_var("
+<a href='%1'>Docker images</a> also provide a quick and easy way to test Plasma.", "https://community.kde.org/Plasma/Docker_Images");?></p>
 
 <h2><?php i18n("Package Downloads");?></h2>
 
