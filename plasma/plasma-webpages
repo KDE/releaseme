@@ -15,7 +15,7 @@ File.write(format('%s/plasma-%s.php', plasma_versions.infocheckout, version), in
 
 announce_template = PlasmaAnnounceTemplate.new
 announce_output = announce_template.render
-File.write(format('%s/plasma-%s.php', plasma_versions.announcecheckout, version), announce_output)
+#File.write(format('%s/plasma-%s.php', plasma_versions.announcecheckout, version), announce_output)
 
 changelog_file = format('plasma-%s-%s-changelog.php',
                         plasma_versions.old_version,
@@ -27,9 +27,9 @@ system('svn', 'add', changelog_file, chdir: plasma_versions.announcecheckout)
 system('svn', 'add', "plasma-#{version}.php", chdir: plasma_versions.infocheckout)
 system('svn', 'commit', '-m', "start webpages for Plasma #{version}",
        chdir: plasma_versions.infocheckout)
-system('svn', 'add', "plasma-#{version}.php", chdir: plasma_versions.announcecheckout)
-system('svn', 'commit', '-m', "start webpages for Plasma #{version}",
-       chdir: plasma_versions.announcecheckout)
+#system('svn', 'add', "plasma-#{version}.php", chdir: plasma_versions.announcecheckout)
+#system('svn', 'commit', '-m', "start webpages for Plasma #{version}",
+#       chdir: plasma_versions.announcecheckout)
 system('firefox', "https://www.kde.org/announcements/plasma-#{version}.php")
 system('firefox', "https://www.kde.org/announcements/plasma-#{plasma_versions.old_version}-#{version}-changelog.php")
 system('firefox', "https://www.kde.org/info/plasma-#{version}.php")
