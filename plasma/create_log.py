@@ -134,7 +134,7 @@ for repo in repos:
 				changelog = commit[1]
 				
 				for line in commit:
-					cgi.escape(line)
+					line = cgi.escape(line)
 					if line.startswith("BUGS:"):
 						bugNumbers = line[line.find(":") + 1:].strip()
 						for bugNumber in bugNumbers.split(","):
