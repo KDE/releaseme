@@ -33,9 +33,8 @@ class L10n < TranslationUnit
   prepend Logable
 
   def verify_pot(potname)
-    if potname.include?('$')
-      raise "l10n pot appears to be a variable. cannot resolve #{potname}"
-    end
+    return unless potname.include?('$')
+    raise "l10n pot appears to be a variable. cannot resolve #{potname}"
   end
 
   def find_templates(directory, pos = [])
