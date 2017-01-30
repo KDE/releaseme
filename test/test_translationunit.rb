@@ -79,4 +79,11 @@ class TestTranslationUnit < Testme
       TranslationUnit.new(TranslationUnit::TRUNK, 'amarok', nil)
     end
   end
+
+  def test_invalid_type
+    assert_raise do
+      # :fishyfishy is a bad type and can't be mapped to a repo path
+      TranslationUnit.new(:fishyfishy, 'amarok', '/dev/null')
+    end
+  end
 end

@@ -106,12 +106,13 @@ class TranslationUnit < Source
   end
 
   def url_type_suffix
-    if type == TRUNK
+    case type
+    when TRUNK
       'trunk'
-    elsif type == STABLE
+    when STABLE, LTS
       'branches/stable'
     else
-      'branches/stable'
+      raise "Unknown l10n type #{type}"
     end
   end
 
