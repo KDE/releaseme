@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2015 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2007-2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -118,11 +118,24 @@ class TranslationUnit < Source
 
   # special translations for Plasma LTS
   def url_l10n_dir
-    if type == LTS && i18n_path == 'kde-workspace'
-      'l10n-kf5-plasma-lts'
-    else
-      'l10n-kf5'
+    case type
+    when TRUNK, STABLE
+      return 'l10n-kf5'
+    when LTS
+      return url_l10n_dir_lts
     end
+    # FIXME: move the concept of origins to project and make an Array
+    # Then blanket assert the type validity in #init
+    raise "Unknown l10n type #{type}"
+  end
+
+  # LTS is special in that they are about as generic as a hardcoded hardon.
+  # Unless we can manually map the LTS origin to a directory it is unreleaseable
+  # as we effectively do not know what LTS means for the given product.
+  # Since we have no access to higher level data this is derived from i18n_path.
+  def url_l10n_dir_lts
+    return 'l10n-kf5-plasma-lts' if i18n_path == 'kde-workspace'
+    raise "Unknown lts type for path #{i18n_path}."
   end
 
   def validate_instace_variables

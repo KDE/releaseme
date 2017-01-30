@@ -55,10 +55,9 @@ class TestTranslationUnit < Testme
 
   # LTS translations should be used but only for Plasma repos
   def test_0_repo_url_init_lts
-    l = create_lts
-    assert_equal(TranslationUnit::LTS, l.type)
-    l.init_repo_url('file://a')
-    assert_equal(l.vcs.repository, 'file://a/branches/stable/l10n-kf5/')
+    assert_raise do
+      create_lts
+    end
   end
 
   def test_0_repo_url_init_lts_plasma
