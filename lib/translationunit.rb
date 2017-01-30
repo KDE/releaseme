@@ -126,8 +126,8 @@ class TranslationUnit < Source
   end
 
   def validate_instace_variables
-    fail 'type must not be nil' unless @type
-    fail 'i18n_path must not be nil' unless @i18n_path
-    fail 'project_name must not be nil' unless @project_name
+    raise 'type must not be nil' unless @type
+    raise 'i18n_path must not be nil' unless @i18n_path
+    raise 'project_name must not be nil' unless @project_name
   end
 end
