@@ -92,11 +92,12 @@ class Project
       # a) distros like to use it so they may not have RW access
       # b) we need RW access for tagme, so tagme needs a way to explicitly
       #    request the RW repo url rather than the RO one...
-      if url.attribute('access').to_s == 'read+write' and
-        url.attribute('protocol').to_s == 'ssh'
-        @vcs = Git.new()
-        @vcs.repository = url.text
+      unless url.attribute('access').to_s == 'read+write' &&
+             url.attribute('protocol').to_s == 'ssh'
+        next
       end
+      @vcs = Git.new
+      @vcs.repository = url.text
     end
 
     branches = doc.root.get_elements("#{@project_element.xpath}/repo/branch")
