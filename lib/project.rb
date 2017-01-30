@@ -101,8 +101,8 @@ class Project
     branches.each do | branch |
       i18n = branch.attribute('i18n').to_s
       text = branch.text
-      next if i18n.nil? or i18n.empty?
-      next if text.nil? or text.empty? or text == 'none'
+      next if i18n.nil? || i18n.empty?
+      next if text.nil? || text.empty? || text == 'none'
       if i18n == 'trunk_kf5'
         @i18n_trunk = text
       elsif i18n == 'stable_kf5'
