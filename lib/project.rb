@@ -120,7 +120,7 @@ class Project
     @project_element.elements.each do |e|
       next unless e.name == 'path'
       path = e.text
-      fail 'unknown path' unless path
+      raise 'unknown path' unless path
       parts = path.split('/')
       warn parts
       if parts[0] == 'kde' && parts[1] != 'workspace'
@@ -173,14 +173,14 @@ class Project
   def self.from_config(project_name)
     ymlfile = "#{@@configdir}/#{project_name}.yml"
     unless File.exist?(ymlfile)
-      fail "Project file for #{project_name} not found [#{ymlfile}]."
+      raise "Project file for #{project_name} not found [#{ymlfile}]."
     end
 
     data = YAML.load(File.read(ymlfile))
     data = data.inject({}) do |tmphsh, (key, value)|
       key = key.downcase.to_sym
       if key == :vcs
-        fail 'Vcs configuration has no type key.' unless value.key?('type')
+        raise 'Vcs configuration has no type key.' unless value.key?('type')
         begin
           vcs_type = value.delete('type')
           require_relative "#{vcs_type.downcase}"
@@ -199,7 +199,7 @@ class Project
   def plasma_lts()
     ymlfile = "#{@@configdir}/plasma.yml"
     unless File.exist?(ymlfile)
-      fail "Project file for Plasma not found [#{ymlfile}]."
+      raise "Project file for Plasma not found [#{ymlfile}]."
     end
 
     data = YAML.load_file(ymlfile)
