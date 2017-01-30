@@ -66,8 +66,8 @@ class Project
   # call-seq:
   #  project.resolve_attributes!() -> true or false
   #
-  # Resolve project attributes by hand. All three REXML elements must be set before
-  # this function will do anything useful. Also see set_elements().
+  # Resolve project attributes by hand. All three REXML elements must be set
+  # before this function will do anything useful. Also see set_elements().
   #--
   # FIXME: needs tests
   #++
