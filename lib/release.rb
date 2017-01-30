@@ -57,9 +57,14 @@ class Release
 
     # FIXME: this possibly should be logic inside Project itself?
     if project.vcs.is_a? Git
-      project.vcs.branch = project.i18n_trunk if origin == :trunk
-      project.vcs.branch = project.i18n_stable if origin == :stable
-      project.vcs.branch = project.i18n_lts if origin == :lts
+      project.vcs.branch = case origin
+                           when :trunk
+                             project.i18n_trunk
+                           when :stable
+                             project.i18n_stable
+                           when :lts
+                             project.i18n_lts
+                           end
     end
 
     source.target = "#{project.identifier}-#{version}"
