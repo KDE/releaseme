@@ -85,4 +85,12 @@ class TestTranslationUnit < Testme
       TranslationUnit.new(:fishyfishy, 'amarok', '/dev/null')
     end
   end
+
+  def test_simple_kde4
+    # Technically we could handle kde4, given this is a fairly low level class
+    # we may just get away with this.
+    u = TranslationUnit.new(Origin::TRUNK_KDE4, 'amarok', '/dev/null')
+    assert_equal('svn://anonsvn.kde.org/home/kde//trunk/l10n-kde4/',
+                 u.vcs.repository)
+  end
 end

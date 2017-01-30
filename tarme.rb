@@ -27,6 +27,7 @@ require_relative 'lib/requirements'
 require_relative 'lib/documentation'
 require_relative 'lib/release'
 require_relative 'lib/l10n'
+require_relative 'lib/origin'
 require_relative 'lib/project'
 require_relative 'lib/projectsfile'
 
@@ -37,7 +38,8 @@ OptionParser.new do |opts|
   opts.separator ''
   opts.separator 'Automatic Project Definition via projects.kde.org:'
 
-  opts.on('--origin ORIGIN', [:trunk, :stable, :lts], 'Origin (trunk or stable or lts).',
+  opts.on('--origin ORIGIN', Origin::ALL,
+          "Origin (#{Origin::ALL.join(' | ')}).",
           '   Used to deduce release branch and localization branches.') do |v|
     options[:origin] = v
   end

@@ -104,4 +104,20 @@ class TestRelease < Testme
     r.source.cleanup
     assert(!File.exist?(@dir))
   end
+
+  def test_kde4_origin
+    data = {
+      :identifier => 'clone',
+      :vcs => Git.new,
+      :i18n_trunk => 'master',
+      :i18n_stable => 'master',
+      :i18n_path => ''
+    }
+    project = Project.new(data)
+    project.vcs.repository = @remotedir
+
+    assert_raise do
+      Release.new(project, Project::TRUNK_KDE4, '1.0')
+    end
+  end
 end

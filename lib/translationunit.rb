@@ -20,6 +20,7 @@
 
 require 'thread'
 
+require_relative 'origin'
 require_relative 'source'
 require_relative 'svn'
 
@@ -42,10 +43,12 @@ class TranslationUnit < Source
   # The project name this translation belongs to
   attr_reader :project_name
 
-  # Type identifiers
-  TRUNK  = :trunk
-  STABLE = :stable
-  LTS = :lts
+  # @deprecated use a {Origin}
+  TRUNK  = Origin::TRUNK
+  # @deprecated use a {Origin}
+  STABLE = Origin::STABLE
+  # @deprecated use a {Origin}
+  LTS = Origin::LTS
 
   # anonsvn only allows 5 concurrent connections.
   THREAD_COUNT = 5
@@ -107,9 +110,9 @@ class TranslationUnit < Source
 
   def url_type_suffix
     case type
-    when TRUNK
+    when Origin::TRUNK, Origin::TRUNK_KDE4
       'trunk'
-    when STABLE, LTS
+    when Origin::STABLE, Origin::LTS, Origin::STABLE_KDE4
       'branches/stable'
     else
       raise "Unknown l10n type #{type}"
@@ -119,10 +122,12 @@ class TranslationUnit < Source
   # special translations for Plasma LTS
   def url_l10n_dir
     case type
-    when TRUNK, STABLE
+    when Origin::TRUNK, Origin::STABLE
       return 'l10n-kf5'
-    when LTS
+    when Origin::LTS
       return url_l10n_dir_lts
+    when Origin::TRUNK_KDE4, Origin::STABLE_KDE4
+      return 'l10n-kde4'
     end
     # FIXME: move the concept of origins to project and make an Array
     # Then blanket assert the type validity in #init

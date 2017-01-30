@@ -64,6 +64,8 @@ class Release
                              project.i18n_stable
                            when :lts
                              project.i18n_lts
+                           else
+                             raise "Origin #{origin} unsupported. See readme."
                            end
     end
 
