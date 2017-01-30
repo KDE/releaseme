@@ -138,12 +138,12 @@ class Project
     # LTS branch only used for Plasma so unless it's set in a config file
     # just use stable branch
     if @i18n_path == 'kde-workspace'
-      @i18n_lts = plasma_lts()
+      @i18n_lts = plasma_lts
     else
       @i18n_lts == @i18n_stable
     end
 
-    return true
+    true
   end
 
   # @return [Array<Project>] never empty, can be nil if resolution failed
@@ -214,7 +214,7 @@ class Project
         return true
       end
     end
-    return false
+    false
   end
 
   def self.find_suitable_projects(xpath, project_id)
@@ -236,6 +236,6 @@ class Project
       pr.resolve_attributes!
       ret << pr
     end
-    return ret
+    ret
   end
 end
