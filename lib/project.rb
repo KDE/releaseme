@@ -87,7 +87,7 @@ class Project
     # Resolve git url.
     @vcs = nil
     urls = doc.root.get_elements("#{@project_element.xpath}/repo/url")
-    urls.each do | url |
+    urls.each do |url|
       # FIXME: we need a way to switch between RO and RW as
       # a) distros like to use it so they may not have RW access
       # b) we need RW access for tagme, so tagme needs a way to explicitly
@@ -100,7 +100,7 @@ class Project
     end
 
     branches = doc.root.get_elements("#{@project_element.xpath}/repo/branch")
-    branches.each do | branch |
+    branches.each do |branch|
       i18n = branch.attribute('i18n').to_s
       text = branch.text
       next if i18n.nil? || i18n.empty?
