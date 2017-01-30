@@ -71,7 +71,7 @@ class Project
   #--
   # FIXME: needs tests
   #++
-  def resolve_attributes!()
+  def resolve_attributes!
     # FIXME: maybe should raise?
     return false if @project_element.nil?
 
