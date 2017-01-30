@@ -207,10 +207,10 @@ class TestProject < Testme
         projects = Project::from_xpath('yakuake')
         assert_equal(projects.size, 1)
         pr = projects.shift
-        assert_equal(pr.identifier, 'yakuake')
-        assert_equal(pr.i18n_trunk, 'master')
-        assert_equal(pr.i18n_stable, 'notmaster')
-        assert_equal(pr.i18n_path, 'extragear-utils')
+        assert_equal('yakuake', pr.identifier)
+        assert_equal('master', pr.i18n_trunk)
+        assert_equal('notmaster', pr.i18n_stable)
+        assert_equal('extragear-utils', pr.i18n_path)
     end
 
     def test_resolve_valid_i18n_path_with_sub_project
