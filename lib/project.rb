@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2014-2016 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2014-2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -157,19 +157,22 @@ class Project
     project_id = project_id.chomp('/') while project_id.end_with?('/')
 
     %w(project module component).each do |element_type|
-      release_projects += find_suitable_projects("//#{element_type}[@identifier]", project_id)
+      search_string = "//#{element_type}[@identifier]"
+      release_projects += find_suitable_projects(search_string, project_id)
     end
 
     # FIXME: return nil but this is slightly meh
     release_projects
   end
 
-  # Constructs a Project instance from the definition placed in projects/project_name.yml
+  # Constructs a Project instance from the definition placed in
+  # projects/project_name.yml
   # @param project_name name of the yml file to look for. This is not reflected
   #   in the actual Project.identifier, just like the original xpath when using
   #   from_xpath.
   # @return Project never empty, raises exceptions when something goes wrong
-  # @raise RuntimeError on every occasion ever. Unless something goes wrong deep inside.
+  # @raise RuntimeError on every occasion ever. Unless something goes wrong deep
+  #        inside.
   def self.from_config(project_name)
     ymlfile = "#{@@configdir}/#{project_name}.yml"
     unless File.exist?(ymlfile)
@@ -183,7 +186,7 @@ class Project
         raise 'Vcs configuration has no type key.' unless value.key?('type')
         begin
           vcs_type = value.delete('type')
-          require_relative "#{vcs_type.downcase}"
+          require_relative vcs_type.downcase.to_s
           value = Object.const_get(vcs_type).from_hash(value)
         rescue LoadError, RuntimeError => e
           raise "Failed to resolve the Vcs values #{value} -->\n #{e}"
@@ -210,7 +213,7 @@ class Project
 
   def self.element_matches_path?(element, path)
     element.elements.each do |e|
-      if e.name == "path" && (e.text == path || e.text.start_with?(path))
+      if e.name == 'path' && (e.text == path || e.text.start_with?(path))
         return true
       end
     end
@@ -221,7 +224,8 @@ class Project
     ret = []
     ProjectsFile.xml_doc.root.get_elements(xpath).each do |element|
       suitable = false
-      if element.attribute("identifier").to_s == project_id || element_matches_path?(element, project_id)
+      if element.attribute('identifier').to_s == project_id ||
+         element_matches_path?(element, project_id)
         suitable = true
       end
       next unless suitable
