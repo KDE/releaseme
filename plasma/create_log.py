@@ -115,6 +115,9 @@ for repo in repos:
 					ignoreCommit = True
 				elif line.startswith("Merge branch"):
 					ignoreCommit = True
+                                #added jr 2017-02-07 for merges
+				elif line.startswith("Merge Plasma"):
+					ignoreCommit = True
                                 # changed jr ignore update version commits
 				elif line.startswith("Update version number for"):
 					ignoreCommit = True
@@ -173,6 +176,8 @@ for repo in repos:
 						#edited jr don't break
 						#raise NameError('Unhandled CHANGELOG')
                                                 changelog = line[11:] # remove word "CHANGELOG: "
+					elif line.startswith("Merge Plasma"):
+                                                pass
 				
 				commitHash = commit[0]
 				if not changelog.endswith("."):
