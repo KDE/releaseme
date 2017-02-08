@@ -19,7 +19,7 @@ figcaption {font-style: italic;}
 </style>
 
 <figure style="float: none">
-<iframe style="text-align: center" width="560" height="315" src="https://www.youtube.com/embed/LgH1Clgr-uE?rel=0" frameborder="0" allowfullscreen></iframe>
+<iframe style="text-align: center" width="560" height="315" src="https://www.youtube.com/embed/lm0sqqVcotA?rel=0" frameborder="0" allowfullscreen></iframe>
 <figcaption><?php i18n("KDE Plasma 5.6 Video");?></figcaption>
 </figure>
 <br clear="all" />
