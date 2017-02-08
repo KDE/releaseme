@@ -50,6 +50,10 @@ class TranslationUnit < Source
   # @deprecated use a {Origin}
   LTS = Origin::LTS
 
+  # Languages that will by default be dropped from the list of languages
+  # obtained from SVN.
+  DEFAULT_EXCLUDED_LANGUAGES = %w(x-test).freeze
+
   # anonsvn only allows 5 concurrent connections.
   THREAD_COUNT = 5
 
@@ -77,7 +81,7 @@ class TranslationUnit < Source
   end
 
   def languages(excluded = [])
-    excluded.concat(%w(x-test))
+    excluded.concat(DEFAULT_EXCLUDED_LANGUAGES)
     languages = self.class.languages(@vcs)
     languages.delete_if { |l| excluded.include?(l) }
   end
