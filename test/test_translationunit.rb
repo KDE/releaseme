@@ -93,4 +93,20 @@ class TestTranslationUnit < Testme
     assert_equal('svn://anonsvn.kde.org/home/kde//trunk/l10n-kde4/',
                  u.vcs.repository)
   end
+
+  def test_default_exclusion
+    u = create_trunk
+    langs = u.languages
+    assert_not_include(langs, 'x-test')
+    assert_false(langs.empty?)
+  end
+
+  def test_exclusion
+    u = create_trunk
+    u.default_excluded_languages = []
+    assert_include(u.languages, 'x-test')
+    # Make sure the exclusion list is not cached so it can be changed later.
+    u.default_excluded_languages = nil
+    assert_not_include(u.languages, 'x-test')
+  end
 end

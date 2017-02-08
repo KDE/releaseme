@@ -72,6 +72,13 @@ class TranslationUnit < Source
     init_repo_url('svn://anonsvn.kde.org/home/kde/')
   end
 
+  # @return Array<String> list of excluded languages, defaults to
+  #   class const {DEFAULT_EXCLUDED_LANGUAGES}
+  def default_excluded_languages
+    @default_excluded_languages || DEFAULT_EXCLUDED_LANGUAGES
+  end
+  attr_writer :default_excluded_languages
+
   # FIXME: this name seems a bit meh
   def init_repo_url(base_url)
     repo_url = base_url
@@ -81,8 +88,8 @@ class TranslationUnit < Source
   end
 
   def languages(excluded = [])
-    excluded.concat(DEFAULT_EXCLUDED_LANGUAGES)
-    languages = self.class.languages(@vcs)
+    excluded.concat(default_excluded_languages)
+    languages = self.class.languages(@vcs).clone # do not modify the live list.
     languages.delete_if { |l| excluded.include?(l) }
   end
 
