@@ -32,7 +32,7 @@ class TestPlasmaWebpages < Testme
   end
 
   def test_info_render
-    ref = File.read(data('plasma-webpages/info-plasma-5.6.4.php'))
+    ref = File.read(data('plasma-webpages/info-plasma-5.9.1.php'))
     assert_not_equal('', ref)
     template = PlasmaInfoTemplate.new
     output = template.render
@@ -40,7 +40,7 @@ class TestPlasmaWebpages < Testme
   end
 
   def test_announce_render
-    ref = File.read(data('plasma-webpages/announce-plasma-5.6.4.php'))
+    ref = File.read(data('plasma-webpages/announce-plasma-5.9.1.php'))
     assert_not_equal('', ref)
     template = PlasmaAnnounceTemplate.new
     output = template.render
@@ -50,10 +50,10 @@ class TestPlasmaWebpages < Testme
   def test_versions
     plasma_versions = PlasmaVersion.new
     assert_not_equal({}, plasma_versions.values)
-    assert_equal('5.6.4', plasma_versions.values['VERSION'])
-    assert_equal('5.6.4', plasma_versions.version)
-    assert_equal('bugfix', plasma_versions.values['RELEASETYPE'])
-    assert_equal('bugfix', plasma_versions.releasetype)
+    assert_equal('5.9.1', plasma_versions.values['VERSION'])
+    assert_equal('5.9.1', plasma_versions.version)
+    assert_equal('Feature', plasma_versions.values['RELEASETYPE'])
+    assert_equal('Feature', plasma_versions.releasetype)
     assert_raises NoMethodError do
       plasma_versions.yolo
     end
