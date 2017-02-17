@@ -258,3 +258,6 @@ To bump the version restriction you need to at the very least run `rake test`
 and make sure it passes on that version. This will at least need you to update
 the requirement_checker and its associated test. In addition to that it may be
 necessary to update gems to iron out incompatibilities with `bundle update`.
+
+Finally, please make sure that at least the .0 variant of the new Ruby version
+is listed in .travis.yml.
