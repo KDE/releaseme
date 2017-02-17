@@ -237,6 +237,10 @@ bundler install
 
 This installs a fixed set of dependencies locked to a specific version.
 
+NOTE: the built-in gem manager is itself a gem and may need updating every
+once in a while with `gem update --system`. In particular when switching to
+newer Ruby versions.
+
 #### Testing
 
 Testing is simply done by running: `rake test`
