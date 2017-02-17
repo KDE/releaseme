@@ -1,11 +1,12 @@
+# Makes sure the runtime requirements of releasme are met.
 class RequirementChecker
   # NOTE: The versions are restricted upwards because behavior changes in the
   # language can result in unexpected outcome when using releaseme. i.e.
   # you may end up with a broken or malformed tar. To prevent this, a change
   # here must be followed by running `rake test` to pass the entire test suite!
   # Also see the section on bumping versions in the REAMDE.
-  COMPATIBLE_RUBIES = %w(2.1.0 2.2.0 2.3.0 2.4.0)
-  REQUIRED_BINARIES = %w(svn git tar xz msgfmt gpg2)
+  COMPATIBLE_RUBIES = %w(2.1.0 2.2.0 2.3.0 2.4.0).freeze
+  REQUIRED_BINARIES = %w(svn git tar xz msgfmt gpg2).freeze
 
   def initialize
     @ruby_version = RUBY_VERSION
@@ -22,7 +23,7 @@ class RequirementChecker
       puts "- Missing binary: #{m}."
       err = true
     end
-    fail 'Not all requirements met.' if err
+    raise 'Not all requirements met.' if err
   end
 
   private
