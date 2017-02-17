@@ -221,3 +221,36 @@ access (i.e. helps with getting the absolute path of test/data/ files).
 - If you are still not sure about the coverage run the relevant test_blackbox_*
   script in test/. They call their related tool and evaluate it's output on a
   global level.
+
+#### Dependencies
+
+Unlike the actual library the testing rig requires third party libraries
+(AKA gems) to run. So you'll want to get them installed. In the Ruby world we
+use a tool called bundler for this. So you'll want to install bundler through
+Ruby's built-in gem manager and then in the source directory instruct bundler
+to install the dependencies:
+
+```
+gem install bundler
+bundler install
+```
+
+This installs a fixed set of dependencies locked to a specific version.
+
+#### Testing
+
+Testing is simply done by running: `rake test`
+
+#### Bumping Ruby versions
+
+Releaseme is tightly version locked to Ruby, meaning it will only work with
+versions we know it works on. This in particular is so that we know someone
+ran the tests at least once and thus that the Ruby version is able to generate
+the expected results. Ruby, being a runtime interpreted language, can change in
+ways that have the potential to generate broken release tarballs. As we
+absolutely do not want that the version safe guard is in place.
+
+To bump the version restriction you need to at the very least run `rake test`
+and make sure it passes on that version. This will at least need you to update
+the requirement_checker and its associated test. In addition to that it may be
+necessary to update gems to iron out incompatibilities with `bundle update`.
