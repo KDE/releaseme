@@ -18,9 +18,10 @@ KDELibs 4.x please use the kdelibs4 branch.
 ## KDE Frameworks 5.x
 
 Unlike the previous versions of releaseme the KDE Frameworks version tries to
-automated as much as possible by defaulting to the meta data provided on
-http://projects.kde.org It is therefore imperative that you make sure the data
-configured there is correct and up to date!
+automated as much as possible by defaulting to the meta data provided in
+https://phabricator.kde.org/source/sysadmin-repo-metadata/
+It is therefore imperative that you make sure the data configured there is
+correct and up to date!
 
 The KDE Frameworks 5.x version features a set of separate tools to allow more
 atomic control over the workflow (when to tag, when to branch etc.)
@@ -40,13 +41,13 @@ The corner stone script to create a tarball is tarme.rb.
 
 Tarme requires three arguments
 
-- **origin**: either trunk or stable referring to the i18n branch configured on
-  projects.kde.org
+- **origin**: either trunk or stable referring to the i18n branch configured in
+  https://phabricator.kde.org/source/sysadmin-repo-metadata/
 - **version**: the version you wish to release
 - The name of the project you want to release. This technically can be the
-  full path as seen on projects.kde.org (e.g. kde/workspace/ksysguard) but
-  does not need to be in most cases as tarme will try to figure this out for
-  itself.
+  full path in https://phabricator.kde.org/source/sysadmin-repo-metadata/browse/master/projects/
+  (e.g. kde/workspace/ksysguard) but does not need to be in most cases as
+  tarme will try to figure this out for itself.
 
 Tarme creates a tarball in the present working directory as well as release meta
 data file. Latter will in turn be used by other scripts to operate on the same
@@ -71,8 +72,9 @@ branchme.
   upwards of 7 days before a release. For most medium sized projects a freeze of
   14 days is recommendable.
 - When string freeze draws closer make sure the correct branches are set for
-  i18n trunk or i18n stable (depending on what you want to release) on
-  projects.kde.org. If you change the settings also make sure to inform the
+  i18n trunk or i18n stable (depending on what you want to release) in
+  https://phabricator.kde.org/source/sysadmin-repo-metadata/.
+  When you change the i18n settings also make sure to inform the
   translators of the move either on IRC or by mail at kde-i18n-doc@kde.org
 - Inform the translation teams when you start string freeze and tell them when
   the release is due so they can plan accordingly. kde-i18n-doc@kde.org
