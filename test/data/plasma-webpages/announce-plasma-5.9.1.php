@@ -3,10 +3,8 @@
 
 	$pageConfig = array_merge($pageConfig, [
 		'title' => "KDE Plasma 5.9.1, Feature Release for January",
-		'cssFile' => 'content/home/portal.css'
+		'cssFile' => '/content/home/portal.css'
 	]);
-
-	function i18n ($v) { return $v; }
 	
 	require('../aether/header.php');
 	$site_root = "../";

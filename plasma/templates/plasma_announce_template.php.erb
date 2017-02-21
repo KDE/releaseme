@@ -3,11 +3,9 @@
 
 	$pageConfig = array_merge($pageConfig, [
 		'title' => "KDE Plasma <%= version %>, <%= releasetype %> Release for <%= releasemonth %>",
-		'cssFile' => 'content/home/portal.css'
+		'cssFile' => '/content/home/portal.css'
 	]);
 
-	function i18n ($v) { return $v; }
-	
 	require('../aether/header.php');
 	$site_root = "../";
 	$release = "<%= version %>";
