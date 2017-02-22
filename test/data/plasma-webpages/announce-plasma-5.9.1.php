@@ -8,7 +8,8 @@
 
 	require('../aether/header.php');
 	$site_root = "../";
-	$release = "5.9.1";
+	$release = 'plasma-5.9.1'; // for i18n
+	$version = "5.9.1";
 ?>
 
 <style>
@@ -87,10 +88,10 @@ main {
 
 <main class="releaseAnnouncment container">
 
-	<h1 class="announce-title"><a href="/announcements/">Release Announcements</a>Plasma 5.9.1</h1>
+	<h1 class="announce-title"><a href="/announcements/"><?php i18n("Release Announcements")?></a><?php print i18n_var("Plasma %1", $version)?></h1>
 
 	<figure class="videoBlock">
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/lm0sqqVcotA?rel=0" allowfullscreen></iframe>
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/lm0sqqVcotA?rel=0" allowfullscreen='true'></iframe>
 	</figure>
 	
 	
@@ -98,90 +99,90 @@ main {
 		<a href="plasma-5.9/plasma-5.9.png">
 			<img src="plasma-5.9/plasma-5.9-wee.png" width="600" height="338" alt="Plasma 5.9" />
 		</a>
-		<figcaption>KDE Plasma 5.9</figcaption>
+		<figcaption><?php print i18n_var("KDE Plasma %1", "5.9")?></figcaption>
 	</figure>
 
 	<p>
-		Tuesday, 14 February 2017.
-		Today KDE releases a Feature update to KDE Plasma 5, versioned 5.9.1.
-		<a href='https://www.kde.org/announcements/plasma-5.9.0.php'>Plasma 5.9</a>
-		was released in January with many feature refinements and new modules to complete the desktop experience.
+		<?php i18n("Tuesday, 14 February 2017.")?>
+		<?php print i18n_var("Today KDE releases a %1 update to KDE Plasma 5, versioned %2", "Feature", "5.9.1");?>.
+		<?php print i18n_var("<a href='https://www.kde.org/announcements/plasma-%1.0.php'>Plasma %1</a>
+		was released in %2 with many feature refinements and new modules to complete the desktop experience.", "5.9", "January");?>
 	</p>
 
 	<p>
-		This release adds a a month's worth of new
-		translations and fixes from KDE's contributors.  The bugfixes are
-		typically small but important and include:
+		print i18n_var("This release adds a %1 worth of new translations and fixes from KDE's contributors.  The bugfixes are typically small but important and include:", "a month's");?>
 	</p>
 
 	<ul>
-		<li>FIXME</li>
+		<li><?php i18n("FIXME")?></li>
 	</ul>
 
-	<a href="plasma-5.9.0-5.9.1-changelog.php">Full Plasma 5.9.1 changelog</a>
+	<a href="plasma-5.9.0-5.9.1-changelog.php"><?php print i18n_var("Full Plasma %1 changelog", "5.9.1"); ?></a>
 
 	<!-- // Boilerplate again -->
 	<section class="row get-it">
 		<article class="col-md">
-			<h2>Live Images</h2>
+			<h2><?php i18n("Live Images");?></h2>
 			<p>
-				The easiest way to try it out is with a live image booted off a
-				USB disk. Docker images also provide a quick and easy way to test Plasma.
+				<?php i18n("The easiest way to try it out is with a live image booted off a USB disk. Docker images also provide a quick and easy way to test Plasma.");?>
 			</p>
-			<a href='https://community.kde.org/Plasma/Live_Images' class="learn-more">Download live images with Plasma 5</a>
-			<a href='https://community.kde.org/Plasma/Docker_Images' class="learn-more">Download Docker images with Plasma 5</a>
+			<a href='https://community.kde.org/Plasma/Live_Images' class="learn-more"><?php i18n("Download live images with Plasma 5");?></a>
+			<a href='https://community.kde.org/Plasma/Docker_Images' class="learn-more"><?php i18n("Download Docker images with Plasma 5");?></a>
 		</article>
-			
+
 		<article class="col-md">
-			<h2>Package Downloads</h2>
+			<h2><?php i18n("Package Downloads");?></h2>
 			<p>
-				Distributions have created, or are in the process
-				of creating, packages listed on our wiki page.
+				<?php i18n("Distributions have created, or are in the process of creating, packages listed on our wiki page.");?>
 			</p>
-			<a href='https://community.kde.org/Plasma/Packages' class="learn-more">Package download wiki page</a>
+			<a href='https://community.kde.org/Plasma/Packages' class="learn-more"><?php i18n("Package download wiki page");?></a>
 		</article>
-			
+
 		<article class="col-md">
-			<h2>Source Downloads</h2>
+			<h2><?php i18n("Source Downloads");?></h2>
 			<p>
-				You can install Plasma 5 directly from source.
+				<?php i18n("You can install Plasma 5 directly from source.");?>
 			</p>
-			<a href='http://community.kde.org/Frameworks/Building'>Community instructions to compile it</a>
-			<a href='../info/plasma-5.9.1.php' class='learn-more'>Source Info Page</a>
+			<a href='http://community.kde.org/Frameworks/Building'><?php i18n("Community instructions to compile it");?></a>
+			<a href='../info/plasma-5.9.2.php' class='learn-more'><?php i18n("Source Info Page");?></a>
 		</article>
 	</section>
 
 	<section class="give-feedback">
-		<h2>Feedback</h2>
+		<h2><?php i18n("Feedback");?></h2>
 
 		<p>
-			You can give us feedback and get updates on
-			<a href='https://www.facebook.com/kde'><img src='https://www.kde.org/announcements/facebook.gif' /></a> <a href='https://www.facebook.com/kde'>Facebook</a>
-			or <a href='https://twitter.com/kdecommunity'><img src='https://www.kde.org/announcements/twitter.png' /></a> <a href='https://twitter.com/kdecommunity'>Twitter</a>
-			or <a href='https://plus.google.com/105126786256705328374/posts'><img src='https://www.kde.org/announcements/googleplus.png' /></a> <a href='https://plus.google.com/105126786256705328374/posts'>Google+</a>.
+			<?php print i18n_var("You can give us feedback and get updates on <a href='%1'><img src='%2' /></a> <a href='%3'>Facebook</a>
+			or <a href='%4'><img src='%5' /></a> <a href='%6'>Twitter</a>
+			or <a href='%7'><img src='%8' /></a> <a href='%9'>Google+</a>.", "https://www.facebook.com/kde", "https://www.kde.org/announcements/facebook.gif", "https://www.facebook.com/kde", "https://twitter.com/kdecommunity", "https://www.kde.org/announcements/twitter.png", "https://twitter.com/kdecommunity", "https://plus.google.com/105126786256705328374/posts", "https://www.kde.org/announcements/googleplus.png", "https://plus.google.com/105126786256705328374/posts"); ?>
 		</p>
 		<p>
-		Discuss Plasma 5 on the <a href='https://forum.kde.org/viewforum.php?f=289'>KDE Forums Plasma 5 board</a>.
+			<?php print i18n_var("Discuss Plasma 5 on the <a href='%1'>KDE Forums Plasma 5 board</a>.", "https://forum.kde.org/viewforum.php?f=289");?>
 		</p>
 
-		<p>You can provide feedback direct to the developers via the <a href='irc://#plasma@freenode.net'>#Plasma IRC channel</a>,
-		<a href='https://mail.kde.org/mailman/listinfo/plasma-devel'>Plasma-devel mailing list</a> or report issues via
-		<a href='https://bugs.kde.org/enter_bug.cgi?product=plasmashell&amp;format=guided'>bugzilla</a>.  If you like what the
-		team is doing, please let them know!
+		<p><?php print i18n_var("You can provide feedback direct to the developers via the <a href='%1'>#Plasma IRC channel</a>, <a href='%2'>Plasma-devel mailing list</a> or report issues via <a href='%3'>bugzilla</a>. If you like what the team is doing, please let them know!", "irc://#plasma@freenode.net", "https://mail.kde.org/mailman/listinfo/plasma-devel", "https://bugs.kde.org/enter_bug.cgi?product=plasmashell&amp;format=guided"); ?>
 
-		<p>Your feedback is greatly appreciated.</p>
+		<p><?php i18n("Your feedback is greatly appreciated.");?></p>
 	</section>
 
 	<h2>
-		Supporting KDE
+		<?php i18n("Supporting KDE");?>
 	</h2>
 
 	<p align="justify">
+		<?php print i18n_var("KDE is a <a href='%1'>Free Software</a> community that exists and grows only because of the help of many volunteers that donate their time and effort. KDE is always looking for new volunteers and contributions, whether it is help with coding, bug fixing or reporting, writing documentation, translations, promotion, money, etc. All contributions are gratefully appreciated and eagerly accepted. Please read through the <a href='%2'>Supporting KDE page</a> for further information or become a KDE e.V. supporting member through our <a href='%3'>Join the Game</a> initiative.", "http://www.gnu.org/philosophy/free-sw.html", "/community/donations/", "https://relate.kde.org/civicrm/contribute/transact?id=5"); ?>
+	</p>
 
-	KDE is a <a href='http://www.gnu.org/philosophy/free-sw.html'>Free Software</a> community that exists and grows only because of the help of many volunteers that donate their time and effort. KDE is always looking for new volunteers and contributions, whether it is help with coding, bug fixing or reporting, writing documentation, translations, promotion, money, etc. All contributions are gratefully appreciated and eagerly accepted. Please read through the <a href='/community/donations/'>Supporting KDE page</a> for further information or become a KDE e.V. supporting member through our <a href='https://relate.kde.org/civicrm/contribute/transact?id=5'>Join the Game</a> initiative. </p>
 <?php
   include($site_root . "/contact/about_kde.inc");
 ?>
+
+<h2><?php i18n("Press Contacts");?></h2>
+
+<?php
+  include($site_root . "/contact/press_contacts.inc");
+?>
+
 </main>
 <?php
-	require('../aether/footer.php');
+  require('../aether/footer.php');

@@ -156,6 +156,12 @@ for repo in repos:
 							extra += ". "
 						reviewNumber = line[line.find(":") + 1:].strip()
 						extra += "Code review <a href='https://git.reviewboard.kde.org/r/" + reviewNumber + "'>#" + reviewNumber + "</a>"
+						# jr addition 2017-02 phab link
+					elif line.startswith("Differential Revision:"):
+						if extra:
+							extra += ". "
+						reviewNumber = line[line.find("org/") + 4:].strip()
+						extra += "Phabricator Code review <a href='https://phabricator.kde.org/" + reviewNumber + "'>" + reviewNumber + "</a>"
 					elif line.startswith("CCBUG:"):
 						if extra:
 							extra += ". "
