@@ -4,6 +4,8 @@
 [![PullReview stats](https://www.pullreview.com/github/apachelogger/releaseme/badges/master.svg?)](https://www.pullreview.com/github/apachelogger/releaseme/reviews/master)
 [![Inline docs](http://inch-ci.org/github/apachelogger/releaseme.svg?branch=master)](http://inch-ci.org/github/apachelogger/releaseme/branch/master)
 
+Releaseme is a release tool for software hosted on KDE infrastructure. It takes care of the nitty gritty details of creating a high-quality release tarball.
+
 ```
 git clone kde:releaseme
 cd releaseme
@@ -12,19 +14,17 @@ cd releaseme
 
 ## KDELibs 4.x
 
-The master branch only supports KDE Frameworks based releases. To release for
-KDELibs 4.x please use the kdelibs4 branch.
+The `master` branch only supports KDE Frameworks based releases. To release for
+KDELibs 4.x please use the `kdelibs4` branch. This in particular also applies
+to software that has its translations in the kdelibs4 directories on SVN.
 
 ## KDE Frameworks 5.x
 
-Unlike the previous versions of releaseme the KDE Frameworks version tries to
-automated as much as possible by defaulting to the meta data provided in
+Releaseme uses 'origins' to control which branch to release and where to draw
+translations from. An origin is basically the i18n association as configured in:
 https://phabricator.kde.org/source/sysadmin-repo-metadata/
-It is therefore imperative that you make sure the data configured there is
+It is imperative that you make sure the data configured there is
 correct and up to date!
-
-The KDE Frameworks 5.x version features a set of separate tools to allow more
-atomic control over the workflow (when to tag, when to branch etc.)
 
 ### Requirements
 
@@ -105,6 +105,23 @@ branchme.
   relatively little effort)
 - Make sure you provide the finger print via a trusted source (i.e. HTTPs, not
   unsigned mails etc.)
+
+## Translations
+
+Releaseme automatically tries to grab translations and documentation translation
+from the data it can find in the repo-metadata. It also tries to automatically
+wire up CMake to build both. If you need the CMake code block placed at a
+specific place in your root CMakeLists.txt you can use a place holder macro to
+tell releaseme where to put its code. `#PO_SUBDIR`.
+
+NOTE: releaseme will try to be smart and only add the code block when it isn't
+already there. So you can actually use ki18n_install(po) in a conditional and
+releaseme will not add another one.
+
+## Issues
+
+If you are problems or suggestions file a bug report in bugzilla:
+https://bugs.kde.org/enter_bug.cgi?product=releaseme
 
 ## Signing | GPG
 
