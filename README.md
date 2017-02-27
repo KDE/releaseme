@@ -157,12 +157,12 @@ find out that the website has been compromised no one would know.
 
 GPG signing helps with this on two fronts.
 
-a) The signature is an opt-in file the user can easily download (automatically)
-   and verify (automatically)
-b) You only need to tell the user your key fingerprint once, they can verify it
-   once and any future release is sorted as long as you don't use a new key.
-   Should your website and tarball get compromised they won't match the key
-   expectation anymore and raise flags.
+- The signature is an opt-in file the user can easily download (automatically)
+  and verify (automatically)
+- You only need to tell the user your key fingerprint once, they can verify it
+  once and any future release is sorted as long as you don't use a new key.
+  Should your website and tarball get compromised they won't match the key
+  expectation anymore and raise flags.
 
 ### Advantages
 
