@@ -1,4 +1,6 @@
 <?php
+	include_once ("functions.inc");
+	$translation_file = "www";
 	require('../aether/config.php');
 
 	$pageConfig = array_merge($pageConfig, [
@@ -89,6 +91,8 @@ main {
 <main class="releaseAnnouncment container">
 
 	<h1 class="announce-title"><a href="/announcements/"><?php i18n("Release Announcements")?></a><?php print i18n_var("Plasma %1", $version)?></h1>
+
+	<?php include "./announce-i18n-bar.inc"; ?>
 
 	<figure class="videoBlock">
 		<iframe width="560" height="315" src="https://www.youtube.com/embed/<%= youtubeid %>?rel=0" allowfullscreen='true'></iframe>
