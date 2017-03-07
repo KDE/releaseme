@@ -10,6 +10,7 @@ env:
   - secure: fcBXclhQt2XL2iXQC6b3WVa6KGiWqboZK6AWFq2u1o53WK3Wz7eeG2OJwYakJvr23h4U2vvsTbMRT8fen6HXnywOHqPm83qQ6YdukoO5ky95s0zNFtVNn8Nj+ulZveb+zb+DlzXwuOUTSaBfgY0bN3XR12lM9b8qLy5UlZNGlNI=
 notifications:
   irc: "chat.freenode.net#kde-neon"
+    on_success: change
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y gnupg2
