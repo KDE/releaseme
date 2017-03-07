@@ -1,4 +1,3 @@
-# rubocop:disable Style/FileName
 # rubocop:disable Style/HashSyntax
 
 def cond_require(lib, &block)
