@@ -20,10 +20,10 @@
 
 require_relative 'lib/testme'
 
-require_relative '../lib/logable'
+require_relative '../lib/releaseme/logable'
 
 class FakeClass1
-  prepend Logable
+  prepend ReleaseMe::Logable
 
   def create_logger
     Logger.new('/dev/null')
@@ -45,7 +45,7 @@ class FakeClass2 < FakeClass1
 end
 
 module M
-  prepend Logable
+  prepend ReleaseMe::Logable
 
   attr_reader :log_file
   module_function :log_file
@@ -72,7 +72,7 @@ module M
 end
 
 class C
-  prepend Logable
+  prepend ReleaseMe::Logable
   prepend M
 
   def self.log(logfile)
@@ -90,7 +90,7 @@ class C
 end
 
 class FakeClass3Prepend
-  prepend Logable
+  prepend ReleaseMe::Logable
 
   private
 

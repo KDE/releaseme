@@ -1,19 +1,18 @@
 require 'fileutils'
 
 require_relative 'lib/testme'
-
-require_relative '../lib/requirement_checker'
+require_relative '../lib/releaseme/requirement_checker'
 
 class TestRequirementChecker < Testme
   def assert_ruby_version_compatible(version)
-    checker = RequirementChecker.new
+    checker = ReleaseMe::RequirementChecker.new
     checker.instance_variable_set(:@ruby_version, version)
     assert(checker.send(:ruby_compatible?),
            "Ruby version #{version} NOT compatible but should be")
   end
 
   def assert_ruby_version_not_compatible(version)
-    checker = RequirementChecker.new
+    checker = ReleaseMe::RequirementChecker.new
     checker.instance_variable_set(:@ruby_version, version)
     assert(!checker.send(:ruby_compatible?),
            "Ruby version #{version} compatible but should not be")
@@ -53,12 +52,12 @@ class TestRequirementChecker < Testme
   end
 
   def all_binaries
-    RequirementChecker.const_get(:REQUIRED_BINARIES)
+    ReleaseMe::RequirementChecker.const_get(:REQUIRED_BINARIES)
   end
 
   def test_missing_binaries
     with_path('') do
-      checker = RequirementChecker.new
+      checker = ReleaseMe::RequirementChecker.new
       missing_binaries = checker.send(:missing_binaries)
       expected_missing_binaries = all_binaries
       assert_equal(expected_missing_binaries, missing_binaries)
@@ -70,7 +69,7 @@ class TestRequirementChecker < Testme
     FileUtils.touch(all_binaries)
     FileUtils.chmod('+x', all_binaries)
     with_path(Dir.pwd) do
-      missing_binaries = RequirementChecker.new.send(:missing_binaries)
+      missing_binaries = ReleaseMe::RequirementChecker.new.send(:missing_binaries)
       assert_equal([], missing_binaries)
     end
   end

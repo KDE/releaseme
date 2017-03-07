@@ -1,18 +1,17 @@
 require 'fileutils'
 
 require_relative 'lib/testme'
-
-require_relative '../lib/git'
-
-module Silencer
-  module_function
-
-  def run(cmd)
-    `#{cmd} 2>&1`
-  end
-end
+require_relative '../lib/releaseme/git'
 
 class TestGit < Testme
+  module Silencer
+    module_function
+
+    def run(cmd)
+      `#{cmd} 2>&1`
+    end
+  end
+
   attr_reader :remotedir
 
   def `(other)

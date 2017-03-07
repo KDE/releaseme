@@ -1,10 +1,9 @@
-require "fileutils"
+require 'fileutils'
 
-require_relative "lib/testme"
-
-require_relative "../lib/l10n.rb"
-require_relative "../lib/l10nstatistics.rb"
-require_relative "../lib/documentation.rb"
+require_relative 'lib/testme'
+require_relative '../lib/releaseme/l10n.rb'
+require_relative '../lib/releaseme/l10nstatistics.rb'
+require_relative '../lib/releaseme/documentation.rb'
 
 # FIXME: test stable
 
@@ -40,7 +39,7 @@ class TestL10n < Testme
     end
 
     def create_l10n
-        l = L10n.new(L10n::TRUNK, 'amarok', @i18n_path)
+        l = ReleaseMe::L10n.new(ReleaseMe::L10n::TRUNK, 'amarok', @i18n_path)
         l.target = "#{@dir}/l10n"
         l
     end
@@ -87,7 +86,7 @@ class TestL10n < Testme
         FileUtils.cp_r(data("multi-pot"), @dir)
         l.get(@dir)
 
-        statistics = L10nStatistics.new
+        statistics = ReleaseMe::L10nStatistics.new
         statistics.gather!(@dir)
         assert_equal(statistics.stats, {"de"=>{:all=>4,
                                            :shown=>3,

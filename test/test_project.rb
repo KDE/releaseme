@@ -18,19 +18,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require "fileutils"
+require 'fileutils'
 
-require_relative "lib/testme"
-
-require_relative "../lib/project"
-require_relative "../lib/vcs"
+require_relative 'lib/testme'
+require_relative '../lib/releaseme/project'
+require_relative '../lib/releaseme/vcs'
 
 class TestProjectResolver < Testme
     def setup
         # Project uses ProjectsFile to read data, so we need to make sure it
         # uses our dummy file.
-        ProjectsFile.xml_path = data('kde_projects_advanced.xml')
-        ProjectsFile.load!
+        ReleaseMe::ProjectsFile.xml_path = data('kde_projects_advanced.xml')
+        ReleaseMe::ProjectsFile.load!
     end
 
     def assert_valid_project(project_array, expected_identifier)
@@ -40,22 +39,22 @@ class TestProjectResolver < Testme
     end
 
     def test_real_project
-        pr = Project::from_xpath("yakuake")
+        pr = ReleaseMe::Project::from_xpath("yakuake")
         assert_valid_project(pr, "yakuake")
     end
 
     def test_real_project_with_full_path
-        pr = Project::from_xpath("extragear/utils/yakuake")
+        pr = ReleaseMe::Project::from_xpath("extragear/utils/yakuake")
         assert_valid_project(pr, "yakuake")
     end
 
     def test_module_as_project
-        pr = Project::from_xpath("networkmanager-qt")
+        pr = ReleaseMe::Project::from_xpath("networkmanager-qt")
         assert_valid_project(pr, "networkmanager-qt")
     end
 
     def test_component_as_project
-        pr = Project::from_xpath("calligra")
+        pr = ReleaseMe::Project::from_xpath("calligra")
         assert_valid_project(pr, "calligra")
     end
 
@@ -77,20 +76,20 @@ class TestProjectResolver < Testme
     end
 
     def test_module
-        pr = Project::from_xpath("utils")
+        pr = ReleaseMe::Project::from_xpath("utils")
         assert_equal([], pr)
     end
 
     def test_module_with_full_path
-        pr = Project::from_xpath("extragear/utils")
+        pr = ReleaseMe::Project::from_xpath("extragear/utils")
         assert_valid_extragear_utils_array(pr)
     end
 
     def test_module_with_full_path_and_trailing garbage
-        pr = Project::from_xpath("extragear/utils/")
+        pr = ReleaseMe::Project::from_xpath("extragear/utils/")
         assert_valid_extragear_utils_array(pr)
 
-        pr = Project::from_xpath("extragear/utils///**///")
+        pr = ReleaseMe::Project::from_xpath("extragear/utils///**///")
         assert_valid_extragear_utils_array(pr)
     end
 
@@ -101,10 +100,10 @@ class TestProjectResolver < Testme
     end
 
     def test_project_with_subprojects
-      pr = Project::from_xpath("extragear/network/telepathy")
+      pr = ReleaseMe::Project::from_xpath("extragear/network/telepathy")
       assert_valid_telepathy_array(pr)
 
-      pr = Project::from_xpath("extragear/network/telepathy/ktp1")
+      pr = ReleaseMe::Project::from_xpath("extragear/network/telepathy/ktp1")
       assert_not_nil(pr)
       assert_equal("ktp1", pr[0].identifier)
     end
@@ -114,7 +113,7 @@ class TestProjectResolver < Testme
     end
 
     def test_component
-        pr = Project::from_xpath("extragear")
+        pr = ReleaseMe::Project::from_xpath("extragear")
         assert_valid_extragear_array(pr)
     end
 end
@@ -123,14 +122,14 @@ class TestProjectConfig < Testme
   def test_invalid_name
     name = 'kittens'
     assert_raise do
-      Project.from_config(name)
+      ReleaseMe::Project.from_config(name)
     end
   end
 
   def test_construction_git
-    Project.class_variable_set(:@@configdir, data('projects/'))
+    ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'valid'
-    pr = Project.from_config(name)
+    pr = ReleaseMe::Project.from_config(name)
     assert_not_nil(pr)
     assert_equal('yakuake', pr.identifier)
     assert_equal('git://anongit.kde.org/yakuake', pr.vcs.repository)
@@ -141,26 +140,26 @@ class TestProjectConfig < Testme
   end
 
   def test_valid_svn
-    Project.class_variable_set(:@@configdir, data('projects/'))
+    ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'valid-svn'
-    pr = Project.from_config(name)
+    pr = ReleaseMe::Project.from_config(name)
     assert_not_nil(pr)
     assert_equal('svn://anonsvn.kde.org/home', pr.vcs.repository)
   end
 
   def test_invalid_vcs
-    Project.class_variable_set(:@@configdir, data('projects/'))
+    ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'invalid-vcs'
     assert_raise NoMethodError do
-      Project.from_config(name)
+      ReleaseMe::Project.from_config(name)
     end
   end
 
   def test_invalid_vcs_type
-    Project.class_variable_set(:@@configdir, data('projects/'))
+    ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'invalid-vcs-type'
     assert_raise RuntimeError do
-      Project.from_config(name)
+      ReleaseMe::Project.from_config(name)
     end
   end
 end
@@ -169,8 +168,8 @@ class TestProject < Testme
     def setup
         # Project uses ProjectsFile to read data, so we need to make sure it
         # uses our dummy file.
-        ProjectsFile.xml_path = data('kde_projects.xml')
-        ProjectsFile.load!
+        ReleaseMe::ProjectsFile.xml_path = data('kde_projects.xml')
+        ReleaseMe::ProjectsFile.load!
     end
 
     def teardown
@@ -179,22 +178,22 @@ class TestProject < Testme
     def test_manual_construction_fail
         assert_raise do
             # Refuse to new because we need all arguments.
-            pr = Project.new(identifier: 'a', vcs: nil)
+            pr = ReleaseMe::Project.new(identifier: 'a', vcs: nil)
         end
     end
 
     def test_manual_construction_success
         data = {
             :identifier => 'yakuake',
-            :vcs => Vcs.new,
+            :vcs => ReleaseMe::Vcs.new,
             :i18n_trunk => 'master',
             :i18n_stable => 'master',
             :i18n_path => 'extragear-utils'
         }
         assert_nothing_raised do
-            Project.new(data)
+            ReleaseMe::Project.new(data)
         end
-        pr = Project.new(data)
+        pr = ReleaseMe::Project.new(data)
         assert_not_nil(pr)
         assert_equal(pr.identifier, data[:identifier])
         assert_equal(pr.vcs, data[:vcs])
@@ -204,7 +203,7 @@ class TestProject < Testme
     end
 
     def test_resolve_valid
-        projects = Project::from_xpath('yakuake')
+        projects = ReleaseMe::Project::from_xpath('yakuake')
         assert_equal(projects.size, 1)
         pr = projects.shift
         assert_equal('yakuake', pr.identifier)
@@ -218,7 +217,7 @@ class TestProject < Testme
       # translation path is component-module. Make sure that we get the correct
       # path for this.
       # Other example would be extragear/graphics/libs/kdiagram.
-      projects = Project.from_xpath('ktp-contact-runner')
+      projects = ReleaseMe::Project.from_xpath('ktp-contact-runner')
       assert_equal(1, projects.size)
       pr = projects.shift
       assert_equal('ktp-contact-runner', pr.identifier)
@@ -226,7 +225,7 @@ class TestProject < Testme
     end
 
     def assert_i18n_path(project_name, i18n_path)
-      projects = Project.from_xpath(project_name)
+      projects = ReleaseMe::Project.from_xpath(project_name)
       assert_equal(1, projects.size)
       pr = projects.shift
       assert_equal(i18n_path, pr.i18n_path)
@@ -239,12 +238,12 @@ class TestProject < Testme
     end
 
     def test_resolve_invalid
-        projects = Project::from_xpath('kitten')
+        projects = ReleaseMe::Project::from_xpath('kitten')
         assert_equal(projects, [])
     end
 
     def test_vcs
-        projects = Project::from_xpath('yakuake')
+        projects = ReleaseMe::Project::from_xpath('yakuake')
         assert_equal(projects.size, 1)
         pr = projects.shift
         vcs = pr.vcs
@@ -253,7 +252,7 @@ class TestProject < Testme
     end
 
     def test_plasma_lts
-        projects = Project::from_xpath('yakuake')
+        projects = ReleaseMe::Project::from_xpath('yakuake')
         assert_equal(projects.size, 1)
         pr = projects.shift
         assert_equal(pr.plasma_lts(), 'Plasma/5.8')

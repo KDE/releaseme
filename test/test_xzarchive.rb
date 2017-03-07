@@ -21,8 +21,7 @@
 require 'fileutils'
 
 require_relative 'lib/testme'
-
-require_relative '../lib/xzarchive'
+require_relative '../lib/releaseme/xzarchive'
 
 class TestXzArchive < Testme
   def setup
@@ -46,7 +45,7 @@ class TestXzArchive < Testme
   end
 
   def test_attr_directory
-    a = XzArchive.new
+    a = ReleaseMe::XzArchive.new
     assert_equal(a.directory, nil)
 
     a.directory = @dir
@@ -54,7 +53,7 @@ class TestXzArchive < Testme
   end
 
   def test_attr_level
-    a = XzArchive.new
+    a = ReleaseMe::XzArchive.new
     a.directory = @dir
     assert_equal(a.level, 9)
 
@@ -67,7 +66,7 @@ class TestXzArchive < Testme
   # Must have @dir.tar.xz.
   # Must not have @dir.tar.
   def test_create_valid
-    a = XzArchive.new
+    a = ReleaseMe::XzArchive.new
     a.directory = @dir
 
     a.level = 1
@@ -82,7 +81,7 @@ class TestXzArchive < Testme
   # Must not have @dir.tar.
   # Must not have @dir.tar.xz
   def test_create_invalid_level
-    a = XzArchive.new
+    a = ReleaseMe::XzArchive.new
     a.directory = @dir
 
     a.level = -1
@@ -97,7 +96,7 @@ class TestXzArchive < Testme
   # Must not have @dir.tar.
   # Must not have @dir.tar.xz
   def test_create_invalid_dir
-    a = XzArchive.new
+    a = ReleaseMe::XzArchive.new
     a.directory = @dir
 
     d = 'test_create_invalid_dir-1.2.3'

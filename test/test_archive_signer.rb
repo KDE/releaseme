@@ -21,13 +21,13 @@
 require 'fileutils'
 
 require_relative 'lib/testme'
-require_relative '../lib/archive_signer'
-require_relative '../lib/xzarchive'
+require_relative '../lib/releaseme/archive_signer'
+require_relative '../lib/releaseme/xzarchive'
 
 class TestArchiveSigner < Testme
   def test_sign
     Dir.mkdir('wroom')
-    archive = XzArchive.new
+    archive = ReleaseMe::XzArchive.new
     archive.directory = 'wroom'
     archive.create
     assert_path_exist(archive.filename)
@@ -35,7 +35,7 @@ class TestArchiveSigner < Testme
     system("tar -xf #{archive.filename}")
     assert_path_exist('wroom')
 
-    signer = ArchiveSigner.new
+    signer = ReleaseMe::ArchiveSigner.new
     signer.sign(archive)
     assert_path_exist(signer.signature)
     assert(system("gpg2 --verify #{signer.signature}"))

@@ -1,8 +1,7 @@
 require 'fileutils'
 
 require_relative 'lib/testme'
-
-require_relative '../lib/documentation.rb'
+require_relative '../lib/releaseme/documentation.rb'
 
 # FIXME: test stable branch
 
@@ -40,16 +39,16 @@ class TestDocumentation < Testme
 
   # TODO: attributes of documentation are not tested....
   def create_doc
-    DocumentationL10n.new(DocumentationL10n::TRUNK, 'amarok', @i18n_path)
+    ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK, 'amarok', @i18n_path)
   end
 
   def create_doc_without_translation
-    DocumentationL10n.new(DocumentationL10n::TRUNK, 'frenchfries', @i18n_path)
+    ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK, 'frenchfries', @i18n_path)
   end
 
   def test_no_doc
     # no doc present
-    d = DocumentationL10n.new(DocumentationL10n::TRUNK,
+    d = ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK,
                               'frenchfries',
                               @i18n_path)
     d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
@@ -90,7 +89,7 @@ class TestDocumentation < Testme
   end
 
   def test_get_doc_multi_doc
-    d = DocumentationL10n.new(DocumentationL10n::TRUNK,
+    d = ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK,
                               'plasma-desktop',
                               'kde-workspace')
     d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
@@ -145,7 +144,7 @@ class TestDocumentation < Testme
   end
 
   def test_divergent_lineup garbage
-    d = DocumentationL10n.new(DocumentationL10n::TRUNK, 'powerdevil', 'kde-workspace')
+    d = ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK, 'powerdevil', 'kde-workspace')
     d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('test_divergent_lineup'), @dir)

@@ -1,9 +1,8 @@
-require "fileutils"
+require 'fileutils'
 
-require_relative "lib/testme"
-
-require_relative "../lib/git"
-require_relative "../lib/source"
+require_relative 'lib/testme'
+require_relative '../lib/releaseme/git'
+require_relative '../lib/releaseme/source'
 
 # FIXME: source should be tested not only with git but also svn
 
@@ -29,9 +28,9 @@ class TestSource < Testme
     def test_get
         FileUtils.rm_rf(@dir)
 
-        s = Source.new()
+        s = ReleaseMe::Source.new()
         s.target = @dir
-        v = Git.new()
+        v = ReleaseMe::Git.new()
         v.repository = @gitTemplateDir
 
         s.get(v)
@@ -48,7 +47,7 @@ class TestSource < Testme
     end
 
     def test_target
-        s = Source.new()
+        s = ReleaseMe::Source.new()
         assert_equal(s.target, nil)
 
         s.target = @dir
@@ -59,7 +58,7 @@ class TestSource < Testme
     end
 
     def test_cleanup
-        s = Source.new()
+        s = ReleaseMe::Source.new()
         s.target = @dir
 
         FileUtils.rm_rf(@dir)

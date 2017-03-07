@@ -34,7 +34,7 @@ class TestCompat < Testme
   end
 
   # Make sure tests load the new files rather than the old ones.
-  lib_dir = "#{File.dirname(__dir__)}/lib/"
+  lib_dir = "#{File.dirname(__dir__)}/lib"
   gem_dir = "#{lib_dir}/releaseme"
   Dir.glob("#{__dir__}/*.rb").each do |file|
     basename = File.basename(file)

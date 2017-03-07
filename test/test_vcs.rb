@@ -18,18 +18,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require_relative "lib/testme"
-
-require_relative "../lib/vcs"
+require_relative 'lib/testme'
+require_relative '../lib/releaseme/vcs'
 
 class TestVcs < Testme
   def test_default
-    assert_nil(Vcs.new.repository)
+    assert_nil(ReleaseMe::Vcs.new.repository)
   end
 
   def test_asserts
-    instance = Vcs.new
-    instance_methods = Vcs.public_instance_methods(false)
+    instance = ReleaseMe::Vcs.new
+    instance_methods = ReleaseMe::Vcs.public_instance_methods(false)
     instance_methods.delete(:repository=)
     instance_methods.delete(:repository)
     instance_methods.each do |meth|
@@ -49,7 +48,7 @@ class TestVcs < Testme
   end
 
   def test_from_hash
-    vcs = Vcs.from_hash({"repository" => "kitten"})
+    vcs = ReleaseMe::Vcs.from_hash({"repository" => "kitten"})
     assert_not_nil(vcs)
     assert_equal("kitten", vcs.repository)
   end

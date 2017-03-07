@@ -1,18 +1,18 @@
 require_relative 'lib/testme'
 
-require_relative '../lib/git'
-require_relative '../lib/project'
-require_relative '../lib/release'
-
-module Silencer
-  module_function
-
-  def run(cmd)
-    `#{cmd} 2>&1`
-  end
-end
+require_relative '../lib/releaseme/git'
+require_relative '../lib/releaseme/project'
+require_relative '../lib/releaseme/release'
 
 class TestRelease < Testme
+  module Silencer
+    module_function
+
+    def run(cmd)
+      `#{cmd} 2>&1`
+    end
+  end
+
   attr_reader :remotedir
 
   def `(other)
@@ -49,15 +49,15 @@ class TestRelease < Testme
   def new_test_release
     data = {
       :identifier => 'clone',
-      :vcs => Git.new,
+      :vcs => ReleaseMe::Git.new,
       :i18n_trunk => 'master',
       :i18n_stable => 'master',
       :i18n_path => ''
     }
-    project = Project.new(data)
+    project = ReleaseMe::Project.new(data)
     project.vcs.repository = @remotedir
 
-    r = Release.new(project, :trunk, '1.0')
+    r = ReleaseMe::Release.new(project, :trunk, '1.0')
 
     assert_not_nil(r)
     assert_equal(project, r.project)
@@ -71,14 +71,14 @@ class TestRelease < Testme
   def new_test_release_svn
     data = {
       :identifier => 'clone',
-      :vcs => Svn.new,
+      :vcs => ReleaseMe::Svn.new,
       :i18n_trunk => 'master',
       :i18n_stable => 'master',
       :i18n_path => ''
     }
-    project = Project.new(data)
+    project = ReleaseMe::Project.new(data)
     project.vcs.repository = @remotedir
-    Release.new(project, :trunk, '1.0')
+    ReleaseMe::Release.new(project, :trunk, '1.0')
   end
 
   def test_init
@@ -108,16 +108,16 @@ class TestRelease < Testme
   def test_kde4_origin
     data = {
       :identifier => 'clone',
-      :vcs => Git.new,
+      :vcs => ReleaseMe::Git.new,
       :i18n_trunk => 'master',
       :i18n_stable => 'master',
       :i18n_path => ''
     }
-    project = Project.new(data)
+    project = ReleaseMe::Project.new(data)
     project.vcs.repository = @remotedir
 
     assert_raise do
-      Release.new(project, Project::TRUNK_KDE4, '1.0')
+      ReleaseMe::Release.new(project, Project::TRUNK_KDE4, '1.0')
     end
   end
 end

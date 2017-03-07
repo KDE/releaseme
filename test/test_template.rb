@@ -19,7 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require_relative 'lib/testme'
-require_relative '../lib/template'
+require_relative '../lib/releaseme/template'
 
 class TestTemplate < Testme
   module BindingProvider
@@ -28,7 +28,7 @@ class TestTemplate < Testme
     end
   end
 
-  class BindingTemplate < Template
+  class BindingTemplate < ReleaseMe::Template
     include BindingProvider
   end
 
@@ -40,7 +40,7 @@ class TestTemplate < Testme
     end
   end
 
-  class RenderBindingTemplate < Template
+  class RenderBindingTemplate < ReleaseMe::Template
     include BindingProvider
 
     def render_binding

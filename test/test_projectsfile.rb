@@ -24,62 +24,62 @@ require 'webmock/test_unit'
 
 require_relative 'lib/testme'
 
-require_relative '../lib/projectsfile'
+require_relative '../lib/releaseme/projectsfile'
 
 class TestProjectFile < Testme
   def setup_caching
     # Moving caching into tmp scope
     @cache_dir = "#{Dir.pwd}/.cache/releaseme"
-    ProjectsFile.instance_variable_set(:@cache_dir, @cache_dir)
+    ReleaseMe::ProjectsFile.instance_variable_set(:@cache_dir, @cache_dir)
     FileUtils.mkpath(@cache_dir)
 
-    @cache_file = ProjectsFile.send(:cache_file)
-    @cache_file_date = ProjectsFile.send(:cache_file_date)
+    @cache_file = ReleaseMe::ProjectsFile.send(:cache_file)
+    @cache_file_date = ReleaseMe::ProjectsFile.send(:cache_file_date)
   end
 
   def setup
     WebMock.disable_net_connect!
     # Project uses ProjectsFile to read data, so we need to make sure it
     # uses our dummy file.
-    ProjectsFile.reset!
-    ProjectsFile.xml_path = data('kde_projects_advanced.xml')
+    ReleaseMe::ProjectsFile.reset!
+    ReleaseMe::ProjectsFile.xml_path = data('kde_projects_advanced.xml')
 
     setup_caching
   end
 
   def teardown
-    ProjectsFile.reset!
+    ReleaseMe::ProjectsFile.reset!
     WebMock.allow_net_connect!
   end
 
   def test_set_xml
     # set in setup
-    assert_equal(ProjectsFile.xml_path, data('kde_projects_advanced.xml'))
+    assert_equal(ReleaseMe::ProjectsFile.xml_path, data('kde_projects_advanced.xml'))
   end
 
   def test_reset
-    ProjectsFile.autoload = true
-    assert_equal(ProjectsFile.xml_path, data('kde_projects_advanced.xml'))
-    assert_not_nil(ProjectsFile.xml_data)
-    assert_not_nil(ProjectsFile.xml_doc)
-    ProjectsFile.reset!
-    ProjectsFile.autoload = false
-    assert_nil(ProjectsFile.xml_doc)
-    assert_nil(ProjectsFile.xml_data)
-    assert_not_equal(ProjectsFile.xml_path, data('kde_projects_advanced.xml'))
+    ReleaseMe::ProjectsFile.autoload = true
+    assert_equal(ReleaseMe::ProjectsFile.xml_path, data('kde_projects_advanced.xml'))
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
+    ReleaseMe::ProjectsFile.reset!
+    ReleaseMe::ProjectsFile.autoload = false
+    assert_nil(ReleaseMe::ProjectsFile.xml_doc)
+    assert_nil(ReleaseMe::ProjectsFile.xml_data)
+    assert_not_equal(ReleaseMe::ProjectsFile.xml_path, data('kde_projects_advanced.xml'))
   end
 
   def test_load
-    ProjectsFile.load!
-    assert_not_nil(ProjectsFile.xml_data)
-    assert_not_nil(ProjectsFile.xml_doc)
+    ReleaseMe::ProjectsFile.load!
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
   end
 
   def test_load_http
     # Revert the xml twiddling from setup and only divert the cache.
     # We need the canonical xml url for this test.
-    file = ProjectsFile.xml_path
-    ProjectsFile.reset!
+    file = ReleaseMe::ProjectsFile.xml_path
+    ReleaseMe::ProjectsFile.reset!
     setup_caching
 
     date = 'Thu, 16 Jun 2016 10:55:16 GMT'
@@ -97,9 +97,9 @@ class TestProjectFile < Testme
         headers: { 'date' => date }
       }
     end
-    ProjectsFile.load!
-    assert_not_nil(ProjectsFile.xml_data)
-    assert_not_nil(ProjectsFile.xml_doc)
+    ReleaseMe::ProjectsFile.load!
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
     assert_path_exist(@cache_file, 'cache file missing')
     assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)
@@ -109,9 +109,9 @@ class TestProjectFile < Testme
     stub = stub_request(:any, 'https://projects.kde.org/kde_projects.xml')
     stub.with(headers: { 'If-Modified-Since' => date })
     stub.to_return(status: [304, 'Not Modified'])
-    ProjectsFile.load!
-    assert_not_nil(ProjectsFile.xml_data)
-    assert_not_nil(ProjectsFile.xml_doc)
+    ReleaseMe::ProjectsFile.load!
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
     assert_path_exist(@cache_file, 'cache file missing')
     assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)
@@ -123,9 +123,9 @@ class TestProjectFile < Testme
     stub = stub_request(:any, 'https://projects.kde.org/kde_projects.xml')
     stub.with(headers: { 'If-Modified-Since' => date })
     stub.to_return(body: File.read(file), headers: { 'date' => date })
-    ProjectsFile.load!
-    assert_not_nil(ProjectsFile.xml_data)
-    assert_not_nil(ProjectsFile.xml_doc)
+    ReleaseMe::ProjectsFile.load!
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
     assert_path_exist(@cache_file, 'cache file missing')
     assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)
@@ -136,9 +136,9 @@ class TestProjectFile < Testme
     prev_mtime = File.mtime(@cache_file)
     stub = stub_request(:any, 'https://projects.kde.org/kde_projects.xml')
     stub.to_return(status: 500)
-    ProjectsFile.load!
-    assert_not_nil(ProjectsFile.xml_data)
-    assert_not_nil(ProjectsFile.xml_doc)
+    ReleaseMe::ProjectsFile.load!
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
+    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
     assert_path_exist(@cache_file, 'cache file missing')
     assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)
@@ -147,9 +147,9 @@ class TestProjectFile < Testme
   end
 
   def test_parse
-    data = File.read(ProjectsFile.xml_path)
-    assert_equal(ProjectsFile.xml_data, data)
+    data = File.read(ReleaseMe::ProjectsFile.xml_path)
+    assert_equal(ReleaseMe::ProjectsFile.xml_data, data)
     # REXML has no dep compare capability, so we'll settle for size compare.
-    assert_equal(ProjectsFile.xml_doc.size, REXML::Document.new(data).size)
+    assert_equal(ReleaseMe::ProjectsFile.xml_doc.size, REXML::Document.new(data).size)
   end
 end

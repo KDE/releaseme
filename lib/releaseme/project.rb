@@ -188,7 +188,7 @@ module ReleaseMe
           begin
             vcs_type = value.delete('type')
             require_relative vcs_type.downcase.to_s
-            value = Object.const_get(vcs_type).from_hash(value)
+            value = ReleaseMe.const_get(vcs_type).from_hash(value)
           rescue LoadError, RuntimeError => e
             raise "Failed to resolve the Vcs values #{value} -->\n #{e}"
           end

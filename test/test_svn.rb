@@ -21,8 +21,7 @@
 require 'fileutils'
 
 require_relative 'lib/testme'
-
-require_relative '../lib/svn'
+require_relative '../lib/releaseme/svn'
 
 class TestSvn < Testme
   def setup
@@ -49,7 +48,7 @@ class TestSvn < Testme
   end
 
   def new_valid_repo
-    s = Svn.new
+    s = ReleaseMe::Svn.new
     s.repository = "file://#{@svn_repo_dir}"
     s
   end
@@ -126,7 +125,7 @@ class TestSvn < Testme
   end
 
   def test_get_repo_valid
-    s = Svn.new
+    s = ReleaseMe::Svn.new
     s.repository = "file://#{@svn_repo_dir}"
     ret = s.get(@svn_checkout_dir)
     assert_equal(true, ret)
@@ -135,7 +134,7 @@ class TestSvn < Testme
   end
 
   def test_get_repo_invalid
-    s = Svn.new
+    s = ReleaseMe::Svn.new
     s.repository = 'file://foofooofoo'
     s.get(@svn_checkout_dir)
     assert(!File.exist?(@svn_checkout_dir))
@@ -153,13 +152,13 @@ class TestSvn < Testme
   end
 
   def test_from_hash
-    s = Svn.from_hash(repository: 'kitten')
+    s = ReleaseMe::Svn.from_hash(repository: 'kitten')
     assert_not_nil(s)
     assert_equal('kitten', s.repository)
   end
 
   def test_to_s
-    s = Svn.from_hash(repository: 'kitten')
+    s = ReleaseMe::Svn.from_hash(repository: 'kitten')
     assert_equal('(svn - kitten)', s.to_s)
   end
 end
