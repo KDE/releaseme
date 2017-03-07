@@ -44,8 +44,8 @@ require_relative "releaseme/#{basename}"
 # Compatibility map all consts out of the gem module into the root Object
 # scope.
 ReleaseMe.constants.each do |class_name|
-  next if class_name == 'ReleaseMe' # Do not map gem module itself.
   next if Object.const_defined?(class_name)
+  next if class_name == 'ReleaseMe' # Do not map gem module itself.
   # Should this restriction become a problem we'll need to establish a whitelist
   # of entities we want to compat map. i.e. old classes. Fully mapping
   # nested modules/classes is neither called for nor useful.
