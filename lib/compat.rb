@@ -52,7 +52,10 @@ set_trace_func proc { |event, file, _line, _id, binding, _classname|
   # Should this restriction become a problem we'll need to establish a whitelist
   # of entities we want to compat map. i.e. old classes. Fully mapping
   # nested modules/classes is neither called for nor useful.
-  raise if class_name.count(':') > 2
+  if class_name.count(':') > 2
+    warn "Not compat mapping #{class_name} as it's nested."
+    next
+  end
   klass = Object.const_get(class_name)
   class_name_base = class_name.split('::')[-1]
   Object.const_set(class_name_base.to_sym, klass)
