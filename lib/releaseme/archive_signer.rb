@@ -23,7 +23,7 @@ module ReleaseMe
   class ArchiveSigner
     attr_reader :signature
 
-    def initalize
+    def initialize
       @signature = nil
     end
 
