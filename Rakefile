@@ -4,8 +4,8 @@
 def cond_require(lib, &block)
   require lib
   block.yield
-  rescue LoadError
-    warn "E: #{lib} not found. Not providing related Rake task."
+rescue LoadError
+  warn "E: #{lib} not found. Not providing related Rake task."
 end
 
 require 'rake/testtask'
