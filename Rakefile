@@ -22,9 +22,9 @@ end
 cond_require 'yard' do
   desc 'Yard documentation'
   YARD::Rake::YardocTask.new do |t|
-    t.files   = ['lib/*.rb']   # optional
-    t.options = ['--any', '--extra', '--opts'] # optional
-    t.stats_options = ['--list-undoc']         # optional
+    t.files   = ['lib/*.rb']
+    t.options = ['--any', '--extra', '--opts']
+    t.stats_options = ['--list-undoc']
   end
 end
 
