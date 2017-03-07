@@ -1,5 +1,8 @@
 # rubocop:disable Style/HashSyntax
 
+# Adds gem management tasks among others build|install|release
+require 'bundler/gem_tasks'
+
 def cond_require(lib, &block)
   require lib
   block.yield
