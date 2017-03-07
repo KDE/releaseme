@@ -41,8 +41,8 @@ end
 # rubocop:disable Metrics/ParameterLists
 set_trace_func proc { |event, file, _line, _id, binding, _classname|
   # rubocop:enable
-  unless File.absolute_path(file) ==
-         File.absolute_path("#{__dir__}/releaseme/#{File.basename(__FILE__)}")
+  unless File.absolute_path(file)
+             .start_with?(File.absolute_path("#{__dir__}/releaseme/"))
     next
   end
   next if event != 'class'
