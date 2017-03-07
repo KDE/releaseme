@@ -24,6 +24,11 @@ end
 require 'simplecov'
 SimpleCov.start do
   formatter SimpleCov::Formatter::MultiFormatter[*formatters]
+  add_filter do |src|
+    # Special compat file for testing the compat code itself.
+    next false if File.basename(src.filename) == 'compat_compat.rb'
+    src.filename.match(%r{.+/lib/[^/]+.rb})
+  end
 end
 
 Dir.chdir(File.dirname(__FILE__)) do
