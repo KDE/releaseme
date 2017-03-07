@@ -222,7 +222,7 @@ format or rdoc (yard preferred).
 
 ### Testing
 
-Tests are done using test-unit #oldschoolswag.
+Tests are done using test-unit.
 
 All tests should derive from test/lib/testme which adds provisioning for PWD
 isolation (i.e. it chdirs into tmpdirs for every test) as well as test fixture
