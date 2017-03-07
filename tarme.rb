@@ -22,14 +22,7 @@
 require 'ostruct'
 require 'optparse'
 
-require_relative 'lib/requirements'
-
-require_relative 'lib/documentation'
-require_relative 'lib/release'
-require_relative 'lib/l10n'
-require_relative 'lib/origin'
-require_relative 'lib/project'
-require_relative 'lib/projectsfile'
+require_relative 'lib/releaseme'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
@@ -38,8 +31,8 @@ OptionParser.new do |opts|
   opts.separator ''
   opts.separator 'Automatic Project Definition via projects.kde.org:'
 
-  opts.on('--origin ORIGIN', Origin::ALL,
-          "Origin (#{Origin::ALL.join(' | ')}).",
+  opts.on('--origin ORIGIN', ReleaseMe::Origin::ALL,
+          "Origin (#{ReleaseMe::Origin::ALL.join(' | ')}).",
           '   Used to deduce release branch and localization branches.') do |v|
     options[:origin] = v
   end
@@ -75,7 +68,7 @@ project_name = ARGV.pop
 
 release_projects = []
 if options[:from_config].nil?
-  release_projects = Project.from_xpath(project_name)
+  release_projects = ReleaseMe::Project.from_xpath(project_name)
   if release_projects.empty?
     warn 'The project #{project_name} could not be resolved.' \
            ' Please note that you need to provide a concret name or path.'
@@ -85,13 +78,13 @@ if options[:from_config].nil?
   # FIXME: runtime deps are not checked first
   # e.g. svn, git, xz...
 else
-  release_projects << Project.from_config(project_name)
+  release_projects << ReleaseMe::Project.from_config(project_name)
 end
 
 release_data_file = File.open('release_data', 'w')
-release_projects.each do | project |
+release_projects.each do |project|
   project_name = project.identifier
-  release = Release.new(project, options[:origin], options[:version])
+  release = ReleaseMe::Release.new(project, options[:origin], options[:version])
 
   # FIXME: ALL gets() need to have appropriate handling and must be able to
   #        throw exceptions or return false when something goes wrong
@@ -102,7 +95,7 @@ release_projects.each do | project |
 
   # FIXME: present release_data format assumes that everything is git, so we
   # cannot add svn data
-  next if release.project.vcs.is_a?(Svn)
+  next if release.project.vcs.is_a?(ReleaseMe::Svn)
 
   # FIXME: technically we need to track SVN revs for l10n as well...........
   # FIXME FIXME FIXME FIXME: need version
