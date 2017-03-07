@@ -61,7 +61,7 @@ class Log
   # FIXME: shit name
   def parse(rev)
     ancestor = `git describe --abbrev=0 --tags`.strip
-    lines = `git log #{ancestor}#{rev} --oneline --no-merges`
+    lines = `git log #{ancestor}..#{rev} --oneline --no-merges`
     lines = lines.split($/).collect(&:strip)
     @entries = []
     lines.each do |line|
