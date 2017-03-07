@@ -46,8 +46,7 @@ kdoctools_create_handbook(index.docbook
   # FIXME: this is getting an awful many arguments
   def write_handbook(dir, language, subdir)
     log_debug " --- Writing #{dir}/CMakeLists.txt for #{language} :: #{subdir}"
-    File.write("#{dir}/CMakeLists.txt",
-               create_handbook(language, subdir))
+    File.write("#{dir}/CMakeLists.txt", create_handbook(language, subdir))
   end
 
   # Creates the CMakeLists.txt for doc/$LANG/*
@@ -121,39 +120,37 @@ kdoctools_create_handbook(index.docbook
     file.close
   end
 
-    # Appends the install instructions for po/*
-    def append_po_install_instructions!(dir, subdir)
-      file = "#{dir}/CMakeLists.txt"
-      data = File.read(file)
-      macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
-      if data.include?("##{subdir.upcase}_SUBDIR")
-        data = data.sub("##{subdir.upcase}_SUBDIR", macro)
-      else
-        # FIXME: my eyes, my precious eyes!
-        if (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil? &&
-           (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
-          data << macro
-        end
-      end
-      File.write(file, data)
-    end
-
-    # Appends the inclusion of subdir/CMakeLists.txt
-    def append_optional_add_subdirectory!(dir, subdir)
-      file = "#{dir}/CMakeLists.txt"
-      data = File.read(file)
-      macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory(#{subdir})\n"
-      if data.include?("##{subdir.upcase}_SUBDIR")
-        data = data.sub("##{subdir.upcase}_SUBDIR", macro)
-      elsif (data =~ /^\s*(add_subdirectory|ecm_optional_add_subdirectory)\s*\(\s*#{subdir}\s*\).*$/).nil?
-        # TODO: needs test case
-        # Mighty fancy regex looking for existing add_subdir.
-        # Basically allows spaces everywhere one might want to put spaces.
-        # At the end we allow everything as there may be a comment for example.
+  # Appends the install instructions for po/*
+  def append_po_install_instructions!(dir, subdir)
+    file = "#{dir}/CMakeLists.txt"
+    data = File.read(file)
+    macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
+    if data.include?("##{subdir.upcase}_SUBDIR")
+      data = data.sub("##{subdir.upcase}_SUBDIR", macro)
+    else
+      # FIXME: my eyes, my precious eyes!
+      if (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil? &&
+         (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
         data << macro
       end
-      File.write(file, data)
     end
+    File.write(file, data)
+  end
 
-private
+  # Appends the inclusion of subdir/CMakeLists.txt
+  def append_optional_add_subdirectory!(dir, subdir)
+    file = "#{dir}/CMakeLists.txt"
+    data = File.read(file)
+    macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory(#{subdir})\n"
+    if data.include?("##{subdir.upcase}_SUBDIR")
+      data = data.sub("##{subdir.upcase}_SUBDIR", macro)
+    elsif (data =~ /^\s*(add_subdirectory|ecm_optional_add_subdirectory)\s*\(\s*#{subdir}\s*\).*$/).nil?
+      # TODO: needs test case
+      # Mighty fancy regex looking for existing add_subdir.
+      # Basically allows spaces everywhere one might want to put spaces.
+      # At the end we allow everything as there may be a comment for example.
+      data << macro
+    end
+    File.write(file, data)
+  end
 end
