@@ -21,6 +21,9 @@ rescue LoadError => e
   warn 'pullreview reporter not available, not sending reports to server'
 end
 
+# HTML formatter.
+formatters << SimpleCov::Formatter::HTMLFormatter
+
 require 'simplecov'
 SimpleCov.start do
   formatter SimpleCov::Formatter::MultiFormatter[*formatters]
