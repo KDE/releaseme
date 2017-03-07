@@ -30,6 +30,7 @@ SimpleCov.start do
   add_filter do |src|
     # Special compat file for testing the compat code itself.
     next false if File.basename(src.filename) == 'compat_compat.rb'
+    next false if File.basename(src.filename) == 'releaseme.rb'
     src.filename.match(%r{.+/lib/[^/]+.rb})
   end
 end

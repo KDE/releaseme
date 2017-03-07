@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2017 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -40,6 +40,7 @@ class TestCompat < Testme
     basename = File.basename(file)
     next if basename == File.basename(__FILE__)
     next if basename.include?('test_compat.rb') # we are allowed to!
+    next if basename.include?('test_releaseme.rb') # so releaseme!
     sanename = basename.delete(' ').delete('/').delete('.')
     define_method("test_#{sanename}".to_sym) do
       # Hop into dir as otherwise we won't be able to expand_path properly.
