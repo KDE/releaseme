@@ -47,13 +47,13 @@ set_trace_func proc { |event, file, _line, _id, binding, _classname|
   end
   next if event != 'class'
   class_name = eval('name', binding)
-  klass = Object.const_get(class_name)
-  next unless klass.is_a?(Class) # Do not forward modules.
+  next if class_name == 'ReleaseMe' # Do not gem module itself.
   next unless class_name.include?('::') # No need forwarding toplevel classes.
   # Should this restriction become a problem we'll need to establish a whitelist
   # of entities we want to compat map. i.e. old classes. Fully mapping
   # nested modules/classes is neither called for nor useful.
   raise if class_name.count(':') > 2
+  klass = Object.const_get(class_name)
   class_name_base = class_name.split('::')[-1]
   Object.const_set(class_name_base.to_sym, klass)
 }
