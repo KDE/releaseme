@@ -17,3 +17,4 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y gnupg2
   - gem update --system
+  - gem update bundler
