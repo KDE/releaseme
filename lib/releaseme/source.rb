@@ -41,11 +41,9 @@ class Source
     #        for tarme shallow is desirable whereas for tagme we need a full
     #        clone....
     #        perhaps a bool:shallow attribute on the vcs would help?
-    begin
-      vcs.get(target, shallow)
-    rescue
-      vcs.get(target)
-    end
+    vcs.get(target, shallow)
+  rescue
+    vcs.get(target)
   end
 
 end

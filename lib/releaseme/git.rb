@@ -77,7 +77,7 @@ class Git < Vcs
       log_debug '------------'
     end
     # Do not return error output as it will screw with output processing.
-    output = '' if $? != 0
+    output = '' unless $?.success?
     output
   end
 end

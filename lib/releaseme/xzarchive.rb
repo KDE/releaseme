@@ -35,7 +35,7 @@ class XzArchive
   attr_reader :filename
 
   # Creates new XzArchive. @directory must be assigned seperately.
-  def initialize()
+  def initialize
     @directory = nil
     @level = 9
     @filename = nil
@@ -50,16 +50,16 @@ class XzArchive
   #--
   # FIXME: need routine to run and log a) command b) results c) outputs
   #++
-  def create()
+  def create
     tar = "#{directory}.tar"
     xz = "#{tar}.xz"
-    return false if not File.exist?(@directory)
+    return false unless File.exist?(@directory)
     begin
       FileUtils.rm_rf(tar)
       FileUtils.rm_rf(xz)
       # Note that system returns bool but only captures stdout.
-      raise RuntimeError if not system("tar -cf #{tar} #{directory} 2> /dev/null")
-      raise RuntimeError if not system("xz -#{level} #{tar} 2> /dev/null")
+      system("tar -cf #{tar} #{directory} 2> /dev/null") || raise
+      system("xz -#{level} #{tar} 2> /dev/null") || raise
       @filename = xz
       return true
     rescue

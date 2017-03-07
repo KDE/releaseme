@@ -96,10 +96,10 @@ kdoctools_create_handbook(index.docbook
           end
         end
       else
-        fail 'there is no cmakelists in enUS and also no index.docbook'
+        raise 'there is no cmakelists in enUS and also no index.docbook'
       end
     else
-      fail 'There is no index.docbook but also no directories'
+      raise 'There is no index.docbook but also no directories'
     end
 
     # en may already have a super cmakelists, do not twiddle with it!

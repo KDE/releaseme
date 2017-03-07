@@ -40,7 +40,7 @@ class Svn < Vcs
       log_debug '------------'
     end
     # Do not return error output as it will screw with output processing.
-    output = '' if $? != 0
+    output = '' unless $?.success?
     output
   end
 
@@ -63,7 +63,7 @@ class Svn < Vcs
     url = repository.dup # Deep copy since we will patch around
     url.concat("/#{path}") if path && !path.empty?
     run(['co', url, target])
-    $? == 0
+    $?.success?
   end
 
   # Removes .svn recursively from target.
@@ -94,7 +94,7 @@ class Svn < Vcs
   def export(target, path)
     url?(target)
     run(['export', "#{repository}/#{path}", target])
-    $? == 0
+    $?.success?
   end
 
   # Checks whether a file/dir exists on the remote repository
@@ -102,7 +102,7 @@ class Svn < Vcs
   # @return [Boolean] whether or not the path exists
   def exist?(path)
     run(['info', "#{repository}/#{path}"])
-    $? == 0
+    $?.success?
   end
 
   def to_s

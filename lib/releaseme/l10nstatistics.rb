@@ -58,10 +58,10 @@ class L10nStatistics
           percentage = ((100.0 * shown.to_f) / all.to_f)
 
           @stats[language] = {
-            :all => all,
-            :shown => shown,
-            :notshown => notshown,
-            :percentage => percentage
+            all: all,
+            shown: shown,
+            notshown: notshown,
+            percentage: percentage
           }
         end
       end

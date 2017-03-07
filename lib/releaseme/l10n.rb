@@ -176,7 +176,7 @@ class L10n < TranslationUnit
         stats = L10nStatistics.new.tap { |l| l.gather!(Dir.pwd) }.stats
         drop = stats.delete_if { |_, s| s[:percentage] >= completion_requirement }
         drop.each { |language, _| FileUtils.rm_r("po/#{language}", verbose: true) }
-        has_translation = false if Dir.glob("po/*").empty?
+        has_translation = false if Dir.glob('po/*').empty?
       end
 
       if has_translation

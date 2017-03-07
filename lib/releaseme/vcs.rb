@@ -26,13 +26,13 @@ class Vcs
 
   # Does a standard get operation. Obtaining repository.url into target.
   def get(_target)
-    fail 'Pure virtual'
+    raise 'Pure virtual'
   end
 
   # Does a standard clean operation. Removing any VCS data from target
   # (e.g. .git/.svn etc.)
   def clean!(_target)
-    fail 'Pure virtual'
+    raise 'Pure virtual'
   end
 
   # Construct a VCS instance from a hash defining its attributes.
