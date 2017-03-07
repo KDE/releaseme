@@ -18,14 +18,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-module Origin
-  # The symbolic values should not ever be changed as they may be hardcoded or
-  # converted to/from strings representation with outside sources.
-  TRUNK = :trunk # technicall _kf5
-  STABLE = :stable
-  LTS = :lts
-  TRUNK_KDE4 = :trunk_kde4
-  STABLE_KDE4 = :stable_kde4
+module ReleaseMe
+  module Origin
+    # The symbolic values should not ever be changed as they may be hardcoded or
+    # converted to/from strings representation with outside sources.
+    TRUNK = :trunk # technicall _kf5
+    STABLE = :stable
+    LTS = :lts
+    TRUNK_KDE4 = :trunk_kde4
+    STABLE_KDE4 = :stable_kde4
 
-  ALL = [TRUNK, STABLE, LTS, TRUNK_KDE4, STABLE_KDE4].freeze
+    ALL = [TRUNK, STABLE, LTS, TRUNK_KDE4, STABLE_KDE4].freeze
+  end
 end

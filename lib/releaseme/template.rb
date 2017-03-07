@@ -21,9 +21,11 @@ require 'erb'
 # Open a .erb file and bind to current object,
 # intended to be overloaded by an object which sets the values uesd ub the
 # .erb file
-class Template
-  def render(path)
-    renderer = ERB.new(File.read(path))
-    renderer.result(respond_to?(:render_binding) ? render_binding : binding)
+module ReleaseMe
+  class Template
+    def render(path)
+      renderer = ERB.new(File.read(path))
+      renderer.result(respond_to?(:render_binding) ? render_binding : binding)
+    end
   end
 end

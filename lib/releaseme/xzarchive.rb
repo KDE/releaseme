@@ -18,54 +18,56 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-##
-# Tar-XZ Archiving Class.
-# This class archives @directory into an tar file and compresses it using xz.
-# Compression strength is set via @level.
-class XzArchive
-  # The directory to archive
-  attr_accessor :directory
-
-  # XZ compression level (must be between 1 and 9 - other values will not
-  # result in an archive file)
-  attr_accessor :level
-
-  # XZ compressed tarball file name (e.g. foobar-1.tar.xz)
-  # This is nil unless create() finished successfully.
-  attr_reader :filename
-
-  # Creates new XzArchive. @directory must be assigned seperately.
-  def initialize
-    @directory = nil
-    @level = 9
-    @filename = nil
-  end
-
+module ReleaseMe
   ##
-  # call-seq:
-  #  archive.create() -> true or false
-  #
-  # Create the archive. Creates an archive based on the directory attribute.
-  # Results in @directory.tar.xz in the present working directory.
-  #--
-  # FIXME: need routine to run and log a) command b) results c) outputs
-  #++
-  def create
-    tar = "#{directory}.tar"
-    xz = "#{tar}.xz"
-    return false unless File.exist?(@directory)
-    begin
-      FileUtils.rm_rf(tar)
-      FileUtils.rm_rf(xz)
-      # Note that system returns bool but only captures stdout.
-      system("tar -cf #{tar} #{directory} 2> /dev/null") || raise
-      system("xz -#{level} #{tar} 2> /dev/null") || raise
-      @filename = xz
-      return true
-    rescue
-      FileUtils.rm_rf(tar)
-      FileUtils.rm_rf(xz)
-      return false
+  # Tar-XZ Archiving Class.
+  # This class archives @directory into an tar file and compresses it using xz.
+  # Compression strength is set via @level.
+  class XzArchive
+    # The directory to archive
+    attr_accessor :directory
+
+    # XZ compression level (must be between 1 and 9 - other values will not
+    # result in an archive file)
+    attr_accessor :level
+
+    # XZ compressed tarball file name (e.g. foobar-1.tar.xz)
+    # This is nil unless create() finished successfully.
+    attr_reader :filename
+
+    # Creates new XzArchive. @directory must be assigned seperately.
+    def initialize
+      @directory = nil
+      @level = 9
+      @filename = nil
+    end
+
+    ##
+    # call-seq:
+    #  archive.create() -> true or false
+    #
+    # Create the archive. Creates an archive based on the directory attribute.
+    # Results in @directory.tar.xz in the present working directory.
+    #--
+    # FIXME: need routine to run and log a) command b) results c) outputs
+    #++
+    def create
+      tar = "#{directory}.tar"
+      xz = "#{tar}.xz"
+      return false unless File.exist?(@directory)
+      begin
+        FileUtils.rm_rf(tar)
+        FileUtils.rm_rf(xz)
+        # Note that system returns bool but only captures stdout.
+        system("tar -cf #{tar} #{directory} 2> /dev/null") || raise
+        system("xz -#{level} #{tar} 2> /dev/null") || raise
+        @filename = xz
+        return true
+      rescue
+        FileUtils.rm_rf(tar)
+        FileUtils.rm_rf(xz)
+        return false
+      end
     end
   end
 end

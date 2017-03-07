@@ -18,30 +18,32 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-# Version control system base class.
-# Doesn't do anything on its own.
-class Vcs
-  # The repository URL
-  attr_accessor :repository
+module ReleaseMe
+  # Version control system base class.
+  # Doesn't do anything on its own.
+  class Vcs
+    # The repository URL
+    attr_accessor :repository
 
-  # Does a standard get operation. Obtaining repository.url into target.
-  def get(_target)
-    raise 'Pure virtual'
-  end
-
-  # Does a standard clean operation. Removing any VCS data from target
-  # (e.g. .git/.svn etc.)
-  def clean!(_target)
-    raise 'Pure virtual'
-  end
-
-  # Construct a VCS instance from a hash defining its attributes.
-  # FIXME: why is this not simply an init? Oo
-  def self.from_hash(hash)
-    vcs = new
-    hash.each do |key, value|
-      vcs.send("#{key}=".to_sym, value)
+    # Does a standard get operation. Obtaining repository.url into target.
+    def get(_target)
+      raise 'Pure virtual'
     end
-    vcs
+
+    # Does a standard clean operation. Removing any VCS data from target
+    # (e.g. .git/.svn etc.)
+    def clean!(_target)
+      raise 'Pure virtual'
+    end
+
+    # Construct a VCS instance from a hash defining its attributes.
+    # FIXME: why is this not simply an init? Oo
+    def self.from_hash(hash)
+      vcs = new
+      hash.each do |key, value|
+        vcs.send("#{key}=".to_sym, value)
+      end
+      vcs
+    end
   end
 end
