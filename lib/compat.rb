@@ -58,6 +58,7 @@ set_trace_func proc { |event, file, _line, _id, binding, _classname|
   end
   klass = Object.const_get(class_name)
   class_name_base = class_name.split('::')[-1]
+  warn "Compat mapping #{class_name_base} ➜ #{class_name}"
   Object.const_set(class_name_base.to_sym, klass)
 }
 
