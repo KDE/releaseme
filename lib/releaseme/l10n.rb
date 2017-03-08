@@ -130,7 +130,7 @@ module ReleaseMe
             Thread.current.abort_on_exception = true
             until queue.empty?
               begin
-                language = queue.pop(true)
+                lang = queue.pop(true)
               rescue
                 # When pop runs into an empty queue with non_block=true it raises
                 # an exception. We'll simply continue with it as our loop should
@@ -138,11 +138,11 @@ module ReleaseMe
                 continue
               end
               Dir.mktmpdir(self.class.to_s) do |tmpdir|
-                log_debug "#{srcdir} - downloading #{language}"
+                log_debug "#{srcdir} - downloading #{lang}"
                 if templates.count > 1
-                  files = get_multiple(language, tmpdir)
+                  files = get_multiple(lang, tmpdir)
                 elsif templates.count == 1
-                  files = get_single(language, tmpdir)
+                  files = get_single(lang, tmpdir)
                 else
                   # FIXME: needs testcase
                   # TODO: this previously aborted entirely, not sure that makes
@@ -153,20 +153,20 @@ module ReleaseMe
                 # No files obtained :(
                 if files.empty?
                   # FIXME: not thread safe without GIL
-                  languages_without_translation << language
+                  languages_without_translation << lang
                   next
                 end
                 # FIXME: not thread safe without GIL
                 has_translation = true
 
                 # TODO: path confusing with target
-                destination = "po/#{language}"
+                destination = "po/#{lang}"
                 Dir.mkdir(destination)
                 FileUtils.mv(files, destination)
               end
 
               # FIXME: this is not thread safe without a GIL
-              @languages += [language]
+              @languages += [lang]
             end
           end
         end
@@ -176,7 +176,7 @@ module ReleaseMe
           require_relative 'l10nstatistics'
           stats = L10nStatistics.new.tap { |l| l.gather!(Dir.pwd) }.stats
           drop = stats.delete_if { |_, s| s[:percentage] >= completion_requirement }
-          drop.each { |language, _| FileUtils.rm_r("po/#{language}", verbose: true) }
+          drop.each { |lang, _| FileUtils.rm_r("po/#{lang}", verbose: true) }
           has_translation = false if Dir.glob('po/*').empty?
         end
 
