@@ -177,4 +177,26 @@ class TestL10n < Testme
   ensure
     $stdout = STDOUT
   end
+
+  def test_script
+    # https://techbase.kde.org/Localization/Concepts/Transcript
+
+    l = ReleaseMe::L10n.new(ReleaseMe::L10n::TRUNK, 'ki18n', 'frameworks')
+    l.target = "#{@dir}/l10n"
+    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('multi-pot-script'), @dir)
+    l.get(@dir)
+
+    assert_path_exist("#{@dir}/po/sr/scripts")
+    assert_path_exist("#{@dir}/po/sr/scripts/ki18n5")
+    assert_path_exist("#{@dir}/po/sr/scripts/libplasma5")
+    assert_path_not_exist("#{@dir}/po/sr/scripts/proto")
+
+    assert_path_exist("#{@dir}/po/sr/scripts/ki18n5/ki18n5.js")
+    assert_path_exist("#{@dir}/po/sr/scripts/ki18n5/trapnakron.pmap")
+
+    assert_path_exist("#{@dir}/po/sr/scripts/libplasma5/libplasma5.js")
+    assert_path_exist("#{@dir}/po/sr/scripts/libplasma5/plasmoid.js")
+  end
 end

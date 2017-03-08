@@ -29,6 +29,47 @@ require_relative 'svn'
 require_relative 'translationunit'
 
 module ReleaseMe
+  # https://techbase.kde.org/Localization/Concepts/Transcript
+  # Downloads scripted l10n helpers.
+  class L10nScriptDownloader
+    attr_reader :artifacts
+
+    attr_reader :lang
+    attr_reader :tmpdir
+
+    def initialize(lang, tmpdir, l10n)
+      @lang = lang
+      @tmpdir = tmpdir
+      @scripts_dir = "#{tmpdir}/scripts"
+      @l10n = l10n
+      @artifacts = []
+    end
+
+    def download
+      has_stuff = false
+      templates.each do |template|
+        name = File.basename(template, '.po')
+        target_dir = "#{@scripts_dir}/#{name}"
+        @l10n.vcs.get(target_dir, "#{script_file_dir}/#{name}")
+        unless Dir.glob("#{target_dir}/*").select { |f| File.file?(f) }.empty?
+          has_stuff = true
+        end
+      end
+
+      has_stuff ? @artifacts = [@scripts_dir] : @artifacts
+    end
+
+    private
+
+    def templates
+      @l10n.templates
+    end
+
+    def script_file_dir
+      "#{lang}/scripts/#{@l10n.i18n_path}"
+    end
+  end
+
   # FIXME: doesn't write master cmake right now...
   class L10n < TranslationUnit
     prepend Logable
@@ -149,6 +190,8 @@ module ReleaseMe
                   #       sense with threading
                   next # No translations need fetching
                 end
+
+                files += L10nScriptDownloader.new(lang, tmpdir, self).download
 
                 # No files obtained :(
                 if files.empty?
