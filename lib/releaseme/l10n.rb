@@ -46,17 +46,16 @@ module ReleaseMe
     end
 
     def download
-      has_stuff = false
       templates.each do |template|
         name = File.basename(template, '.po')
         target_dir = "#{@scripts_dir}/#{name}"
         @l10n.vcs.get(target_dir, "#{script_file_dir}/#{name}")
         unless Dir.glob("#{target_dir}/*").select { |f| File.file?(f) }.empty?
-          has_stuff = true
+          @artifacts = [@scripts_dir]
         end
       end
 
-      has_stuff ? @artifacts = [@scripts_dir] : @artifacts
+      @artifacts
     end
 
     private
