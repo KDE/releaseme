@@ -22,10 +22,17 @@ Gem::Specification.new do |spec|
       'public gem pushes.'
   end
 
-  spec.files = `git ls-files -z`.split("\x0").reject do |f|
+  spec.files = `git ls-files -z`.split("\x0")
+  rejected_files = spec.files.find_all do |f|
     f.match(%r{^(test|spec|features)/}) ||
     (f.match(%r{^lib/[^/]+.rb}) && !f.match(%r{^lib/releaseme.rb}))
   end
+  spec.files -= rejected_files
+
+  if File.basename($PROGRAM_NAME).include?('bundle')
+    FileUtils.rm_rf(rejected_files, verbose: true)
+  end
+
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 1.14'
