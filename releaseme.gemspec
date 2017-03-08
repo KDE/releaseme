@@ -29,7 +29,11 @@ Gem::Specification.new do |spec|
   end
   spec.files -= rejected_files
 
-  if File.basename($PROGRAM_NAME).include?('bundle')
+  # When run through bundler AND in a Gem search path mangle the working
+  # directory.
+  if File.basename($PROGRAM_NAME).include?('bundle') &&
+     Gem.path.any? { |x| Dir.pwd.start_with?(x) }
+    warn "Mangling releaseme gem as it is in a gem search path #{Dir.pwd}"
     FileUtils.rm_rf(rejected_files, verbose: true)
   end
 
