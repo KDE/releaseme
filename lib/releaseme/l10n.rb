@@ -41,7 +41,9 @@ module ReleaseMe
     # Caches available scripts for template (i.e. po file).
     # For every template in every language we'd have to do vcs.get the cache
     # does a vcs.list for each language exactly once. It records the directories
-    # available so that we later can do a fast
+    # available so that we later can do a fast lookup and skip vcs.get
+    # altogether. With each svn request taking ~1 second that is a huge
+    # time saver.
     class TemplateCache
       def initialize(l10n)
         @data = {}
