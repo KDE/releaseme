@@ -90,7 +90,7 @@ module ReleaseMe
 
     def languages(excluded = [])
       excluded.concat(default_excluded_languages)
-      languages = self.class.languages(@vcs).clone # do not modify the live list.
+      languages = self.class.languages(@vcs).clone # do not modify the live list
       languages.delete_if { |l| excluded.include?(l) }
     end
 
