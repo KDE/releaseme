@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'English'
 require 'fileutils'
 require 'thwait'
 require 'tmpdir'
@@ -37,17 +38,77 @@ module ReleaseMe
     attr_reader :lang
     attr_reader :tmpdir
 
-    def initialize(lang, tmpdir, l10n)
+    # Caches available scripts for template (i.e. po file).
+    # For every template in every language we'd have to do vcs.get the cache
+    # does a vcs.list for each language exactly once. It records the directories
+    # available so that we later can do a fast
+    class TemplateCache
+      def initialize(l10n)
+        @data = {}
+        @l10n = l10n
+
+        queue = l10n.languages_queue
+        threads = each_thread do
+          loop_queue(queue)
+        end
+        ThreadsWait.all_waits(threads)
+      end
+
+      def [](*args)
+        @data[*args]
+      end
+
+      private
+
+      attr_reader :l10n
+
+      def loop_queue(queue)
+        loop do
+          lang = begin
+            queue.pop(true)
+          rescue
+            break # loop empty if an exception was raised
+          end
+          @data[lang] = list(lang) # GIL secures this.
+        end
+      end
+
+      def each_thread
+        threads = []
+        l10n.class::THREAD_COUNT.times do
+          threads << Thread.new do
+            Thread.current.abort_on_exception = true
+            yield
+          end
+        end
+        threads
+      end
+
+      def list(lang)
+        list = l10n.vcs.list(script_file_dir(lang, l10n.i18n_path))
+        list.split($INPUT_RECORD_SEPARATOR).collect do |x|
+          x.delete('/')
+        end
+      end
+
+      def script_file_dir(lang, i18n_path)
+        "#{lang}/scripts/#{i18n_path}"
+      end
+    end
+
+    def initialize(lang, tmpdir, cache, l10n)
       @lang = lang
       @tmpdir = tmpdir
       @scripts_dir = "#{tmpdir}/scripts"
       @l10n = l10n
       @artifacts = []
+      @cache = cache
     end
 
     def download
       templates.each do |template|
         name = File.basename(template, '.po')
+        next unless @cache[lang].include?(name)
         target_dir = "#{@scripts_dir}/#{name}"
         @l10n.vcs.get(target_dir, "#{script_file_dir}/#{name}")
         unless Dir.glob("#{target_dir}/*").select { |f| File.file?(f) }.empty?
@@ -165,6 +226,7 @@ module ReleaseMe
       Dir.chdir(srcdir) do
         queue = languages_queue
         threads = []
+        script_cache = L10nScriptDownloader::TemplateCache.new(self)
         THREAD_COUNT.times do
           threads << Thread.new do
             Thread.current.abort_on_exception = true
@@ -190,7 +252,8 @@ module ReleaseMe
                   next # No translations need fetching
                 end
 
-                files += L10nScriptDownloader.new(lang, tmpdir, self).download
+                files += L10nScriptDownloader.new(lang, tmpdir, script_cache,
+                                                  self).download
 
                 # No files obtained :(
                 if files.empty?
