@@ -147,7 +147,7 @@ module ReleaseMe
       true
     end
 
-    # @return [Array<Project>] never empty, can be nil if resolution failed
+    # @return [Array<Project>] can be empty
     def self.from_xpath(project_id)
       release_projects = []
 
@@ -162,8 +162,20 @@ module ReleaseMe
         release_projects += find_suitable_projects(search_string, project_id)
       end
 
-      # FIXME: return nil but this is slightly meh
       release_projects
+    end
+
+    # @param url [String] find all Projects associated with this repo url.
+    # @return [Array<Project>] can be empty
+    def self.from_repo_url(url)
+      # XPath is like a knife in the eye.
+      # This finds all url nodes, with any ancestry, where their text is
+      # exactly equal to the requested url. Of those it then selects the
+      # ancestors of type project (there should only be one of those one hopes).
+      xpath = "//url[text()='#{url}']/ancestor::project"
+      ProjectsFile.xml_doc.root.get_elements(xpath).collect do |element|
+        Project.new(project_element: element).tap(&:resolve_attributes!)
+      end
     end
 
     # Constructs a Project instance from the definition placed in

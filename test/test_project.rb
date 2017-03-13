@@ -257,4 +257,12 @@ class TestProject < Testme
     pr = projects.shift
     assert_equal(pr.plasma_lts(), 'Plasma/5.8')
   end
+
+  def test_from_repo_url
+    projects = ReleaseMe::Project.from_repo_url('git://anongit.kde.org/kfilemetadata')
+    assert_equal(1, projects.size)
+    pr = projects.shift
+    assert_equal('kfilemetadata', pr.identifier)
+    assert_equal('git@git.kde.org:kfilemetadata', pr.vcs.repository)
+  end
 end
