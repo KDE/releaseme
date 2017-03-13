@@ -1,0 +1,7 @@
+[main]
+customsrc=git@git.kde.org:simon
+doc=true
+l10n=true
+protocol=anonsvn
+branch=trunk
+gitbranch=master
