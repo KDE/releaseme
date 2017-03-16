@@ -222,38 +222,40 @@ module ReleaseMe
       data['i18n_lts']
     end
 
-    private
+    class << self
+      private
 
-    def self.element_matches_path?(element, path)
-      element.elements.each do |e|
-        if e.name == 'path' && (e.text == path || e.text.start_with?(path))
-          return true
+      def element_matches_path?(element, path)
+        element.elements.each do |e|
+          if e.name == 'path' && (e.text == path || e.text.start_with?(path))
+            return true
+          end
         end
+        false
       end
-      false
-    end
 
-    def self.find_suitable_projects(xpath, project_id)
-      ret = []
-      ProjectsFile.xml_doc.root.get_elements(xpath).each do |element|
-        suitable = false
-        if element.attribute('identifier').to_s == project_id ||
-           element_matches_path?(element, project_id)
-          suitable = true
+      def find_suitable_projects(xpath, project_id)
+        ret = []
+        ProjectsFile.xml_doc.root.get_elements(xpath).each do |element|
+          suitable = false
+          if element.attribute('identifier').to_s == project_id ||
+             element_matches_path?(element, project_id)
+            suitable = true
+          end
+          next unless suitable
+          has_children = false
+          # FIXME: do we really need to xpath recursive here?
+          element.each_element("/#{element.xpath}/*[@identifier]") do |_|
+            has_children = true
+            break
+          end
+          next if has_children
+          pr = Project.new(project_element: element)
+          pr.resolve_attributes!
+          ret << pr
         end
-        next unless suitable
-        has_children = false
-        # FIXME: do we really need to xpath recursive here?
-        element.each_element("/#{element.xpath}/*[@identifier]") do |_|
-          has_children = true
-          break
-        end
-        next if has_children
-        pr = Project.new(project_element: element)
-        pr.resolve_attributes!
-        ret << pr
+        ret
       end
-      ret
     end
   end
 end
