@@ -172,10 +172,9 @@ module ReleaseMe
       # This finds all url nodes, with any ancestry, where their text is
       # exactly equal to the requested url. Of those it then selects the
       # ancestors of type project (there should only be one of those one hopes).
-      xpath = "//url[text()='#{url}']/ancestor::project"
-      ProjectsFile.xml_doc.root.get_elements(xpath).collect do |element|
-        Project.new(project_element: element).tap(&:resolve_attributes!)
-      end
+      element = url_elements.fetch(url, nil)
+      return [] unless element
+      [Project.new(project_element: element).tap(&:resolve_attributes!)]
     end
 
     # Constructs a Project instance from the definition placed in
@@ -224,6 +223,21 @@ module ReleaseMe
 
     class << self
       private
+
+      # Cache hash of url=>xml_element.
+      def url_elements
+        @hash ||= begin
+          r = {}
+          ProjectsFile.xml_doc.root.get_elements('//repo/url').each do |element|
+            # Can't xpath to ancestor::project[1] as some crap is a module. WTF.
+            projects = element.get_elements('../../').to_a
+            raise "multiple parents :( #{projects}" unless projects.size <= 1
+            next if projects.size.zero?
+            r[element.text] = projects[0]
+          end
+          r
+        end
+      end
 
       def element_matches_path?(element, path)
         element.elements.each do |e|
