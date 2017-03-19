@@ -4,5 +4,5 @@ doc=true
 l10n=true
 protocol=anonsvn
 branch=stable
-gitbranch=kbibtex/0.6
-version=0.6.0.95
+gitbranch=v0.6.2
+version=0.6.2
