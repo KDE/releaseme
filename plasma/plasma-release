@@ -4,7 +4,7 @@ set -xe
 
 . VERSIONS.inc
 
-ssh ftpadmin@depot.kde.org "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
+ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
 
 # remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
 

@@ -104,7 +104,7 @@ for repo in repos:
 			elif line.startswith("Date"):
 				pass
 			elif line.startswith("Merge"):
-				pass
+					ignoreCommit = True
 			else:
 				line = line.strip()
 				if line.startswith("Merge remote-tracking branch"):
