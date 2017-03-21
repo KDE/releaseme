@@ -22,19 +22,19 @@ mkdir -p tmp-tests
 
 echo == start diff tarballs test, check for diff below
 ssh ${UPLOADSERVER} ls ${FTPSTABLE}/plasma/${VERSION}/ | sed s,-5.*xz,, > tmp-tests/${VERSION}-tars
-ssh ftpadmin@depot.kde.org ls ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/ | sed s,-5.*xz,, > tmp-tests/${OLD_VERSION}-tars
+ssh ${UPLOADSERVER} ls ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/ | sed s,-5.*xz,, > tmp-tests/${OLD_VERSION}-tars
 diff -u tmp-tests/${OLD_VERSION}-tars tmp-tests/${VERSION}-tars | tee tmp-tests/${VERSION}-tars-testoutput
 echo == end diff tarballs test
 
 echo == start tarballs l10n probe test, check for diff below
 ssh ${UPLOADSERVER} "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${VERSION}-po
-ssh ftpadmin@depot.kde.org "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${OLD_VERSION}-po
+ssh ${UPLOADSERVER} "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${OLD_VERSION}-po
 diff -u tmp-tests/${OLD_VERSION}-po tmp-tests/${VERSION}-po | tee tmp-tests/${VERSION}-po-testoutput
 echo == end tarballs l10n probe test
 
 echo == start tarballs docs probe test, check for diff below
 ssh ${UPLOADSERVER} "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${VERSION}-doc
-ssh ftpadmin@depot.kde.org "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${OLD_VERSION}-doc
+ssh ${UPLOADSERVER} "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${OLD_VERSION}-doc
 diff -u tmp-tests/${OLD_VERSION}-doc tmp-tests/${VERSION}-doc | tee tmp-tests/${VERSION}-doc-testoutput
 echo == end tarballs l10n probe test
 

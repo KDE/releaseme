@@ -114,7 +114,7 @@ main {
 	</p>
 
 	<p>
-		print i18n_var("This release adds a %1 worth of new translations and fixes from KDE's contributors.  The bugfixes are typically small but important and include:", "a month's");?>
+<?php		print i18n_var("This release adds a %1 worth of new translations and fixes from KDE's contributors.  The bugfixes are typically small but important and include:", "a month's");?>
 	</p>
 
 	<ul>

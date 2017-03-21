@@ -17,7 +17,7 @@ INFOCHECKOUT="/home/jr/src/www/www/info"                   # svn+ssh://svn@svn.k
 ANNOUNCECHECKOUT="/home/jr/src/www/www/announcements"      # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
 L10NSCRIPTSCHECKOUT="/home/jr/src/www/l10n-kde4/scripts"   # svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kde4/scripts/
 WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/
-UPLOADSERVER="ftpadmin@depot.kde.org"
+UPLOADSERVER="ftpadmin@racnoss.kde.org"
 #UPLOADSERVER="weegie"
 
 RELEASEDATE="Tuesday, 14 February 2017" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
