@@ -148,7 +148,7 @@ main {
 				<?php i18n("You can install Plasma 5 directly from source.");?>
 			</p>
 			<a href='http://community.kde.org/Frameworks/Building'><?php i18n("Community instructions to compile it");?></a>
-			<a href='../info/plasma-5.9.2.php' class='learn-more'><?php i18n("Source Info Page");?></a>
+			<a href='../info/plasma-5.9.1.php' class='learn-more'><?php i18n("Source Info Page");?></a>
 		</article>
 	</section>
 
