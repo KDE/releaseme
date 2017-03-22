@@ -98,6 +98,20 @@ class TestL10n < Testme
     assert(File.exist?("#{@dir}/po/de/amarokcollectionscanner_qt.po"))
   end
 
+  def test_get_po_elsewhere
+    l = create_l10n
+    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+
+    @elsewhere = "#{Dir.pwd}/elsewhere_tmp_l10n_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data("single-pot"), @dir)
+    l.get(@dir, @elsewhere, false)
+    assert(File.exist?("#{@elsewhere}/de/amarok.po"))
+
+    FileUtils.rm_rf(@elsewhere)
+  end
+
   def test_statistics
     l = create_l10n
     l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
@@ -107,16 +121,16 @@ class TestL10n < Testme
     l.get(@dir)
 
     statistics = ReleaseMe::L10nStatistics.new
-    statistics.gather!(@dir)
-    assert_equal(statistics.stats, {"de"=>{:all=>4,
-                                       :shown=>3,
-                                       :notshown=>1,
-                                       :percentage=>75.0},
-                                    "fr"=>{:all=>4,
-                                       :shown=>4,
-                                       :notshown=>0,
-                                       :percentage=>100.0}})
-  end
+    statistics.gather!("#{@dir}/po")
+    assert_equal({"de"=>{:all=>4,
+                    :shown=>3,
+                    :notshown=>1,
+                    :percentage=>75.0},
+                "fr"=>{:all=>4,
+                    :shown=>4,
+                    :notshown=>0,
+                    :percentage=>100.0}}, statistics.stats)
+end
 
   def test_variable_potname
     l = create_l10n

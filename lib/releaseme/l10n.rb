@@ -214,9 +214,7 @@ module ReleaseMe
       files.uniq
     end
 
-    def get(srcdir)
-      # FIXME: this is later used as destination for the weirdest of reasons...
-      target = "#{srcdir}/po/"
+    def get(srcdir, target = File.expand_path("#{Dir.getwd}/#{srcdir}/po"), allow_edit = true)
       Dir.mkdir(target)
 
       @templates = find_templates(srcdir)
@@ -267,7 +265,7 @@ module ReleaseMe
                 has_translation = true
 
                 # TODO: path confusing with target
-                destination = "po/#{lang}"
+                destination = "#{target}/#{lang}"
                 Dir.mkdir(destination)
                 FileUtils.mv(files, destination)
               end
@@ -281,15 +279,15 @@ module ReleaseMe
 
         if completion_requirement = ENV.fetch('RELEASEME_L10N_REQUIREMENT', nil).to_i
           require_relative 'l10nstatistics'
-          stats = L10nStatistics.new.tap { |l| l.gather!(Dir.pwd) }.stats
+          stats = L10nStatistics.new.tap { |l| l.gather!(target) }.stats
           drop = stats.delete_if { |_, s| s[:percentage] >= completion_requirement }
-          drop.each { |lang, _| FileUtils.rm_r("po/#{lang}", verbose: true) }
-          has_translation = false if Dir.glob('po/*').empty?
+          drop.each { |lang, _| FileUtils.rm_r("#{target}/#{lang}", verbose: true) }
+          has_translation = false if Dir.glob("#{target}/*").empty?
         end
 
         if has_translation
           # Update CMakeLists.txt
-          CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
+          CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po') if allow_edit
         else
           # Remove the empty translations directory
           Dir.delete('po')

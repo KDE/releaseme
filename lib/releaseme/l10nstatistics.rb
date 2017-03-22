@@ -27,8 +27,7 @@ module ReleaseMe
       @stats = {}
     end
 
-    def gather!(srcdir)
-      podir = "#{srcdir}/po/"
+    def gather!(podir)
       Dir.chdir(podir) do
         languages = Dir.glob('*')
         languages.each do |language|
