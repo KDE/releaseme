@@ -123,7 +123,6 @@ module ReleaseMe
         path = e.text
         raise 'unknown path' unless path
         parts = path.split('/')
-        warn parts
         if parts[0] == 'kde' && parts[1] != 'workspace'
           # Everything but kde/workspace is flattend without the kde part.
           # kde/workspace on the other hand is kde-workspace.
