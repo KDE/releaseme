@@ -214,7 +214,8 @@ module ReleaseMe
       files.uniq
     end
 
-    def get(srcdir, target = File.expand_path("#{Dir.getwd}/#{srcdir}/po"), allow_edit = true)
+    def get(srcdir, target = File.expand_path("#{Dir.getwd}/#{srcdir}/po"),
+            allow_edit = true)
       Dir.mkdir(target)
 
       @templates = find_templates(srcdir)
@@ -285,10 +286,10 @@ module ReleaseMe
           has_translation = false if Dir.glob("#{target}/*").empty?
         end
 
-        if has_translation
+        if has_translation && allow_edit
           # Update CMakeLists.txt
-          CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po') if allow_edit
-        else
+          CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
+        elsif !has_translation
           # Remove the empty translations directory
           Dir.delete('po')
         end
