@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2015 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2015-2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -67,19 +67,22 @@ class TestL10n < Testme
   def test_find_templates
     l = create_l10n
 
-    templates = l.find_templates(data("multi-pot"))
+    templates = l.find_templates(data('multi-pot'))
     assert_equal(templates.count, 2)
 
-    templates = l.find_templates(data("single-pot"))
+    templates = l.find_templates(data('single-pot'))
     assert_equal(templates.count, 1)
   end
 
   def test_get_po
+    # For visual string consinstency we actually interpolate pointlessly below.
+    # rubocop:disable Style/UnneededInterpolation
+
     l = create_l10n
     l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
-    FileUtils.cp_r(data("single-pot"), @dir)
+    FileUtils.cp_r(data('single-pot'), @dir)
     l.get(@dir)
     assert(File.exist?("#{@dir}"))
     assert(File.exist?("#{@dir}/CMakeLists.txt"))
@@ -88,7 +91,7 @@ class TestL10n < Testme
     assert(File.exist?("#{@dir}/po/de/amarok.po"))
 
     FileUtils.rm_rf(@dir)
-    FileUtils.cp_r(data("multi-pot"), @dir)
+    FileUtils.cp_r(data('multi-pot'), @dir)
     l.get(@dir)
     assert(File.exist?("#{@dir}"))
     assert(File.exist?("#{@dir}/CMakeLists.txt"))
@@ -139,7 +142,7 @@ class TestL10n < Testme
     l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
-    FileUtils.cp_r(data("multi-pot"), @dir)
+    FileUtils.cp_r(data('multi-pot'), @dir)
     l.get(@dir)
 
     statistics = ReleaseMe::L10nStatistics.new
@@ -176,7 +179,7 @@ end
 
   def test_find_templates_bogus
     l = create_l10n
-    templates = l.find_templates(data("bogus-pot"))
+    templates = l.find_templates(data('bogus-pot'))
     assert_equal(templates, [])
   end
 
@@ -187,7 +190,7 @@ end
     l = create_l10n
     l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
-    FileUtils.cp_r(data("multi-pot"), @dir)
+    FileUtils.cp_r(data('multi-pot'), @dir)
     l.get(@dir)
 
     ENV.delete('RELEASEME_SHUTUP') # Reset by testme setup
