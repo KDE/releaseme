@@ -105,11 +105,33 @@ class TestL10n < Testme
     @elsewhere = "#{Dir.pwd}/elsewhere_tmp_l10n_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
 
     FileUtils.rm_rf(@dir)
-    FileUtils.cp_r(data("single-pot"), @dir)
-    l.get(@dir, @elsewhere, false)
+    FileUtils.cp_r(data('single-pot'), @dir)
+    l.get(@dir, @elsewhere, edit_cmake: false)
     assert(File.exist?("#{@elsewhere}/de/amarok.po"))
 
     FileUtils.rm_rf(@elsewhere)
+  end
+
+  def test_get_po_edit_cmake
+    l = create_l10n
+    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('single-pot'), @dir)
+    l.get(@dir, edit_cmake: true)
+    assert(File.exist?("#{@dir}/CMakeLists.txt"))
+    assert_include(File.read("#{@dir}/CMakeLists.txt"), 'ki18n_install(po)')
+  end
+
+  def test_get_po_no_edit_cmake
+    l = create_l10n
+    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('single-pot'), @dir)
+    l.get(@dir, edit_cmake: false)
+    assert(File.exist?("#{@dir}/CMakeLists.txt"))
+    assert_not_include(File.read("#{@dir}/CMakeLists.txt"), 'ki18n_install(po)')
   end
 
   def test_statistics
