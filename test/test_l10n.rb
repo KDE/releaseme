@@ -29,32 +29,32 @@ require_relative '../lib/releaseme/documentation.rb'
 
 class TestL10n < Testme
   def setup
-    @repoDataDir = data("l10nrepo/")
+    @repo_data_dir = data('l10nrepo/')
 
-    @i18n_path = "extragear-multimedia"
+    @i18n_path = 'extragear-multimedia'
 
-    @trunkUrl = "trunk/l10n-kf5/"
-    @stableUrl = "branches/stable/l10n-kf5"
+    @trunk_url = 'trunk/l10n-kf5/'
+    @stable_url = 'branches/stable/l10n-kf5'
 
     @dir = 'tmp_l10n'
-    @svnTemplateDir = 'tmp_l10n_repo'
-    @svnCheckoutDir = 'tmp_l10n_check'
+    @svn_template_dir = 'tmp_l10n_repo'
+    @svn_checkout_dir = 'tmp_l10n_check'
 
-    `svnadmin create #{@svnTemplateDir}`
-    assert(File.exist?(@svnTemplateDir))
+    `svnadmin create #{@svn_template_dir}`
+    assert(File.exist?(@svn_template_dir))
 
-    `svn co file://#{Dir.pwd}/#{@svnTemplateDir} #{@svnCheckoutDir}`
-    FileUtils.cp_r("#{@repoDataDir}/trunk", @svnCheckoutDir)
-    FileUtils.cp_r("#{@repoDataDir}/branches", @svnCheckoutDir)
-    Dir.chdir(@svnCheckoutDir) do
+    `svn co file://#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}`
+    FileUtils.cp_r("#{@repo_data_dir}/trunk", @svn_checkout_dir)
+    FileUtils.cp_r("#{@repo_data_dir}/branches", @svn_checkout_dir)
+    Dir.chdir(@svn_checkout_dir) do
       `svn add *`
       `svn ci -m 'yolo'`
     end
   end
 
   def teardown
-    FileUtils.rm_rf(@svnTemplateDir)
-    FileUtils.rm_rf(@svnCheckoutDir)
+    FileUtils.rm_rf(@svn_template_dir)
+    FileUtils.rm_rf(@svn_checkout_dir)
     FileUtils.rm_rf(@dir)
   end
 
@@ -76,7 +76,7 @@ class TestL10n < Testme
 
   def test_get_po
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data("single-pot"), @dir)
@@ -100,7 +100,7 @@ class TestL10n < Testme
 
   def test_get_po_elsewhere
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
 
     @elsewhere = "#{Dir.pwd}/elsewhere_tmp_l10n"
 
@@ -114,7 +114,7 @@ class TestL10n < Testme
 
   def test_get_po_edit_cmake
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
@@ -125,7 +125,7 @@ class TestL10n < Testme
 
   def test_get_po_no_edit_cmake
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
@@ -136,7 +136,7 @@ class TestL10n < Testme
 
   def test_statistics
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data("multi-pot"), @dir)
@@ -156,7 +156,7 @@ end
 
   def test_variable_potname
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('variable-pot'), @dir)
     assert_raises RuntimeError do
@@ -166,7 +166,7 @@ end
 
   def test_space_and_declared_multi_pot
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('space-and-declared-multi-pot'), @dir)
     l.get(@dir)
@@ -185,7 +185,7 @@ end
     # only some were not found.
 
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data("multi-pot"), @dir)
     l.get(@dir)
@@ -219,7 +219,7 @@ end
 
     l = ReleaseMe::L10n.new(ReleaseMe::L10n::TRUNK, 'ki18n', 'frameworks')
     l.target = "#{@dir}/l10n"
-    l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot-script'), @dir)
     l.get(@dir)
