@@ -110,9 +110,7 @@ class TestL10n < Testme
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     l.get(@dir, @elsewhere, edit_cmake: false)
-    assert(File.exist?("#{@elsewhere}/de/amarok.po"))
-
-    FileUtils.rm_rf(@elsewhere)
+    assert_path_exist("#{@elsewhere}/de/amarok.po")
   end
 
   def test_get_po_edit_cmake
