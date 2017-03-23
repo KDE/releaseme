@@ -66,6 +66,7 @@ module ReleaseMe
       @vcs = Svn.new
 
       @languages = []
+      @default_excluded_languages = nil
       @templates = []
 
       validate_instace_variables
