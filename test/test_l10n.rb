@@ -113,6 +113,17 @@ class TestL10n < Testme
     assert_path_exist("#{@elsewhere}/de/amarok.po")
   end
 
+  def test_get_po_absolute_srcdir
+    # Make sure we can pass an absolute dir as srcdir param.
+    l = create_l10n
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('single-pot'), @dir)
+    l.get(File.absolute_path(@dir))
+    assert_path_exist("#{@dir}/po/de/amarok.po")
+  end
+
   def test_get_po_edit_cmake
     l = create_l10n
     l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")

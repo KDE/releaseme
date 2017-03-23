@@ -214,8 +214,7 @@ module ReleaseMe
       files.uniq
     end
 
-    def get(srcdir, target = File.expand_path("#{Dir.getwd}/#{srcdir}/po"),
-            edit_cmake: true)
+    def get(srcdir, target = File.expand_path("#{srcdir}/po"), edit_cmake: true)
       Dir.mkdir(target)
 
       @templates = find_templates(srcdir)
