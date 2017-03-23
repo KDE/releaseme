@@ -143,9 +143,9 @@ module ReleaseMe
       raise "l10n pot appears to be a variable. cannot resolve #{potname}"
     end
 
-    def find_templates(directory, pos = [])
+    def find_templates(directory, pos = [], skip_dir: RELEASEME_TEST_DIR)
       Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
-        next if File.absolute_path(file).start_with?(RELEASEME_TEST_DIR)
+        next if skip_dir && File.absolute_path(file).start_with?(skip_dir)
         File.readlines(file).each do |line|
           line.match(%r{[^/\s=]+\.pot}).to_a.each do |match|
             verify_pot(match)

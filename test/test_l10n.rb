@@ -67,10 +67,10 @@ class TestL10n < Testme
   def test_find_templates
     l = create_l10n
 
-    templates = l.find_templates(data('multi-pot'))
+    templates = l.find_templates(data('multi-pot'), skip_dir: nil)
     assert_equal(templates.count, 2)
 
-    templates = l.find_templates(data('single-pot'))
+    templates = l.find_templates(data('single-pot'), skip_dir: nil)
     assert_equal(templates.count, 1)
   end
 
@@ -164,7 +164,7 @@ class TestL10n < Testme
                     :shown=>4,
                     :notshown=>0,
                     :percentage=>100.0}}, statistics.stats)
-end
+  end
 
   def test_variable_potname
     l = create_l10n
@@ -188,7 +188,7 @@ end
 
   def test_find_templates_bogus
     l = create_l10n
-    templates = l.find_templates(data('bogus-pot'))
+    templates = l.find_templates(data('bogus-pot'), skip_dir: nil)
     assert_equal(templates, [])
   end
 
@@ -271,6 +271,6 @@ end
     # If you have come here because you moved the test and get a failure:
     #   Simply adjust the assertion to match reality.
     assert_equal(File.absolute_path(__dir__),
-                 ReleaseMe::L10n.RELEASEME_TEST_DIR)
+                 ReleaseMe::L10n::RELEASEME_TEST_DIR)
   end
 end
