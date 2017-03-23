@@ -215,7 +215,7 @@ module ReleaseMe
     end
 
     def get(srcdir, target = File.expand_path("#{Dir.getwd}/#{srcdir}/po"),
-            allow_edit = true)
+            allow_edit: true)
       Dir.mkdir(target)
 
       @templates = find_templates(srcdir)
