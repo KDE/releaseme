@@ -36,9 +36,9 @@ class TestL10n < Testme
     @trunkUrl = "trunk/l10n-kf5/"
     @stableUrl = "branches/stable/l10n-kf5"
 
-    @dir = "tmp_l10n_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
-    @svnTemplateDir = "tmp_l10n_repo_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
-    @svnCheckoutDir = "tmp_l10n_check_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+    @dir = 'tmp_l10n'
+    @svnTemplateDir = 'tmp_l10n_repo'
+    @svnCheckoutDir = 'tmp_l10n_check'
 
     `svnadmin create #{@svnTemplateDir}`
     assert(File.exist?(@svnTemplateDir))
@@ -102,7 +102,7 @@ class TestL10n < Testme
     l = create_l10n
     l.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
 
-    @elsewhere = "#{Dir.pwd}/elsewhere_tmp_l10n_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+    @elsewhere = "#{Dir.pwd}/elsewhere_tmp_l10n"
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
