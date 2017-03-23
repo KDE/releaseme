@@ -247,4 +247,30 @@ end
     assert_path_exist("#{@dir}/po/sr/scripts/libplasma5/libplasma5.js")
     assert_path_exist("#{@dir}/po/sr/scripts/libplasma5/plasmoid.js")
   end
+
+  def test_pot_detection_without_releaseme
+    # Do not find templates in the releaseme directory itself.
+    # If releaseme was cloned into a source directory (or submoduled')
+    # we'd otherwise trip over test fixtures.
+    # One such fixture is:
+    assert_path_exist("#{__dir__}/data/variable-pot/Messages.sh")
+    l = ReleaseMe::L10n.new(ReleaseMe::L10n::TRUNK, 'ki18n', 'frameworks')
+    # Make sure this doesn't raise anything.
+    pos = l.find_templates(__dir__)
+    assert_empty(pos)
+  end
+
+  def test_releaseme_dir
+    # This is a bit of a silly test. It is meant as an additional safeguard
+    # against breaking relative path resolution. RELEASEME_DIR is meant
+    # to be resolved to the main releaseme directory. The idea here is that
+    # it's less likely both the test AND the lib get moved, so we'd get a
+    # failing teset if any of the two move.
+    # If you have come here because you moved the lib and get a failure:
+    #   Make sure RELEASEME_DIR still resolves to the main releasme dir!
+    # If you have come here because you moved the test and get a failure:
+    #   Simply adjust the assertion to match reality.
+    assert_equal(File.absolute_path(__dir__),
+                 ReleaseMe::L10n.RELEASEME_TEST_DIR)
+  end
 end

@@ -136,6 +136,8 @@ module ReleaseMe
   class L10n < TranslationUnit
     prepend Logable
 
+    RELEASEME_TEST_DIR = File.absolute_path("#{__dir__}/../../test").freeze
+
     def verify_pot(potname)
       return unless potname.include?('$')
       raise "l10n pot appears to be a variable. cannot resolve #{potname}"
@@ -143,6 +145,7 @@ module ReleaseMe
 
     def find_templates(directory, pos = [])
       Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
+        next if File.absolute_path(file).start_with?(RELEASEME_TEST_DIR)
         File.readlines(file).each do |line|
           line.match(%r{[^/\s=]+\.pot}).to_a.each do |match|
             verify_pot(match)
