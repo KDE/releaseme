@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   # directory.
   if File.basename($PROGRAM_NAME).include?('bundle') &&
      (Gem.path.any? { |x| Dir.pwd.start_with?(x) } ||
-      Dir.pwd.include?('.bundle/'))
+      Dir.pwd.include?('.bundler/') || Dir.pwd.include?('.bundle/'))
     warn "Mangling releaseme gem as it is in a gem search path #{Dir.pwd}"
     FileUtils.rm_rf(rejected_files, verbose: true)
   end
