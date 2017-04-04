@@ -36,6 +36,8 @@ Gem::Specification.new do |spec|
   p Gem.path
   p Dir.pwd
   p Gem.path.any? { |x| Dir.pwd.start_with?(x) }
+  p Dir.pwd.include?('.bundle/')
+  p (Gem.path.any? { |x| Dir.pwd.start_with?(x) } || Dir.pwd.include?('.bundle/'))
   if File.basename($PROGRAM_NAME).include?('bundle') &&
      (Gem.path.any? { |x| Dir.pwd.start_with?(x) } ||
       Dir.pwd.include?('.bundle/'))
