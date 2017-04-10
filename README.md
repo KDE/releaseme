@@ -106,6 +106,15 @@ branchme.
 - Make sure you provide the finger print via a trusted source (i.e. HTTPs, not
   unsigned mails etc.)
 
+## CI State
+
+Releaseme automatically checks build.kde.org for relevant jobs and complains if
+one of them doesn't have a stable build (i.e. a green one) as most recent
+build. You can lower the required quality by exporting
+`RELEASEME_CI_CHECK=success` (i.e. yellow). You really should not ever release
+your software if the CI jobs aren't building at all. You are flying blind at
+that point.
+
 ## Translations
 
 Releaseme automatically tries to grab translations and documentation translation
