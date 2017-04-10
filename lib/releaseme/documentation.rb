@@ -36,6 +36,12 @@ module ReleaseMe
     end
 
     def get(srcdir)
+      # TODO: instead of moving the trees around, checkout into /po. This should
+      # simplify the actual logic a bit. There is however the fairly silly use
+      # case of CMakeLists re-use to be considered. i.e. if a source has
+      # multiple docbooks and some of them are dependent on build-time
+      # configuration it would be weird if those docbooks got installed all the
+      # time for $lang while the native english docs are flag sensitive.
       @docdir = "#{File.expand_path(srcdir)}/doc"
       FileUtils.mkpath(@docdir)
 
