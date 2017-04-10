@@ -76,6 +76,9 @@ module ReleaseMe
     # Get the source
     # FIXME: l10n and documentation have no test backing
     def get
+      log_info "Getting CI states."
+      check_ci!
+
       log_info "Getting source #{project.vcs}"
       play if ENV.key?('RELEASE_THE_BEAT')
       source.cleanup
@@ -104,6 +107,32 @@ module ReleaseMe
     end
 
     private
+
+    def check_ci!
+      jobs = Jenkins::Job.from_name_and_branch(project.identifier,
+                                               project.vcs.branch)
+      jobs.select! do |job|
+        next false if job.sufficient_quality?
+        log_warn <<-EOF
+build.kde.org: #{job.display_name} is not of sufficient quality #{job.url}"
+EOF
+        true
+      end
+      continue?(jobs)
+    end
+
+    def continue?(jobs)
+      return if jobs.empty?
+      loop do
+        puts 'Continue despite shitty jobs? [y/n]'
+        case gets.strip
+        when 'y'
+          break
+        when 'n'
+          abort
+        end
+      end
+    end
 
     def play
       url = case ENV.fetch('RELEASE_THE_BEAT', '')
