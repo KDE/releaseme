@@ -272,4 +272,25 @@ class TestL10n < Testme
     assert_equal(File.absolute_path(__dir__),
                  ReleaseMe::L10n::RELEASEME_TEST_DIR)
   end
+
+  def test_data
+    # https://techbase.kde.org/Localization/Concepts/Non_Text_Resources
+
+    # Data assets actually have no identifying quality, translators are expected
+    # to manually pick them out of the source VCS and put them into their l10n
+    # tree without breaking anything. As such we need no source tree for the
+    # test at all.
+
+    l = create_l10n('ktuberling', 'kdegames')
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+
+    Dir.mkdir(@dir)
+    File.write("#{@dir}/CMakeLists.txt", '')
+    l.get(@dir)
+
+    assert_path_exist("#{@dir}/po")
+    assert_path_exist("#{@dir}/po/de/data/ktuberling/CMakeLists.txt")
+    assert_path_exist("#{@dir}/po/de/data/ktuberling/foo.fake.ogg")
+    assert_path_exist("#{@dir}/po/de/data/ktuberling/bar.fake.ogg")
+  end
 end

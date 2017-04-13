@@ -29,6 +29,7 @@ require_relative 'source'
 require_relative 'svn'
 require_relative 'translationunit'
 
+require_relative 'l10n/data_downloader'
 require_relative 'l10n/script_downloader'
 
 module ReleaseMe
@@ -146,16 +147,17 @@ module ReleaseMe
                 log_debug "#{srcdir} - downloading #{lang}"
                 files = []
 
+                # Data assets are not linked to a template, so we can run these
+                # before even looking at the templates in detail.
+                files += L10nDataDownloader.new(lang, tmpdir, self).download
+
                 if templates.count > 1
                   files += get_multiple(lang, tmpdir)
                 elsif templates.count == 1
                   files += get_single(lang, tmpdir)
-                else
-                  # FIXME: needs testcase
-                  # TODO: this previously aborted entirely, not sure that makes
-                  #       sense with threading
-                  next # No translations need fetching
                 end
+                # No translations need fetching. But continue because not
+                # all assets are template bound.
 
                 files += L10nScriptDownloader.new(lang, tmpdir, script_cache,
                                                   self).download
