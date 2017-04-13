@@ -33,15 +33,22 @@ module ReleaseMe
       # So we are not using a cache for this.
       @lang = lang
       @tmpdir = tmpdir
-      @tmpdir_assets = "#{tmpdir}/#{@lang}/data"
+      @tmpdir_assets = "#{tmpdir}/data" # tmpdir is per-language.
+      @tmpdir_modules = "#{tmpdir}/cmake_modules"
       @l10n = l10n
       @artifacts = []
     end
 
     def download
       @l10n.vcs.get(target_path, remote_path)
-      unless Dir.glob("#{target_path}/*").select { |f| File.file?(f) }.empty?
-        @artifacts = [@tmpdir_assets]
+      files = Dir.glob("#{target_path}/*").select { |f| File.file?(f) }
+      return [] if files.empty?
+      @artifacts = [@tmpdir_assets]
+      # Some languages may have a cmake_modules dir to aid with the cmake logic
+      # in their data directories. Grab this as well.
+      # NB: the L10n class has to move these into po/
+      if @l10n.vcs.get(target_cmake_modules_path, remote_cmake_modules_path)
+        @artifacts << @tmpdir_modules
       end
       @artifacts
     end
@@ -58,6 +65,14 @@ module ReleaseMe
 
     def remote_path
       "#{lang}/data/#{@l10n.i18n_path}/#{project_name}"
+    end
+
+    def target_cmake_modules_path
+      @tmpdir_modules
+    end
+
+    def remote_cmake_modules_path
+      "#{lang}/cmake_modules"
     end
   end
 end

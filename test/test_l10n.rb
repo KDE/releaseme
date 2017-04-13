@@ -289,8 +289,25 @@ class TestL10n < Testme
     l.get(@dir)
 
     assert_path_exist("#{@dir}/po")
+    assert_path_exist("#{@dir}/po/CMakeLists.txt")
+
     assert_path_exist("#{@dir}/po/de/data/ktuberling/CMakeLists.txt")
     assert_path_exist("#{@dir}/po/de/data/ktuberling/foo.fake.ogg")
     assert_path_exist("#{@dir}/po/de/data/ktuberling/bar.fake.ogg")
+
+    assert_path_exist("#{@dir}/po/sr/data/ktuberling/CMakeLists.txt")
+    assert_path_exist("#{@dir}/po/sr/data/ktuberling/foo.fake.ogg")
+    assert_path_exist("#{@dir}/po/sr/data/ktuberling/bar.fake.ogg")
+
+    # SR is a special snow flake, it needs cmake modules, the other 100
+    # languages magically don't.
+    # For testing reasons there's also one in our de directory to make sure
+    # things wouldn't break with >1.
+    assert_path_exist("#{@dir}/po/cmake_modules/deDataMacros.cmake")
+    assert_path_exist("#{@dir}/po/cmake_modules/srDataMacros.cmake")
+
+    # Make sure the CMakeLists properly adds our asset dir.
+    assert(File.read("#{@dir}/po/CMakeLists.txt").include?('add_subdirectory(de/data/ktuberling)'))
+    assert(File.read("#{@dir}/CMakeLists.txt").include?('ecm_optional_add_subdirectory(po)'))
   end
 end

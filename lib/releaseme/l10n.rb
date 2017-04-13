@@ -193,9 +193,40 @@ module ReleaseMe
           has_translation = false if Dir.glob("#{target}/*").empty?
         end
 
-        if has_translation && edit_cmake
-          # Update CMakeLists.txt
-          CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
+        if has_translation
+          if edit_cmake
+            # Update master CMakeLists.txt
+            # FIXME: Dir.pwd becuase we chdir above and never undo that.
+            CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
+          end
+
+          # Create po's CMakeLists.txt if there are data assets we need to
+          # install. Data assets rely on CMakeLists.txt supplied by
+          # translators, we still need to assemble the directories with assets
+          # into the po/CMakeLists.txt though.
+          data_assets = Dir.glob("#{target}/*/data/*")
+          unless data_assets.empty?
+            File.open("#{target}/CMakeLists.txt", 'a') do |f|
+              data_assets.each do |dir|
+                f.puts(CMakeEditor.add_subdirectory(dir, relative_to: target))
+              end
+            end
+            if edit_cmake
+              # FIXME: Dir.pwd becuase we chdir above and never undo that.
+              CMakeEditor.append_optional_add_subdirectory!(Dir.pwd, 'po')
+            end
+          end
+
+          # cmake_modules may be used by data assets, they are meant to be
+          # folded into a join cmake_modules dir (doesn't make sense to me
+          # why though, seems to me that does nothing but cause risk of clash)
+          mod_target = "#{target}/cmake_modules".freeze
+          Dir.glob("#{target}/*/cmake_modules").each do |mod|
+            content = Dir.glob("#{mod}/*").reject { |x| x.include?('.svn') }
+            FileUtils.mkpath(mod_target)
+            FileUtils.cp_r(content, mod_target, verbose: true)
+            FileUtils.rm_r(mod)
+          end
         elsif !has_translation
           # Remove the empty translations directory
           Dir.delete('po')

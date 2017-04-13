@@ -30,8 +30,12 @@ module ReleaseMe
 
     module_function
 
-    def add_subdirectory(file)
-      "add_subdirectory(#{File.basename(file)})\n"
+    def add_subdirectory(path, relative_to: nil)
+      rel = path.dup
+      if relative_to
+        rel = Pathname.new(rel).relative_path_from(Pathname.new(relative_to))
+      end
+      "add_subdirectory(#{rel})\n"
     end
 
     # FIXME: INSTALL_DEST needs to take into account subdirs of language
