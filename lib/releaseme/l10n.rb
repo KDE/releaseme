@@ -280,7 +280,8 @@ module ReleaseMe
         end
         ThreadsWait.all_waits(threads)
 
-        if completion_requirement = ENV.fetch('RELEASEME_L10N_REQUIREMENT', nil).to_i
+        if ENV.include?('RELEASEME_L10N_REQUIREMENT')
+          completion_requirement = ENV['RELEASEME_L10N_REQUIREMENT'].to_i
           require_relative 'l10nstatistics'
           stats = L10nStatistics.new.tap { |l| l.gather!(target) }.stats
           drop = stats.delete_if { |_, s| s[:percentage] >= completion_requirement }
