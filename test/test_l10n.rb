@@ -58,8 +58,8 @@ class TestL10n < Testme
     FileUtils.rm_rf(@dir)
   end
 
-  def create_l10n
-    l = ReleaseMe::L10n.new(ReleaseMe::L10n::TRUNK, 'amarok', @i18n_path)
+  def create_l10n(name = 'amarok', i18n_path = @i18n_path)
+    l = ReleaseMe::L10n.new(ReleaseMe::L10n::TRUNK, name, i18n_path)
     l.target = "#{@dir}/l10n"
     l
   end
@@ -229,8 +229,7 @@ class TestL10n < Testme
   def test_script
     # https://techbase.kde.org/Localization/Concepts/Transcript
 
-    l = ReleaseMe::L10n.new(ReleaseMe::L10n::TRUNK, 'ki18n', 'frameworks')
-    l.target = "#{@dir}/l10n"
+    l = create_l10n('ki18n', 'frameworks')
     l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot-script'), @dir)
