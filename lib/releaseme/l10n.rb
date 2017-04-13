@@ -244,10 +244,12 @@ module ReleaseMe
               end
               Dir.mktmpdir(self.class.to_s) do |tmpdir|
                 log_debug "#{srcdir} - downloading #{lang}"
+                files = []
+
                 if templates.count > 1
-                  files = get_multiple(lang, tmpdir)
+                  files += get_multiple(lang, tmpdir)
                 elsif templates.count == 1
-                  files = get_single(lang, tmpdir)
+                  files += get_single(lang, tmpdir)
                 else
                   # FIXME: needs testcase
                   # TODO: this previously aborted entirely, not sure that makes
