@@ -111,7 +111,7 @@ kdoctools_create_handbook(index.docbook
       log_debug "Writing main cmakelists #{dir}/../CMakeLists.txt"
       # FIXME: not thread safe
       File.open("#{dir}/../CMakeLists.txt", 'a') do |f|
-        f.write(add_subdirectory(dir))
+        f.write(add_subdirectory(dir, relative_to: "#{dir}/.."))
       end
     end
 
