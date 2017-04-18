@@ -118,15 +118,17 @@ module ReleaseMe
         # override in one's .bashrc if one gets annoyed by the query once too
         # often in the long run rendering the feature useless.
         # OTOH I am not sure I care
-        qualifier = case ENV['RELEASEME_CI_CHECK']
-                    when 'none'
-                      return true
-                    when 'success'
-                      last_successful_build
-                    else
-                      last_stable_build
-                    end
-        qualifier == last_build
+        case ENV['RELEASEME_CI_CHECK']
+        when 'none'
+          true
+        when 'success'
+          # When we deal with a quality override we want to apply it to the
+          # completed build not the current one. If the current one is still
+          # building our validation is always rubbish.
+          last_successful_build == last_completed_build
+        else
+          last_stable_build == last_build
+        end
       end
 
       private

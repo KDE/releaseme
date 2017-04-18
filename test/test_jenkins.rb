@@ -110,6 +110,8 @@ class TestJenkins < Testme
       .to_return(body: JSON.generate(id: 17))
     stub_request(:get, 'https://build.kde.org/job/xx/lastStableBuild/api/json')
       .to_return(body: JSON.generate(id: 16))
+    stub_request(:get, 'https://build.kde.org/job/xx/lastCompletedBuild/api/json')
+      .to_return(body: JSON.generate(id: 17))
 
     job = ReleaseMe::Jenkins::Job.new('https://build.kde.org/job/xx/', new_connection)
     build = job.last_build
@@ -162,5 +164,26 @@ class TestJenkins < Testme
 
     job = ReleaseMe::Jenkins::Job.new('https://build.kde.org/job/xx/', new_connection)
     assert_false(job.building?)
+  end
+
+  def test_job_unstable_building
+    stub_request(:get, 'https://build.kde.org/job/xx/lastBuild/api/json')
+      .to_return(body: JSON.generate(id: 17))
+    stub_request(:get, 'https://build.kde.org/job/xx/lastSuccessfulBuild/api/json')
+      .to_return(body: JSON.generate(id: 16))
+    stub_request(:get, 'https://build.kde.org/job/xx/lastStableBuild/api/json')
+      .to_return(body: JSON.generate(id: 15))
+    stub_request(:get, 'https://build.kde.org/job/xx/lastCompletedBuild/api/json')
+      .to_return(body: JSON.generate(id: 16))
+
+    job = ReleaseMe::Jenkins::Job.new('https://build.kde.org/job/xx/', new_connection)
+
+    # If we lower the quality restriction we should also ignore currently
+    # building. Notably lowering the restriction is meant to be used when
+    # mass releasing software (such as all of plasma), where acknowledging
+    # each invidiual bit is not called for. In those cases quality should
+    # also take current-building into account.
+    ENV['RELEASEME_CI_CHECK'] = 'success'
+    assert(job.sufficient_quality?)
   end
 end
