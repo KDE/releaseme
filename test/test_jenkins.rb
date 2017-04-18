@@ -28,6 +28,7 @@ require 'webmock/test_unit'
 class TestJenkins < Testme
   def teardown
     WebMock.reset!
+    ENV.delete('RELEASEME_CI_CHECK')
   end
 
   def new_connection
