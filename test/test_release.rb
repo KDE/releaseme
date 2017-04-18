@@ -4,6 +4,8 @@ require_relative '../lib/releaseme/git'
 require_relative '../lib/releaseme/project'
 require_relative '../lib/releaseme/release'
 
+require 'mocha/test_unit'
+
 class TestRelease < Testme
   module Silencer
     module_function
@@ -42,6 +44,14 @@ class TestRelease < Testme
     @remotedir = "#{Dir.pwd}/remote"
 
     setup_repo_content
+
+    # Disable all SVN nonesense so we don't hit live servers.
+    fake_svn = mock('svn')
+    fake_svn.stubs(:repository=)
+    fake_svn.stubs(:cat).returns('')
+    fake_svn.stubs(:list).returns('')
+    fake_svn.stubs(:get).returns(true)
+    ReleaseMe::Svn.stubs(:new).returns(fake_svn)
 
     # Teardown happens automatically when the @tmpdir is torn down
   end

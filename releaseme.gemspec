@@ -52,6 +52,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'codeclimate-test-reporter'
   spec.add_development_dependency 'pullreview-coverage'
+  spec.add_development_dependency 'mocha'
   # Quality
   spec.add_development_dependency 'rubocop'
 end
