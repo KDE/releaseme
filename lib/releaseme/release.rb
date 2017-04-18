@@ -76,7 +76,7 @@ module ReleaseMe
     # Get the source
     # FIXME: l10n and documentation have no test backing
     def get
-      log_info "Getting CI states."
+      log_info 'Getting CI states.'
       check_ci!
 
       log_info "Getting source #{project.vcs}"
