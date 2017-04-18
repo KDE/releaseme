@@ -143,4 +143,24 @@ class TestJenkins < Testme
     assert_false(job.last_stable_build == job.last_build)
     assert_false(job.last_stable_build == job.last_successful_build)
   end
+
+  def test_job_building
+    stub_request(:get, 'https://build.kde.org/job/xx/lastBuild/api/json')
+      .to_return(body: JSON.generate(id: 17))
+    stub_request(:get, 'https://build.kde.org/job/xx/lastCompletedBuild/api/json')
+      .to_return(body: JSON.generate(id: 16))
+
+    job = ReleaseMe::Jenkins::Job.new('https://build.kde.org/job/xx/', new_connection)
+    assert(job.building?)
+  end
+
+  def test_job_not_building
+    stub_request(:get, 'https://build.kde.org/job/xx/lastBuild/api/json')
+      .to_return(body: JSON.generate(id: 17))
+    stub_request(:get, 'https://build.kde.org/job/xx/lastCompletedBuild/api/json')
+      .to_return(body: JSON.generate(id: 17))
+
+    job = ReleaseMe::Jenkins::Job.new('https://build.kde.org/job/xx/', new_connection)
+    assert_false(job.building?)
+  end
 end

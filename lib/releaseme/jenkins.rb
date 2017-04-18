@@ -105,6 +105,14 @@ module ReleaseMe
         build('lastStableBuild')
       end
 
+      def last_completed_build
+        build('lastCompletedBuild')
+      end
+
+      def building?
+        last_completed_build != last_build
+      end
+
       def sufficient_quality?
         # TODO: I am not sure ENV is a good idea. It may promote putting an
         # override in one's .bashrc if one gets annoyed by the query once too
