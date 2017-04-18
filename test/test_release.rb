@@ -45,6 +45,10 @@ class TestRelease < Testme
 
     setup_repo_content
 
+    stub_request(:get, 'https://build.kde.org/api/json?tree=jobs%5Bname,url%5D,views%5Bname%5D')
+      .to_return(body: JSON.generate(jobs: []))
+    WebMock.enable!
+
     # Disable all SVN nonesense so we don't hit live servers.
     fake_svn = mock('svn')
     fake_svn.stubs(:repository=)
@@ -54,6 +58,10 @@ class TestRelease < Testme
     ReleaseMe::Svn.stubs(:new).returns(fake_svn)
 
     # Teardown happens automatically when the @tmpdir is torn down
+  end
+
+  def teardown
+    WebMock.reset!
   end
 
   def new_test_release
@@ -129,5 +137,106 @@ class TestRelease < Testme
     assert_raise do
       ReleaseMe::Release.new(project, Project::TRUNK_KDE4, '1.0')
     end
+  end
+
+  def test_ci_check_all_good
+    # For now we can stub on a HTTP level, should the Jenkins classes become
+    # too complex it will be better to moch the objects themself. Moddelling
+    # the http interaction litters a lot.
+
+    stub_request(:get, 'https://build.kde.org/api/json?tree=jobs%5Bname,url%5D,views%5Bname%5D')
+      .to_return(body: JSON.generate(
+        jobs: [
+          {
+            name: 'clone master kf5-qt5',
+            url: 'https://build.kde.org/job/clone/'
+          }
+        ]
+      ))
+
+    stub_request(:get, 'https://build.kde.org/job/clone/lastBuild/api/json')
+      .to_return(body: JSON.generate(id: 17))
+    stub_request(:get, 'https://build.kde.org/job/clone/lastSuccessfulBuild/api/json')
+      .to_return(body: JSON.generate(id: 17))
+    stub_request(:get, 'https://build.kde.org/job/clone/lastStableBuild/api/json')
+      .to_return(body: JSON.generate(id: 17))
+    stub_request(:get, 'https://build.kde.org/job/clone/lastCompletedBuild/api/json')
+      .to_return(body: JSON.generate(id: 17))
+
+    data = {
+      identifier: 'clone',
+      vcs: ReleaseMe::Git.new,
+      i18n_trunk: 'master',
+      i18n_stable: 'master',
+      i18n_path: ''
+    }
+    project = ReleaseMe::Project.new(data)
+    project.vcs.repository = @remotedir
+
+    ReleaseMe::Release.new(project, Origin::TRUNK, '1.0').get
+  end
+
+  def test_ci_check_one_building_one_shitty
+    # For now we can stub on a HTTP level, should the Jenkins classes become
+    # too complex it will be better to moch the objects themself. Moddelling
+    # the http interaction litters a lot.
+
+    stub_request(:get, 'https://build.kde.org/api/json?tree=jobs%5Bname,url%5D,views%5Bname%5D')
+      .to_return(body: JSON.generate(
+        jobs: [
+          {
+            name: 'clone master kf5-qt5',
+            url: 'https://build.kde.org/job/clone/'
+          },
+          {
+            name: 'clone master kf5-qt5-kitten',
+            url: 'https://build.kde.org/job/clone2/'
+          }
+        ]
+      ))
+
+    # clone is still building
+    stub_request(:get, 'https://build.kde.org/job/clone/api/json')
+      .to_return(body: JSON.generate(displayName: 'clone'))
+    stub_request(:get, 'https://build.kde.org/job/clone/lastBuild/api/json')
+      .to_return(body: JSON.generate(id: 17))
+    stub_request(:get, 'https://build.kde.org/job/clone/lastSuccessfulBuild/api/json')
+      .to_return(body: JSON.generate(id: 16))
+    stub_request(:get, 'https://build.kde.org/job/clone/lastStableBuild/api/json')
+      .to_return(body: JSON.generate(id: 16))
+    stub_request(:get, 'https://build.kde.org/job/clone/lastCompletedBuild/api/json')
+      .to_return(body: JSON.generate(id: 16))
+
+    # clone2 has bad quality
+    stub_request(:get, 'https://build.kde.org/job/clone2/api/json')
+      .to_return(body: JSON.generate(displayName: 'clone2'))
+    stub_request(:get, 'https://build.kde.org/job/clone2/lastBuild/api/json')
+      .to_return(body: JSON.generate(id: 16))
+    stub_request(:get, 'https://build.kde.org/job/clone2/lastSuccessfulBuild/api/json')
+      .to_return(body: JSON.generate(id: 15))
+    stub_request(:get, 'https://build.kde.org/job/clone2/lastStableBuild/api/json')
+      .to_return(body: JSON.generate(id: 15))
+    stub_request(:get, 'https://build.kde.org/job/clone2/lastCompletedBuild/api/json')
+      .to_return(body: JSON.generate(id: 16))
+
+    data = {
+      identifier: 'clone',
+      vcs: ReleaseMe::Git.new,
+      i18n_trunk: 'master',
+      i18n_stable: 'master',
+      i18n_path: ''
+    }
+    project = ReleaseMe::Project.new(data)
+    project.vcs.repository = @remotedir
+
+    # Release.rb will call abort once we tell it to not ignore the shitty jobs.
+    # We intercept this and instead raise a sytemcallerror to verify that this
+    # is in fact what occured.
+    ReleaseMe::Release.any_instance.expects(:abort).raises(SystemCallError.new(''))
+    ReleaseMe::Release.any_instance.expects(:gets).returns("n\n")
+    assert_raises SystemCallError do
+      ReleaseMe::Release.new(project, Origin::TRUNK, '1.0').get
+    end
+    assert_path_not_exist('clone-1.0')
   end
 end

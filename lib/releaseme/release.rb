@@ -108,14 +108,22 @@ module ReleaseMe
 
     private
 
+    def warn_job_state(job)
+      log_warn format(
+        if job.building?
+          'build.kde.org: %s is still building %s'
+        else
+          'build.kde.org: %s is not of sufficient quality %s'
+        end, job.display_name, job.url
+      )
+    end
+
     def check_ci!
       jobs = Jenkins::Job.from_name_and_branch(project.identifier,
                                                project.vcs.branch)
       jobs.select! do |job|
         next false if job.sufficient_quality?
-        log_warn <<-EOF
-build.kde.org: #{job.display_name} is not of sufficient quality #{job.url}"
-EOF
+        warn_job_state(job)
         true
       end
       continue?(jobs)
@@ -124,7 +132,7 @@ EOF
     def continue?(jobs)
       return if jobs.empty?
       loop do
-        puts 'Continue despite shitty jobs? [y/n]'
+        puts 'Continue despite unexpected job states? [y/n]'
         case gets.strip
         when 'y'
           break
