@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 #--
 # Copyright (C) 2017 Aleix Pol Gonzalez <aleixpol@kde.org>
+# Copyright (C) 2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -25,7 +26,9 @@ require 'optparse'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
-  opts.banner = 'Usage: fetchpo.rb --origin ORIGIN SOURCE_DIR OUTPUT_PO_DIR'
+  opts.banner = <<-EOF
+Usage: fetchpo.rb [ARGS] SOURCE_DIR
+  EOF
 
   opts.separator ''
 
@@ -35,18 +38,25 @@ OptionParser.new do |opts|
     options[:origin] = v
   end
 
-  opts.on('--project NAME', 'ProjectName.',
-          '   Repository name in git.kde.org') do |v|
+  opts.on('--project NAME', 'Repository name in git.kde.org') do |v|
     options[:project] = v
+  end
+
+  opts.on('--output-dir PATH', 'Where to put po translations.') do |v|
+    options[:output_dir] = v
+  end
+
+  opts.on('--output-poqm-dir PATH', 'Where to put _qt.po translations.') do |v|
+    options[:output_poqm_dir] = v
   end
 end.parse!
 
-unless options.origin && options.project && ARGV.count == 2
-  warn 'error, you need to set an origin'
+unless options.origin && options.project && options.output_dir &&
+       options.output_poqm_dir && ARGV.count == 1
+  warn 'error, you need to set origin, project, output-dir, output-poqm-dir'
   exit 1
 end
 
-output_dir = File.expand_path(ARGV.pop)
 source_dir = File.expand_path(ARGV.pop)
 
 elements =
@@ -56,13 +66,16 @@ unless elements.count == 1
   exit 2
 end
 
-if File.exist?(output_dir)
-  warn "#{output_dir} should be created by the script, please remove first"
-  exit 3
+[options.output_dir, options.output_poqm_dir].each do |dir|
+  if File.exist?(dir)
+    warn "#{dir} should be created by the script, please remove first"
+    exit 3
+  end
 end
 
 project_information = elements[0]
 
 l10n = ReleaseMe::L10n.new(options.origin, options.project,
                            project_information.i18n_path)
-l10n.get(source_dir, output_dir, edit_cmake: false)
+l10n.get(source_dir, options.output_dir, options.output_poqm_dir,
+         edit_cmake: false)
