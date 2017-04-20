@@ -58,8 +58,9 @@ class TestL10n < Testme
     FileUtils.rm_rf(@dir)
   end
 
-  def create_l10n(name = 'amarok', i18n_path = @i18n_path)
-    l = ReleaseMe::L10n.new(ReleaseMe::L10n::TRUNK, name, i18n_path)
+  def create_l10n(name = 'amarok', i18n_path = @i18n_path,
+                  origin: ReleaseMe::L10n::TRUNK)
+    l = ReleaseMe::L10n.new(origin, name, i18n_path)
     l.target = "#{@dir}/l10n"
     l
   end
@@ -98,7 +99,7 @@ class TestL10n < Testme
     assert(!File.exist?("#{@dir}/l10n")) # temp dir must not be there
     assert(File.exist?("#{@dir}/po"))
     assert(File.exist?("#{@dir}/po/de/amarok.po"))
-    assert(File.exist?("#{@dir}/po/de/amarokcollectionscanner_qt.po"))
+    assert(File.exist?("#{@dir}/po/de/amarokcollectionscanner.po"))
   end
 
   def test_get_po_elsewhere
@@ -183,7 +184,7 @@ class TestL10n < Testme
     FileUtils.cp_r(data('space-and-declared-multi-pot'), @dir)
     l.get(@dir)
     assert_path_exist("#{@dir}/po/de/amarok.po")
-    assert_path_exist("#{@dir}/po/de/amarokcollectionscanner_qt.po")
+    assert_path_exist("#{@dir}/po/de/amarokcollectionscanner.po")
   end
 
   def test_find_templates_bogus
@@ -309,5 +310,48 @@ class TestL10n < Testme
     # Make sure the CMakeLists properly adds our asset dir.
     assert(File.read("#{@dir}/po/CMakeLists.txt").include?('add_subdirectory(de/data/ktuberling)'))
     assert(File.read("#{@dir}/CMakeLists.txt").include?('ecm_optional_add_subdirectory(po)'))
+  end
+
+
+  def test_multi_pot_kde4
+    # In KDE4 you could have foo_qt.po to mean anything. In KF5 based code this
+    # explicitly means that this is a qt translation compiled to qm.
+    # We'll assert that KDE4 origins are treated as previously expected, the new
+    # behavior is checked elsewhere.
+
+    l = create_l10n(origin: ReleaseMe::Origin::TRUNK_KDE4)
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('multi-pot-kde4'), @dir)
+    l.get(@dir)
+
+    assert(File.exist?("#{@dir}"))
+    assert(File.exist?("#{@dir}/CMakeLists.txt"))
+    assert(!File.exist?("#{@dir}/l10n")) # temp dir must not be there
+    assert(File.exist?("#{@dir}/po"))
+    assert(File.exist?("#{@dir}/po/de/amarok.po"))
+    assert(File.exist?("#{@dir}/po/de/amarokcollectionscanner_qt.po"))
+
+    assert_false(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm'))
+  end
+
+  def test_poqm
+    # Qt strings get put into a foo_qt.po, they are meant to get installed via
+    # ecm_install_po_files_as_qm from ECM.
+
+    l = create_l10n('step', 'kdeedu')
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('multi-pot-qt'), @dir)
+    l.get(@dir)
+
+    assert_path_exist("#{@dir}/poqm")
+    assert_path_exist("#{@dir}/po/de/step.po")
+    assert_path_exist("#{@dir}/poqm/de/step_qt.po")
+
+    assert(File.read("#{@dir}/CMakeLists.txt").include?('ki18n_install(po)'))
+    assert(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(poqm)'))
   end
 end

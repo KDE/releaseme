@@ -29,5 +29,11 @@ module ReleaseMe
     STABLE_KDE4 = :stable_kde4
 
     ALL = [TRUNK, STABLE, LTS, TRUNK_KDE4, STABLE_KDE4].freeze
+
+    module_function
+
+    def kde4?(origin)
+      [TRUNK_KDE4, STABLE_KDE4].include?(origin)
+    end
   end
 end

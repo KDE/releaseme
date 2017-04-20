@@ -118,8 +118,18 @@ module ReleaseMe
       files.uniq
     end
 
-    def get(srcdir, target = File.expand_path("#{srcdir}/po"), edit_cmake: true)
+    def qt?(po)
+      File.basename(po).end_with?('_qt.po')
+    end
+
+    def kde4_origin?
+      ReleaseMe::Origin.kde4?(type)
+    end
+
+    def get(srcdir, target = File.expand_path("#{srcdir}/po"),
+            qttarget = File.expand_path("#{target}/../poqm"), edit_cmake: true)
       Dir.mkdir(target)
+      Dir.mkdir(qttarget)
 
       @templates = find_templates(srcdir)
       log_info "Downloading translations for #{srcdir}"
@@ -172,9 +182,15 @@ module ReleaseMe
                 has_translation = true
 
                 # TODO: path confusing with target
-                destination = "#{target}/#{lang}"
-                Dir.mkdir(destination)
-                FileUtils.mv(files, destination)
+                files.each do |file|
+                  destination = if qt?(file) && !kde4_origin?
+                                  "#{qttarget}/#{lang}"
+                                else
+                                  "#{target}/#{lang}"
+                                end
+                  FileUtils.mkpath(destination)
+                  FileUtils.mv(file, destination)
+                end
               end
 
               # FIXME: this is not thread safe without a GIL
@@ -187,19 +203,44 @@ module ReleaseMe
         if ENV.include?('RELEASEME_L10N_REQUIREMENT')
           completion_requirement = ENV['RELEASEME_L10N_REQUIREMENT'].to_i
           require_relative 'l10nstatistics'
-          stats = L10nStatistics.new.tap { |l| l.gather!(target) }.stats
-          drop = stats.delete_if { |_, s| s[:percentage] >= completion_requirement }
-          drop.each { |lang, _| FileUtils.rm_r("#{target}/#{lang}", verbose: true) }
-          has_translation = false if Dir.glob("#{target}/*").empty?
+          translation_dirs = []
+          [target, qttarget].each do |dir|
+            stats = L10nStatistics.new.tap { |l| l.gather!(dir) }.stats
+            stats.each do |lang, stat|
+              next if stat[:percentage] >= completion_requirement
+              FileUtils.rm_r("#{dir}/#{lang}", verbose: true)
+            end
+            translation_dirs += Dir.glob("#{dir}/*")
+          end
+          has_translation = false if translation_dirs.empty?
         end
 
-        if has_translation
+        po_files = Dir.glob("#{target}/**/**")
+        po_files.select! { |x| File.file?(x) }
+
+        qt_files = Dir.glob("#{qttarget}/**/**")
+        qt_files.select! { |x| File.file?(x) }
+
+        has_po_translations = !po_files.empty?
+        has_qt_translations = !qt_files.empty?
+
+        if has_qt_translations
+          if edit_cmake
+            # Update master CMakeLists.txt
+            # FIXME: Dir.pwd becuase we chdir above and never undo that.
+            CMakeEditor.append_poqm_install_instructions!(Dir.pwd, 'poqm')
+          end
+        end
+
+        if has_po_translations
           if edit_cmake
             # Update master CMakeLists.txt
             # FIXME: Dir.pwd becuase we chdir above and never undo that.
             CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
           end
+        end
 
+        if has_translation
           # Create po's CMakeLists.txt if there are data assets we need to
           # install. Data assets rely on CMakeLists.txt supplied by
           # translators, we still need to assemble the directories with assets
@@ -227,9 +268,10 @@ module ReleaseMe
             FileUtils.cp_r(content, mod_target, verbose: true)
             FileUtils.rm_r(mod)
           end
-        elsif !has_translation
+        else
           # Remove the empty translations directory
-          Dir.delete('po')
+          Dir.delete(target) unless has_po_translations
+          Dir.delete(qttarget) unless has_qt_translations
         end
       end
 

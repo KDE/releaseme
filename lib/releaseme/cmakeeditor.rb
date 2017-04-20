@@ -132,12 +132,22 @@ kdoctools_create_handbook(index.docbook
       macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
       if data.include?("##{subdir.upcase}_SUBDIR")
         data = data.sub("##{subdir.upcase}_SUBDIR", macro)
-      else
-        # FIXME: my eyes, my precious eyes!
-        if (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil? &&
-           (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
-          data << macro
-        end
+      elsif (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil? &&
+            (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
+        data << macro
+      end
+      File.write(file, data)
+    end
+
+    # Appends the install instructions for poqm/*
+    def append_poqm_install_instructions!(dir, subdir)
+      file = "#{dir}/CMakeLists.txt"
+      data = File.read(file)
+      macro = "\necm_install_po_files_as_qm(#{subdir})\n"
+      if data.include?("##{subdir.upcase}_SUBDIR")
+        data = data.sub("##{subdir.upcase}_SUBDIR", macro)
+      elsif (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
+        data << macro
       end
       File.write(file, data)
     end
