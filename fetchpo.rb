@@ -41,7 +41,7 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-unless options.origin && options.project && ARGV.count==2
+unless options.origin && options.project && ARGV.count == 2
   warn 'error, you need to set an origin'
   exit 1
 end
@@ -49,7 +49,8 @@ end
 output_dir = File.expand_path(ARGV.pop)
 source_dir = File.expand_path(ARGV.pop)
 
-elements = ReleaseMe::Project.from_repo_url("git://anongit.kde.org/#{options.project}")
+elements =
+  ReleaseMe::Project.from_repo_url("git://anongit.kde.org/#{options.project}")
 unless elements.count == 1
   warn "Found #{elements.count} elements for #{options.project}"
   exit 2
@@ -59,8 +60,6 @@ if File.exist?(output_dir)
   warn "#{output_dir} should be created by the script, please remove first"
   exit 3
 end
-
-# ./fetchpo.rb --origin stable --project kalgebra ~/devel/frameworks/kalgebra/ /tmp/foo/po
 
 project_information = elements[0]
 
