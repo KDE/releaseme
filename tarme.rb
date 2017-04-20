@@ -70,7 +70,7 @@ release_projects = []
 if options[:from_config].nil?
   release_projects = ReleaseMe::Project.from_xpath(project_name)
   if release_projects.empty?
-    warn 'The project #{project_name} could not be resolved.' \
+    warn "The project #{project_name} could not be resolved." \
            ' Please note that you need to provide a concret name or path.'
     exit 1
   end
