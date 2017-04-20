@@ -53,8 +53,7 @@ end.parse!
 
 unless options.origin && options.project && options.output_dir &&
        options.output_poqm_dir && ARGV.count == 1
-  warn 'error, you need to set origin, project, output-dir, output-poqm-dir'
-  exit 1
+  abort 'error, you need to set origin, project, output-dir, output-poqm-dir'
 end
 
 source_dir = File.expand_path(ARGV.pop)
@@ -62,14 +61,12 @@ source_dir = File.expand_path(ARGV.pop)
 elements =
   ReleaseMe::Project.from_repo_url("git://anongit.kde.org/#{options.project}")
 unless elements.count == 1
-  warn "Found #{elements.count} elements for #{options.project}"
-  exit 2
+  abort "Found #{elements.count} elements for #{options.project}"
 end
 
 [options.output_dir, options.output_poqm_dir].each do |dir|
   if File.exist?(dir)
-    warn "#{dir} should be created by the script, please remove first"
-    exit 3
+    abort "#{dir} should be created by the script, please remove first"
   end
 end
 
