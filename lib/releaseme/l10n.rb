@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2017 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2007-2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
