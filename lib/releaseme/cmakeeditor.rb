@@ -67,41 +67,40 @@ kdoctools_create_handbook(index.docbook
         # -- Recyle en' CMakeLists --
         enusdir = "#{dir}/../en/"
         enuscmake = "#{enusdir}/CMakeLists.txt"
-        if File.exist?(enuscmake)
-          # FIXME: naughty
-          FileUtils.cp(enuscmake, dir) unless File.basename(dir) == 'en'
-          Dir.glob("#{dir}/**/**").each do |current_dir|
-            next unless File.directory?(current_dir)
-            next if File.basename(dir) == 'en'
-            dir_pathname = Pathname.new(dir)
-            current_dir_pathname = Pathname.new(current_dir)
-            relative_path = current_dir_pathname.relative_path_from(dir_pathname)
-            # FIXME: this will fail if the cmakelists doesn't exist, which is
-            #        possible but also a bit odd, not sure if we should just
-            #        ignore that...
-            # FIXME: has no test backing I think
-            cmakefile = "#{enusdir}/#{relative_path}/CMakeLists.txt"
-            FileUtils.cp(cmakefile, current_dir) if File.exist?(cmakefile)
-          end
-          Dir.glob("#{dir}/**/index.docbook").each do |docbook|
-            # FIXME: subdir logic needs testing through documentation class
-            # FIXME: this is not tested via our tests
-            dirname = File.dirname(docbook)
-
-            dir_pathname = Pathname.new(dir)
-            current_dir_pathname = Pathname.new(dirname)
-            relative_path = current_dir_pathname.relative_path_from(dir_pathname)
-
-            subdir = File.join(relative_path)
-            subdir.chomp!(File::SEPARATOR)
-            # FIXME: really naughty workaround to avoid overwriting existing lists
-            unless language == 'en' && File.exist?("#{dirname}/CMakeLists.txt")
-              # FIXME: no test backing
-              write_handbook(dirname, language, subdir)
-            end
-          end
-        else
+        unless File.exist?(enuscmake)
           raise 'there is no cmakelists in enUS and also no index.docbook'
+        end
+        # FIXME: naughty
+        FileUtils.cp(enuscmake, dir) unless File.basename(dir) == 'en'
+        Dir.glob("#{dir}/**/**").each do |current_dir|
+          next unless File.directory?(current_dir)
+          next if File.basename(dir) == 'en'
+          dir_pathname = Pathname.new(dir)
+          current_dir_pathname = Pathname.new(current_dir)
+          relative_path = current_dir_pathname.relative_path_from(dir_pathname)
+          # FIXME: this will fail if the cmakelists doesn't exist, which is
+          #        possible but also a bit odd, not sure if we should just
+          #        ignore that...
+          # FIXME: has no test backing I think
+          cmakefile = "#{enusdir}/#{relative_path}/CMakeLists.txt"
+          FileUtils.cp(cmakefile, current_dir) if File.exist?(cmakefile)
+        end
+        Dir.glob("#{dir}/**/index.docbook").each do |docbook|
+          # FIXME: subdir logic needs testing through documentation class
+          # FIXME: this is not tested via our tests
+          dirname = File.dirname(docbook)
+
+          dir_pathname = Pathname.new(dir)
+          current_dir_pathname = Pathname.new(dirname)
+          relative_path = current_dir_pathname.relative_path_from(dir_pathname)
+
+          subdir = File.join(relative_path)
+          subdir.chomp!(File::SEPARATOR)
+          # FIXME: really naughty workaround to avoid overwriting existing lists
+          unless language == 'en' && File.exist?("#{dirname}/CMakeLists.txt")
+            # FIXME: no test backing
+            write_handbook(dirname, language, subdir)
+          end
         end
       else
         raise 'There is no index.docbook but also no directories'
