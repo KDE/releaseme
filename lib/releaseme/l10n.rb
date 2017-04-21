@@ -135,7 +135,6 @@ module ReleaseMe
       log_info "Downloading translations for #{srcdir}"
 
       languages_without_translation = []
-      has_translation = false
       # FIXME: due to threading we do explicit pathing, so this probably can go
       Dir.chdir(srcdir) do
         queue = languages_queue
@@ -178,8 +177,6 @@ module ReleaseMe
                   languages_without_translation << lang
                   next
                 end
-                # FIXME: not thread safe without GIL
-                has_translation = true
 
                 # TODO: path confusing with target
                 files.each do |file|
@@ -222,15 +219,6 @@ module ReleaseMe
 
         has_po_translations = !po_files.empty?
         has_qt_translations = !qt_files.empty?
-        has_translation = has_po_translations || has_qt_translations
-
-        if has_qt_translations
-          if edit_cmake
-            # Update master CMakeLists.txt
-            # FIXME: Dir.pwd becuase we chdir above and never undo that.
-            CMakeEditor.append_poqm_install_instructions!(Dir.pwd, 'poqm')
-          end
-        end
 
         if has_po_translations
           if edit_cmake
@@ -238,9 +226,7 @@ module ReleaseMe
             # FIXME: Dir.pwd because we chdir above and never undo that.
             CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
           end
-        end
 
-        if has_translation
           # Create po's CMakeLists.txt if there are data assets we need to
           # install. Data assets rely on CMakeLists.txt supplied by
           # translators, we still need to assemble the directories with assets
@@ -267,6 +253,30 @@ module ReleaseMe
             FileUtils.mkpath(mod_target)
             FileUtils.cp_r(content, mod_target, verbose: true)
             FileUtils.rm_r(mod)
+          end
+        end
+
+        # Process Qt translations. This MUST be after the PO translations as
+        # we may wish to reuse the PO location if there's only Qt translations.
+        if has_qt_translations
+          final_target = qttarget # Can get modified.
+
+          unless has_po_translations
+            log_info 'Found Qt translations, but no Gettext translations.' \
+                     ' Storing Qt translations in po/ dir.'
+            FileUtils.rm_r(target)
+            FileUtils.mv(qttarget, target)
+            # Prevent us from getting deleted in the new target.
+            has_po_translations = has_qt_translations
+            final_target = target
+          end
+
+          if edit_cmake
+            # Update master CMakeLists.txt
+            # FIXME: handle *name in CMakeEditor, this is way too long a line.
+            CMakeEditor
+              .append_poqm_install_instructions!(File.dirname(final_target),
+                                                 File.basename(final_target))
           end
         end
 

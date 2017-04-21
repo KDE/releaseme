@@ -355,4 +355,25 @@ class TestL10n < Testme
     assert(File.read("#{@dir}/CMakeLists.txt").include?('ki18n_install(po)'))
     assert(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(poqm)'))
   end
+
+  def test_poqm_frameworks_movery
+    # In frameworks po/ is used in place of poqm/ when a source uses Qt
+    # translations exclusively. I couldn't actually find an example of
+    # frameworks using both, but I'd like to think that it would be consistent
+    # with how applications handle it: po/ and poqm/.
+
+    l = create_l10n('solid', 'frameworks')
+    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('multi-pot-qt-frameworks'), @dir)
+    l.get(@dir)
+
+    assert_path_exist("#{@dir}/po")
+    assert_path_exist("#{@dir}/po/de/solid_qt.po")
+    assert_path_not_exist("#{@dir}/poqm")
+
+    assert(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(po)'))
+    assert(!File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(poqm)'))
+  end
 end
