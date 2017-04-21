@@ -29,6 +29,7 @@ require_relative 'source'
 require_relative 'svn'
 require_relative 'translationunit'
 
+require_relative 'l10n/asset'
 require_relative 'l10n/data_downloader'
 require_relative 'l10n/script_downloader'
 
@@ -60,27 +61,6 @@ module ReleaseMe
       pos.uniq
     end
 
-    # FIXME: this has no test backing right now
-    def strip_comments(file)
-      # Strip #~ lines, which once were sensible translations, but then the
-      # strings got removed, so they now stick around in case the strings
-      # return, poor souls, waiting for a comeback, reminds me of Sunset Blvd :(
-      # Problem is that msgfmt adds those to the binary!
-      file = File.new(file, File::RDWR)
-      str = file.read
-      file.rewind
-      file.truncate(0)
-      # Sometimes a fuzzy marker can precede an obsolete translation block, so
-      # first remove any fuzzy obsoletion in the file and then remove any
-      # additional obsoleted lines.
-      # This prevents the fuzzy markers from getting left over.
-      str.gsub!(/^#, fuzzy\n#~.*/, '')
-      str.gsub!(/^#~.*/, '')
-      str = str.strip
-      file << str
-      file.close
-    end
-
     def po_file_dir(lang)
       "#{lang}/messages/#{@i18n_path}"
     end
@@ -94,11 +74,8 @@ module ReleaseMe
       vcs.export(po_file_path, vcs_file_path)
 
       files = []
-      if File.exist?(po_file_path)
-        files << po_file_path
-        strip_comments(po_file_path)
-      end
-      files.uniq
+      files << po_file_path if File.exist?(po_file_path)
+      files
     end
 
     def get_multiple(lang, tmpdir)
@@ -107,19 +84,13 @@ module ReleaseMe
       return [] if @vcs.list(vcs_path).empty?
       @vcs.get(tmpdir, vcs_path)
 
-      files = []
-      templates.each do |po|
+      files = templates.collect do |po|
         po_file_path = tmpdir.dup.concat("/#{po}")
-        next unless File.exist?(po_file_path)
-        files << po_file_path
-        strip_comments(po_file_path)
+        next nil unless File.exist?(po_file_path)
+        po_file_path if File.exist?(po_file_path)
       end
 
-      files.uniq
-    end
-
-    def qt?(po)
-      File.basename(po).end_with?('_qt.po')
+      files
     end
 
     def kde4_origin?
@@ -171,6 +142,8 @@ module ReleaseMe
                 files += L10nScriptDownloader.new(lang, tmpdir, script_cache,
                                                   self).download
 
+                files = files.compact.uniq
+
                 # No files obtained :(
                 if files.empty?
                   # FIXME: not thread safe without GIL
@@ -180,7 +153,9 @@ module ReleaseMe
 
                 # TODO: path confusing with target
                 files.each do |file|
-                  destination = if qt?(file) && !kde4_origin?
+                  file = L10nAsset.new(file)
+                  file.strip!
+                  destination = if file.qt? && !kde4_origin?
                                   "#{qttarget}/#{lang}"
                                 else
                                   "#{target}/#{lang}"
