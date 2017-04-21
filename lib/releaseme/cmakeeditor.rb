@@ -50,7 +50,7 @@ kdoctools_create_handbook(index.docbook
 
     # FIXME: this is getting an awful many arguments
     def write_handbook(dir, language, subdir)
-      log_debug " --- Writing #{dir}/CMakeLists.txt for #{language} :: #{subdir}"
+      log_debug " -- Writing #{dir}/CMakeLists.txt for #{language} :: #{subdir}"
       File.write("#{dir}/CMakeLists.txt", create_handbook(language, subdir))
     end
 
