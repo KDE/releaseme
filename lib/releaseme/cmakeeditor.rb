@@ -124,48 +124,61 @@ kdoctools_create_handbook(index.docbook
       file.close
     end
 
-    # Appends the install instructions for po/*
-    def append_po_install_instructions!(dir, subdir)
-      file = "#{dir}/CMakeLists.txt"
+    # Helper, append methods can get one arg, which is expected to be a
+    # path we can split into its pieces.
+    # TODO: possibly deprecate calling the appends with two args altogether.
+    def dir_subdir_split(dir)
+      [File.dirname(dir), File.basename(dir)]
+    end
+
+    def edit_file(file)
       data = File.read(file)
-      macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
-      if data.include?("##{subdir.upcase}_SUBDIR")
-        data = data.sub("##{subdir.upcase}_SUBDIR", macro)
-      elsif (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil? &&
-            (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
-        data << macro
-      end
+      yield data
       File.write(file, data)
+    end
+
+    # Appends the install instructions for po/*
+    def append_po_install_instructions!(dir, subdir = nil)
+      dir, subdir = dir_subdir_split(dir) unless subdir
+      macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
+      edit_file("#{dir}/CMakeLists.txt") do |data|
+        if data.include?("##{subdir.upcase}_SUBDIR")
+          data.sub!("##{subdir.upcase}_SUBDIR", macro)
+        elsif (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil? &&
+              (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
+          data << macro
+        end
+      end
     end
 
     # Appends the install instructions for poqm/*
-    def append_poqm_install_instructions!(dir, subdir)
-      file = "#{dir}/CMakeLists.txt"
-      data = File.read(file)
+    def append_poqm_install_instructions!(dir, subdir = nil)
+      dir, subdir = dir_subdir_split(dir) unless subdir
       macro = "\necm_install_po_files_as_qm(#{subdir})\n"
-      if data.include?("##{subdir.upcase}_SUBDIR")
-        data = data.sub("##{subdir.upcase}_SUBDIR", macro)
-      elsif (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
-        data << macro
+      edit_file("#{dir}/CMakeLists.txt") do |data|
+        if data.include?("##{subdir.upcase}_SUBDIR")
+          data.sub!("##{subdir.upcase}_SUBDIR", macro)
+        elsif (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
+          data << macro
+        end
       end
-      File.write(file, data)
     end
 
     # Appends the inclusion of subdir/CMakeLists.txt
-    def append_optional_add_subdirectory!(dir, subdir)
-      file = "#{dir}/CMakeLists.txt"
-      data = File.read(file)
+    def append_optional_add_subdirectory!(dir, subdir = nil)
+      dir, subdir = dir_subdir_split(dir) unless subdir
       macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory(#{subdir})\n"
-      if data.include?("##{subdir.upcase}_SUBDIR")
-        data = data.sub("##{subdir.upcase}_SUBDIR", macro)
-      elsif (data =~ /^\s*(add_subdirectory|ecm_optional_add_subdirectory)\s*\(\s*#{subdir}\s*\).*$/).nil?
-        # TODO: needs test case
-        # Mighty fancy regex looking for existing add_subdir.
-        # Basically allows spaces everywhere one might want to put spaces.
-        # At the end we allow everything as there may be a comment for example.
-        data << macro
+      edit_file("#{dir}/CMakeLists.txt") do |data|
+        if data.include?("##{subdir.upcase}_SUBDIR")
+          data.sub!("##{subdir.upcase}_SUBDIR", macro)
+        elsif (data =~ /^\s*(add_subdirectory|ecm_optional_add_subdirectory)\s*\(\s*#{subdir}\s*\).*$/).nil?
+          # TODO: needs test case
+          # Mighty fancy regex looking for existing add_subdir.
+          # Basically allows spaces everywhere one might want to put spaces.
+          # At the end we allow everything as there may be a comment for example.
+          data << macro
+        end
       end
-      File.write(file, data)
     end
   end
 end

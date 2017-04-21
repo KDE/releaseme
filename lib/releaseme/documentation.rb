@@ -76,7 +76,7 @@ module ReleaseMe
 
       if !docs.empty?
         CMakeEditor.create_doc_meta_lists!(@docdir)
-        CMakeEditor.append_optional_add_subdirectory!(srcdir, 'doc')
+        CMakeEditor.append_optional_add_subdirectory!(@docdir)
       else
         log_warn 'There are no translations at all!'
         FileUtils.rm_rf(@docdir)

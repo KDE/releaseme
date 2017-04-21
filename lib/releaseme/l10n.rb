@@ -162,11 +162,7 @@ module ReleaseMe
       has_qt_translations = !qt_files.empty?
 
       if has_po_translations
-        if edit_cmake
-          # Update master CMakeLists.txt
-          # FIXME: Dir.pwd because we chdir above and never undo that.
-          CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
-        end
+        CMakeEditor.append_po_install_instructions!(target) if edit_cmake
 
         # Create po's CMakeLists.txt if there are data assets we need to
         # install. Data assets rely on CMakeLists.txt supplied by
@@ -179,10 +175,7 @@ module ReleaseMe
               f.puts(CMakeEditor.add_subdirectory(dir, relative_to: target))
             end
           end
-          if edit_cmake
-            # FIXME: Dir.pwd because we chdir above and never undo that.
-            CMakeEditor.append_optional_add_subdirectory!(Dir.pwd, 'po')
-          end
+          CMakeEditor.append_optional_add_subdirectory!(target) if edit_cmake
         end
 
         # cmake_modules may be used by data assets, they are meant to be
@@ -213,11 +206,8 @@ module ReleaseMe
         end
 
         if edit_cmake
-          # Update master CMakeLists.txt
-          # FIXME: handle *name in CMakeEditor, this is way too long a line.
-          CMakeEditor
-            .append_poqm_install_instructions!(File.dirname(final_target),
-                                               File.basename(final_target))
+          # Update $srcdir/CMakeLists.txt
+          CMakeEditor.append_poqm_install_instructions!(final_target)
         end
       end
 
