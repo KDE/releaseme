@@ -68,10 +68,10 @@ class TestL10n < Testme
   def test_find_templates
     l = create_l10n
 
-    templates = l.find_templates(data('multi-pot'), skip_dir: nil)
+    templates = l.send(:find_templates, data('multi-pot'), skip_dir: nil)
     assert_equal(templates.count, 2)
 
-    templates = l.find_templates(data('single-pot'), skip_dir: nil)
+    templates = l.send(:find_templates, data('single-pot'), skip_dir: nil)
     assert_equal(templates.count, 1)
   end
 
@@ -190,7 +190,7 @@ class TestL10n < Testme
 
   def test_find_templates_bogus
     l = create_l10n
-    templates = l.find_templates(data('bogus-pot'), skip_dir: nil)
+    templates = l.send(:find_templates, data('bogus-pot'), skip_dir: nil)
     assert_equal(templates, [])
   end
 
@@ -209,14 +209,14 @@ class TestL10n < Testme
     some_missing_stdout = StringIO.open do |io|
       $stdout = io
       l.instance_variable_set(:@__logger, nil) # Reset
-      l.print_missing_languages([l.languages.pop])
+      l.send(:print_missing_languages, [l.languages.pop])
       io.string.strip
     end
 
     all_missing_stdout = StringIO.open do |io|
       $stdout = io
       l.instance_variable_set(:@__logger, nil) # Reset
-      l.print_missing_languages(l.languages)
+      l.send(:print_missing_languages, l.languages)
       io.string.strip
     end
     $stdout = STDOUT
@@ -257,7 +257,7 @@ class TestL10n < Testme
     assert_path_exist("#{__dir__}/data/variable-pot/Messages.sh")
     l = ReleaseMe::L10n.new(ReleaseMe::L10n::TRUNK, 'ki18n', 'frameworks')
     # Make sure this doesn't raise anything.
-    pos = l.find_templates(__dir__)
+    pos = l.send(:find_templates, __dir__)
     assert_empty(pos)
   end
 

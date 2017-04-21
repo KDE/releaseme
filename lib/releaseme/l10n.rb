@@ -40,63 +40,6 @@ module ReleaseMe
 
     RELEASEME_TEST_DIR = File.absolute_path("#{__dir__}/../../test").freeze
 
-    def verify_pot(potname)
-      return unless potname.include?('$')
-      raise "l10n pot appears to be a variable. cannot resolve #{potname}"
-    end
-
-    def find_templates(directory, pos = [], skip_dir: RELEASEME_TEST_DIR)
-      Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
-        next if skip_dir && File.absolute_path(file).start_with?(skip_dir)
-        File.readlines(file).each do |line|
-          line.match(%r{[^/\s=]+\.pot}).to_a.each do |match|
-            verify_pot(match)
-            pos << match.sub('.pot', '.po')
-          end
-        end
-      end
-      # Templates must be unique as multiple lines can contribute to the same
-      # template, as such it can happen that a.pot appears twice which can
-      # have unintended consequences by an outside user of the Array.
-      pos.uniq
-    end
-
-    def po_file_dir(lang)
-      "#{lang}/messages/#{@i18n_path}"
-    end
-
-    def get_single(lang, tmpdir)
-      # TODO: maybe class this
-      po_file_name = templates[0]
-      vcs_file_path = "#{po_file_dir(lang)}/#{po_file_name}"
-      po_file_path = "#{tmpdir}/#{po_file_name}"
-
-      vcs.export(po_file_path, vcs_file_path)
-
-      files = []
-      files << po_file_path if File.exist?(po_file_path)
-      files
-    end
-
-    def get_multiple(lang, tmpdir)
-      vcs_path = po_file_dir(lang)
-
-      return [] if @vcs.list(vcs_path).empty?
-      @vcs.get(tmpdir, vcs_path)
-
-      files = templates.collect do |po|
-        po_file_path = tmpdir.dup.concat("/#{po}")
-        next nil unless File.exist?(po_file_path)
-        po_file_path if File.exist?(po_file_path)
-      end
-
-      files
-    end
-
-    def kde4_origin?
-      ReleaseMe::Origin.kde4?(type)
-    end
-
     def get(srcdir, target = File.expand_path("#{srcdir}/po"),
             qttarget = File.expand_path("#{target}/../poqm"), edit_cmake: true)
       Dir.mkdir(target)
@@ -262,6 +205,65 @@ module ReleaseMe
 
       return if languages_without_translation.empty?
       print_missing_languages(languages_without_translation)
+    end
+
+    private
+
+    def verify_pot(potname)
+      return unless potname.include?('$')
+      raise "l10n pot appears to be a variable. cannot resolve #{potname}"
+    end
+
+    def find_templates(directory, pos = [], skip_dir: RELEASEME_TEST_DIR)
+      Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
+        next if skip_dir && File.absolute_path(file).start_with?(skip_dir)
+        File.readlines(file).each do |line|
+          line.match(%r{[^/\s=]+\.pot}).to_a.each do |match|
+            verify_pot(match)
+            pos << match.sub('.pot', '.po')
+          end
+        end
+      end
+      # Templates must be unique as multiple lines can contribute to the same
+      # template, as such it can happen that a.pot appears twice which can
+      # have unintended consequences by an outside user of the Array.
+      pos.uniq
+    end
+
+    def po_file_dir(lang)
+      "#{lang}/messages/#{@i18n_path}"
+    end
+
+    def get_single(lang, tmpdir)
+      # TODO: maybe class this
+      po_file_name = templates[0]
+      vcs_file_path = "#{po_file_dir(lang)}/#{po_file_name}"
+      po_file_path = "#{tmpdir}/#{po_file_name}"
+
+      vcs.export(po_file_path, vcs_file_path)
+
+      files = []
+      files << po_file_path if File.exist?(po_file_path)
+      files
+    end
+
+    def get_multiple(lang, tmpdir)
+      vcs_path = po_file_dir(lang)
+
+      return [] if @vcs.list(vcs_path).empty?
+      @vcs.get(tmpdir, vcs_path)
+
+      files = templates.collect do |po|
+        po_file_path = tmpdir.dup.concat("/#{po}")
+        next nil unless File.exist?(po_file_path)
+        po_file_path if File.exist?(po_file_path)
+      end
+
+      files
+    end
+
+    def kde4_origin?
+      ReleaseMe::Origin.kde4?(type)
     end
 
     def print_missing_languages(missing)
