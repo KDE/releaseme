@@ -63,70 +63,81 @@ module ReleaseMe
 
     private
 
-    def download(srcdir, languages_without_translation, target, qttarget)
-      queue = languages_queue
-      threads = []
-      script_cache = L10nScriptDownloader::TemplateCache.new(self)
-      THREAD_COUNT.times do
-        threads << Thread.new do
+    def blocking_thread_pool
+      threads = THREAD_COUNT.times.collect do
+        Thread.new do
           Thread.current.abort_on_exception = true
-          until queue.empty?
-            begin
-              lang = queue.pop(true)
-            rescue
-              # When pop runs into an empty queue with non_block=true it raises
-              # an exception. We'll simply continue with it as our loop should
-              # naturally end anyway.
-              continue
-            end
-            Dir.mktmpdir(self.class.to_s) do |tmpdir|
-              log_debug "#{srcdir} - downloading #{lang}"
-              files = []
-
-              # Data assets are not linked to a template, so we can run these
-              # before even looking at the templates in detail.
-              files += L10nDataDownloader.new(lang, tmpdir, self).download
-
-              if templates.count > 1
-                files += get_multiple(lang, tmpdir)
-              elsif templates.count == 1
-                files += get_single(lang, tmpdir)
-              end
-              # No translations need fetching. But continue because not
-              # all assets are template bound.
-
-              files += L10nScriptDownloader.new(lang, tmpdir, script_cache,
-                                                self).download
-
-              files = files.compact.uniq
-
-              # No files obtained :(
-              if files.empty?
-                # FIXME: not thread safe without GIL
-                languages_without_translation << lang
-                next
-              end
-
-              # TODO: path confusing with target
-              files.each do |file|
-                file = L10nAsset.new(file)
-                file.strip!
-                destination = if file.qt? && !kde4_origin?
-                                "#{qttarget}/#{lang}"
-                              else
-                                "#{target}/#{lang}"
-                              end
-                FileUtils.mkpath(destination)
-                FileUtils.mv(file, destination)
-              end
-            end
-
-            # FIXME: this is not thread safe without a GIL
-            @languages += [lang]
-          end
+          yield
         end
       end
       ThreadsWait.all_waits(threads)
+    end
+
+    def thread_queue(queue)
+      blocking_thread_pool do
+        until queue.empty?
+          begin
+            lang = queue.pop(true)
+          rescue
+            # When pop runs into an empty queue with non_block=true it raises
+            # an exception. We'll simply continue with it as our loop should
+            # naturally end anyway.
+            continue
+          end
+          yield lang
+        end
+      end
+    end
+
+    def download(srcdir, languages_without_translation, target, qttarget)
+      queue = languages_queue
+      script_cache = L10nScriptDownloader::TemplateCache.new(self)
+      thread_queue(languages_queue) do |lang|
+        Dir.mktmpdir(self.class.to_s) do |tmpdir|
+          log_debug "#{srcdir} - downloading #{lang}"
+          files = []
+
+          # Data assets are not linked to a template, so we can run these
+          # before even looking at the templates in detail.
+          files += L10nDataDownloader.new(lang, tmpdir, self).download
+
+          if templates.count > 1
+            files += get_multiple(lang, tmpdir)
+          elsif templates.count == 1
+            files += get_single(lang, tmpdir)
+          end
+          # No translations need fetching. But continue because not
+          # all assets are template bound.
+
+          files += L10nScriptDownloader.new(lang, tmpdir, script_cache,
+                                            self).download
+
+          files = files.compact.uniq
+
+          # No files obtained :(
+          if files.empty?
+            # FIXME: not thread safe without GIL
+            languages_without_translation << lang
+            next
+          end
+
+          # TODO: path confusing with target
+          files.each do |file|
+            file = L10nAsset.new(file)
+            file.strip!
+            destination = if file.qt? && !kde4_origin?
+                            "#{qttarget}/#{lang}"
+                          else
+                            "#{target}/#{lang}"
+                          end
+            FileUtils.mkpath(destination)
+            FileUtils.mv(file, destination)
+          end
+        end
+
+        # FIXME: this is not thread safe without a GIL
+        @languages += [lang]
+      end
     end
 
     def post_process(target, qttarget, edit_cmake)
