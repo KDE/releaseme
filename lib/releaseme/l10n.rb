@@ -203,17 +203,16 @@ module ReleaseMe
         if ENV.include?('RELEASEME_L10N_REQUIREMENT')
           completion_requirement = ENV['RELEASEME_L10N_REQUIREMENT'].to_i
           require_relative 'l10nstatistics'
-          translation_dirs = []
           [target, qttarget].each do |dir|
             stats = L10nStatistics.new.tap { |l| l.gather!(dir) }.stats
             stats.each do |lang, stat|
               next if stat[:percentage] >= completion_requirement
               FileUtils.rm_r("#{dir}/#{lang}", verbose: true)
             end
-            translation_dirs += Dir.glob("#{dir}/*")
           end
-          has_translation = false if translation_dirs.empty?
         end
+
+        # Update Data after mangling
 
         po_files = Dir.glob("#{target}/**/**")
         po_files.select! { |x| File.file?(x) }
@@ -223,6 +222,7 @@ module ReleaseMe
 
         has_po_translations = !po_files.empty?
         has_qt_translations = !qt_files.empty?
+        has_translation = has_po_translations || has_qt_translations
 
         if has_qt_translations
           if edit_cmake
