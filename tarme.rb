@@ -82,7 +82,7 @@ else
 end
 
 release_data_file = File.open('release_data', 'w')
-release_projects.each do |project|
+releases = release_projects.collect do |project|
   project_name = project.identifier
   release = ReleaseMe::Release.new(project, options[:origin], options[:version])
 
@@ -95,7 +95,7 @@ release_projects.each do |project|
 
   # FIXME: present release_data format assumes that everything is git, so we
   # cannot add svn data
-  next if release.project.vcs.is_a?(ReleaseMe::Svn)
+  next nil if release.project.vcs.is_a?(ReleaseMe::Svn)
 
   # FIXME: technically we need to track SVN revs for l10n as well...........
   # FIXME FIXME FIXME FIXME: need version
@@ -105,4 +105,8 @@ release_projects.each do |project|
   tar = release.archive_.filename
   sha256 = `sha256sum #{tar}`.split(' ')[0] unless tar.nil?
   release_data_file.write("#{project};#{branch};#{hash};#{tar};#{sha256}\n")
+  release
 end
+
+# At the end dump help output for all created tarballs.
+releases.compact.each(&:help)

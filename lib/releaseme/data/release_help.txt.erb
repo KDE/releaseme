@@ -1,0 +1,25 @@
+################################################################################
+Tarball Done!
+
+# Next Steps
+
+Create a maintenance branch
+  $ ./branchme.rb --help
+
+Tag the release
+  $ ./tagme.rb --help
+
+Create a changelog
+  $ ./logme.rb --help
+
+# Publish
+
+Read readme: ftp://upload.kde.org/README
+Upload: ftp://upload.kde.org/
+  $ echo put <%= tarball %> | ftp upload.kde.org
+  $ echo put <%= signature %> | ftp upload.kde.org
+
+File a syadmin ticket: https://go.kde.org/u/systickets
+
+# Ticket Template Link
+<%= ticket_uri %>

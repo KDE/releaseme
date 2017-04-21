@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2015 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2007-2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -23,6 +23,7 @@ require_relative 'documentation'
 require_relative 'l10n'
 require_relative 'logable'
 require_relative 'source'
+require_relative 'template'
 require_relative 'xzarchive'
 
 # FIXME: with vcs construction outside the class scope there need to be tests
@@ -103,10 +104,36 @@ module ReleaseMe
       source.clean(project.vcs)
       @archive_.directory = source.target
       @archive_.create
-      ArchiveSigner.new.sign(@archive_)
+      @signature = ArchiveSigner.new.sign(@archive_)
+    end
+
+    def help
+      tar = archive_.filename
+      sig = File.basename(@signature)
+
+      uri = sysadmin_ticket(tar, sig)
+
+      template = HashTemplate.new(tarball: tar, signature: sig, ticket_uri: uri)
+      puts template.render("#{__dir__}/data/release_help.txt.erb")
     end
 
     private
+
+    def sysadmin_ticket(tar, sig)
+      title = "Publish #{tar}"
+      sha256s = [sig, tar].collect { |x| `sha256sum #{x}`.strip }
+      sha1s = [sig, tar].collect { |x| `sha1sum #{x}`.strip }
+      template = HashTemplate.new(sha256s: sha256s, sha1s: sha1s)
+      template_file = "#{__dir__}/data/ticket_description.txt.erb"
+      description = template.render(template_file)
+      sysadmin_ticket_uri(title: title, description: description)
+    end
+
+    def sysadmin_ticket_uri(**form_data)
+      uri = URI.parse('https://phabricator.kde.org/maniphest/task/edit/form/2')
+      uri.query = URI.encode_www_form(**form_data)
+      uri
+    end
 
     def warn_job_state(job)
       log_warn format(
@@ -156,7 +183,7 @@ module ReleaseMe
     def play_thread(url)
       Thread.new do
         loop do
-          ret = system(*(%w(vlc --no-video --play-and-exit --intf dummy) << url),
+          ret = system(*(%w[vlc --no-video --play-and-exit --intf dummy] << url),
                        pgroup: Process.pid)
           break unless ret
         end

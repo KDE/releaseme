@@ -18,22 +18,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require_relative 'releaseme/archive_signer'
-require_relative 'releaseme/cmakeeditor'
-require_relative 'releaseme/documentation'
-require_relative 'releaseme/git'
-require_relative 'releaseme/hash_template'
-require_relative 'releaseme/jenkins'
-require_relative 'releaseme/l10n'
-require_relative 'releaseme/l10nstatistics'
-require_relative 'releaseme/logable'
-require_relative 'releaseme/project'
-require_relative 'releaseme/projectsfile'
-require_relative 'releaseme/release'
-require_relative 'releaseme/requirement_checker'
-require_relative 'releaseme/source'
-require_relative 'releaseme/svn'
-require_relative 'releaseme/template'
-require_relative 'releaseme/translationunit'
-require_relative 'releaseme/vcs'
-require_relative 'releaseme/xzarchive'
+require_relative 'template'
+
+module ReleaseMe
+  # Simple Template providing a binding context around a hash. The hash
+  # keys are exposed as methods in the binding context.
+  # The hash keys must be symbols.
+  class HashTemplate < Template
+    def initialize(hash)
+      @hash = hash
+    end
+
+    def method_missing(meth, *args)
+      @hash.fetch(meth) { super }
+    end
+
+    def respond_to_missing?(meth, *)
+      @hash.include?(meth) || super
+    end
+  end
+end

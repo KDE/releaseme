@@ -239,4 +239,24 @@ class TestRelease < Testme
     end
     assert_path_not_exist('clone-1.0')
   end
+
+  def test_help
+    data = {
+      identifier: 'clone',
+      vcs: ReleaseMe::Git.new,
+      i18n_trunk: 'master',
+      i18n_stable: 'master',
+      i18n_path: ''
+    }
+    project = ReleaseMe::Project.new(data)
+    project.vcs.repository = @remotedir
+
+    r = ReleaseMe::Release.new(project, :trunk, '1.0')
+    r.get
+    r.archive
+
+    # We do not particularly care about the output at this time. What matters
+    # is that it passes.
+    r.help
+  end
 end
