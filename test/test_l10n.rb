@@ -90,6 +90,7 @@ class TestL10n < Testme
     assert(!File.exist?("#{@dir}/l10n")) # temp dir must not be there
     assert(File.exist?("#{@dir}/po"))
     assert(File.exist?("#{@dir}/po/de/amarok.po"))
+    assert(!File.exist?("#{@dir}/poqm")) # qt translation dir must not be there
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot'), @dir)

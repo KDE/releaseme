@@ -268,11 +268,11 @@ module ReleaseMe
             FileUtils.cp_r(content, mod_target, verbose: true)
             FileUtils.rm_r(mod)
           end
-        else
-          # Remove the empty translations directory
-          Dir.delete(target) unless has_po_translations
-          Dir.delete(qttarget) unless has_qt_translations
         end
+
+        # Remove the empty translations directory
+        Dir.delete(target) unless has_po_translations
+        Dir.delete(qttarget) unless has_qt_translations
       end
 
       return if languages_without_translation.empty?
