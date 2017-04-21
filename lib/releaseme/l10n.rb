@@ -235,7 +235,7 @@ module ReleaseMe
         if has_po_translations
           if edit_cmake
             # Update master CMakeLists.txt
-            # FIXME: Dir.pwd becuase we chdir above and never undo that.
+            # FIXME: Dir.pwd because we chdir above and never undo that.
             CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
           end
         end
@@ -253,7 +253,7 @@ module ReleaseMe
               end
             end
             if edit_cmake
-              # FIXME: Dir.pwd becuase we chdir above and never undo that.
+              # FIXME: Dir.pwd because we chdir above and never undo that.
               CMakeEditor.append_optional_add_subdirectory!(Dir.pwd, 'po')
             end
           end
