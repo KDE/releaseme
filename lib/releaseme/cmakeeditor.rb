@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2014 Harald Sitter <apachelogger@ubuntu.com>
+# Copyright (C) 2007-2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -118,7 +118,7 @@ kdoctools_create_handbook(index.docbook
     def create_doc_meta_lists!(dir)
       file = File.new("#{dir}/CMakeLists.txt", 'w')
       Dir.foreach(dir) do |lang|
-        next if %w(. .. CMakeLists.txt).include?(lang)
+        next if %w[. .. CMakeLists.txt].include?(lang)
         file << "add_subdirectory(#{lang})\n"
       end
       file.close
