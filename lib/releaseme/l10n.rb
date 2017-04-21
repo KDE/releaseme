@@ -73,7 +73,7 @@ module ReleaseMe
       ThreadsWait.all_waits(threads)
     end
 
-    def thread_queue(queue)
+    def each_language_with_tmpdir(queue = languages_queue)
       blocking_thread_pool do
         until queue.empty?
           begin
@@ -84,55 +84,52 @@ module ReleaseMe
             # naturally end anyway.
             continue
           end
-          yield lang
+          Dir.mktmpdir(self.class.to_s) { |tmpdir| yield lang, tmpdir }
         end
       end
     end
 
     def download(srcdir, languages_without_translation, target, qttarget)
-      queue = languages_queue
       script_cache = L10nScriptDownloader::TemplateCache.new(self)
-      thread_queue(languages_queue) do |lang|
-        Dir.mktmpdir(self.class.to_s) do |tmpdir|
-          log_debug "#{srcdir} - downloading #{lang}"
-          files = []
+      each_language_with_tmpdir do |lang, tmpdir|
+        log_debug "#{srcdir} - downloading #{lang}"
+        files = []
 
-          # Data assets are not linked to a template, so we can run these
-          # before even looking at the templates in detail.
-          files += L10nDataDownloader.new(lang, tmpdir, self).download
+        # Data assets are not linked to a template, so we can run these
+        # before even looking at the templates in detail.
+        files += L10nDataDownloader.new(lang, tmpdir, self).download
 
-          if templates.count > 1
-            files += get_multiple(lang, tmpdir)
-          elsif templates.count == 1
-            files += get_single(lang, tmpdir)
-          end
-          # No translations need fetching. But continue because not
-          # all assets are template bound.
+        if templates.count > 1
+          files += get_multiple(lang, tmpdir)
+        elsif templates.count == 1
+          files += get_single(lang, tmpdir)
+        end
+        # No translations need fetching. But continue because not
+        # all assets are template bound.
 
-          files += L10nScriptDownloader.new(lang, tmpdir, script_cache,
-                                            self).download
+        files += L10nScriptDownloader.new(lang, tmpdir, script_cache,
+                                          self).download
 
-          files = files.compact.uniq
+        files = files.compact.uniq
 
-          # No files obtained :(
-          if files.empty?
-            # FIXME: not thread safe without GIL
-            languages_without_translation << lang
-            next
-          end
+        # No files obtained :(
+        if files.empty?
+          # FIXME: not thread safe without GIL
+          languages_without_translation << lang
+          next
+        end
 
-          # TODO: path confusing with target
-          files.each do |file|
-            file = L10nAsset.new(file)
-            file.strip!
-            destination = if file.qt? && !kde4_origin?
-                            "#{qttarget}/#{lang}"
-                          else
-                            "#{target}/#{lang}"
-                          end
-            FileUtils.mkpath(destination)
-            FileUtils.mv(file, destination)
-          end
+        # TODO: path confusing with target
+        files.each do |file|
+          file = L10nAsset.new(file)
+          file.strip!
+          destination = if file.qt? && !kde4_origin?
+                          "#{qttarget}/#{lang}"
+                        else
+                          "#{target}/#{lang}"
+                        end
+          FileUtils.mkpath(destination)
+          FileUtils.mv(file, destination)
         end
 
         # FIXME: this is not thread safe without a GIL
