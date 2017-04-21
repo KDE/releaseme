@@ -41,7 +41,7 @@ class TestL10n < Testme
     @svn_checkout_dir = 'tmp_l10n_check'
 
     `svnadmin create #{@svn_template_dir}`
-    assert(File.exist?(@svn_template_dir))
+    assert_path_exist(@svn_template_dir)
 
     `svn co file://#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}`
     FileUtils.cp_r("#{@repo_data_dir}/trunk", @svn_checkout_dir)
@@ -85,22 +85,22 @@ class TestL10n < Testme
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     l.get(@dir)
-    assert(File.exist?("#{@dir}"))
-    assert(File.exist?("#{@dir}/CMakeLists.txt"))
-    assert(!File.exist?("#{@dir}/l10n")) # temp dir must not be there
-    assert(File.exist?("#{@dir}/po"))
-    assert(File.exist?("#{@dir}/po/de/amarok.po"))
-    assert(!File.exist?("#{@dir}/poqm")) # qt translation dir must not be there
+    assert_path_exist("#{@dir}")
+    assert_path_exist("#{@dir}/CMakeLists.txt")
+    assert_path_not_exist("#{@dir}/l10n") # temp dir must not be there
+    assert_path_exist("#{@dir}/po")
+    assert_path_exist("#{@dir}/po/de/amarok.po")
+    assert_path_not_exist("#{@dir}/poqm") # qt translation dir must not be there
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot'), @dir)
     l.get(@dir)
-    assert(File.exist?("#{@dir}"))
-    assert(File.exist?("#{@dir}/CMakeLists.txt"))
-    assert(!File.exist?("#{@dir}/l10n")) # temp dir must not be there
-    assert(File.exist?("#{@dir}/po"))
-    assert(File.exist?("#{@dir}/po/de/amarok.po"))
-    assert(File.exist?("#{@dir}/po/de/amarokcollectionscanner.po"))
+    assert_path_exist("#{@dir}")
+    assert_path_exist("#{@dir}/CMakeLists.txt")
+    assert_path_not_exist("#{@dir}/l10n") # temp dir must not be there
+    assert_path_exist("#{@dir}/po")
+    assert_path_exist("#{@dir}/po/de/amarok.po")
+    assert_path_exist("#{@dir}/po/de/amarokcollectionscanner.po")
   end
 
   def test_get_po_elsewhere
@@ -133,7 +133,7 @@ class TestL10n < Testme
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     l.get(@dir, edit_cmake: true)
-    assert(File.exist?("#{@dir}/CMakeLists.txt"))
+    assert_path_exist("#{@dir}/CMakeLists.txt")
     assert_include(File.read("#{@dir}/CMakeLists.txt"), 'ki18n_install(po)')
   end
 
@@ -144,7 +144,7 @@ class TestL10n < Testme
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     l.get(@dir, edit_cmake: false)
-    assert(File.exist?("#{@dir}/CMakeLists.txt"))
+    assert_path_exist("#{@dir}/CMakeLists.txt")
     assert_not_include(File.read("#{@dir}/CMakeLists.txt"), 'ki18n_install(po)')
   end
 
@@ -327,11 +327,11 @@ class TestL10n < Testme
     FileUtils.cp_r(data('multi-pot-kde4'), @dir)
     l.get(@dir)
 
-    assert(File.exist?("#{@dir}"))
-    assert(File.exist?("#{@dir}/CMakeLists.txt"))
-    assert(!File.exist?("#{@dir}/l10n")) # temp dir must not be there
-    assert(File.exist?("#{@dir}/po"))
-    assert(File.exist?("#{@dir}/po/de/amarok.po"))
+    assert_path_exist("#{@dir}")
+    assert_path_exist("#{@dir}/CMakeLists.txt")
+    assert_path_not_exist("#{@dir}/l10n") # temp dir must not be there
+    assert_path_exist("#{@dir}/po")
+    assert_path_exist("#{@dir}/po/de/amarok.po")
     assert(File.exist?("#{@dir}/po/de/amarokcollectionscanner_qt.po"))
 
     assert_false(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm'))

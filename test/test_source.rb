@@ -11,10 +11,10 @@ class TestSource < Testme
         @dir = "tmp_src_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         @gitTemplateDir = "tmp_src_git_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
         %x[git init #{@gitTemplateDir}]
-        assert(File::exist?(@gitTemplateDir))
+        assert_path_exist(@gitTemplateDir)
         Dir.chdir(@gitTemplateDir) do
             File.open("file", "w") { }
-            assert(File::exist?("file"))
+            assert_path_exist("file")
             %x[git add file]
             %x[git commit -m 'import']
         end
@@ -34,16 +34,16 @@ class TestSource < Testme
         v.repository = @gitTemplateDir
 
         s.get(v)
-        assert(File::exist?(@dir))
+        assert_path_exist(@dir)
 
         # Also do not fail on subsequent gets
         s.get(v)
-        assert(File::exist?(@dir))
+        assert_path_exist(@dir)
 
         # Finally... we still can get
         FileUtils.rm_rf(@dir)
         s.get(v)
-        assert(File::exist?(@dir))
+        assert_path_exist(@dir)
     end
 
     def test_target
@@ -64,9 +64,9 @@ class TestSource < Testme
         FileUtils.rm_rf(@dir)
         Dir.mkdir(@dir)
         s.cleanup()
-        assert(!File::exist?(@dir))
+        assert_path_not_exist(@dir)
 
         s.cleanup()
-        assert(!File::exist?(@dir))
+        assert_path_not_exist(@dir)
     end
 end

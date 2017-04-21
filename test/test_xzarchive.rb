@@ -72,8 +72,8 @@ class TestXzArchive < Testme
     a.level = 1
     ret = a.create
     assert_equal(ret, true)
-    assert(File.exist?(xz_file))
-    assert(!File.exist?(tar_file))
+    assert_path_exist(xz_file)
+    assert_path_not_exist(tar_file)
   end
 
   # Bogus compression level.
@@ -87,8 +87,8 @@ class TestXzArchive < Testme
     a.level = -1
     ret = a.create
     assert_equal(ret, false)
-    assert(!File.exist?(tar_file))
-    assert(!File.exist?(xz_file))
+    assert_path_not_exist(tar_file)
+    assert_path_not_exist(xz_file)
   end
 
   # Directory does not exist.
@@ -103,7 +103,7 @@ class TestXzArchive < Testme
     a.directory = d
     ret = a.create
     assert_equal(ret, false)
-    assert(!File.exist?(tar_file))
-    assert(!File.exist?(xz_file))
+    assert_path_not_exist(tar_file)
+    assert_path_not_exist(xz_file)
   end
 end

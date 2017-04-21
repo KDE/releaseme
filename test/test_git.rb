@@ -59,7 +59,7 @@ class TestGit < Testme
     g = Git.new
     g.repository = @remotedir
     g.get('clone')
-    assert(File.exist?('clone/abc'))
+    assert_path_exist('clone/abc')
     assert_equal('content', File.read('clone/abc'))
     assert_not_nil(g.hash)
   end
@@ -68,9 +68,9 @@ class TestGit < Testme
     g = Git.new
     g.repository = @remotedir
     g.get('clone')
-    assert(File.exist?('clone/.git'))
+    assert_path_exist('clone/.git')
     g.clean!('clone')
-    assert(!File.exist?('clone/.git'))
+    assert_path_not_exist('clone/.git')
   end
 
   def create_from_hash

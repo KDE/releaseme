@@ -120,7 +120,7 @@ class TestCMakeEditor < Testme
     # valid by creating index.docbook.
     FileUtils.touch('index.docbook')
     ReleaseMe::CMakeEditor.create_language_specific_doc_lists!(Dir.pwd, 'xx', 'yolo')
-    assert(File.exist?('CMakeLists.txt'))
+    assert_path_exist('CMakeLists.txt')
     data = File.read('CMakeLists.txt')
     assert_equal(ReleaseMe::CMakeEditor.create_handbook('xx', 'yolo'), data)
     assert_has_terminal_newline(data)
@@ -137,7 +137,7 @@ class TestCMakeEditor < Testme
     Dir.mkdir("#{Dir.pwd}/bb")
     Dir.mkdir("#{Dir.pwd}/cc")
     ReleaseMe::CMakeEditor.create_doc_meta_lists!(Dir.pwd)
-    assert(File.exist?('CMakeLists.txt'))
+    assert_path_exist('CMakeLists.txt')
     data = File.read('CMakeLists.txt')
     assert(!data.downcase.include?('find_package(gettext')) # PO-only!
     assert(data.downcase.include?('add_subdirectory(aa)'))
@@ -156,7 +156,7 @@ class TestCMakeEditor < Testme
     create_cmakelists!
     ReleaseMe::CMakeEditor.append_po_install_instructions!(Dir.pwd, 'po')
     # FIXME: lots of code dup like this
-    assert(File.exist?('CMakeLists.txt'))
+    assert_path_exist('CMakeLists.txt')
     data = File.read('CMakeLists.txt')
     assert(data.include?("#FOO_SUBDIR\n"))
     assert(data.include?('ki18n_install(po)'))
@@ -177,7 +177,7 @@ class TestCMakeEditor < Testme
   def test_append_po_install_instructions_substitute
     create_cmakelists!
     ReleaseMe::CMakeEditor.append_po_install_instructions!(Dir.pwd, 'foo')
-    assert(File.exist?('CMakeLists.txt'))
+    assert_path_exist('CMakeLists.txt')
     data = File.read('CMakeLists.txt')
     assert(!data.include?("#FOO_SUBDIR\n"))
     assert(data.include?('ki18n_install(foo)'))
@@ -187,7 +187,7 @@ class TestCMakeEditor < Testme
   def test_append_optional_add_subdirectory_append
     create_cmakelists!
     ReleaseMe::CMakeEditor.append_optional_add_subdirectory!(Dir.pwd, 'append')
-    assert(File.exist?('CMakeLists.txt'))
+    assert_path_exist('CMakeLists.txt')
     data = File.read('CMakeLists.txt')
     assert(data.include?("#FOO_SUBDIR\n"))
     assert(data.include?('add_subdirectory(append)'))
@@ -201,7 +201,7 @@ class TestCMakeEditor < Testme
   def test_append_optional_add_subdirectory_substitute
     create_cmakelists!
     ReleaseMe::CMakeEditor.append_optional_add_subdirectory!(Dir.pwd, 'foo')
-    assert(File.exist?('CMakeLists.txt'))
+    assert_path_exist('CMakeLists.txt')
     data = File.read('CMakeLists.txt')
     assert(!data.include?("#FOO_SUBDIR\n"))
     assert(data.include?('ECMOptionalAddSubdirectory'))

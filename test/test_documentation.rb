@@ -20,7 +20,7 @@ class TestDocumentation < Testme
     @svnCheckoutDir = "tmp_l10n_check_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
 
     `svnadmin create #{@svnTemplateDir}`
-    assert(File.exist?(@svnTemplateDir))
+    assert_path_exist(@svnTemplateDir)
 
     `svn co file://#{Dir.pwd}/#{@svnTemplateDir} #{@svnCheckoutDir}`
     FileUtils.cp_r("#{@repoDataDir}/trunk", @svnCheckoutDir)
@@ -55,8 +55,8 @@ class TestDocumentation < Testme
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('variable-pot'), @dir)
     d.get(@dir)
-    assert(File.exist?("#{@dir}/Messages.sh"))
-    assert(!File.exist?("#{@dir}/doc"))
+    assert_path_exist("#{@dir}/Messages.sh")
+    assert_path_not_exist("#{@dir}/doc")
   end
 
   def test_get_doc
@@ -66,12 +66,12 @@ class TestDocumentation < Testme
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     d.get(@dir)
-    assert(File.exist?("#{@dir}/CMakeLists.txt"))
-    assert(File.exist?("#{@dir}/doc/CMakeLists.txt"))
-    assert(File.exist?("#{@dir}/doc/en/index.docbook"))
-    assert(File.exist?("#{@dir}/doc/en/CMakeLists.txt"))
-    assert(File.exist?("#{@dir}/doc/de/index.docbook"))
-    assert(File.exist?("#{@dir}/doc/de/CMakeLists.txt"))
+    assert_path_exist("#{@dir}/CMakeLists.txt")
+    assert_path_exist("#{@dir}/doc/CMakeLists.txt")
+    assert_path_exist("#{@dir}/doc/en/index.docbook")
+    assert_path_exist("#{@dir}/doc/en/CMakeLists.txt")
+    assert_path_exist("#{@dir}/doc/de/index.docbook")
+    assert_path_exist("#{@dir}/doc/de/CMakeLists.txt")
 
     # en only (everything works if only doc/ is present in git but not
     # translated)
@@ -80,12 +80,12 @@ class TestDocumentation < Testme
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     d.get(@dir)
-    assert(File.exist?("#{@dir}/CMakeLists.txt"))
-    assert(File.exist?("#{@dir}/doc/CMakeLists.txt"))
-    assert(File.exist?("#{@dir}/doc/en/index.docbook"))
-    assert(File.exist?("#{@dir}/doc/en/CMakeLists.txt"))
-    assert(!File.exist?("#{@dir}/doc/de/index.docbook"))
-    assert(!File.exist?("#{@dir}/doc/de/CMakeLists.txt"))
+    assert_path_exist("#{@dir}/CMakeLists.txt")
+    assert_path_exist("#{@dir}/doc/CMakeLists.txt")
+    assert_path_exist("#{@dir}/doc/en/index.docbook")
+    assert_path_exist("#{@dir}/doc/en/CMakeLists.txt")
+    assert_path_not_exist("#{@dir}/doc/de/index.docbook")
+    assert_path_not_exist("#{@dir}/doc/de/CMakeLists.txt")
   end
 
   def test_get_doc_multi_doc

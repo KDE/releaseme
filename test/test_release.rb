@@ -108,19 +108,19 @@ class TestRelease < Testme
     r = new_test_release
 
     @dir = r.source.target
-    assert(!File.exist?(@dir))
+    assert_path_not_exist(@dir)
     r.get
-    assert(File.exist?(@dir))
-    assert(File.exist?("#{@dir}/file"))
+    assert_path_exist(@dir)
+    assert_path_exist("#{@dir}/file")
 
-    assert(!File.exist?("#{@dir}.tar.xz"))
+    assert_path_not_exist("#{@dir}.tar.xz")
     r.archive
-    assert(File.exist?("#{@dir}.tar.xz"))
+    assert_path_exist("#{@dir}.tar.xz")
     assert_path_exist("#{@dir}.tar.xz.sig")
 
-    assert(File.exist?(@dir))
+    assert_path_exist(@dir)
     r.source.cleanup
-    assert(!File.exist?(@dir))
+    assert_path_not_exist(@dir)
   end
 
   def test_kde4_origin

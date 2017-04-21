@@ -18,7 +18,7 @@ class TestBlackboxBranchme < Testme
         cleanup_libdebconf(branchname)
 
         FileUtils.cp("#{@datadir}/blackbox/release_data", ".")
-        assert(File.exist?("release_data"))
+        assert_path_exist("release_data")
 
         # FIXME: make bindir?
 

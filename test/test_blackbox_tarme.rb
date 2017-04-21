@@ -14,7 +14,7 @@ class TestBlackboxTarme < Testme
 
         ret = system("ruby #{@testdir}/../tarme.rb --origin #{origin} --version #{version} #{name}")
         assert(ret)
-        assert(File.exist?(expected_tarname))
+        assert_path_exist(expected_tarname)
         expected_files = %w[
             .
             CMakeLists.txt
@@ -22,7 +22,7 @@ class TestBlackboxTarme < Testme
             po/de/libdebconf-kde.po
         ]
         expected_files.each do |expected_file|
-            assert(File.exist?("#{expected_dirname}/#{expected_file}"), "File #{expected_file} not found in directory")
+            assert_path_exist("#{expected_dirname}/#{expected_file}")
         end
 
         # Move base directory out of the way and extract a canonical version from
@@ -31,7 +31,7 @@ class TestBlackboxTarme < Testme
         new_dirname = "#{expected_dirname}"
         FileUtils.mv(new_dirname, old_dirname)
         assert(system("tar -xf #{expected_tarname}"))
-        assert(File.exist?(new_dirname))
+        assert_path_exist(new_dirname)
         old_file_list = Dir.chdir(old_dirname) { Dir.glob("**/**") }
         new_file_list = Dir.chdir(new_dirname) { Dir.glob("**/**") }
         assert_equal(old_file_list.sort, new_file_list.sort)

@@ -84,8 +84,8 @@ class TestProjectFile < Testme
 
     date = 'Thu, 16 Jun 2016 10:55:16 GMT'
 
-    assert(!File.exist?(@cache_file))
-    assert(!File.exist?(@cache_file_date))
+    assert_path_not_exist(@cache_file)
+    assert_path_not_exist(@cache_file_date)
 
     # Request against stub, we are expecting our cache files as a result.
     # We EXPECT https://! anything else means the request is malformed.

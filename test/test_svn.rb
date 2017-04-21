@@ -28,7 +28,7 @@ class TestSvn < Testme
     @svn_checkout_dir = "#{Dir.pwd}/tmp_check_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
     @svn_repo_dir = "#{Dir.pwd}/tmp_repo_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
     `svnadmin create #{@svn_repo_dir}`
-    assert(File.exist?(@svn_repo_dir))
+    assert_path_exist(@svn_repo_dir)
   end
 
   def teardown
@@ -108,17 +108,17 @@ class TestSvn < Testme
     # Valid target and path
     ret = s.export("#{tmpDir}/file", '/dir/file')
     assert_equal(ret, true)
-    assert(File.exist?("#{tmpDir}/file"))
+    assert_path_exist("#{tmpDir}/file")
 
     # Target dir does not exist
     ret = s.export("#{tmpDir}123/file", '/dir/file')
     assert_equal(ret, false)
-    assert(!File.exist?("#{tmpDir}123/file"))
+    assert_path_not_exist("#{tmpDir}123/file")
 
     # Invalid path
     ret = s.export("#{tmpDir}/file", '/dir/otherfile')
     assert_equal(ret, false)
-    assert(!File.exist?("#{tmpDir}/otherfile"))
+    assert_path_not_exist("#{tmpDir}/otherfile")
 
   ensure
     FileUtils.rm_rf(tmpDir)
@@ -129,7 +129,7 @@ class TestSvn < Testme
     s.repository = "file://#{@svn_repo_dir}"
     ret = s.get(@svn_checkout_dir)
     assert_equal(true, ret)
-    assert(File.exist?(@svn_checkout_dir))
+    assert_path_exist(@svn_checkout_dir)
     FileUtils.rm_rf(@svn_checkout_dir)
   end
 
@@ -137,7 +137,7 @@ class TestSvn < Testme
     s = ReleaseMe::Svn.new
     s.repository = 'file://foofooofoo'
     s.get(@svn_checkout_dir)
-    assert(!File.exist?(@svn_checkout_dir))
+    assert_path_not_exist(@svn_checkout_dir)
     FileUtils.rm_rf(@svn_checkout_dir)
   end
 
@@ -147,8 +147,8 @@ class TestSvn < Testme
 
     s.get(@svn_checkout_dir)
     s.clean!(@svn_checkout_dir)
-    assert(!File.exist?("#{@svn_checkout_dir}/.svn"))
-    assert(!File.exist?("#{@svn_checkout_dir}/dir/.svn"))
+    assert_path_not_exist("#{@svn_checkout_dir}/.svn")
+    assert_path_not_exist("#{@svn_checkout_dir}/dir/.svn")
   end
 
   def test_from_hash
