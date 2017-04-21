@@ -64,7 +64,7 @@ module ReleaseMe
     private
 
     def blocking_thread_pool
-      threads = THREAD_COUNT.times.collect do
+      threads = Array.new(THREAD_COUNT) do
         Thread.new do
           Thread.current.abort_on_exception = true
           yield
