@@ -6,6 +6,26 @@
     </description>
     <path>kde</path>
     <web>http://projects.kde.org/projects/kde</web>
+    <module identifier="kdepim-runtime">
+      <name>KDE Pim Runtime</name>
+      <description>h1. Extends the functionality of kdepim</description>
+      <icon/>
+      <path>kde/kdepim-runtime</path>
+      <web>https://cgit.kde.org/kdepim-runtime.git</web>
+      <member username="dvratil">Dan Vrátil</member>
+      <repo>
+        <active>true</active>
+        <web type="gitweb">https://cgit.kde.org/kdepim-runtime.git</web>
+        <url protocol="git" access="read-only">git://anongit.kde.org/kdepim-runtime</url>
+        <url protocol="ssh" access="read+write">git@git.kde.org:kdepim-runtime</url>
+        <url protocol="http" access="read-only">http://anongit.kde.org/kdepim-runtime</url>
+        <url protocol="tarball" access="read-only">http://anongit.kde.org/kdepim-runtime/kdepim-runtime-latest.tar.gz</url>
+        <branch i18n="trunk">none</branch>
+        <branch i18n="stable">none</branch>
+        <branch i18n="trunk_kf5">master</branch>
+        <branch i18n="stable_kf5">Applications/17.04</branch>
+      </repo>
+    </module>
     <module identifier="kdenetwork">
       <name>KDE Network</name>
       <description>

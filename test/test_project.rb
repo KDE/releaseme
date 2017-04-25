@@ -265,4 +265,14 @@ class TestProject < Testme
     assert_equal('kfilemetadata', pr.identifier)
     assert_equal('git@git.kde.org:kfilemetadata', pr.vcs.repository)
   end
+
+  def test_flat_project
+    # Make sure i18n_path of modules that are also projects get properly
+    # constructed.
+    # https://bugs.kde.org/show_bug.cgi?id=379164
+    projects = ReleaseMe::Project.from_xpath('kdepim-runtime')
+    assert_equal(projects.size, 1)
+    pr = projects.shift
+    assert_equal('kdepim-runtime', pr.i18n_path)
+  end
 end

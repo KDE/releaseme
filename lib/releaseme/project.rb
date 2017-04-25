@@ -129,7 +129,10 @@ module ReleaseMe
           # So, for everything but workspace, drop the kde part.
           parts.shift
         end
-        parts.pop # ditch last part as that is our name
+        # Ditch last part as that is our name. But only if we in fact have more
+        # parts. Otherwise the last part is the i18n_path of a flat
+        # component. e.g. kdepim-runtime is a component AND the project.
+        parts.pop if parts.size > 1
         parts.pop while parts.size > 2
         @i18n_path = parts.join('-')
       end
