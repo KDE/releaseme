@@ -270,9 +270,19 @@ class TestProject < Testme
     # Make sure i18n_path of modules that are also projects get properly
     # constructed.
     # https://bugs.kde.org/show_bug.cgi?id=379164
-    projects = ReleaseMe::Project.from_xpath('kdepim-runtime')
+    projects = ReleaseMe::Project.from_xpath('kde/kdepim-runtime')
     assert_equal(projects.size, 1)
     pr = projects.shift
     assert_equal('kdepim-runtime', pr.i18n_path)
+  end
+
+  def test_deep_project
+    # Make sure i18n_path of modules that are inside projects on a third level
+    # nested get properly constructed.
+    # https://bugs.kde.org/show_bug.cgi?id=379161
+    projects = ReleaseMe::Project.from_xpath('kde/kdegraphics/libs/libksane')
+    assert_equal(projects.size, 1)
+    pr = projects.shift
+    assert_equal('kdegraphics', pr.i18n_path)
   end
 end

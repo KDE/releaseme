@@ -116,25 +116,12 @@ module ReleaseMe
 
       return false unless @vcs
 
-      # FIXME: needs a test
       # Figure out which i18n path to use.
       @project_element.elements.each do |e|
         next unless e.name == 'path'
         path = e.text
         raise 'unknown path' unless path
-        parts = path.split('/')
-        if parts[0] == 'kde' && parts[1] != 'workspace'
-          # Everything but kde/workspace is flattend without the kde part.
-          # kde/workspace on the other hand is kde-workspace.
-          # So, for everything but workspace, drop the kde part.
-          parts.shift
-        end
-        # Ditch last part as that is our name. But only if we in fact have more
-        # parts. Otherwise the last part is the i18n_path of a flat
-        # component. e.g. kdepim-runtime is a component AND the project.
-        parts.pop if parts.size > 1
-        parts.pop while parts.size > 2
-        @i18n_path = parts.join('-')
+        @i18n_path = reduce_i18n_path(path)
       end
       return false unless @i18n_path
 
@@ -147,6 +134,54 @@ module ReleaseMe
       end
 
       true
+    end
+
+    def reduce_i18n_path(path)
+      # Break the full project path down into parts and mangle them until
+      # we get the path under which this project would appear in SVN.
+      parts = path.split('/')
+      drop_limit = 2
+
+      # Start off with stripping the leading kde/.
+      if parts[0] == 'kde' && parts[1] != 'workspace'
+        # Everything but kde/workspace is flattend without the kde part.
+        # kde/workspace on the other hand is kde-workspace.
+        # So, for everything but workspace, drop the kde part.
+        #   [kde,workspace] => same
+        #   [kde,kdepim-runtime] => [kdepim-runtime]
+        #   [kde,kdegraphics,libs] => [kdegraphics,libs]
+        parts.shift
+        # Shrink the drop limit. When we dropped kde/ we'll effecitvely have
+        # removed the original assumption of there being two elements to join
+        # as we already removed the first element. Workspace is the best example
+        # of this fact as it is kde-workspace even though pim isn't kde-pim.
+        # That is also why it needs special treatment.
+        drop_limit = 1
+      end
+
+      # Ditch last part as that is our name. But only if we in fact have more
+      # parts. Otherwise the last part is the i18n_path of a flat
+      # component. e.g. kdepim-runtime is a component AND the project.
+      parts.pop if parts.size > 1
+
+      # Reduce the path down to 2-1 parts at the most to strip subprojects
+      #   [calligra] => same
+      #   [frameworks] => same
+      #   [workspace] => same
+      #   [kdepim-runtime] => same
+      #   [kdegraphics,libs] => [kdegraphics] (drop limit was 1)
+      #   [extragear,utils,telepathy] => [extragear,utils] (drop limit was 2)
+      parts.pop while parts.size > drop_limit
+
+      # The remainder is between 1 and 2 parts long which we'll join to get
+      # the i18n path.
+      #   [calligra] => 'calligra'
+      #   [frameworks] => 'frameworks'
+      #   [kde,workspace] => 'kde-workspace'
+      #   [kdepim-runtime] => 'kdepim-runtime'
+      #   [kdegraphics] => 'kdegraphics'
+      #   [extragear,utils] => 'extragear-utils'
+      parts.join('-')
     end
 
     # @return [Array<Project>] can be empty

@@ -26,6 +26,54 @@
         <branch i18n="stable_kf5">Applications/17.04</branch>
       </repo>
     </module>
+    <module identifier="kdegraphics">
+      <name>KDE Graphics</name>
+      <description>An (optional) super-repository which holds the history</description>
+      <icon/>
+      <path>kde/kdegraphics</path>
+      <web>https://cgit.kde.org/kdegraphics.git</web>
+      <member username="aacid">Albert Astals Cid</member>
+      <repo>
+        <active>false</active>
+        <web type="gitweb">https://cgit.kde.org/kdegraphics.git</web>
+        <url protocol="http" access="read-only">http://anongit.kde.org/kdegraphics</url>
+        <url protocol="tarball" access="read-only">http://anongit.kde.org/kdegraphics/kdegraphics-latest.tar.gz</url>
+        <url protocol="ssh" access="read+write">git@git.kde.org:kdegraphics</url>
+        <url protocol="git" access="read-only">git://anongit.kde.org/kdegraphics</url>
+        <branch i18n="trunk">none</branch>
+        <branch i18n="stable">none</branch>
+        <branch i18n="trunk_kf5">none</branch>
+        <branch i18n="stable_kf5">none</branch>
+      </repo>
+      <project identifier="libs">
+        <name>libs</name>
+        <description></description>
+        <icon/>
+        <path>kde/kdegraphics/libs</path>
+        <web/>
+        <project identifier="libksane">
+          <name>libksane</name>
+          <description>libksane is an image scanning library that provides </description>
+          <icon>scanner</icon>
+          <path>kde/kdegraphics/libs/libksane</path>
+          <web>https://cgit.kde.org/libksane.git</web>
+          <member username="sars">Kåre Särs</member>
+          <repo>
+            <active>true</active>
+            <web type="gitweb">https://cgit.kde.org/libksane.git</web>
+            <url protocol="http" access="read-only">http://anongit.kde.org/libksane</url>
+            <url protocol="tarball" access="read-only">http://anongit.kde.org/libksane/libksane-latest.tar.gz</url>
+            <url protocol="ssh" access="read+write">git@git.kde.org:libksane</url>
+            <url protocol="git" access="read-only">git://anongit.kde.org/libksane</url>
+            <branch>Applications/17.04</branch>
+            <branch i18n="trunk">none</branch>
+            <branch i18n="stable">none</branch>
+            <branch i18n="trunk_kf5">master</branch>
+            <branch i18n="stable_kf5">Applications/17.04</branch>
+          </repo>
+        </project>
+      </project>
+    </module>
     <module identifier="kdenetwork">
       <name>KDE Network</name>
       <description>
