@@ -285,4 +285,12 @@ class TestProject < Testme
     pr = projects.shift
     assert_equal('kdegraphics', pr.i18n_path)
   end
+
+  def test_krita
+    # Make sure krita's i18n_path gets properly resolved.
+    projects = ReleaseMe::Project.from_xpath('krita')
+    assert_equal(projects.size, 1)
+    pr = projects.shift
+    assert_equal('calligra', pr.i18n_path)
+  end
 end

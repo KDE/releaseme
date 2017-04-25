@@ -1,4 +1,52 @@
 <kdeprojects version="1">
+  <component identifier="calligra">
+    <name>Calligra</name>
+    <description></description>
+    <icon/>
+    <path>calligra</path>
+    <web/>
+    <project identifier="calligra">
+      <name>Calligra</name>
+      <description>The Calligra project develops a set of applications for productivity and creative usage</description>
+      <icon/>
+      <path>calligra/calligra</path>
+      <web>https://cgit.kde.org/calligra.git</web>
+      <member username="kossebau">Friedrich W. H. Kossebau</member>
+      <repo>
+        <active>true</active>
+        <web type="gitweb">https://cgit.kde.org/calligra.git</web>
+        <url protocol="ssh" access="read+write">git@git.kde.org:calligra</url>
+        <url protocol="git" access="read-only">git://anongit.kde.org/calligra</url>
+        <url protocol="tarball" access="read-only">http://anongit.kde.org/calligra/calligra-latest.tar.gz</url>
+        <url protocol="http" access="read-only">http://anongit.kde.org/calligra</url>
+        <branch>2.7</branch>
+        <branch i18n="trunk">none</branch>
+        <branch i18n="stable">calligra/2.9</branch>
+        <branch i18n="trunk_kf5">master</branch>
+        <branch i18n="stable_kf5">none</branch>
+      </repo>
+    </project>
+    <project identifier="krita">
+      <name>Krita</name>
+      <description>Krita is a free digital painting application. Digital Painting, Creative Freedom!</description>
+      <icon/>
+      <path>calligra/krita</path>
+      <web>https://cgit.kde.org/krita.git</web>
+      <member username="berger">Cyrille Berger Skott</member>
+      <repo>
+        <active>true</active>
+        <web type="gitweb">https://cgit.kde.org/krita.git</web>
+        <url protocol="ssh" access="read+write">git@git.kde.org:krita</url>
+        <url protocol="git" access="read-only">git://anongit.kde.org/krita</url>
+        <url protocol="tarball" access="read-only">http://anongit.kde.org/krita/krita-latest.tar.gz</url>
+        <url protocol="http" access="read-only">http://anongit.kde.org/krita</url>
+        <branch i18n="trunk">none</branch>
+        <branch i18n="stable">none</branch>
+        <branch i18n="trunk_kf5">master</branch>
+        <branch i18n="stable_kf5">krita/3.1</branch>
+      </repo>
+    </project>
+  </component>
   <component identifier="kde">
     <name>KDE</name>
     <description>
