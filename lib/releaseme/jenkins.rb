@@ -72,6 +72,7 @@ module ReleaseMe
 
       class << self
         def from_name_and_branch(name, branch, connection = Connection.new)
+          return [] unless name && branch
           filter = 'tree=jobs[name,url],views[name]'
           jobs = connection.get('/', filter).fetch('jobs')
           job_name_start = "#{name} #{branch.tr('/', '-')} "

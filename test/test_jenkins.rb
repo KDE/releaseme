@@ -186,4 +186,9 @@ class TestJenkins < Testme
     ENV['RELEASEME_CI_CHECK'] = 'success'
     assert(job.sufficient_quality?)
   end
+
+  def test_bad_input_from_name_and_branch
+    assert_equal([], ReleaseMe::Jenkins::Job.from_name_and_branch('yakuake',
+                                                                  nil))
+  end
 end
