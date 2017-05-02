@@ -2,9 +2,9 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.9.4
+VERSION=5.9.5
 SHORT_VERSION=5.9
-OLD_VERSION=5.9.3
+OLD_VERSION=5.9.4
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -20,9 +20,9 @@ WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.k
 UPLOADSERVER="ftpadmin@racnoss.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 14 February 2017" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEMONTH="February" # usually `LC_ALL=C date "+%B" --date="next Tue"`
-TIMESINCELASTRELEASE="two week's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
+RELEASEDATE="Tuesday, 25 April 2017" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEMONTH="April" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
 YOUTUBEID="lm0sqqVcotA" # The video ID used in URL for youtube
 

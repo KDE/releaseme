@@ -58,3 +58,5 @@ TODO:
  check .sig matches the key in VERSION
  test gpg works with agent before running plasma-tag
  test tag has been pushed
+ pkgdiff output https://lvc.github.io/pkgdiff/
+ 
