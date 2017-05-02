@@ -208,4 +208,40 @@ class TestCMakeEditor < Testme
     assert(data.include?('ecm_optional_add_subdirectory(foo'))
     assert_has_terminal_newline(data)
   end
+
+  def skip_options(d)
+    d = d.upcase
+    [
+      "# SKIP_#{d}_INSTALL",
+      "# SKIP_#{d}_INSTALL fishy sail",
+      "    # SKIP_#{d}_INSTALL",
+      "    # SKIP_#{d}_INSTALL    ",
+      "#SKIP_#{d}_INSTALL    ",
+      " beeep #SKIP_#{d}_INSTALL"
+    ]
+  end
+
+  def test_skipperino
+    # SKIP_FOO_INSTALL can be used as a comment anywhere in a to-be-mangled
+    # CMakeLists.txt to prevent the mangling from a source level. This overrides
+    # whatever releaseme wants to do or is instructed to do!
+
+    skip_options('po').each do |comment|
+      File.write('CMakeLists.txt', comment)
+      ReleaseMe::CMakeEditor.append_po_install_instructions!("#{Dir.pwd}/po")
+      assert_equal(comment, File.read('CMakeLists.txt'), 'po')
+    end
+
+    skip_options('poqm').each do |comment|
+      File.write('CMakeLists.txt', comment)
+      ReleaseMe::CMakeEditor.append_poqm_install_instructions!("#{Dir.pwd}/poqm")
+      assert_equal(comment, File.read('CMakeLists.txt'), 'poqm')
+    end
+
+    skip_options('doc').each do |comment|
+      File.write('CMakeLists.txt', comment)
+      ReleaseMe::CMakeEditor.append_optional_add_subdirectory!("#{Dir.pwd}/doc")
+      assert_equal(comment, File.read('CMakeLists.txt'), 'doc')
+    end
+  end
 end

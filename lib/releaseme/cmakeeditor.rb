@@ -142,6 +142,7 @@ kdoctools_create_handbook(index.docbook
       dir, subdir = dir_subdir_split(dir) unless subdir
       macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
       edit_file("#{dir}/CMakeLists.txt") do |data|
+        break if data =~ /.*#\s*SKIP_#{subdir.upcase}_INSTALL/
         if data.include?("##{subdir.upcase}_SUBDIR")
           data.sub!("##{subdir.upcase}_SUBDIR", macro)
         elsif (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil? &&
@@ -156,6 +157,7 @@ kdoctools_create_handbook(index.docbook
       dir, subdir = dir_subdir_split(dir) unless subdir
       macro = "\necm_install_po_files_as_qm(#{subdir})\n"
       edit_file("#{dir}/CMakeLists.txt") do |data|
+        break if data =~ /.*#\s*SKIP_#{subdir.upcase}_INSTALL/
         if data.include?("##{subdir.upcase}_SUBDIR")
           data.sub!("##{subdir.upcase}_SUBDIR", macro)
         elsif (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
@@ -169,6 +171,7 @@ kdoctools_create_handbook(index.docbook
       dir, subdir = dir_subdir_split(dir) unless subdir
       macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory(#{subdir})\n"
       edit_file("#{dir}/CMakeLists.txt") do |data|
+        break if data =~ /.*#\s*SKIP_#{subdir.upcase}_INSTALL/
         if data.include?("##{subdir.upcase}_SUBDIR")
           data.sub!("##{subdir.upcase}_SUBDIR", macro)
         elsif (data =~ /^\s*(add_subdirectory|ecm_optional_add_subdirectory)\s*\(\s*#{subdir}\s*\).*$/).nil?
