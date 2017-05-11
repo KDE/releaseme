@@ -3,7 +3,7 @@
  on make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata 
 
 check for build failures on CI:
- https://build.kde.org/view/Plasma5/
+ https://build.kde.org/user/jriddell/my-views/view/Plasma/
 or for a stable version
  https://build.kde.org/view/branchGroup%20stable-kf5-qt5/
 check for build failures on neon CI:
