@@ -69,6 +69,7 @@ sed "s,>Breeze-gtk,>Breeze GTK," ${FILE} -i
 sed "s,>discover,>Discover," ${FILE} -i
 sed "s,>Breeze-plymouth,>Breeze Plymouth," ${FILE} -i
 sed "s,>Plasma Workspace-wallpapers,>Plasma Workspace Wallpapers," ${FILE} -i
+sed "s,>plymouth-kcm,>Plymouth KControl Module," ${FILE} -i
 
 cat >>${FILE} <<EOL
 </main>
