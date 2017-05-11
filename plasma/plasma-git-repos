@@ -12,8 +12,10 @@ WORKSPACE="$WORKSPACE
 
 mv git-repositories-for-release git-repositories-for-release-old
 echo $WORKSPACE > git-repositories-for-release
+echo xdg-desktop-portal-kde >> git-repositories-for-release
 cat git-repositories-for-release | tr " " "\n" | sort | tr "\n" " " > git-repositories-for-release-sorted
 mv git-repositories-for-release-sorted git-repositories-for-release
 sed "s,kaccounts-mobile ,," -i git-repositories-for-release
+sed "s,plasma-vault ,," -i git-repositories-for-release
 wdiff git-repositories-for-release-old git-repositories-for-release
 echo == git-repositories-for-release updated
