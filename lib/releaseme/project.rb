@@ -248,7 +248,7 @@ module ReleaseMe
       Project.new(data)
     end
 
-    def plasma_lts()
+    def plasma_lts
       ymlfile = "#{@@configdir}/plasma.yml"
       unless File.exist?(ymlfile)
         raise "Project file for Plasma not found [#{ymlfile}]."
