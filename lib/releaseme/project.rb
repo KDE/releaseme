@@ -24,9 +24,12 @@ require 'yaml'
 
 require_relative 'git'
 require_relative 'projectsfile'
+require_relative 'project_api_overlay'
 
 module ReleaseMe
   class Project
+    prepend ProjectAPIOverlay if ENV.fetch('RELEASEME_PROJECTS_API', false)
+
     @@configdir = "#{File.dirname(File.dirname(File.expand_path(__dir__)))}/projects/"
 
     # Project identifer found. nil if not resolved.
@@ -249,16 +252,20 @@ module ReleaseMe
     end
 
     def plasma_lts
-      ymlfile = "#{@@configdir}/plasma.yml"
-      unless File.exist?(ymlfile)
-        raise "Project file for Plasma not found [#{ymlfile}]."
-      end
-
-      data = YAML.load_file(ymlfile)
-      data['i18n_lts']
+      self.class.plasma_lts
     end
 
     class << self
+      def plasma_lts
+        ymlfile = "#{@@configdir}/plasma.yml"
+        unless File.exist?(ymlfile)
+          raise "Project file for Plasma not found [#{ymlfile}]."
+        end
+
+        data = YAML.load_file(ymlfile)
+        data['i18n_lts']
+      end
+
       private
 
       # Cache hash of url=>xml_element.
