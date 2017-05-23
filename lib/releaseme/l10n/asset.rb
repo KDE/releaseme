@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'delegate'
+
 module ReleaseMe
   # Wraps around an asset file (pofile, script, whathaveyou) to allow
   # streamlined handling of files.
