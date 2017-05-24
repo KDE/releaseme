@@ -77,7 +77,7 @@ module ReleaseMe
         repo = without_scheme.split('/', 2)[-1]
         repo = repo.gsub(/\.git$/, '')
         api_project = ProjectsAPI.get_by_repo(repo)
-        from_data(api_project)
+        [from_data(api_project)]
       end
     end
 
