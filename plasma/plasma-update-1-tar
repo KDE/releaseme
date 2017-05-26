@@ -23,7 +23,7 @@ cd ..
 
 echo == diff to previous tar
 cd tmp-tests
-scp ftpadmin@depot.kde.org:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
+scp ftpadmin@racnoss.kde.org:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
 tar xf old.tar.xz
 echo diff -urN ${TAR}-${VERSION}/ ../${VERSION}/${TAR}-${VERSION}
 diff -urN ${TAR}-${VERSION}/ ../${VERSION}/${TAR}-${VERSION} | tee ${TAR}.diff
