@@ -10,6 +10,7 @@ TAR=$1
 . VERSIONS.inc
 
 svn --version > /dev/null || { echo "Install subversion"; exit 1; }
+pkgdiff --version > /dev/null || { echo "Install pkgdiff"; exit 1; }
 
 cd $VERSION
 
@@ -24,9 +25,8 @@ cd ..
 echo == diff to previous tar
 cd tmp-tests
 scp ftpadmin@racnoss.kde.org:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
-tar xf old.tar.xz
-echo diff -urN ${TAR}-${VERSION}/ ../${VERSION}/${TAR}-${VERSION}
-diff -urN ${TAR}-${VERSION}/ ../${VERSION}/${TAR}-${VERSION} | tee ${TAR}.diff
+pkgdiff old.tar.xz ../${VERSION}/${TAR}-${VERSION}.tar.xz || true
+firefox pkgdiff_reports/old/X_to_${VERSION}/changes_report.html
 cd ..
 echo == end diff to previous tar
 
