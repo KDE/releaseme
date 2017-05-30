@@ -54,8 +54,7 @@ module ReleaseMe
                    i18n_stable: nil,
                    i18n_lts: nil,
                    i18n_path: nil)
-      unless project_element || (identifier && vcs &&
-                                 (i18n_trunk || i18n_stable) && i18n_path)
+      unless project_element || (identifier && vcs)
         raise 'Project construction either needs to happen with a' \
               ' project_element or all other values being !nil'
       end
