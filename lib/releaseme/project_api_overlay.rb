@@ -71,13 +71,16 @@ module ReleaseMe
       # @return [Array<Project>] can be empty
       def from_repo_url(url)
         # Git URIs are all over the place so much so that standard URI cannot
-        # accurately parse them, so bypass URI entirely and do a super nasty split
-        # run to get the path.
+        # accurately parse them, so bypass URI entirely and do a super nasty
+        # split run to get the path.
         without_scheme = url.split('//', 2)[-1]
         repo = without_scheme.split('/', 2)[-1]
         repo = repo.gsub(/\.git$/, '')
         api_project = ProjectsAPI.get_by_repo(repo)
         [from_data(api_project)]
+      rescue OpenURI::HTTPError => e
+        return [] if e.io.status[0] == '404' # Not a thing
+        raise e # Otherwise raise, the error was unexpected on an API level.
       end
     end
 
