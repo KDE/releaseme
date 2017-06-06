@@ -16,8 +16,8 @@ Create a changelog
 
 Read readme: ftp://upload.kde.org/README
 Upload: ftp://upload.kde.org/
-  $ echo put <%= tarball %> | ftp upload.kde.org
-  $ echo put <%= signature %> | ftp upload.kde.org
+  $ kdecp5 <%= tarball %> ftp://upload.kde.org/incoming
+  $ kdecp5 <%= signature %> ftp://upload.kde.org/incoming
 
 File a syadmin ticket: https://go.kde.org/u/systickets
 
