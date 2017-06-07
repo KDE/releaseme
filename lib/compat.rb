@@ -50,6 +50,8 @@ ReleaseMe.constants.each do |class_name|
   # of entities we want to compat map. i.e. old classes. Fully mapping
   # nested modules/classes is neither called for nor useful.
   klass = ReleaseMe.const_get(class_name)
-  warn "Compat mapping ReleaseMe::#{class_name} ➜ #{class_name}"
+  if ENV['RELEASEME_DEBUG']
+    warn "Compat mapping ReleaseMe::#{class_name} ➜ #{class_name}"
+  end
   Object.const_set(class_name, klass)
 end
