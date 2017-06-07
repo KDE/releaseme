@@ -16,7 +16,7 @@ echo == uploading
 rsync -CvzaP --stats ${VERSION}/*xz ${VERSION}/*xz.sig ${UPLOADSERVER}:${FTPSTABLE}/plasma/${VERSION}/
 
 echo == uploading release-data file to http://embra.edinburghlinux.co.uk/~jr/tmp/${VERSION}-release-data
-scp ${VERSION}/${VERSION}-release-data embra:tmp/
+scp ${VERSION}/${VERSION}-release-data ${SCRATCH_SERVER}
 
 mkdir -p tmp-tests
 
@@ -37,6 +37,20 @@ ssh ${UPLOADSERVER} "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --li
 ssh ${UPLOADSERVER} "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${OLD_VERSION}-doc
 diff -u tmp-tests/${OLD_VERSION}-doc tmp-tests/${VERSION}-doc | tee tmp-tests/${VERSION}-doc-testoutput
 echo == end tarballs l10n probe test
+
+#echo == pkgdiff to previous tar
+#WORKSPACE=`cat git-repositories-for-release`
+#echo "making tars for $WORKSPACE"
+#cd tmp-tests
+#for TAR in $WORKSPACE; do
+#  scp ${UPLOADSERVER}:${FTPSTABLE}/plasma/${OLD_VERSION}/${TAR}-${OLD_VERSION}.tar.xz ${TAR}-${OLD_VERSION}.tar.xz
+#  pkgdiff ${TAR}-${OLD_VERSION}.tar.xz ../${VERSION}/${TAR}-${VERSION}.tar.xz || true
+#  rm ${TAR}-${OLD_VERSION}.tar.xz
+#done
+#scp -r pkgdiff_reports/ ${SCRATCH_SERVER}
+#firefox http://embra.edinburghlinux.co.uk/~jr/tmp/pkgdiff_reports/${TAR}/${OLD_VERSION}_to_${VERSION}/changes_report.html
+#cd -
+#echo == end pkgdiff to previous tar
 
 echo == start updating info page source-plasma-${VERSION}.inc
 cp ${VERSION}/source-plasma-${VERSION}.inc ${INFOCHECKOUT}/source-plasma-${VERSION}.inc

@@ -24,7 +24,7 @@ cd ..
 
 echo == diff to previous tar
 cd tmp-tests
-scp ftpadmin@racnoss.kde.org:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
+scp ${UPLOADSERVER}:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
 pkgdiff old.tar.xz ../${VERSION}/${TAR}-${VERSION}.tar.xz || true
 firefox pkgdiff_reports/old/X_to_${VERSION}/changes_report.html
 cd ..

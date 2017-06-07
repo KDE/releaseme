@@ -86,6 +86,14 @@ main {
 	width: auto;
 	vertical-align: middle;
 }
+
+figure {
+    position: relative;
+    z-index: 2;
+    font-size: smaller;
+    text-shadow: 2px 2px 5px light-grey;
+}
+
 </style>
 
 <main class="releaseAnnouncment container">
