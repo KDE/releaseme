@@ -18,6 +18,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+# NB: cannot use other files as everything else is meant to load this first.
+require_relative 'silencer'
+
 module ReleaseMe
   # Makes sure the runtime requirements of releasme are met.
   class RequirementChecker
@@ -26,8 +29,8 @@ module ReleaseMe
     # you may end up with a broken or malformed tar. To prevent this, a change
     # here must be followed by running `rake test` to pass the entire test suite!
     # Also see the section on bumping versions in the REAMDE.
-    COMPATIBLE_RUBIES = %w(2.1.0 2.2.0 2.3.0 2.4.0).freeze
-    REQUIRED_BINARIES = %w(svn git tar xz msgfmt gpg2).freeze
+    COMPATIBLE_RUBIES = %w[2.1.0 2.2.0 2.3.0 2.4.0].freeze
+    REQUIRED_BINARIES = %w[svn git tar xz msgfmt gpg2].freeze
 
     def initialize
       @ruby_version = RUBY_VERSION
@@ -36,18 +39,23 @@ module ReleaseMe
     def check
       err = false
       unless ruby_compatible?
-        puts "- Ruby #{COMPATIBLE_RUBIES.join(' or ')} required."
-        puts "  Currently using: #{@ruby_version}"
+        print "- Ruby #{COMPATIBLE_RUBIES.join(' or ')} required."
+        print "  Currently using: #{@ruby_version}"
         err = true
       end
       missing_binaries.each do |m|
-        puts "- Missing binary: #{m}."
+        print "- Missing binary: #{m}."
         err = true
       end
       raise 'Not all requirements met.' if err
     end
 
     private
+
+    def print(*args)
+      return if Silencer.shutup?
+      puts(*args)
+    end
 
     def ruby_compatible?
       COMPATIBLE_RUBIES.each do |v|

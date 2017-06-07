@@ -110,6 +110,7 @@ module ReleaseMe
     end
 
     def help
+      return if Silencer.shutup?
       tar = archive_.filename
       sig = File.basename(@signature)
 
@@ -161,7 +162,7 @@ module ReleaseMe
     def continue?(jobs)
       return if jobs.empty?
       loop do
-        puts 'Continue despite unexpected job states? [y/n]'
+        puts 'Continue despite unexpected job states? [y/n]' unless shutup?
         case gets.strip
         when 'y'
           break

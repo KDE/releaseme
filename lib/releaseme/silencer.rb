@@ -1,6 +1,5 @@
-# frozen_string_literal: true
-#
-# Copyright (C) 2016 Harald Sitter <sitter@kde.org>
+#--
+# Copyright (C) 2015-2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -17,28 +16,34 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#++
 
-require 'fileutils'
+# Implements a shutup method to check if output should be done or not
+module ReleaseMe
+  module Silencer
+    # Methods extending the Object a {Logable} is included in. All methods are
+    # private by default.
+    module Methods
+      # @!visibility public
 
-require_relative 'test_helper'
-require_relative 'lib/testme'
-require_relative '../lib/releaseme/archive_signer'
-require_relative '../lib/releaseme/xzarchive'
+      def shutup?
+        ENV['RELEASEME_SHUTUP'] && !ENV['RELEASEME_DEBUG']
+      end
+    end
 
-class TestArchiveSigner < Testme
-  def test_sign
-    Dir.mkdir('wroom')
-    archive = ReleaseMe::XzArchive.new
-    archive.directory = 'wroom'
-    archive.create
-    assert_path_exist(archive.filename)
-    Dir.delete('wroom')
-    system("tar -xf #{archive.filename}")
-    assert_path_exist('wroom')
+    extend Methods
+    # @!parse extend Methods
 
-    signer = ReleaseMe::ArchiveSigner.new
-    signer.sign(archive)
-    assert_path_exist(signer.signature)
-    assert(system("gpg2 --verify #{signer.signature}", [:out, :err] => '/dev/null'))
+    # @!visibility private
+    def self.prepended(base)
+      base.extend(Methods)
+      base.prepend(Methods)
+    end
+
+    # @!visibility private
+    def self.included(base)
+      base.extend(Methods)
+      base.include(Methods)
+    end
   end
 end

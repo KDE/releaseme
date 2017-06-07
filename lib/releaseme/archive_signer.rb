@@ -18,6 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+require_relative 'silencer'
+
 module ReleaseMe
   # Signs an archive (i.e. tarball)
   class ArchiveSigner
@@ -30,7 +32,8 @@ module ReleaseMe
     def sign(archive)
       file = archive.filename
       sigfile = "#{file}.sig"
-      system("gpg2 --armor --detach-sign -o #{sigfile} #{file}") || raise
+      args = Silencer.shutup? ? { %i[out err] => '/dev/null' } : {}
+      system("gpg2 --armor --detach-sign -o #{sigfile} #{file}", args) || raise
       @signature = File.absolute_path(sigfile)
     end
   end

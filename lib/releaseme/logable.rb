@@ -26,6 +26,7 @@ rescue LoadError
 end
 
 require_relative 'requirements'
+require_relative 'silencer'
 
 # Expands Objects with logging capabilities.
 # This module can be included or prepended, prepend allows you to implement
@@ -38,13 +39,11 @@ module ReleaseMe
     # Methods extending the Object a {Logable} is included in. All methods are
     # private by default.
     module Methods
+      include Silencer
+
       private
 
       # @!visibility public
-
-      def shutup?
-        ENV['RELEASEME_SHUTUP'] && !ENV['RELEASEME_DEBUG']
-      end
 
       # Logs as info type
       # @param str [String] the string to log

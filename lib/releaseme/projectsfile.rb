@@ -22,6 +22,8 @@ require 'fileutils'
 require 'net/http'
 require 'rexml/document'
 
+require_relative 'silencer'
+
 module ReleaseMe
   ##
   # KDE Projects XML data management class.
@@ -120,7 +122,7 @@ module ReleaseMe
       if response.is_a?(Net::HTTPSuccess)
         data = update_cache(response)
       else
-        unless response.is_a?(Net::HTTPNotModified)
+        unless response.is_a?(Net::HTTPNotModified) || Silencer.shutup?
           puts "Couldn't fetch #{@xml_path} using #{cache_file}"
         end
         data = File.read(cache_file) if File.exist?(cache_file)
