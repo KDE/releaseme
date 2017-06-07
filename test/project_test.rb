@@ -24,12 +24,119 @@ require_relative 'lib/testme'
 require_relative '../lib/releaseme/project'
 require_relative '../lib/releaseme/vcs'
 
+def j(*args)
+  JSON.generate(*args)
+end
+
+def default_i18n
+  { stable: nil, stableKF5: nil, trunk: nil, trunkKF5: 'master', component: 'default' }
+end
+
+def stub_projects_single(url)
+  path = url.gsub('https://projects.kde.org/api/v1/projects/', '')
+  stub_request(:get, url).to_return(body: j([path]))
+end
+
+# FIXME: this should go somewhere central or into a class. having a meth in global scope sucks
+def stub_api
+  stub_request(:get, 'https://projects.kde.org/api/v1/projects/extragear/utils')
+    .to_return(body: JSON.generate(%w[extragear/utils/yakuake
+                                      extragear/utils/krusader
+                                      extragear/utils/krecipes]))
+
+  # Invalid.
+  stub_request(:get, 'https://projects.kde.org/api/v1/projects/kitten')
+    .to_return(status: 404)
+  stub_request(:get, 'https://projects.kde.org/api/v1/find?id=kitten')
+    .to_return(status: 404)
+  stub_request(:get, 'https://projects.kde.org/api/v1/projects/utils')
+    .to_return(status: 404)
+  stub_request(:get, 'https://projects.kde.org/api/v1/find?id=utils')
+    .to_return(status: 404)
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/projects/yakuake')
+    .to_return(status: 404)
+  stub_request(:get, 'https://projects.kde.org/api/v1/find?id=yakuake')
+    .to_return(body: j(%w[extragear/utils/yakuake]))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/networkmanager-qt')
+    .to_return(status: 404)
+  stub_request(:get, 'https://projects.kde.org/api/v1/find?id=networkmanager-qt')
+    .to_return(body: j(%w[frameworks/networkmanager-qt]))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/projects/ktp-contact-runner')
+    .to_return(status: 404)
+  stub_request(:get, 'https://projects.kde.org/api/v1/find?id=ktp-contact-runner')
+    .to_return(body: j(%w[kde/kdenetwork/ktp-contact-runner]))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/projects/extragear')
+    .to_return(body: j(%w[extragear/utils/yakuake
+                          extragear/utils/krusader
+                          extragear/utils/krecipes
+                          extragear/network/telepathy/ktp1
+                          extragear/network/telepathy/ktp2]))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/projects/extragear/network/telepathy')
+    .to_return(body: j(%w[extragear/network/telepathy/ktp1
+                          extragear/network/telepathy/ktp2]))
+
+  stub_projects_single('https://projects.kde.org/api/v1/projects/kde/kdegraphics/libs/libksane')
+  stub_projects_single('https://projects.kde.org/api/v1/projects/extragear/network/telepathy/ktp1')
+  stub_projects_single('https://projects.kde.org/api/v1/projects/extragear/network/telepathy/ktp2')
+  stub_projects_single('https://projects.kde.org/api/v1/projects/networkmanager-qt')
+  stub_projects_single('https://projects.kde.org/api/v1/projects/extragear/utils/yakuake')
+
+  # By Project Path
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/extragear/utils/yakuake')
+    .to_return(body: j(path: 'extragear/utils/yakuake',
+                       repo: 'yakuake',
+                       i18n: { stable: nil, stableKF5: 'notmaster', trunk: nil,
+                               trunkKF5: 'master', component: 'extragear-utils' }))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/extragear/utils/krusader')
+    .to_return(body: j(path: 'extragear/utils/krusader',
+                       repo: 'krusader',
+                       i18n: default_i18n))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/extragear/utils/krecipes')
+    .to_return(body: j(path: 'extragear/utils/krecipes',
+                       repo: 'krecipes',
+                       i18n: default_i18n))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/extragear/network/telepathy/ktp1')
+    .to_return(body: j(path: 'extragear/network/telepathy/ktp1',
+                       repo: 'ktp1',
+                       i18n: default_i18n))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/extragear/network/telepathy/ktp2')
+    .to_return(body: j(path: 'extragear/network/telepathy/ktp2',
+                       repo: 'ktp2',
+                       i18n: default_i18n))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/kde/kdenetwork/ktp-contact-runner')
+    .to_return(body: j(path: 'kde/kdenetwork/ktp-contact-runner',
+                       repo: 'ktp-contact-runner',
+                       i18n: default_i18n))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/frameworks/networkmanager-qt')
+    .to_return(body: j(path: 'frameworks/networkmanager-qt',
+                       repo: 'networkmanager-qt',
+                       i18n: default_i18n))
+
+  # By Repo
+  stub_request(:get, 'https://projects.kde.org/api/v1/repo/kfilemetadata')
+    .to_return(body: j(path: 'frameworks/kfilemetadata',
+                       repo: 'kfilemetadata',
+                       i18n: default_i18n))
+end
+
 class TestProjectResolver < Testme
   def setup
     # Project uses ProjectsFile to read data, so we need to make sure it
     # uses our dummy file.
     ReleaseMe::ProjectsFile.xml_path = data('kde_projects_advanced.xml')
     ReleaseMe::ProjectsFile.load!
+    stub_api
   end
 
   def assert_valid_project(project_array, expected_identifier)
@@ -51,11 +158,6 @@ class TestProjectResolver < Testme
   def test_module_as_project
     pr = ReleaseMe::Project.from_xpath('networkmanager-qt')
     assert_valid_project(pr, 'networkmanager-qt')
-  end
-
-  def test_component_as_project
-    pr = ReleaseMe::Project.from_xpath('calligra')
-    assert_valid_project(pr, 'calligra')
   end
 
   ####
@@ -162,6 +264,7 @@ class TestProject < Testme
     # uses our dummy file.
     ReleaseMe::ProjectsFile.xml_path = data('kde_projects.xml')
     ReleaseMe::ProjectsFile.load!
+    stub_api
   end
 
   def teardown
@@ -182,7 +285,6 @@ class TestProject < Testme
       :i18n_stable => 'master',
       :i18n_path => 'extragear-utils'
     }
-    ReleaseMe::Project.new(data)
     pr = ReleaseMe::Project.new(data)
     refute_nil(pr)
     assert_equal(pr.identifier, data[:identifier])
@@ -211,20 +313,6 @@ class TestProject < Testme
     assert_equal(1, projects.size)
     pr = projects.shift
     assert_equal('ktp-contact-runner', pr.identifier)
-    assert_equal('extragear-utils', pr.i18n_path)
-  end
-
-  def assert_i18n_path(project_name, i18n_path)
-    projects = ReleaseMe::Project.from_xpath(project_name)
-    assert_equal(1, projects.size)
-    pr = projects.shift
-    assert_equal(i18n_path, pr.i18n_path)
-  end
-
-  def test_resolve_valid_i18n_path_all_garbage_combinations
-    assert_i18n_path('ktp-contact-runner', 'extragear-utils')
-    assert_i18n_path('kfilemetadata', 'kde-workspace')
-    assert_i18n_path('kde/kdenetwork/ktp-common-internal', 'kdenetwork')
   end
 
   def test_resolve_invalid
@@ -256,31 +344,23 @@ class TestProject < Testme
     assert_equal('git@git.kde.org:kfilemetadata', pr.vcs.repository)
   end
 
-  def test_flat_project
-    # Make sure i18n_path of modules that are also projects get properly
-    # constructed.
-    # https://bugs.kde.org/show_bug.cgi?id=379164
-    projects = ReleaseMe::Project.from_xpath('kde/kdepim-runtime')
-    assert_equal(projects.size, 1)
-    pr = projects.shift
-    assert_equal('kdepim-runtime', pr.i18n_path)
-  end
-
-  def test_deep_project
-    # Make sure i18n_path of modules that are inside projects on a third level
-    # nested get properly constructed.
-    # https://bugs.kde.org/show_bug.cgi?id=379161
-    projects = ReleaseMe::Project.from_xpath('kde/kdegraphics/libs/libksane')
-    assert_equal(projects.size, 1)
-    pr = projects.shift
-    assert_equal('kdegraphics', pr.i18n_path)
-  end
-
-  def test_krita
-    # Make sure krita's i18n_path gets properly resolved.
-    projects = ReleaseMe::Project.from_xpath('krita')
-    assert_equal(projects.size, 1)
-    pr = projects.shift
-    assert_equal('calligra', pr.i18n_path)
+  def test_projectsfile_removal
+    # TODO: drop project_element once projectsfile support is entirely removed
+    #  - this test can also be dropped then
+    #  - project.xml test data in test/data can also be dropped
+    #  - overlay class as well
+    #  - api overlay can be merged into project
+    #  - api overlay's from_data can be merged into initialize
+    data = {
+      :identifier => 'yakuake',
+      :vcs => ReleaseMe::Vcs.new,
+      :i18n_trunk => 'master',
+      :i18n_stable => 'master',
+      :i18n_path => 'extragear-utils'
+    }
+    pr = ReleaseMe::Project.new(data)
+    assert_includes ReleaseMe.constants, :ProjectsFile
+    assert_includes ReleaseMe.constants, :ProjectProjectsfileOverlay
+    assert_includes pr.instance_variables, :@project_element
   end
 end

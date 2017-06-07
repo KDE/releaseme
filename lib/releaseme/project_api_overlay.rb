@@ -45,12 +45,12 @@ module ReleaseMe
         # just use stable branch
         i18n_lts = i18n_path == 'kde-workspace' ? plasma_lts : i18n_stable
 
-        p Project.new(identifier: id,
-                      vcs: vcs,
-                      i18n_trunk: i18n_trunk,
-                      i18n_stable: i18n_stable,
-                      i18n_lts: i18n_lts,
-                      i18n_path: i18n_path)
+        Project.new(identifier: id,
+                    vcs: vcs,
+                    i18n_trunk: i18n_trunk,
+                    i18n_stable: i18n_stable,
+                    i18n_lts: i18n_lts,
+                    i18n_path: i18n_path)
       end
 
       def from_xpath(id)
@@ -62,9 +62,16 @@ module ReleaseMe
       rescue OpenURI::HTTPError
         # If the list comes back with an error try to find by id name.
         # This is for when the user wants to release 'kinfocenter'
+        from_find(id)
+      end
+
+      def from_find(id)
         ProjectsAPI.find(id: id).collect do |path|
           from_data(ProjectsAPI.get(path))
         end
+      rescue OpenURI::HTTPError => e
+        return [] if e.io.status[0] == '404' # [0] is code, [1] msg
+        raise e
       end
 
       # @param url [String] find all Projects associated with this repo url.

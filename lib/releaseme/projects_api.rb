@@ -22,6 +22,8 @@ require 'net/http'
 require 'open-uri'
 require 'json'
 
+require_relative 'logable'
+
 module ReleaseMe
   # projects.kde.org API.
   module ProjectsAPI
@@ -64,9 +66,10 @@ module ReleaseMe
 
     # Connection wrapper.
     class Connection
+      prepend Logable
+
       def initialize
         @uri = URI.parse('https://projects.kde.org/api/v1')
-        # @uri = URI.parse('http://localhost:8181/v1')
       end
 
       def uri(path, **query)
@@ -74,7 +77,7 @@ module ReleaseMe
         path = path[0] == '/' ? path : path[1..-1]
         uri.path = "#{uri.path}#{path}"
         uri.query = URI.encode_www_form(query) unless query.empty?
-        p uri
+        log_debug uri
         uri
       end
 
@@ -115,10 +118,6 @@ module ReleaseMe
       def initialize(data, _connection)
         @data = data
         @data[:i18n] = I18n.new(data[:i18n])
-      end
-
-      def project?
-        !repo.empty?
       end
     end
 
