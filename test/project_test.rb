@@ -273,7 +273,7 @@ class TestProject < Testme
   def test_manual_construction_fail
     assert_raises do
       # Refuse to new because we need all arguments.
-      pr = ReleaseMe::Project.new(identifier: 'a', vcs: nil)
+      ReleaseMe::Project.new(identifier: 'a', vcs: nil)
     end
   end
 

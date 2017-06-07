@@ -36,8 +36,6 @@ module ReleaseMe
     # The i18n base path to use in SVN (e.g. extragear-utils/)
     attr_reader :i18n_path
 
-    # Obtained and valid languages
-    attr_reader :languages
     # Found templates
     attr_reader :templates
 
