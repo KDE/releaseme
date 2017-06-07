@@ -20,6 +20,8 @@
 
 require_relative 'archive_signer'
 require_relative 'documentation'
+require_relative 'hash_template'
+require_relative 'jenkins'
 require_relative 'l10n'
 require_relative 'logable'
 require_relative 'source'
