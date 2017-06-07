@@ -2,6 +2,11 @@ require_relative 'lib/testme'
 require_relative '../lib/releaseme/translationunit'
 
 class TestTranslationUnit < Testme
+  def setup
+    # Disable querying VCS by default.
+    ReleaseMe::TranslationUnit.languages = []
+  end
+
   def create(type)
     l = ReleaseMe::TranslationUnit.new(type, 'amarok', '/dev/null')
     l.target = "#{@dir}/l10n"
@@ -54,7 +59,7 @@ class TestTranslationUnit < Testme
 
   # LTS translations should be used but only for Plasma repos
   def test_0_repo_url_init_lts
-    assert_raise do
+    assert_raises do
       create_lts
     end
   end
@@ -67,19 +72,19 @@ class TestTranslationUnit < Testme
   end
 
   def test_invalid_inits
-    assert_raise do
+    assert_raises do
       ReleaseMe::TranslationUnit.new(nil, 'amarok', '/dev/null')
     end
-    assert_raise do
+    assert_raises do
       ReleaseMe::TranslationUnit.new(ReleaseMe::TranslationUnit::TRUNK, nil, 'null')
     end
-    assert_raise do
+    assert_raises do
       ReleaseMe::TranslationUnit.new(ReleaseMe::TranslationUnit::TRUNK, 'amarok', nil)
     end
   end
 
   def test_invalid_type
-    assert_raise do
+    assert_raises do
       # :fishyfishy is a bad type and can't be mapped to a repo path
       ReleaseMe::TranslationUnit.new(:fishyfishy, 'amarok', '/dev/null')
     end
@@ -95,18 +100,20 @@ class TestTranslationUnit < Testme
   end
 
   def test_default_exclusion
+    ReleaseMe::TranslationUnit.languages = nil # force detection
     u = create_trunk
     langs = u.languages
-    assert_not_include(langs, 'x-test')
-    assert_false(langs.empty?)
+    refute_includes(langs, 'x-test')
+    refute(langs.empty?)
   end
 
   def test_exclusion
+    ReleaseMe::TranslationUnit.languages = nil # force detection
     u = create_trunk
     u.default_excluded_languages = []
-    assert_include(u.languages, 'x-test')
+    assert_includes(u.languages, 'x-test')
     # Make sure the exclusion list is not cached so it can be changed later.
     u.default_excluded_languages = nil
-    assert_not_include(u.languages, 'x-test')
+    refute_includes(u.languages, 'x-test')
   end
 end

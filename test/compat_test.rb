@@ -25,12 +25,12 @@ class TestCompat < Testme
     # Requiring a compat file needs to expose the contained class in the
     # root scope. Additionally the gem module scope should have it available,
     # and the thing should be able to
-    assert_not_include(Object.constants, :ReleaseMeCompatCompat)
+    refute_includes(Object.constants, :ReleaseMeCompatCompat)
     require_relative '../lib/compat_compat'
-    assert_include(Object.constants, :ReleaseMeCompatCompat)
-    assert_include(Object.constants, :ReleaseMe)
-    assert_include(ReleaseMe.constants, :ReleaseMeCompatCompat)
-    assert_not_nil(ReleaseMeCompatCompat.new) # able to init
+    assert_includes(Object.constants, :ReleaseMeCompatCompat)
+    assert_includes(Object.constants, :ReleaseMe)
+    assert_includes(ReleaseMe.constants, :ReleaseMeCompatCompat)
+    refute_nil(ReleaseMeCompatCompat.new) # able to init
   end
 
   # Make sure tests load the new files rather than the old ones.

@@ -16,7 +16,7 @@ class TestRequirementChecker < Testme
     checker.instance_variable_set(:@ruby_version, version)
     assert(!checker.send(:ruby_compatible?),
            "Ruby version #{version} compatible but should not be")
-    assert_raise { checker.check }
+    assert_raises { checker.check }
   end
 
   def with_path(path)
@@ -61,7 +61,7 @@ class TestRequirementChecker < Testme
       missing_binaries = checker.send(:missing_binaries)
       expected_missing_binaries = all_binaries
       assert_equal(expected_missing_binaries, missing_binaries)
-      assert_raise { checker.check }
+      assert_raises { checker.check }
     end
   end
 

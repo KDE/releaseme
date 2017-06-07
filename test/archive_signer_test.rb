@@ -20,6 +20,7 @@
 
 require 'fileutils'
 
+require_relative 'test_helper'
 require_relative 'lib/testme'
 require_relative '../lib/releaseme/archive_signer'
 require_relative '../lib/releaseme/xzarchive'

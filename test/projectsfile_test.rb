@@ -20,7 +20,6 @@
 
 require 'fileutils'
 require 'rexml/document'
-require 'webmock/test_unit'
 
 require_relative 'lib/testme'
 
@@ -60,19 +59,19 @@ class TestProjectFile < Testme
   def test_reset
     ReleaseMe::ProjectsFile.autoload = true
     assert_equal(ReleaseMe::ProjectsFile.xml_path, data('kde_projects_advanced.xml'))
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
+    refute_nil(ReleaseMe::ProjectsFile.xml_data)
+    refute_nil(ReleaseMe::ProjectsFile.xml_doc)
     ReleaseMe::ProjectsFile.reset!
     ReleaseMe::ProjectsFile.autoload = false
     assert_nil(ReleaseMe::ProjectsFile.xml_doc)
     assert_nil(ReleaseMe::ProjectsFile.xml_data)
-    assert_not_equal(ReleaseMe::ProjectsFile.xml_path, data('kde_projects_advanced.xml'))
+    refute_equal(ReleaseMe::ProjectsFile.xml_path, data('kde_projects_advanced.xml'))
   end
 
   def test_load
     ReleaseMe::ProjectsFile.load!
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
+    refute_nil(ReleaseMe::ProjectsFile.xml_data)
+    refute_nil(ReleaseMe::ProjectsFile.xml_doc)
   end
 
   def test_load_http
@@ -84,8 +83,8 @@ class TestProjectFile < Testme
 
     date = 'Thu, 16 Jun 2016 10:55:16 GMT'
 
-    assert_path_not_exist(@cache_file)
-    assert_path_not_exist(@cache_file_date)
+    refute_path_exist(@cache_file)
+    refute_path_exist(@cache_file_date)
 
     # Request against stub, we are expecting our cache files as a result.
     # We EXPECT https://! anything else means the request is malformed.
@@ -98,8 +97,8 @@ class TestProjectFile < Testme
       }
     end
     ReleaseMe::ProjectsFile.load!
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
+    refute_nil(ReleaseMe::ProjectsFile.xml_data)
+    refute_nil(ReleaseMe::ProjectsFile.xml_doc)
     assert_path_exist(@cache_file, 'cache file missing')
     assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)
@@ -110,8 +109,8 @@ class TestProjectFile < Testme
     stub.with(headers: { 'If-Modified-Since' => date })
     stub.to_return(status: [304, 'Not Modified'])
     ReleaseMe::ProjectsFile.load!
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
+    refute_nil(ReleaseMe::ProjectsFile.xml_data)
+    refute_nil(ReleaseMe::ProjectsFile.xml_doc)
     assert_path_exist(@cache_file, 'cache file missing')
     assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)
@@ -124,12 +123,12 @@ class TestProjectFile < Testme
     stub.with(headers: { 'If-Modified-Since' => date })
     stub.to_return(body: File.read(file), headers: { 'date' => date })
     ReleaseMe::ProjectsFile.load!
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
+    refute_nil(ReleaseMe::ProjectsFile.xml_data)
+    refute_nil(ReleaseMe::ProjectsFile.xml_doc)
     assert_path_exist(@cache_file, 'cache file missing')
     assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)
-    assert_not_equal(prev_mtime, File.mtime(@cache_file),
+    refute_equal(prev_mtime, File.mtime(@cache_file),
                      'Cache file should have been modified but was not.')
 
     # Last time, we'll let this one fall into cache.
@@ -137,8 +136,8 @@ class TestProjectFile < Testme
     stub = stub_request(:any, 'https://projects.kde.org/kde_projects.xml')
     stub.to_return(status: 500)
     ReleaseMe::ProjectsFile.load!
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_data)
-    assert_not_nil(ReleaseMe::ProjectsFile.xml_doc)
+    refute_nil(ReleaseMe::ProjectsFile.xml_data)
+    refute_nil(ReleaseMe::ProjectsFile.xml_doc)
     assert_path_exist(@cache_file, 'cache file missing')
     assert_path_exist(@cache_file_date, 'date cache missing')
     remove_request_stub(stub)

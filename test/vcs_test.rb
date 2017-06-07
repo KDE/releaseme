@@ -32,7 +32,7 @@ class TestVcs < Testme
     instance_methods.delete(:repository=)
     instance_methods.delete(:repository)
     instance_methods.each do |meth|
-      assert_raise RuntimeError do
+      assert_raises RuntimeError do
         argc = 0
         begin
           argv = []
@@ -49,7 +49,7 @@ class TestVcs < Testme
 
   def test_from_hash
     vcs = ReleaseMe::Vcs.from_hash({"repository" => "kitten"})
-    assert_not_nil(vcs)
+    refute_nil(vcs)
     assert_equal("kitten", vcs.repository)
   end
 end

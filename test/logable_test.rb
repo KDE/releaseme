@@ -107,13 +107,13 @@ class TestLogable < Testme
 
   def test_privacy
     fake = FakeClass1.new
-    assert_raise NoMethodError do
+    assert_raises NoMethodError do
       fake.log_warn 'kitten'
     end
-    assert_raise NoMethodError do
+    assert_raises NoMethodError do
       fake.log_info 'kitten'
     end
-    assert_raise NoMethodError do
+    assert_raises NoMethodError do
       fake.log_debug 'kitten'
     end
   end
@@ -121,9 +121,7 @@ class TestLogable < Testme
   def test_init
     fake = FakeClass1.new
     assert_equal(fake.instance_variables, []) # lazy init
-    assert_nothing_raised do
-      fake.send :log_debug, 'kitten'
-    end
+    fake.send :log_debug, 'kitten'
     assert_equal(fake.instance_variables, [:@__logger]) # lazy init
   end
 
@@ -176,7 +174,7 @@ class TestLogable < Testme
     fake = FakeClass3Prepend.new
     fake.send :create_logger
     logger = fake.send :logger
-    assert_not_nil(logger)
+    refute_nil(logger)
     assert_equal(Logger::WARN, logger.level)
   end
 end

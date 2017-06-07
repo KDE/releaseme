@@ -46,7 +46,7 @@ class TestXzArchive < Testme
 
   def test_attr_directory
     a = ReleaseMe::XzArchive.new
-    assert_equal(a.directory, nil)
+    assert_nil(a.directory)
 
     a.directory = @dir
     assert_equal(a.directory, @dir)
@@ -73,7 +73,7 @@ class TestXzArchive < Testme
     ret = a.create
     assert_equal(ret, true)
     assert_path_exist(xz_file)
-    assert_path_not_exist(tar_file)
+    refute_path_exist(tar_file)
   end
 
   # Bogus compression level.
@@ -87,8 +87,8 @@ class TestXzArchive < Testme
     a.level = -1
     ret = a.create
     assert_equal(ret, false)
-    assert_path_not_exist(tar_file)
-    assert_path_not_exist(xz_file)
+    refute_path_exist(tar_file)
+    refute_path_exist(xz_file)
   end
 
   # Directory does not exist.
@@ -103,7 +103,7 @@ class TestXzArchive < Testme
     a.directory = d
     ret = a.create
     assert_equal(ret, false)
-    assert_path_not_exist(tar_file)
-    assert_path_not_exist(xz_file)
+    refute_path_exist(tar_file)
+    refute_path_exist(xz_file)
   end
 end

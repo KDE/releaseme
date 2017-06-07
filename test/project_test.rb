@@ -33,7 +33,7 @@ class TestProjectResolver < Testme
   end
 
   def assert_valid_project(project_array, expected_identifier)
-    assert_not_nil(project_array)
+    refute_nil(project_array)
     assert_equal(project_array.size, 1)
     assert_equal(project_array[0].identifier, expected_identifier)
   end
@@ -61,7 +61,7 @@ class TestProjectResolver < Testme
   ####
 
   def assert_valid_array(project_array, matches)
-    assert_not_nil(project_array)
+    refute_nil(project_array)
     assert_equal(matches.size, project_array.size)
     project_array.each do |project|
       matches.delete(project.identifier)
@@ -85,14 +85,6 @@ class TestProjectResolver < Testme
     assert_valid_extragear_utils_array(pr)
   end
 
-  def test_module_with_full_path_and_trailing garbage
-    pr = ReleaseMe::Project.from_xpath('extragear/utils/')
-    assert_valid_extragear_utils_array(pr)
-
-    pr = ReleaseMe::Project.from_xpath('extragear/utils///**///')
-    assert_valid_extragear_utils_array(pr)
-  end
-
   ####### super nested resolution
 
   def assert_valid_telepathy_array(project_array)
@@ -104,7 +96,7 @@ class TestProjectResolver < Testme
     assert_valid_telepathy_array(pr)
 
     pr = ReleaseMe::Project.from_xpath('extragear/network/telepathy/ktp1')
-    assert_not_nil(pr)
+    refute_nil(pr)
     assert_equal('ktp1', pr[0].identifier)
   end
 
@@ -121,7 +113,7 @@ end
 class TestProjectConfig < Testme
   def test_invalid_name
     name = 'kittens'
-    assert_raise do
+    assert_raises do
       ReleaseMe::Project.from_config(name)
     end
   end
@@ -130,12 +122,12 @@ class TestProjectConfig < Testme
     ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'valid'
     pr = ReleaseMe::Project.from_config(name)
-    assert_not_nil(pr)
+    refute_nil(pr)
     assert_equal('yakuake', pr.identifier)
     assert_equal('git://anongit.kde.org/yakuake', pr.vcs.repository)
     assert_equal('master', pr.i18n_trunk)
     assert_equal('notmaster', pr.i18n_stable)
-    assert_equal(nil, pr.i18n_lts)
+    assert_nil(pr.i18n_lts)
     assert_equal('extragear-utils', pr.i18n_path)
   end
 
@@ -143,14 +135,14 @@ class TestProjectConfig < Testme
     ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'valid-svn'
     pr = ReleaseMe::Project.from_config(name)
-    assert_not_nil(pr)
+    refute_nil(pr)
     assert_equal('svn://anonsvn.kde.org/home', pr.vcs.repository)
   end
 
   def test_invalid_vcs
     ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'invalid-vcs'
-    assert_raise NoMethodError do
+    assert_raises NoMethodError do
       ReleaseMe::Project.from_config(name)
     end
   end
@@ -158,7 +150,7 @@ class TestProjectConfig < Testme
   def test_invalid_vcs_type
     ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'invalid-vcs-type'
-    assert_raise RuntimeError do
+    assert_raises RuntimeError do
       ReleaseMe::Project.from_config(name)
     end
   end
@@ -176,7 +168,7 @@ class TestProject < Testme
   end
 
   def test_manual_construction_fail
-    assert_raise do
+    assert_raises do
       # Refuse to new because we need all arguments.
       pr = ReleaseMe::Project.new(identifier: 'a', vcs: nil)
     end
@@ -190,11 +182,9 @@ class TestProject < Testme
       :i18n_stable => 'master',
       :i18n_path => 'extragear-utils'
     }
-    assert_nothing_raised do
-      ReleaseMe::Project.new(data)
-    end
+    ReleaseMe::Project.new(data)
     pr = ReleaseMe::Project.new(data)
-    assert_not_nil(pr)
+    refute_nil(pr)
     assert_equal(pr.identifier, data[:identifier])
     assert_equal(pr.vcs, data[:vcs])
     assert_equal(pr.i18n_trunk, data[:i18n_trunk])
@@ -248,7 +238,7 @@ class TestProject < Testme
     pr = projects.shift
     vcs = pr.vcs
     assert_equal(vcs.repository, 'git@git.kde.org:yakuake')
-    assert_equal(vcs.branch, nil) # project on its own should not set a branch
+    assert_nil(vcs.branch) # project on its own should not set a branch
   end
 
   def test_plasma_lts

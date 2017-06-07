@@ -27,7 +27,7 @@ class TestSvn < Testme
   def setup
     @svn_checkout_dir = "#{Dir.pwd}/tmp_check_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
     @svn_repo_dir = "#{Dir.pwd}/tmp_repo_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
-    `svnadmin create #{@svn_repo_dir}`
+    system("svnadmin create #{@svn_repo_dir}", [:out] => '/dev/null') || raise
     assert_path_exist(@svn_repo_dir)
   end
 
@@ -64,7 +64,7 @@ class TestSvn < Testme
 
     # Invalid file.
     ret = s.cat('/bar')
-    assert_not_equal(0, $?.to_i)
+    refute_equal(0, $?.to_i)
     assert_equal('', ret)
   end
 
@@ -113,12 +113,12 @@ class TestSvn < Testme
     # Target dir does not exist
     ret = s.export("#{tmpDir}123/file", '/dir/file')
     assert_equal(ret, false)
-    assert_path_not_exist("#{tmpDir}123/file")
+    refute_path_exist("#{tmpDir}123/file")
 
     # Invalid path
     ret = s.export("#{tmpDir}/file", '/dir/otherfile')
     assert_equal(ret, false)
-    assert_path_not_exist("#{tmpDir}/otherfile")
+    refute_path_exist("#{tmpDir}/otherfile")
 
   ensure
     FileUtils.rm_rf(tmpDir)
@@ -137,7 +137,7 @@ class TestSvn < Testme
     s = ReleaseMe::Svn.new
     s.repository = 'file://foofooofoo'
     s.get(@svn_checkout_dir)
-    assert_path_not_exist(@svn_checkout_dir)
+    refute_path_exist(@svn_checkout_dir)
     FileUtils.rm_rf(@svn_checkout_dir)
   end
 
@@ -147,13 +147,13 @@ class TestSvn < Testme
 
     s.get(@svn_checkout_dir)
     s.clean!(@svn_checkout_dir)
-    assert_path_not_exist("#{@svn_checkout_dir}/.svn")
-    assert_path_not_exist("#{@svn_checkout_dir}/dir/.svn")
+    refute_path_exist("#{@svn_checkout_dir}/.svn")
+    refute_path_exist("#{@svn_checkout_dir}/dir/.svn")
   end
 
   def test_from_hash
     s = ReleaseMe::Svn.from_hash(repository: 'kitten')
-    assert_not_nil(s)
+    refute_nil(s)
     assert_equal('kitten', s.repository)
   end
 

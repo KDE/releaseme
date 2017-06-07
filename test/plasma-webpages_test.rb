@@ -33,7 +33,7 @@ class TestPlasmaWebpages < Testme
 
   def test_info_render
     ref = File.read(data('plasma-webpages/info-plasma-5.9.1.php'))
-    assert_not_equal('', ref)
+    refute_equal('', ref)
     template = PlasmaInfoTemplate.new
     output = template.render
     assert_equal(ref, output)
@@ -41,7 +41,7 @@ class TestPlasmaWebpages < Testme
 
   def test_announce_render
     ref = File.read(data('plasma-webpages/announce-plasma-5.9.1.php'))
-    assert_not_equal('', ref)
+    refute_equal('', ref)
     template = PlasmaAnnounceTemplate.new
     output = template.render
     assert_equal(ref.split($/), output.split($/))
@@ -49,7 +49,7 @@ class TestPlasmaWebpages < Testme
 
   def test_versions
     plasma_versions = PlasmaVersion.new
-    assert_not_equal({}, plasma_versions.values)
+    refute_equal({}, plasma_versions.values)
     assert_equal('5.9.1', plasma_versions.values['VERSION'])
     assert_equal('5.9.1', plasma_versions.version)
     assert_equal('Feature', plasma_versions.values['RELEASETYPE'])

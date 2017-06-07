@@ -45,7 +45,7 @@ class TestGit < Testme
 
   def test_init
     g = Git.new
-    assert_not_nil(g)
+    refute_nil(g)
     g.repository = '/repo'
     assert_equal('/repo', g.repository)
     assert_nil(g.branch)
@@ -61,7 +61,7 @@ class TestGit < Testme
     g.get('clone')
     assert_path_exist('clone/abc')
     assert_equal('content', File.read('clone/abc'))
-    assert_not_nil(g.hash)
+    refute_nil(g.hash)
   end
 
   def test_clean
@@ -70,7 +70,7 @@ class TestGit < Testme
     g.get('clone')
     assert_path_exist('clone/.git')
     g.clean!('clone')
-    assert_path_not_exist('clone/.git')
+    refute_path_exist('clone/.git')
   end
 
   def create_from_hash
@@ -79,7 +79,7 @@ class TestGit < Testme
 
   def test_from_hash
     g = create_from_hash
-    assert_not_nil(g)
+    refute_nil(g)
     assert_equal('/kitten', g.repository)
     assert_equal('brunch', g.branch)
   end

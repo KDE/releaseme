@@ -17,7 +17,7 @@ end
 begin
   require 'pullreview/coverage_reporter'
   formatters << PullReview::Coverage::Formatter
-rescue LoadError => e
+rescue LoadError
   warn 'pullreview reporter not available, not sending reports to server'
 end
 
@@ -35,11 +35,5 @@ SimpleCov.start do
   end
 end
 
-Dir.chdir(File.dirname(__FILE__)) do
-  Dir.glob('*_test.rb').each do |testfile|
-    next if File.basename(testfile) == File.basename(__FILE__)
-    next if File.basename(testfile).include?('blackbox')
-    puts "Adding Test File: #{testfile}"
-    require_relative testfile
-  end
-end
+# $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'minitest/autorun'

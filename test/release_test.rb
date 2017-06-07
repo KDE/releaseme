@@ -1,10 +1,9 @@
 require_relative 'lib/testme'
 
 require_relative '../lib/releaseme/git'
+require_relative '../lib/releaseme/origin'
 require_relative '../lib/releaseme/project'
 require_relative '../lib/releaseme/release'
-
-require 'mocha/test_unit'
 
 class TestRelease < Testme
   module Silencer
@@ -77,7 +76,7 @@ class TestRelease < Testme
 
     r = ReleaseMe::Release.new(project, :trunk, '1.0')
 
-    assert_not_nil(r)
+    refute_nil(r)
     assert_equal(project, r.project)
     assert_equal(:trunk, r.origin)
     assert_equal('1.0', r.version)
@@ -108,19 +107,19 @@ class TestRelease < Testme
     r = new_test_release
 
     @dir = r.source.target
-    assert_path_not_exist(@dir)
+    refute_path_exist(@dir)
     r.get
     assert_path_exist(@dir)
     assert_path_exist("#{@dir}/file")
 
-    assert_path_not_exist("#{@dir}.tar.xz")
+    refute_path_exist("#{@dir}.tar.xz")
     r.archive
     assert_path_exist("#{@dir}.tar.xz")
     assert_path_exist("#{@dir}.tar.xz.sig")
 
     assert_path_exist(@dir)
     r.source.cleanup
-    assert_path_not_exist(@dir)
+    refute_path_exist(@dir)
   end
 
   def test_kde4_origin
@@ -134,7 +133,7 @@ class TestRelease < Testme
     project = ReleaseMe::Project.new(data)
     project.vcs.repository = @remotedir
 
-    assert_raise do
+    assert_raises do
       ReleaseMe::Release.new(project, Project::TRUNK_KDE4, '1.0')
     end
   end
@@ -173,7 +172,7 @@ class TestRelease < Testme
     project = ReleaseMe::Project.new(data)
     project.vcs.repository = @remotedir
 
-    ReleaseMe::Release.new(project, Origin::TRUNK, '1.0').get
+    ReleaseMe::Release.new(project, ReleaseMe::Origin::TRUNK, '1.0').get
   end
 
   def test_ci_check_one_building_one_shitty
@@ -235,9 +234,9 @@ class TestRelease < Testme
     ReleaseMe::Release.any_instance.expects(:abort).raises(SystemCallError.new(''))
     ReleaseMe::Release.any_instance.expects(:gets).returns("n\n")
     assert_raises SystemCallError do
-      ReleaseMe::Release.new(project, Origin::TRUNK, '1.0').get
+      ReleaseMe::Release.new(project, ReleaseMe::Origin::TRUNK, '1.0').get
     end
-    assert_path_not_exist('clone-1.0')
+    refute_path_exist('clone-1.0')
   end
 
   def test_help

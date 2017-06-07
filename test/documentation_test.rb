@@ -8,32 +8,32 @@ require_relative '../lib/releaseme/documentation.rb'
 class TestDocumentation < Testme
   def setup
     # FIXME: code copy with l10n
-    @repoDataDir = data('l10nrepo/')
+    @repo_data_dir = data('l10nrepo/')
 
     @i18n_path = 'extragear-multimedia'
 
-    @trunkUrl = 'trunk/l10n-kf5/'
-    @stableUrl = 'branches/stable/l10n-kf5'
+    @trunk_url = 'trunk/l10n-kf5/'
+    @stable_url = 'branches/stable/l10n-kf5'
 
-    @dir = "tmp_l10n_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
-    @svnTemplateDir = "tmp_l10n_repo_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
-    @svnCheckoutDir = "tmp_l10n_check_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+    @dir = 'tmp_l10n_' + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+    @svn_template_dir = 'tmp_l10n_repo_' + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
+    @svn_checkout_dir = 'tmp_l10n_check_' + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
 
-    `svnadmin create #{@svnTemplateDir}`
-    assert_path_exist(@svnTemplateDir)
+    system("svnadmin create #{@svn_template_dir}", [:out] => '/dev/null')
+    assert_path_exist(@svn_template_dir)
 
-    `svn co file://#{Dir.pwd}/#{@svnTemplateDir} #{@svnCheckoutDir}`
-    FileUtils.cp_r("#{@repoDataDir}/trunk", @svnCheckoutDir)
-    FileUtils.cp_r("#{@repoDataDir}/branches", @svnCheckoutDir)
-    Dir.chdir(@svnCheckoutDir) do
-      `svn add *`
-      `svn ci -m 'yolo'`
-    end
+    system("svn co file://#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}")
+    FileUtils.cp_r("#{@repo_data_dir}/trunk", @svn_checkout_dir)
+    FileUtils.cp_r("#{@repo_data_dir}/branches", @svn_checkout_dir)
+    system('svn add *', chdir: @svn_checkout_dir, [:out] => '/dev/null')
+    system("svn ci -m 'yolo'", chdir: @svn_checkout_dir, [:out] => '/dev/null')
+
+    ReleaseMe::DocumentationL10n.languages = nil
   end
 
   def teardown
-    FileUtils.rm_rf(@svnTemplateDir)
-    FileUtils.rm_rf(@svnCheckoutDir)
+    FileUtils.rm_rf(@svn_template_dir)
+    FileUtils.rm_rf(@svn_checkout_dir)
     FileUtils.rm_rf(@dir)
   end
 
@@ -51,18 +51,18 @@ class TestDocumentation < Testme
     d = ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK,
                               'frenchfries',
                               @i18n_path)
-    d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('variable-pot'), @dir)
     d.get(@dir)
     assert_path_exist("#{@dir}/Messages.sh")
-    assert_path_not_exist("#{@dir}/doc")
+    refute_path_exist("#{@dir}/doc")
   end
 
   def test_get_doc
     # en & de
     d = create_doc
-    d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     d.get(@dir)
@@ -76,7 +76,7 @@ class TestDocumentation < Testme
     # en only (everything works if only doc/ is present in git but not
     # translated)
     d = create_doc_without_translation
-    d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     d.get(@dir)
@@ -84,15 +84,15 @@ class TestDocumentation < Testme
     assert_path_exist("#{@dir}/doc/CMakeLists.txt")
     assert_path_exist("#{@dir}/doc/en/index.docbook")
     assert_path_exist("#{@dir}/doc/en/CMakeLists.txt")
-    assert_path_not_exist("#{@dir}/doc/de/index.docbook")
-    assert_path_not_exist("#{@dir}/doc/de/CMakeLists.txt")
+    refute_path_exist("#{@dir}/doc/de/index.docbook")
+    refute_path_exist("#{@dir}/doc/de/CMakeLists.txt")
   end
 
   def test_get_doc_multi_doc
     d = ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK,
                               'plasma-desktop',
                               'kde-workspace')
-    d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
+    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-doc'), @dir)
     d.get(@dir)
@@ -141,35 +141,5 @@ class TestDocumentation < Testme
     assert(present_files.empty?, "unexpected file(s): #{present_files}")
 
     # FIXME: check contents?
-  end
-
-  def test_divergent_lineup garbage
-    d = ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK, 'powerdevil', 'kde-workspace')
-    d.init_repo_url("file://#{Dir.pwd}/#{@svnTemplateDir}")
-    FileUtils.rm_rf(@dir)
-    FileUtils.cp_r(data('test_divergent_lineup'), @dir)
-    d.get(@dir)
-    expected_files = %w(
-      CMakeLists.txt
-      en
-      en/CMakeLists.txt
-      en/kcm
-      en/kcm/CMakeLists.txt
-      en/kcm/index.docbook
-      de/CMakeLists.txt
-      de/kcontrol
-      de/kcontrol/CMakeLists.txt
-      de/kcontrol/powerdevil
-      de/kcontrol/powerdevil/CMakeLists.txt
-      de/kcontrol/powerdevil/index.docbook
-    )
-    present_files = Dir.chdir("#{@dir}/doc/") { Dir.glob('**/**') }
-    missing_files = []
-    expected_files.each do |f|
-      missing_files << f unless present_files.include?(f)
-      present_files.delete(f)
-    end
-    assert(missing_files.empty?, "missing file(S): #{missing_files}")
-    assert(present_files.empty?, "unexpected file(s): #{present_files}")
   end
 end

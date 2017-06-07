@@ -1,8 +1,13 @@
 require 'tmpdir'
 require 'fileutils'
-require 'test/unit'
 
-class Testme < Test::Unit::TestCase
+require_relative '../test_helper'
+
+require 'minitest/unit'
+require 'mocha/mini_test'
+require 'webmock/minitest'
+
+module TestMeExtension
   attr_reader :tmpdir
   attr_reader :testdir
   attr_reader :datadir
@@ -34,25 +39,44 @@ class Testme < Test::Unit::TestCase
     ENV['GNUPGHOME'] = data('keyring')
   end
 
-  def priority_setup
+  def before_setup
     ENV['RELEASEME_SHUTUP'] = 'true'
     @tmpdir = Dir.mktmpdir("testme-#{self.class}")
-    @testdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}"
+    @testdir = File.expand_path(File.dirname(File.dirname(__FILE__))).to_s
     @datadir = "#{@testdir}/data"
     @pwdir = Dir.pwd
     Dir.chdir(@tmpdir)
     setup_git
     setup_env
+    super
   end
 
-  def priority_teardown
+  def after_teardown
     teardown_git
     Dir.chdir(@pwdir)
     FileUtils.rm_rf(@tmpdir)
+    super
   end
 
   def data(path)
     path = path.partition('data/').last if path.start_with?('data/')
     "#{@datadir}/#{path}"
   end
+
+  def assert_path_exist(path, msg = nil)
+    msg = message(msg) { "Expected path '#{path}' to exist" }
+    assert File.exist?(path), msg
+  end
+
+  def refute_path_exist(path, msg = nil)
+    msg = message(msg) { "Expected path '#{path}' to NOT exist" }
+    refute File.exist?(path), msg
+  end
+end
+
+class Testme < Minitest::Test
+  prepend TestMeExtension
+
+  # WARNING: with minitest one should extend through a prepend otherwise hooks
+  #   such as mocha may not get properly applied and cause test malfunctions!
 end

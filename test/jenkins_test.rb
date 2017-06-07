@@ -23,8 +23,6 @@ require 'fileutils'
 require_relative 'lib/testme'
 require_relative '../lib/releaseme/jenkins'
 
-require 'webmock/test_unit'
-
 class TestJenkins < Testme
   def teardown
     WebMock.reset!
@@ -125,7 +123,7 @@ class TestJenkins < Testme
     assert(successful_build != stable_build)
 
     ENV.delete('RELEASEME_CI_CHECK')
-    assert_false(job.sufficient_quality?)
+    refute(job.sufficient_quality?)
     ENV['RELEASEME_CI_CHECK'] = 'success'
     assert(job.sufficient_quality?)
     ENV['RELEASEME_CI_CHECK'] = 'none'
@@ -141,9 +139,9 @@ class TestJenkins < Testme
       .to_return(status: 404)
 
     job = ReleaseMe::Jenkins::Job.new('https://build.kde.org/job/xx/', new_connection)
-    assert_false(job.last_successful_build == job.last_build)
-    assert_false(job.last_stable_build == job.last_build)
-    assert_false(job.last_stable_build == job.last_successful_build)
+    refute(job.last_successful_build == job.last_build)
+    refute(job.last_stable_build == job.last_build)
+    refute(job.last_stable_build == job.last_successful_build)
   end
 
   def test_job_building
@@ -163,7 +161,7 @@ class TestJenkins < Testme
       .to_return(body: JSON.generate(id: 17))
 
     job = ReleaseMe::Jenkins::Job.new('https://build.kde.org/job/xx/', new_connection)
-    assert_false(job.building?)
+    refute(job.building?)
   end
 
   def test_job_unstable_building

@@ -50,6 +50,8 @@ class TestL10n < Testme
       `svn add *`
       `svn ci -m 'yolo'`
     end
+
+    ReleaseMe::L10n.languages = nil
   end
 
   def teardown
@@ -87,17 +89,17 @@ class TestL10n < Testme
     l.get(@dir)
     assert_path_exist("#{@dir}")
     assert_path_exist("#{@dir}/CMakeLists.txt")
-    assert_path_not_exist("#{@dir}/l10n") # temp dir must not be there
+    refute_path_exist("#{@dir}/l10n") # temp dir must not be there
     assert_path_exist("#{@dir}/po")
     assert_path_exist("#{@dir}/po/de/amarok.po")
-    assert_path_not_exist("#{@dir}/poqm") # qt translation dir must not be there
+    refute_path_exist("#{@dir}/poqm") # qt translation dir must not be there
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot'), @dir)
     l.get(@dir)
     assert_path_exist("#{@dir}")
     assert_path_exist("#{@dir}/CMakeLists.txt")
-    assert_path_not_exist("#{@dir}/l10n") # temp dir must not be there
+    refute_path_exist("#{@dir}/l10n") # temp dir must not be there
     assert_path_exist("#{@dir}/po")
     assert_path_exist("#{@dir}/po/de/amarok.po")
     assert_path_exist("#{@dir}/po/de/amarokcollectionscanner.po")
@@ -133,8 +135,9 @@ class TestL10n < Testme
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     l.get(@dir, edit_cmake: true)
+
     assert_path_exist("#{@dir}/CMakeLists.txt")
-    assert_include(File.read("#{@dir}/CMakeLists.txt"), 'ki18n_install(po)')
+    assert_includes(File.read("#{@dir}/CMakeLists.txt"), 'ki18n_install(po)')
   end
 
   def test_get_po_no_edit_cmake
@@ -145,7 +148,7 @@ class TestL10n < Testme
     FileUtils.cp_r(data('single-pot'), @dir)
     l.get(@dir, edit_cmake: false)
     assert_path_exist("#{@dir}/CMakeLists.txt")
-    assert_not_include(File.read("#{@dir}/CMakeLists.txt"), 'ki18n_install(po)')
+    refute_includes(File.read("#{@dir}/CMakeLists.txt"), 'ki18n_install(po)')
   end
 
   def test_statistics
@@ -221,9 +224,9 @@ class TestL10n < Testme
     end
     $stdout = STDOUT
 
-    assert_not_empty(some_missing_stdout)
-    assert_not_empty(all_missing_stdout)
-    assert_not_equal(some_missing_stdout, all_missing_stdout)
+    refute_empty(some_missing_stdout)
+    refute_empty(all_missing_stdout)
+    refute_equal(some_missing_stdout, all_missing_stdout)
   ensure
     $stdout = STDOUT
   end
@@ -240,7 +243,7 @@ class TestL10n < Testme
     assert_path_exist("#{@dir}/po/sr/scripts")
     assert_path_exist("#{@dir}/po/sr/scripts/ki18n5")
     assert_path_exist("#{@dir}/po/sr/scripts/libplasma5")
-    assert_path_not_exist("#{@dir}/po/sr/scripts/proto")
+    refute_path_exist("#{@dir}/po/sr/scripts/proto")
 
     assert_path_exist("#{@dir}/po/sr/scripts/ki18n5/ki18n5.js")
     assert_path_exist("#{@dir}/po/sr/scripts/ki18n5/trapnakron.pmap")
@@ -329,12 +332,12 @@ class TestL10n < Testme
 
     assert_path_exist("#{@dir}")
     assert_path_exist("#{@dir}/CMakeLists.txt")
-    assert_path_not_exist("#{@dir}/l10n") # temp dir must not be there
+    refute_path_exist("#{@dir}/l10n") # temp dir must not be there
     assert_path_exist("#{@dir}/po")
     assert_path_exist("#{@dir}/po/de/amarok.po")
     assert(File.exist?("#{@dir}/po/de/amarokcollectionscanner_qt.po"))
 
-    assert_false(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm'))
+    refute(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm'))
   end
 
   def test_poqm
@@ -371,7 +374,7 @@ class TestL10n < Testme
 
     assert_path_exist("#{@dir}/po")
     assert_path_exist("#{@dir}/po/de/solid_qt.po")
-    assert_path_not_exist("#{@dir}/poqm")
+    refute_path_exist("#{@dir}/poqm")
 
     assert(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(po)'))
     assert(!File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(poqm)'))
