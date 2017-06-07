@@ -22,7 +22,8 @@ class TestDocumentation < Testme
     system("svnadmin create #{@svn_template_dir}", [:out] => '/dev/null')
     assert_path_exist(@svn_template_dir)
 
-    system("svn co file://#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}")
+    system("svn co file://#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}",
+           [:out] => '/dev/null')
     FileUtils.cp_r("#{@repo_data_dir}/trunk", @svn_checkout_dir)
     FileUtils.cp_r("#{@repo_data_dir}/branches", @svn_checkout_dir)
     system('svn add *', chdir: @svn_checkout_dir, [:out] => '/dev/null')

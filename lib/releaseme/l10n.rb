@@ -145,7 +145,7 @@ module ReleaseMe
           stats = L10nStatistics.new.tap { |l| l.gather!(dir) }.stats
           stats.each do |lang, stat|
             next if stat[:percentage] >= completion_requirement
-            FileUtils.rm_r("#{dir}/#{lang}", verbose: true)
+            FileUtils.rm_r("#{dir}/#{lang}")
           end
         end
       end
@@ -185,7 +185,7 @@ module ReleaseMe
         Dir.glob("#{target}/*/cmake_modules").each do |mod|
           content = Dir.glob("#{mod}/*").reject { |x| x.include?('.svn') }
           FileUtils.mkpath(mod_target)
-          FileUtils.cp_r(content, mod_target, verbose: true)
+          FileUtils.cp_r(content, mod_target)
           FileUtils.rm_r(mod)
         end
       end
