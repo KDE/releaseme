@@ -111,8 +111,6 @@ module ReleaseMe
     #   fail 'todo'
     # end
 
-    private
-
     # FIXME: not tested
     def self.languages(vcs)
       # Cache this bugger to avoid double lookup for messages and documentation.
@@ -120,6 +118,12 @@ module ReleaseMe
       #       the same vcs configuration, so this is potentially dangerous.
       @languages ||= vcs.cat('subdirs').split($RS)
     end
+
+    def self.languages=(l)
+      @languages = l
+    end
+
+    private
 
     def url_type_suffix
       case type
