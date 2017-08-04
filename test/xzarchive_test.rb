@@ -71,7 +71,7 @@ class TestXzArchive < Testme
 
     a.level = 1
     ret = a.create
-    assert_equal(ret, true)
+    assert_equal(true, ret)
     assert_path_exist(xz_file)
     refute_path_exist(tar_file)
   end
@@ -86,7 +86,7 @@ class TestXzArchive < Testme
 
     a.level = -1
     ret = a.create
-    assert_equal(ret, false)
+    assert_equal(false, ret)
     refute_path_exist(tar_file)
     refute_path_exist(xz_file)
   end
@@ -102,7 +102,7 @@ class TestXzArchive < Testme
     d = 'test_create_invalid_dir-1.2.3'
     a.directory = d
     ret = a.create
-    assert_equal(ret, false)
+    assert_equal(false, ret)
     refute_path_exist(tar_file)
     refute_path_exist(xz_file)
   end
