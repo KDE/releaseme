@@ -1,7 +1,7 @@
-doc
-coverage
-html
-old
-output
-.yardoc
-plasma/bugzilla-cookies.inc
+/doc/
+/coverage/
+/html/
+/old/
+/output
+/.yardoc
+/plasma/bugzilla-cookies.inc
