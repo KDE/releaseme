@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2014 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -105,5 +105,16 @@ class TestXzArchive < Testme
     assert_equal(false, ret)
     refute_path_exist(tar_file)
     refute_path_exist(xz_file)
+  end
+
+  def test_path
+    a = ReleaseMe::XzArchive.new
+    a.directory = @dir
+    a.level = 1
+
+    ret = a.create
+
+    assert ret
+    assert_equal "#{Dir.pwd}/#{a.filename}", a.path
   end
 end

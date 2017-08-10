@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2014 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2007-2017 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -35,11 +35,17 @@ module ReleaseMe
     # This is nil unless create() finished successfully.
     attr_reader :filename
 
+    # @return String absolute path of archive file
+    attr_reader :path
+
+    LEVEL_RANGE = 0..9
+
     # Creates new XzArchive. @directory must be assigned seperately.
     def initialize
       @directory = nil
       @level = 9
       @filename = nil
+      @path = nil
     end
 
     ##
@@ -52,22 +58,30 @@ module ReleaseMe
     # FIXME: need routine to run and log a) command b) results c) outputs
     #++
     def create
-      tar = "#{directory}.tar"
-      xz = "#{tar}.xz"
-      return false unless File.exist?(@directory)
-      begin
-        FileUtils.rm_rf(tar)
-        FileUtils.rm_rf(xz)
-        # Note that system returns bool but only captures stdout.
-        system("tar -cf #{tar} #{directory} 2> /dev/null") || raise
-        system("xz -#{level} #{tar} 2> /dev/null") || raise
-        @filename = xz
-        return true
-      rescue
-        FileUtils.rm_rf(tar)
-        FileUtils.rm_rf(xz)
-        return false
-      end
+      xz = "#{directory}.tar.xz"
+      return false unless valid?
+      FileUtils.rm_rf(xz)
+      # Note that system returns bool but only captures stdout.
+      compress(directory, xz) || raise
+      return true
+    rescue RuntimeError
+      FileUtils.rm_rf(xz)
+      return false
+    end
+
+    private
+
+    def valid?
+      File.exist?(@directory) && LEVEL_RANGE.include?(@level)
+    end
+
+    def compress(dir, xz)
+      # Tar and compress in one go. tar supports -J for quite a while now.
+      system({ 'XZ_OPT' => "-#{level}" },
+             'tar', 'cfJ', xz, dir,
+             %i[out err] => '/dev/null')
+      @filename = xz
+      @path = File.realpath(xz)
     end
   end
 end
