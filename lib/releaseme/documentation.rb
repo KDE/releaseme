@@ -95,8 +95,10 @@ Skipping documentation :(
     def kdoctools_dirs
       Dir.glob("#{@srcdir}/**/CMakeLists.txt").collect do |file|
         next unless file.include?('doc/')
-        regex = Regexp.new('kdoctools_create_handbook\s*\(.+\s+SUBDIR\s+(?<subdir>[^\)\s]+)\)',
-                           Regexp::IGNORECASE | Regexp::MULTILINE)
+        regex = Regexp.new(
+          'kdoctools_create_handbook\s*\(.+\s+SUBDIR\s+(?<subdir>[^\)\s]+)\)',
+          Regexp::IGNORECASE | Regexp::MULTILINE
+        )
         matchdata = regex.match(File.read(file))
         next nil unless matchdata
         matchdata.named_captures.fetch('subdir', nil)
@@ -106,8 +108,10 @@ Skipping documentation :(
     def manpages
       Dir.glob("#{@srcdir}/**/CMakeLists.txt").collect do |file|
         next unless file.include?('doc/')
-        regex = Regexp.new('kdoctools_create_manpage\s*\(\s*(?<man>man-[^\)\s]+\.docbook)',
-                           Regexp::IGNORECASE | Regexp::MULTILINE)
+        regex = Regexp.new(
+          'kdoctools_create_manpage\s*\(\s*(?<man>man-[^\)\s]+\.docbook)',
+          Regexp::IGNORECASE | Regexp::MULTILINE
+        )
         matchdata = regex.match(File.read(file))
         next nil unless matchdata
         matchdata.named_captures.fetch('man', nil)
