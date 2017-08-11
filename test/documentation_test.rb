@@ -60,18 +60,20 @@ class TestDocumentation < Testme
 
   # TODO: attributes of documentation are not tested....
   def create_doc
-    ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK, 'amarok', @i18n_path)
+    ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK,
+                                     'amarok', @i18n_path)
   end
 
   def create_doc_without_translation
-    ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK, 'frenchfries', 'frenchfries')
+    ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK,
+                                     'frenchfries', 'frenchfries')
   end
 
   def test_no_doc
     # no doc present
     d = ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK,
-                              'frenchfries',
-                              @i18n_path)
+                                         'frenchfries',
+                                         @i18n_path)
     d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('variable-pot'), @dir)
