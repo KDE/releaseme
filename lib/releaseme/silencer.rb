@@ -20,6 +20,8 @@
 
 # Implements a shutup method to check if output should be done or not
 module ReleaseMe
+  # Helper methods to determine whether to be silent or not (i.e. should
+  # output be generated or not)
   module Silencer
     # Methods extending the Object a {Logable} is included in. All methods are
     # private by default.
