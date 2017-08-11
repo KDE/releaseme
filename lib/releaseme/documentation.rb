@@ -37,13 +37,7 @@ module ReleaseMe
 
     def get(srcdir)
       @srcdir = File.expand_path(srcdir)
-      @podir = if Dir.exist?("#{@srcdir}/po")
-                 "#{@srcdir}/po"
-               elsif Dir.exist?("#{@srcdir}/poqm")
-                 "#{@srcdir}/poqm"
-               else
-                 "#{@srcdir}/po" # Default to po
-               end
+      @podir = podir_from(@srcdir)
 
       langs_with_documentation = []
       langs_without_documentation = []
@@ -79,6 +73,16 @@ Skipping documentation :(
     end
 
     private
+
+    def podir_from(srcdir)
+      if Dir.exist?("#{srcdir}/po")
+        "#{srcdir}/po"
+      elsif Dir.exist?("#{srcdir}/poqm")
+        "#{srcdir}/poqm"
+      else
+        "#{srcdir}/po" # Default to po
+      end
+    end
 
     def docbook_dirs
       Dir.glob("#{@srcdir}/**/*.docbook").collect do |file|
