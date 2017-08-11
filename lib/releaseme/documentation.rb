@@ -131,9 +131,7 @@ Skipping documentation :(
     end
 
     def find_all_docs(dir)
-      doc_dirs.select do |doc_dir|
-        Dir.exist?("#{dir}/#{doc_dir}")
-      end
+      doc_dirs.select { |doc_dir| Dir.exist?("#{dir}/#{doc_dir}") }
     end
 
     def find_all_manpages(dir)
