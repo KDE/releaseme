@@ -150,8 +150,8 @@ Skipping documentation :(
       selection = (find_all_docs(tmpdir) + find_all_manpages(tmpdir)).uniq
       selection.each do |d|
         dest = "#{@podir}/#{language}/docs/#{File.dirname(d)}"
-        FileUtils.mkpath(dest, verbose: true)
-        FileUtils.cp_r("#{tmpdir}/#{d}", dest, verbose: true)
+        FileUtils.mkpath(dest)
+        FileUtils.cp_r("#{tmpdir}/#{d}", dest)
       end
 
       !selection.empty?
