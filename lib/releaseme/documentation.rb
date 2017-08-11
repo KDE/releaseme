@@ -19,11 +19,9 @@
 #++
 
 require 'fileutils'
-require 'thwait'
 
 require_relative 'cmakeeditor'
 require_relative 'logable'
-require_relative 'source'
 require_relative 'svn'
 require_relative 'translationunit'
 
