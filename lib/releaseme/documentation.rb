@@ -26,8 +26,14 @@ require_relative 'svn'
 require_relative 'translationunit'
 
 module ReleaseMe
+  # Fetches documentation localization.
   class DocumentationL10n < TranslationUnit
     prepend Logable
+
+    HANDBOOK_REGEX =
+      'kdoctools_create_handbook\s*\(.+\s+SUBDIR\s+(?<item>[^\)\s]+)\)'.freeze
+    MANPAGE_REGEX =
+      'kdoctools_create_manpage\s*\(\s*(?<item>man-[^\)\s]+\.docbook)'.freeze
 
     def vcs_l10n_path(lang)
       "#{lang}/docs/#{@i18n_path}/#{@project_name}"
@@ -90,30 +96,22 @@ Skipping documentation :(
       end
     end
 
-    def kdoctools_dirs
+    def cmake_collect_matches(regex_str)
       Dir.glob("#{@srcdir}/**/CMakeLists.txt").collect do |file|
         next unless file.include?('doc/')
-        regex = Regexp.new(
-          'kdoctools_create_handbook\s*\(.+\s+SUBDIR\s+(?<subdir>[^\)\s]+)\)',
-          Regexp::IGNORECASE | Regexp::MULTILINE
-        )
+        regex = Regexp.new(regex_str, Regexp::IGNORECASE | Regexp::MULTILINE)
         matchdata = regex.match(File.read(file))
         next nil unless matchdata
-        matchdata.named_captures.fetch('subdir', nil)
+        matchdata.named_captures.fetch('item', nil)
       end.compact
     end
 
+    def kdoctools_dirs
+      cmake_collect_matches(HANDBOOK_REGEX)
+    end
+
     def manpages
-      Dir.glob("#{@srcdir}/**/CMakeLists.txt").collect do |file|
-        next unless file.include?('doc/')
-        regex = Regexp.new(
-          'kdoctools_create_manpage\s*\(\s*(?<man>man-[^\)\s]+\.docbook)',
-          Regexp::IGNORECASE | Regexp::MULTILINE
-        )
-        matchdata = regex.match(File.read(file))
-        next nil unless matchdata
-        matchdata.named_captures.fetch('man', nil)
-      end.compact
+      cmake_collect_matches(MANPAGE_REGEX)
     end
 
     def doc_dirs
