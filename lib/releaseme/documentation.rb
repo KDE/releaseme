@@ -100,9 +100,7 @@ Skipping documentation :(
       Dir.glob("#{@srcdir}/**/CMakeLists.txt").collect do |file|
         next unless file.include?('doc/')
         regex = Regexp.new(regex_str, Regexp::IGNORECASE | Regexp::MULTILINE)
-        matchdata = regex.match(File.read(file))
-        next nil unless matchdata
-        matchdata.named_captures.fetch('item', nil)
+        (regex.match(File.read(file)) || {})[:item]
       end.compact
     end
 
