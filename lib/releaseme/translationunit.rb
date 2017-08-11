@@ -93,9 +93,9 @@ module ReleaseMe
       languages.delete_if { |l| excluded.include?(l) }
     end
 
-    def languages_queue(excluded = [])
+    def languages_queue(excluded = nil, without: [])
       queue = Queue.new
-      languages(excluded).each { |l| queue << l }
+      languages(excluded || without).each { |l| queue << l }
       queue
     end
 
@@ -122,6 +122,32 @@ module ReleaseMe
     end
 
     private
+
+    def blocking_thread_pool
+      threads = Array.new(THREAD_COUNT) do
+        Thread.new do
+          Thread.current.abort_on_exception = true
+          yield
+        end
+      end
+      ThreadsWait.all_waits(threads)
+    end
+
+    def each_language_with_tmpdir(queue = languages_queue)
+      blocking_thread_pool do
+        until queue.empty?
+          begin
+            lang = queue.pop(true)
+          rescue
+            # When pop runs into an empty queue with non_block=true it raises
+            # an exception. We'll simply continue with it as our loop should
+            # naturally end anyway.
+            continue
+          end
+          Dir.mktmpdir(self.class.to_s) { |tmpdir| yield lang, tmpdir }
+        end
+      end
+    end
 
     def url_type_suffix
       case type

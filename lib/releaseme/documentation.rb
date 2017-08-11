@@ -59,22 +59,14 @@ Skipping documentation :(
         return
       end
 
-      queue = languages_queue(%w[en])
-      threads = []
-      THREAD_COUNT.times do
-        threads << Thread.new do
-          Thread.current.abort_on_exception = true
-          until queue.empty?
-            language = queue.pop(true)
-            if get_language(language)
-              langs_with_documentation << language
-            else
-              langs_without_documentation << language
-            end
-          end
+      queue = languages_queue(without: %w[en])
+      each_language_with_tmpdir(queue) do |lang, tmpdir|
+        if get_language(lang, tmpdir)
+          langs_with_documentation << lang
+        else
+          langs_without_documentation << lang
         end
       end
-      ThreadsWait.all_waits(threads)
 
       if !langs_with_documentation.empty?
         CMakeEditor.append_doc_install_instructions!(@podir)
@@ -144,19 +136,17 @@ Skipping documentation :(
       end.flatten
     end
 
-    def get_language(language)
-      Dir.mktmpdir(self.class.to_s) do |tmpdir|
-        @vcs.get(tmpdir, "#{language}/docs/#{@i18n_path}")
+    def get_language(language, tmpdir)
+      @vcs.get(tmpdir, "#{language}/docs/#{@i18n_path}")
 
-        selection = (find_all_docs(tmpdir) + find_all_manpages(tmpdir)).uniq
-        selection.each do |d|
-          dest = "#{@podir}/#{language}/docs/#{File.dirname(d)}"
-          FileUtils.mkpath(dest, verbose: true)
-          FileUtils.cp_r("#{tmpdir}/#{d}", dest, verbose: true)
-        end
-
-        return !selection.empty?
+      selection = (find_all_docs(tmpdir) + find_all_manpages(tmpdir)).uniq
+      selection.each do |d|
+        dest = "#{@podir}/#{language}/docs/#{File.dirname(d)}"
+        FileUtils.mkpath(dest, verbose: true)
+        FileUtils.cp_r("#{tmpdir}/#{d}", dest, verbose: true)
       end
+
+      !selection.empty?
     end
   end
 end

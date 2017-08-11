@@ -63,32 +63,6 @@ module ReleaseMe
 
     private
 
-    def blocking_thread_pool
-      threads = Array.new(THREAD_COUNT) do
-        Thread.new do
-          Thread.current.abort_on_exception = true
-          yield
-        end
-      end
-      ThreadsWait.all_waits(threads)
-    end
-
-    def each_language_with_tmpdir(queue = languages_queue)
-      blocking_thread_pool do
-        until queue.empty?
-          begin
-            lang = queue.pop(true)
-          rescue
-            # When pop runs into an empty queue with non_block=true it raises
-            # an exception. We'll simply continue with it as our loop should
-            # naturally end anyway.
-            continue
-          end
-          Dir.mktmpdir(self.class.to_s) { |tmpdir| yield lang, tmpdir }
-        end
-      end
-    end
-
     def download(srcdir, languages_without_translation, target, qttarget)
       script_cache = L10nScriptDownloader::TemplateCache.new(self)
       each_language_with_tmpdir do |lang, tmpdir|
