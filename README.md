@@ -12,6 +12,9 @@ cd releaseme
 ./tarme.rb --version 1.0 --origin trunk libdebconf-kde
 ```
 
+For more details on how to make a release see
+https://community.kde.org/ReleasingSoftware
+
 ## KDELibs 4.x
 
 The `master` branch only supports KDE Frameworks based releases. To release for
@@ -105,6 +108,7 @@ branchme.
   relatively little effort)
 - Make sure you provide the finger print via a trusted source (i.e. HTTPs, not
   unsigned mails etc.)
+- Also check over https://community.kde.org/ReleasingSoftware#Sanity_Checklist
 
 ## CI State
 
