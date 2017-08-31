@@ -6,7 +6,7 @@ set -xe
 
 rm -f kde_projects.xml*
 wget http://projects.kde.org/kde_projects.xml
-WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//'`
+WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//' | grep -v qqc2-desktop-style`
 WORKSPACE="$WORKSPACE
 "
 
