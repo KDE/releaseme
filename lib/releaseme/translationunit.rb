@@ -19,6 +19,7 @@
 #++
 
 require 'thread'
+require 'thwait'
 
 require_relative 'origin'
 require_relative 'source'
