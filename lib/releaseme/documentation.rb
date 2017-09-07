@@ -31,7 +31,8 @@ module ReleaseMe
     prepend Logable
 
     HANDBOOK_REGEX =
-      'kdoctools_create_handbook\s*\(.+\s+SUBDIR\s+(?<item>[^\)\s]+)\)'.freeze
+      'kdoctools_create_handbook\s*\(.+\s+SUBDIR\s+(?<item>[^\)\s]+)\s*\)'
+      .freeze
     MANPAGE_REGEX =
       'kdoctools_create_manpage\s*\(\s*(?<item>man-[^\)\s]+\.docbook)'.freeze
 

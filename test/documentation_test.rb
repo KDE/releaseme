@@ -195,4 +195,20 @@ class TestDocumentation < Testme
       assert_equal(2, docs.size)
     end
   end
+
+  def test_doc_excess_spacing
+    # CMakeLists contains lots of excess spacing, regex should handle this and
+    # be able to retrieve the l10n.
+    d = create_doc
+    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('excess-spacing-doc'), @dir)
+    d.get(@dir)
+    Dir.chdir(@dir) do
+      docs = Dir.glob('po/*/docs/*')
+      assert_includes(docs, 'po/fr/docs/amarok')
+      assert_includes(docs, 'po/de/docs/amarok')
+      assert_equal(2, docs.size)
+    end
+  end
 end
