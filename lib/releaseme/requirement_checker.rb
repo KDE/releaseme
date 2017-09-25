@@ -29,7 +29,7 @@ module ReleaseMe
     # NOTE: The versions are restricted upwards because behavior changes in the
     # language can result in unexpected outcome when using releaseme. i.e.
     # you may end up with a broken or malformed tar. To prevent this, a change
-    # here must be followed by running `rake test` to pass the entire test suite!
+    # here must be followed by running `rake test` to pass the entire test suite
     # Also see the section on bumping versions in the REAMDE.
     COMPATIBLE_RUBIES = %w[2.1.0 2.2.0 2.3.0 2.4.0].freeze
     REQUIRED_BINARIES = %w[svn git tar xz msgfmt gpg2].freeze
@@ -39,20 +39,23 @@ module ReleaseMe
     end
 
     def check
-      err = false
-      unless ruby_compatible?
-        print "- Ruby #{COMPATIBLE_RUBIES.join(' or ')} required."
-        print "  Currently using: #{@ruby_version}"
-        err = true
-      end
-      missing_binaries.each do |m|
-        print "- Missing binary: #{m}."
-        err = true
-      end
-      raise 'Not all requirements met.' if err
+      raise 'Not all requirements met.' unless check_ruby && check_binaries
     end
 
     private
+
+    def check_ruby
+      return true if ruby_compatible?
+      print "- Ruby #{COMPATIBLE_RUBIES.join(' or ')} required."
+      print "  Currently using: #{@ruby_version}"
+      false
+    end
+
+    def check_binaries
+      missing_binaries.each do |m|
+        print "- Missing binary: #{m}."
+      end.empty?
+    end
 
     def print(*args)
       return if Silencer.shutup?
