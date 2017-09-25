@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'mkmf'
+
 # NB: cannot use other files as everything else is meant to load this first.
 require_relative 'silencer'
 
@@ -67,7 +69,7 @@ module ReleaseMe
     def missing_binaries
       missing_binaries = []
       REQUIRED_BINARIES.each do |r|
-        missing_binaries << missing(r)
+        missing_binaries << missing?(r)
       end
       missing_binaries.compact
     end
@@ -76,9 +78,26 @@ module ReleaseMe
       Gem::Dependency.new('', "~> #{a}").match?('', @ruby_version)
     end
 
-    def missing(bin)
-      return bin unless system("type #{bin} > /dev/null 2>&1")
-      nil
+    def no_mkmf_log
+      # mkmf isn't really meant for non-makefile use, so it has very clunky
+      # logging configuration, we'd like the find_executable call to be silent
+      # though, so we temporarily force mkmf to be super quiet and then undo
+      # that again (as to not interfer with expectations elsewhere).
+      quiet = MakeMakefile::Logging.quiet
+      verbose = $VERBOSE
+      MakeMakefile::Logging.quiet = true
+      $VERBOSE = false
+      yield
+    ensure
+      $VERBOSE = verbose
+      MakeMakefile::Logging.quiet = quiet
+    end
+
+    def missing?(bin)
+      no_mkmf_log do
+        return bin unless find_executable(bin)
+        nil
+      end
     end
   end
 end
