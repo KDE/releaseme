@@ -83,7 +83,7 @@ module ReleaseMe
     # Appends the install instructions for documentation in po/*
     def append_doc_install_instructions!(dir, subdir = nil)
       dir, subdir = dir_subdir_split(dir) unless subdir
-      macro = "\nfind_package(KF5DocTools CONFIG REQUIRED)\nkdoctools_install(#{subdir})\n"
+      macro = "\nfind_package(KF5DocTools CONFIG)\nif(KF5DocTools_FOUND)\n  kdoctools_install(#{subdir})\nendif()\n"
       edit_file("#{dir}/CMakeLists.txt") do |data|
         break if data =~ /.*#\s*SKIP_#{subdir.upcase}_INSTALL/
         if data.include?("##{subdir.upcase}_SUBDIR")
