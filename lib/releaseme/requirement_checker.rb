@@ -18,14 +18,80 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'mkmf'
-
 # NB: cannot use other files as everything else is meant to load this first.
 require_relative 'silencer'
 
 module ReleaseMe
   # Makes sure the runtime requirements of releasme are met.
   class RequirementChecker
+    # Finds executables. MakeMakefile is the only core ruby entity providing
+    # PATH based executable lookup, unfortunately it is really not meant to be
+    # used outside extconf.rb use cases as it mangles the main name scope by
+    # injecting itself into it (which breaks for example the ffi gem).
+    # The Shell interface's command-processor also has lookup code but it's not
+    # Windows compatible.
+    class Executable
+      attr_reader :bin
+
+      def initialize(bin)
+        @bin = bin
+      end
+
+      # Finds the executable in PATH by joining it with all parts of PATH and
+      # checking if the resulting absolute path exists and is an executable.
+      # This also honor's Windows' PATHEXT to determine the list of potential
+      # file extensions. So find('gpg2') will find gpg2 on POSIX and gpg2.exe
+      # on Windows.
+      def find
+        # PATHEXT on Windows defines the valid executable extensions.
+        exts = ENV.fetch('PATHEXT', '').split(';')
+        # On other systems we'll work with no extensions.
+        exts << '' if exts.empty?
+
+        ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+          path = unescape_path(path)
+          exts.each do |ext|
+            file = File.join(path, bin + ext)
+            return file if executable?(file)
+          end
+        end
+
+        nil
+      end
+
+      private
+
+      def executable?(path)
+        stat = File.stat(path)
+      rescue SystemCallError
+      else
+        return true if stat.file? && stat.executable?
+      end
+
+      def mswin?
+        @mswin ||= /mswin/ =~ RUBY_PLATFORM
+      end
+
+      def mingw?
+        @mingw ||= /mingw/ =~ RUBY_PLATFORM
+      end
+
+      def windows?
+        @windows ||= ENV['RELEASEME_FORCE_WINDOWS'] || mswin? || mingw?
+      end
+
+      def unescape_path(path)
+        # Strip qutation.
+        # NB: POSIX does not define any quoting mechanism so you simply cannot
+        # have colons in PATH on POSIX systems as a side effect we mustn't
+        # strip quotes as they have no syntactic meaning and instead are
+        # assumed to be part of the path
+        # http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html#tag_08_03
+        return path.sub(/\A"(.*)"\z/m, '\1') if windows?
+        path
+      end
+    end
+
     # NOTE: The versions are restricted upwards because behavior changes in the
     # language can result in unexpected outcome when using releaseme. i.e.
     # you may end up with a broken or malformed tar. To prevent this, a change
@@ -81,26 +147,9 @@ module ReleaseMe
       Gem::Dependency.new('', "~> #{a}").match?('', @ruby_version)
     end
 
-    def no_mkmf_log
-      # mkmf isn't really meant for non-makefile use, so it has very clunky
-      # logging configuration, we'd like the find_executable call to be silent
-      # though, so we temporarily force mkmf to be super quiet and then undo
-      # that again (as to not interfer with expectations elsewhere).
-      quiet = MakeMakefile::Logging.quiet
-      verbose = $VERBOSE
-      MakeMakefile::Logging.quiet = true
-      $VERBOSE = false
-      yield
-    ensure
-      $VERBOSE = verbose
-      MakeMakefile::Logging.quiet = quiet
-    end
-
     def missing?(bin)
-      no_mkmf_log do
-        return bin unless find_executable(bin)
-        nil
-      end
+      return bin unless Executable.new(bin).find
+      nil
     end
   end
 end

@@ -4,6 +4,39 @@ require_relative 'lib/testme'
 require_relative '../lib/releaseme/requirement_checker'
 
 class TestRequirementChecker < Testme
+  class ExecutableTest < Testme
+    Executable = ReleaseMe::RequirementChecker::Executable
+
+    def setup
+      ENV['PATH'] = Dir.pwd
+    end
+
+    def make_exe(name)
+      File.write(name, '')
+      File.chmod(0o700, name)
+    end
+
+    def test_exec
+      make_exe('gpg2')
+      assert_equal "#{Dir.pwd}/gpg2", Executable.new('gpg2').find
+      assert_equal nil, Executable.new('foobar').find
+    end
+
+    def test_windows
+      # windows
+      ENV['RELEASEME_FORCE_WINDOWS']
+      make_exe('gpg2.exe')
+      make_exe('svn.com')
+
+      ENV['PATHEXT'] = '.COM;.EXE'.downcase # downcase so this passes on Linux
+      ENV['PATH'] = Dir.pwd
+
+      assert_equal "#{Dir.pwd}/gpg2.exe", Executable.new('gpg2').find
+      assert_equal "#{Dir.pwd}/svn.com", Executable.new('svn').find
+      assert_nil Executable.new('foobar').find
+    end
+  end
+
   def assert_ruby_version_compatible(version)
     checker = ReleaseMe::RequirementChecker.new
     checker.instance_variable_set(:@ruby_version, version)
