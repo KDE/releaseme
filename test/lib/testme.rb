@@ -40,6 +40,7 @@ module TestMeExtension
   end
 
   def before_setup
+    @orig_env = ENV.to_h # to_h causes a full deserialization
     ENV['RELEASEME_SHUTUP'] = 'true'
     @tmpdir = Dir.mktmpdir("testme-#{self.class.to_s.tr(':', '_')}")
     @testdir = File.expand_path(File.dirname(File.dirname(__FILE__))).to_s
@@ -55,6 +56,8 @@ module TestMeExtension
     teardown_git
     Dir.chdir(@pwdir)
     FileUtils.rm_rf(@tmpdir)
+    # Restore original env
+    ENV.replace(@orig_env)
     super
   end
 
