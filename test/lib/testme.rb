@@ -41,7 +41,7 @@ module TestMeExtension
 
   def before_setup
     ENV['RELEASEME_SHUTUP'] = 'true'
-    @tmpdir = Dir.mktmpdir("testme-#{self.class}")
+    @tmpdir = Dir.mktmpdir("testme-#{self.class.to_s.tr(':', '_')}")
     @testdir = File.expand_path(File.dirname(File.dirname(__FILE__))).to_s
     @datadir = "#{@testdir}/data"
     @pwdir = Dir.pwd
