@@ -1,0 +1,5 @@
+[main]
+customsrc=kde:ktechlab
+gitbranch=master
+branch=trunk
+protocol=anonsvn
