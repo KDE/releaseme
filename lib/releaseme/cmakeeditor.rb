@@ -38,78 +38,157 @@ module ReleaseMe
       "add_subdirectory(#{rel})\n"
     end
 
-    # Helper, append methods can get one arg, which is expected to be a
-    # path we can split into its pieces.
-    # TODO: possibly deprecate calling the appends with two args altogether.
-    def dir_subdir_split(dir)
-      [File.dirname(dir), File.basename(dir)]
-    end
+    # Base class for cmake editor implementations.
+    # An editor opens a cmakelists and edits it to fit a certain expectation.
+    # An editor always works with a cmakelists inside a dir and adds/changes
+    # the reference to a given subdir (e.g. doc/).
+    # Editing does not happen if `# SKIP_$SUBDIR_INSTALL` is in the CMakeLists.
+    # If ``#$SUBDIR_SUBDIR` is in the CMakeLists the comment will be replaced
+    # with the actual code (handy for if conditionally the entire block).
+    # Otherwise the block will be appended to the file.
+    #
+    # An editor needs to implement a method `macro` which returns a string
+    # of the block to paste into the file.
+    # It also needs `already_edited?` to regex the content to determine
+    # if the functional bit of the maybe is already in the file (e.g.
+    # ki18n_install is already called somewhere).
+    class CMakeEditorBase
+      # The directory in which we want to edit the cmakelists
+      attr_reader :dir
 
-    def edit_file(file)
-      data = File.read(file)
-      yield data
-      File.write(file, data)
-    end
+      # The directory which we are referencing in the edit.
+      attr_reader :subdir
 
-    # Appends the install instructions for po/*
-    def append_po_install_instructions!(dir, subdir = nil)
-      dir, subdir = dir_subdir_split(dir) unless subdir
-      macro = "\nfind_package(KF5I18n CONFIG REQUIRED)\nki18n_install(#{subdir})\n"
-      edit_file("#{dir}/CMakeLists.txt") do |data|
-        break if data =~ /.*#\s*SKIP_#{subdir.upcase}_INSTALL/
-        if data.include?("##{subdir.upcase}_SUBDIR")
-          data.sub!("##{subdir.upcase}_SUBDIR", macro)
-        elsif (data =~ /^\s*(ki18n_install)\s*\(\s*#{subdir}\s*\).*$/).nil? &&
-              (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
-          data << macro
+      # Data of the cmakelists, only avaiable during editing!
+      attr_reader :data
+
+      def initialize(dir, subdir: nil)
+        @dir = dir
+        @subdir = subdir
+        @dir, @subdir = dir_subdir_split(dir) unless subdir
+      end
+
+      def run
+        edit_file("#{dir}/CMakeLists.txt") do
+          break if skip? || already_edited?
+          edit!
         end
       end
-    end
 
-    # Appends the install instructions for poqm/*
-    def append_poqm_install_instructions!(dir, subdir = nil)
-      dir, subdir = dir_subdir_split(dir) unless subdir
-      macro = "\necm_install_po_files_as_qm(#{subdir})\n"
-      edit_file("#{dir}/CMakeLists.txt") do |data|
-        break if data =~ /.*#\s*SKIP_#{subdir.upcase}_INSTALL/
+      private
+
+      def edit!
         if data.include?("##{subdir.upcase}_SUBDIR")
           data.sub!("##{subdir.upcase}_SUBDIR", macro)
-        elsif (data =~ /^\s*(ecm_install_po_files_as_qm)\s*\(\s*#{subdir}\s*\).*$/).nil?
-          data << macro
-        end
-      end
-    end
-
-    # Appends the install instructions for documentation in po/*
-    def append_doc_install_instructions!(dir, subdir = nil)
-      dir, subdir = dir_subdir_split(dir) unless subdir
-      macro = "\nfind_package(KF5DocTools CONFIG)\nif(KF5DocTools_FOUND)\n  kdoctools_install(#{subdir})\nendif()\n"
-      edit_file("#{dir}/CMakeLists.txt") do |data|
-        break if data =~ /.*#\s*SKIP_#{subdir.upcase}_INSTALL/
-        if data.include?("##{subdir.upcase}_SUBDIR")
-          data.sub!("##{subdir.upcase}_SUBDIR", macro)
-        elsif (data =~ /^\s*(kdoctools_install)\s*\(\s*#{subdir}\s*\).*$/).nil?
-          data << macro
-        end
-      end
-    end
-
-    # Appends the inclusion of subdir/CMakeLists.txt
-    def append_optional_add_subdirectory!(dir, subdir = nil)
-      dir, subdir = dir_subdir_split(dir) unless subdir
-      macro = "\ninclude(ECMOptionalAddSubdirectory)\necm_optional_add_subdirectory(#{subdir})\n"
-      edit_file("#{dir}/CMakeLists.txt") do |data|
-        break if data =~ /.*#\s*SKIP_#{subdir.upcase}_INSTALL/
-        if data.include?("##{subdir.upcase}_SUBDIR")
-          data.sub!("##{subdir.upcase}_SUBDIR", macro)
-        elsif (data =~ /^\s*(add_subdirectory|ecm_optional_add_subdirectory)\s*\(\s*#{subdir}\s*\).*$/).nil?
+        else
           # TODO: needs test case
           # Mighty fancy regex looking for existing add_subdir.
           # Basically allows spaces everywhere one might want to put spaces.
-          # At the end we allow everything as there may be a comment for example.
+          # At the end we allow everything as there may be a comment for
+          # example.
           data << macro
         end
       end
+
+      # Checks if data contains a cmake method call with subdir as argument
+      def subdir_method_call?(method_pattern)
+        data.match?(method_call_regex_of(method_pattern))
+      end
+
+      def method_call_regex_of(method_pattern)
+        /^\s*(#{method_pattern})\s*\(\s*#{subdir}\s*\).*$/
+      end
+
+      def skip?
+        data =~ /.*#\s*SKIP_#{subdir.upcase}_INSTALL/
+      end
+
+      def edit_file(file)
+        @data = File.read(file)
+        yield
+        File.write(file, @data)
+      end
+
+      def dir_subdir_split(dir)
+        [File.dirname(dir), File.basename(dir)]
+      end
+    end
+
+    # Appends the install instructions for po/*
+    class AppendPOInstallInstructions < CMakeEditorBase
+      def already_edited?
+        subdir_method_call?('ki18n_install') ||
+          subdir_method_call?('ecm_install_po_files_as_qm')
+      end
+
+      def macro
+        "\n" + <<-CMAKE
+find_package(KF5I18n CONFIG REQUIRED)
+ki18n_install(#{subdir})
+      CMAKE
+      end
+    end
+
+    # Compatibility, see AppendPOInstallInstructions.
+    def append_po_install_instructions!(dir, subdir = nil)
+      AppendPOInstallInstructions.new(dir, subdir: subdir).run
+    end
+
+    # Appends the install instructions for poqm/*
+    class AppendPOQMInstallInstructions < CMakeEditorBase
+      def already_edited?
+        subdir_method_call?('ecm_install_po_files_as_qm')
+      end
+
+      def macro
+        "\necm_install_po_files_as_qm(#{subdir})\n"
+      end
+    end
+
+    # Compatibility, see AppendPOQMInstallInstructions.
+    def append_poqm_install_instructions!(dir, subdir = nil)
+      AppendPOQMInstallInstructions.new(dir, subdir: subdir).run
+    end
+
+    # Appends the install instructions for documentation in po/*
+    class AppendDocInstallInstructions < CMakeEditorBase
+      def already_edited?
+        subdir_method_call?('kdoctools_install')
+      end
+
+      def macro
+        "\n" + <<-CMAKE
+  find_package(KF5DocTools CONFIG)
+  if(KF5DocTools_FOUND)
+    kdoctools_install(#{subdir})
+  endif()
+        CMAKE
+      end
+    end
+
+    # Compatibility, see AppendDocInstallInstructions.
+    def append_doc_install_instructions!(dir, subdir = nil)
+      AppendDocInstallInstructions.new(dir, subdir: subdir).run
+    end
+
+    # Appends the inclusion of subdir/CMakeLists.txt
+    class AppendOptionalAddSubdirectory < CMakeEditorBase
+      def already_edited?
+        subdir_method_call?('add_subdirectory') ||
+          subdir_method_call?('ecm_optional_add_subdirectory')
+      end
+
+      def macro
+        "\n" + <<-CMAKE
+  include(ECMOptionalAddSubdirectory)
+  ecm_optional_add_subdirectory(#{subdir})
+        CMAKE
+      end
+    end
+
+    # Compatibility, see AppendOptionalAddSubdirectory.
+    def append_optional_add_subdirectory!(dir, subdir = nil)
+      AppendOptionalAddSubdirectory.new(dir, subdir: subdir).run
     end
   end
 end
