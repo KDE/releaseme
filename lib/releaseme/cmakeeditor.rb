@@ -92,7 +92,7 @@ module ReleaseMe
 
       # Checks if data contains a cmake method call with subdir as argument
       def subdir_method_call?(method_pattern)
-        data.match?(method_call_regex_of(method_pattern))
+        data =~ method_call_regex_of(method_pattern)
       end
 
       def method_call_regex_of(method_pattern)
