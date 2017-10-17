@@ -2,12 +2,6 @@
 
 require_relative 'lib/plasma-tag-test'
 
-tagTest = PlasmaTagTest.new
-tagTest.get_git_repos
-tagTest.check_tags
-
-#class with methods to:
-# get list of git repos
-# for each repo git tag
-# check it has tag for version
-# print result
+tag_test = PlasmaTagTest.new
+tag_test.grab_git_repos
+tag_test.check_tags
