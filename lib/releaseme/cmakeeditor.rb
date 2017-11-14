@@ -59,7 +59,7 @@ module ReleaseMe
       # The directory which we are referencing in the edit.
       attr_reader :subdir
 
-      # Data of the cmakelists, only avaiable during editing!
+      # Data of the cmakelists, only available during editing!
       attr_reader :data
 
       def initialize(dir, subdir: nil)

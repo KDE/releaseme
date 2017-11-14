@@ -40,7 +40,7 @@ module ReleaseMe
 
     LEVEL_RANGE = 0..9
 
-    # Creates new XzArchive. @directory must be assigned seperately.
+    # Creates new XzArchive. @directory must be assigned separately.
     def initialize
       @directory = nil
       @level = 9
