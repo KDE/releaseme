@@ -1,0 +1,15 @@
+{
+  "exclude": "(^test/)",
+  "linters": {
+    "spelling": {
+      "type": "spelling"
+    },
+    "merge-conflict": {
+      "type": "merge-conflict"
+    },
+    "ruby": {
+      "type": "ruby",
+      "include": "(\\.rb$)"
+    }
+  }
+}
