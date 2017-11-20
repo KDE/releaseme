@@ -57,6 +57,12 @@ module ReleaseMe
         logger.warn(str) unless shutup?
       end
 
+      # Logs as fatal type
+      # @param str [String] the string to log
+      def log_fatal(str)
+        logger.fatal(str) unless shutup?
+      end
+
       # Logs as debug type
       # @param str [String] the string to log
       def log_debug(str)
