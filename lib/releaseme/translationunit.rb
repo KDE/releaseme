@@ -52,7 +52,7 @@ module ReleaseMe
 
     # Languages that will by default be dropped from the list of languages
     # obtained from SVN.
-    DEFAULT_EXCLUDED_LANGUAGES = %w(x-test).freeze
+    DEFAULT_EXCLUDED_LANGUAGES = %w[x-test].freeze
 
     # anonsvn only allows 5 concurrent connections.
     THREAD_COUNT = 5
