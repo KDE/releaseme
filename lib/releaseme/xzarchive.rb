@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require_relative 'assert_case_insensitive'
+
 module ReleaseMe
   ##
   # Tar-XZ Archiving Class.
@@ -72,7 +74,12 @@ module ReleaseMe
     private
 
     def valid?
-      File.exist?(@directory) && LEVEL_RANGE.include?(@level)
+      File.exist?(@directory) && LEVEL_RANGE.include?(@level) && asserts
+    end
+
+    def asserts
+      AssertCaseInsensitive.assert(@directory)
+      true # Included in && chain.
     end
 
     def compress(dir, xz)
