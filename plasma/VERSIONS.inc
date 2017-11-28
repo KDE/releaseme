@@ -2,9 +2,9 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.11.3
+VERSION=5.11.4
 SHORT_VERSION=5.11
-OLD_VERSION=5.11.2
+OLD_VERSION=5.11.3
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -21,9 +21,9 @@ UPLOADSERVER="ftpadmin@racnoss.kde.org"
 PLASMA_CLONES="/home/jr/src/plasma/"                       # a directory containing khotkeys/neongit/khotkeys/ etc for each repo
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 7 November 2017" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Tuesday, 28 November 2017" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="November" # usually `LC_ALL=C date "+%B" --date="next Tue"`
-TIMESINCELASTRELEASE="fortnight's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
+TIMESINCELASTRELEASE="three week's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
