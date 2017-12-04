@@ -2,7 +2,7 @@
 #
 # Generates a release tarball
 #
-# Copyright © 2014 Thomas Fischer <fischer@unix-ag.uni-kl.de>
+# Copyright © 2014-2017 Thomas Fischer <fischer@unix-ag.uni-kl.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
