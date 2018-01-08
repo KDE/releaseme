@@ -11,7 +11,7 @@ rescue LoadError
 end
 
 require 'rake/testtask'
-Rake::TestTask.new(:test) do |t|
+Rake::TestTask.new('test::unit') do |t|
   t.libs << 'test'
   t.libs << 'lib'
   t.options = '--pride'
@@ -23,6 +23,13 @@ Rake::TestTask.new('test::integration') do |t|
   t.test_files = FileList['test/integration/*_test.rb']
   t.verbose = true
 end
+
+task :codeclimate do
+  sh 'codeclimate-test-reporter'
+end
+
+task :test => 'test::unit'
+task :test => :codeclimate if ENV.include?('CODECLIMATE_REPO_TOKEN')
 
 require 'rdoc/task'
 RDoc::Task.new do |rdoc|
@@ -47,10 +54,5 @@ cond_require 'rubocop/rake_task' do
   end
   task :quality => :rubocop
 end
-
-task :codeclimate do
-  sh 'codeclimate-test-reporter'
-end
-task :test => :codeclimate if ENV.include?('CODECLIMATE_REPO_TOKEN')
 
 task :default => :test
