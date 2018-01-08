@@ -49,7 +49,7 @@ Gem::Specification.new do |spec|
   # Testing
   spec.add_development_dependency 'minitest'
   spec.add_development_dependency 'webmock'
-  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'simplecov', '>= 0.11'
   spec.add_development_dependency 'codeclimate-test-reporter'
   spec.add_development_dependency 'pullreview-coverage'
   spec.add_development_dependency 'mocha'

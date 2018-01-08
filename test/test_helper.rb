@@ -26,7 +26,7 @@ formatters << SimpleCov::Formatter::HTMLFormatter
 
 require 'simplecov'
 SimpleCov.start do
-  formatter SimpleCov::Formatter::MultiFormatter[*formatters]
+  formatter SimpleCov::Formatter::MultiFormatter.new(formatters)
   add_filter do |src|
     # Special compat file for testing the compat code itself.
     next false if File.basename(src.filename) == 'compat_compat.rb'
