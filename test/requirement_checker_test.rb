@@ -61,7 +61,7 @@ class TestRequirementChecker < Testme
   end
 
   def test_versions
-    compatibles = %w(
+    compatibles = %w[
       2.1
       2.1.0
       2.1.1
@@ -74,15 +74,15 @@ class TestRequirementChecker < Testme
       2.4.1
       2.5
       2.5.1
-    )
+    ]
     compatibles.each { |i| assert_ruby_version_compatible(i) }
-    incompatibles = %w(
+    incompatibles = %w[
       1.9.0
       2.0
       2.0.99
       2.6
       2.6.1
-    )
+    ]
     incompatibles.each { |i| assert_ruby_version_not_compatible(i) }
   end
 
