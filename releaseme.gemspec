@@ -44,16 +44,17 @@ Gem::Specification.new do |spec|
   # Development
   spec.add_development_dependency 'rake', '~> 10.0'
   # Documentation
-  spec.add_development_dependency 'yard'
   spec.add_development_dependency 'rdoc'
+  spec.add_development_dependency 'yard'
   # Testing
   spec.add_development_dependency 'minitest'
+  spec.add_development_dependency 'mocha'
   spec.add_development_dependency 'webmock'
-  spec.add_development_dependency 'simplecov', '>= 0.11'
+  # Coverage
   spec.add_development_dependency 'codeclimate-test-reporter', '~> 1.0'
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'pullreview-coverage'
-  spec.add_development_dependency 'mocha'
+  spec.add_development_dependency 'simplecov', '>= 0.11'
   # Quality
   spec.add_development_dependency 'rubocop'
 end
