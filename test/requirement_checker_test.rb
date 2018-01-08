@@ -19,7 +19,7 @@ class TestRequirementChecker < Testme
     def test_exec
       make_exe('gpg2')
       assert_equal "#{Dir.pwd}/gpg2", Executable.new('gpg2').find
-      assert_equal nil, Executable.new('foobar').find
+      assert_nil Executable.new('foobar').find
     end
 
     def test_windows
