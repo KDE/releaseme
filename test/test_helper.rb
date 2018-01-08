@@ -1,11 +1,6 @@
-formatters = []
+require 'simplecov'
 
-begin
-  require 'codeclimate-test-reporter'
-  formatters << CodeClimate::TestReporter::Formatter
-rescue LoadError
-  warn 'codeclimate reporter not available, not sending reports to server'
-end
+formatters = []
 
 begin
   require 'coveralls'
@@ -24,7 +19,6 @@ end
 # HTML formatter.
 formatters << SimpleCov::Formatter::HTMLFormatter
 
-require 'simplecov'
 SimpleCov.start do
   formatter SimpleCov::Formatter::MultiFormatter.new(formatters)
   add_filter do |src|

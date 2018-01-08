@@ -48,4 +48,9 @@ cond_require 'rubocop/rake_task' do
   task :quality => :rubocop
 end
 
+task :codeclimate do
+  sh 'codeclimate-test-reporter'
+end
+task :test => :codeclimate if ENV.include?('CODECLIMATE_REPO_TOKEN')
+
 task :default => :test
