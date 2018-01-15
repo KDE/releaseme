@@ -16,5 +16,6 @@ cat git-repositories-for-release | tr " " "\n" | sort | tr "\n" " " > git-reposi
 mv git-repositories-for-release-sorted git-repositories-for-release
 sed "s,kaccounts-mobile ,," -i git-repositories-for-release
 sed "s,qqc2-desktop-style ,," -i git-repositories-for-release
+sed "s,plasma-browser-integration ,," -i git-repositories-for-release
 wdiff git-repositories-for-release-old git-repositories-for-release
 echo == git-repositories-for-release updated

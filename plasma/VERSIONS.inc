@@ -2,27 +2,27 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.11.4
+VERSION=5.11.95
 SHORT_VERSION=5.11
-OLD_VERSION=5.11.3
-ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
-FTPSTABLE=stable  # set to unstable or stable
+OLD_VERSION=5.11.5
+ORIGIN=trunk  # git branch as set in projects.k.o, set to trunk or stable
+FTPSTABLE=unstable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
-BRANCH=Plasma/5.11 # set to master or Plasma/5.x
-MINOR_RELEASE_MONTH=October # for announcement, when was 5.x.0 released
+BRANCH=master # set to master or Plasma/5.x
+MINOR_RELEASE_MONTH=January # for announcement, when was 5.x.0 released
 
-RELEASETYPE=Bugfix # for changelog, set to Beta, Feature or Bugfix
+RELEASETYPE=Beta # for changelog, set to Beta, Feature or Bugfix
 
 INFOCHECKOUT="/home/jr/src/www/www/info"                   # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/info/
 ANNOUNCECHECKOUT="/home/jr/src/www/www/announcements"      # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
 L10NSCRIPTSCHECKOUT="/home/jr/src/www/l10n-kde4/scripts"   # svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kde4/scripts/
 WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/
 UPLOADSERVER="ftpadmin@racnoss.kde.org"
-PLASMA_CLONES="/home/jr/src/plasma/"                       # a directory containing khotkeys/neongit/khotkeys/ etc for each repo
 #UPLOADSERVER="weegie"
+PLASMA_CLONES="/home/jr/src/plasma/"                       # a directory containing khotkeys/neongit/khotkeys/ etc for each repo
 
-RELEASEDATE="Tuesday, 28 November 2017" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEMONTH="November" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+RELEASEDATE="Monday, 15 January 2018" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEMONTH="January" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="three week's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
