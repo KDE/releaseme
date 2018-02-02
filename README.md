@@ -94,16 +94,19 @@ branchme.
   twitter, facebook, g+ etc. etc. etc.)
 
 ## Best Practise
-- Use discrete version numbers. No -beta or whatever suffixes. Use appropriately
-  large version numbers to represent the pre-release status.
-  A common scheme employed is to use .7x for alpha, .8x for beta, .9x for rc.
-  So for example 5.1 alpha1 would be 5.0.71.
-- tarme -> check results -> tagme. You really should not tag unless you are
-  sure your tar is of suitable quality.
 - No backsies! Once you published your tarball (that is: as soon as it hits
   download.kde.org publically) you have to increase the version number.
   This can be as trivial as simply appending a new position with .1 e.g.:
   2.0.0 becomes 2.0.0.1
+- Use discrete version numbers. No -beta or whatever suffixes. Use appropriately
+  large version numbers to represent the pre-release status.
+  A common scheme employed is to use .7x for alpha, .8x for beta, .9x for rc.
+  So for example 5.1 alpha1 would be 5.0.71.
+- Do not use any random non-digit suffixes to versions, as above! Always
+  stick to digits and points only!
+  No 2.0.0-1, no 2.0.0a, no 2.0.0-beta, no 2.0.0alpha, no 2.0.0.real, etc.
+- tarme -> check results -> tagme. You really should not tag unless you are
+  sure your tar is of suitable quality.
 - Always provide the full GPG finger print (short ids can be collided with
   relatively little effort)
 - Make sure you provide the finger print via a trusted source (i.e. HTTPs, not
