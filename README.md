@@ -102,8 +102,8 @@ branchme.
   large version numbers to represent the pre-release status.
   A common scheme employed is to use .7x for alpha, .8x for beta, .9x for rc.
   So for example 5.1 alpha1 would be 5.0.71.
-- Do not use any random non-digit suffixes to versions, as above! Always
-  stick to digits and points only!
+- Do not use any random non-digit suffixes to versions! Always stick to digits
+  and points only!
   No 2.0.0-1, no 2.0.0a, no 2.0.0-beta, no 2.0.0alpha, no 2.0.0.real, etc.
 - tarme -> check results -> tagme. You really should not tag unless you are
   sure your tar is of suitable quality.
