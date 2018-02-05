@@ -94,6 +94,7 @@ branchme.
   twitter, facebook, g+ etc. etc. etc.)
 
 ## Best Practise
+
 - No backsies! Once you published your tarball (that is: as soon as it hits
   download.kde.org publically) you have to increase the version number.
   This can be as trivial as simply appending a new position with .1 e.g.:
