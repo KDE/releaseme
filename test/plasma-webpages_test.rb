@@ -52,8 +52,8 @@ class TestPlasmaWebpages < Testme
     refute_equal({}, plasma_versions.values)
     assert_equal('5.9.1', plasma_versions.values['VERSION'])
     assert_equal('5.9.1', plasma_versions.version)
-    assert_equal('Feature', plasma_versions.values['RELEASETYPE'])
-    assert_equal('Feature', plasma_versions.releasetype)
+    assert_equal('Bugfix', plasma_versions.values['RELEASETYPE'])
+    assert_equal('Bugfix', plasma_versions.releasetype)
     assert_raises NoMethodError do
       plasma_versions.yolo
     end

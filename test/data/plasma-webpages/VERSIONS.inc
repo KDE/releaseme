@@ -11,7 +11,7 @@ OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.9 # set to master or Plasma/5.x
 MINOR_RELEASE_MONTH=January # for announcement, when was 5.x.0 released
 
-RELEASETYPE=Feature # for changelog, set to Beta, Feature or Bugfix
+RELEASETYPE=Bugfix # for changelog, set to Beta, Feature or Bugfix
 
 INFOCHECKOUT="/home/jr/src/www/www/info"                   # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/info/
 ANNOUNCECHECKOUT="/home/jr/src/www/www/announcements"      # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
