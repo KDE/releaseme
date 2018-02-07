@@ -2,16 +2,16 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.10.4
-SHORT_VERSION=5.10
-OLD_VERSION=5.10.3
-ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
+VERSION=5.8.9
+SHORT_VERSION=5.8
+OLD_VERSION=5.8.8
+ORIGIN=lts  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
-BRANCH=Plasma/5.10 # set to master or Plasma/5.x
-MINOR_RELEASE_MONTH=May # for announcement, when was 5.x.0 released
+BRANCH=Plasma/5.8 # set to master or Plasma/5.x
+MINOR_RELEASE_MONTH=October # for announcement, when was 5.x.0 released
 
-RELEASETYPE=Bugfix # for changelog, set to Beta, Feature or Bugfix
+RELEASETYPE=Bugfix # for changelog, set to beta, feature or bugfix
 
 INFOCHECKOUT="/home/jr/src/www/www/info"                   # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/info/
 ANNOUNCECHECKOUT="/home/jr/src/www/www/announcements"      # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
@@ -20,13 +20,13 @@ WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.k
 UPLOADSERVER="ftpadmin@racnoss.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 18 July 2017" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEMONTH="June" # usually `LC_ALL=C date "+%B" --date="next Tue"`
-TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
+RELEASEDATE="Wednesday, 7 February 2018" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEMONTH="February" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+TIMESINCELASTRELEASE="three months'" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
-YOUTUBEID="VtdTC2Mh070" # The video ID used in URL for youtube
+YOUTUBEID="LgH1Clgr-uE" # The video ID used in URL for youtube
 
 GPG_KEY=0xEC94D18F7F05997E
 RELEASE_DUDE="Jonathan Riddell"
