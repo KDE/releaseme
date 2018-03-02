@@ -27,7 +27,7 @@ TIMESINCELASTRELEASE="a week's" # in sentence 'This release adds a TIMESINCELAST
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
-YOUTUBEID="nMFDrBIA0PM" # The video ID used in URL for youtube
+YOUTUBEID="xha6DJ_v1E4" # The video ID used in URL for youtube
 
 GPG_KEY=0xEC94D18F7F05997E
 RELEASE_DUDE="Jonathan Riddell"
