@@ -96,7 +96,7 @@ module ReleaseMe
       end
 
       def method_call_regex_of(method_pattern)
-        /^\s*(#{method_pattern})\s*\(\s*#{subdir}\s*\).*$/
+        /^\s*(#{method_pattern})\s*\(\s*#{subdir}\s*\).*$/i
       end
 
       def skip?
