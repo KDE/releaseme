@@ -52,4 +52,4 @@ def custom
 end
 
 # get things started
-require 'lib/starter'
+require_relative 'lib/starter'
