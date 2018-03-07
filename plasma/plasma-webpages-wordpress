@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'rubypress'
+
+require_relative 'lib/plasma_info_template_wp'
+require_relative 'lib/plasma_announce_template_wp'
+require_relative 'lib/plasma_version'
+
+#Put USERNAME='foo' PASSWORD='bar' in wordpress_access.rb
+require_relative 'wordpress_access'
+
+
+wp = Rubypress::Client.new(:host => "jriddell.org",
+                           :username => USERNAME,
+                           :password => PASSWORD)
+
+
+plasma_versions = PlasmaVersion.new
+version = plasma_versions.version
+
+info_template = PlasmaInfoTemplateWp.new
+info_output = info_template.render
+new_post = wp.newPost( :blog_id => "0", # 0 unless using WP Multi-Site, then use the blog id
+               :content => {
+                         :post_type    => "page",
+                         :post_status  => "publish",
+                         :post_date    => Time.now,
+                         :post_content => "This is the body",
+                         :post_title   => "RubyPress is the best!",
+                         :post_name    => "/rubypress-is-the-best",
+                         :post_author  => 1} # 1 if there is only the admin user, otherwise the user's id
+              )
+puts "Published info at #{new_post}"
+
+announce_template = PlasmaAnnounceTemplateWp.new
+announce_output = announce_template.render
+new_post = wp.newPost( :blog_id => "0", # 0 unless using WP Multi-Site, then use the blog id
+               :content => {
+                         :post_type    => "page",
+                         :post_status  => "publish",
+                         :post_date    => Time.now,
+                         :post_content => "This is the body",
+                         :post_title   => "RubyPress is the best!",
+                         :post_name    => format("/rubypress-is-the-best-%s", version),
+                         :post_author  => 1} # 1 if there is only the admin user, otherwise the user's id
+              )
+puts "Published announce at #{new_post}"
+
+
+changelog_file = format('plasma-%s-%s-changelog.php',
+                        plasma_versions.old_version,
+                        version)
+new_post = wp.newPost( :blog_id => "0", # 0 unless using WP Multi-Site, then use the blog id
+               :content => {
+                         :post_type    => "page",
+                         :post_status  => "publish",
+                         :post_date    => Time.now,
+                         :post_content => 'plasma-%s-%s-changelog.php contents',
+                         :post_title   => "RubyPress is the best!",
+                         :post_name    => format("/rubypress-is-the-best-%s", version),
+                         :post_author  => 1} # 1 if there is only the admin user, otherwise the user's id
+              )
+puts "Published changelog at #{new_post}"
+
+
+system('firefox', "https://www.kde.org/announcements/plasma-#{version}.php")
+system('firefox', "https://www.kde.org/announcements/plasma-#{plasma_versions.old_version}-#{version}-changelog.php")
+system('firefox', "https://www.kde.org/info/plasma-#{version}.php")
+
+#system('sed',
+#       "s,release_files\\[\"plasma-#{plasma_versions.old_version}\"\] = \\[\"plasma-#{plasma_versions.old_version}.php\"\],release_files[\"plasma-#{plasma_versions.old_version}\"] = [\"plasma-##{plasma_versions.old_version}.php\"]\\n  release_files[\"plasma-#{version}\"] = [\"plasma-#{version}.php\"],", "generate_release_data.py", "-i",
+#       chdir: plasma_versions.l10nscriptscheckout)
+#system('svn', 'diff', chdir: plasma_versions.l10nscriptscheckout)
+#system('svn', 'commit', '-m', "add Plasma #{version} announcement", chdir: plasma_versions.l10nscriptscheckout)

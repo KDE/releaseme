@@ -1,1 +1,2 @@
 gem 'git'
+gem 'rubypress'
