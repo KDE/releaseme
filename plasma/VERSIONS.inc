@@ -2,9 +2,9 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.12.3
+VERSION=5.12.4
 SHORT_VERSION=5.12
-OLD_VERSION=5.12.2
+OLD_VERSION=5.12.3
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -21,7 +21,7 @@ UPLOADSERVER="ftpadmin@racnoss.kde.org"
 #UPLOADSERVER="weegie"
 PLASMA_CLONES="/home/jr/src/plasma/"                       # a directory containing khotkeys/neongit/khotkeys/ etc for each repo
 
-RELEASEDATE="Tuesday, 6 March 2018" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Tuesday, 27 March 2018" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="March" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a fortnight's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
 
