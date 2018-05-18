@@ -70,6 +70,6 @@ firefox https://www.reddit.com/r/kde/submit
 firefox https://dot.kde.org/#overlay=node/add/story
 
 # e-mail release-team@kde.org, plasma-devel@kde.org with the happy news
-echo "e-mail me to release-team@kde.org, plasma-devel@kde.org" > tmp-announcements/release-team
+echo "e-mail me to kde-announce@kde.org, release-team@kde.org, plasma-devel@kde.org" > tmp-announcements/release-team
 echo "Plasma ${VERSION} is now released https://www.kde.org/announcements/plasma-${VERSION}.php" >> tmp-announcements/release-team
 kate tmp-announcements/release-team
