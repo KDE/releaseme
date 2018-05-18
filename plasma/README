@@ -29,6 +29,9 @@ on beta tar day branch:
   run ./plasma-branch
   edit ./plasma-update-versions to override versions to set 5.x.80 and run it for master
   Update kde:kde-build-metadata/logical-module-structure top use new branch Plasma/5.x and build that branch in build.kde.org
+  build.kde.org CI: log in, switch to "CI Management", run "DSL Job Seed" to make sure any latest build-metadata is picked up,
+      once done trigger "Global Rebuild Plasma stable*" builds, which will first update dependencies to latest needs and then
+      trigger rebuild of any modules
   ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages and update repo-metadata
   Update https://community.kde.org/Plasma/Live_Images
  
