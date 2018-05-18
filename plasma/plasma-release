@@ -4,6 +4,8 @@ set -xe
 
 . VERSIONS.inc
 
+sudo apt install w3m
+
 ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
 
 # remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
@@ -53,7 +55,6 @@ mkdir tmp-announcements
 ./plasma-dot-story -v ${VERSION} > tmp-announcements/DOT-STORY.html
 kate tmp-announcements/DOT-STORY.html
 
-sudo apt install w3m
 w3m tmp-announcements/DOT-STORY.html  -dump > tmp-announcements/KDE-ANNOUNCE_TEXT.txt
 sed -i "s,Live Images.*,https://www.kde.org/announcements/plasma-${VERSION}.php\nhttps://www.kde.org/announcements/plasma-${OLD_VERSION}-${VERSION}-changelog.php," tmp-announcements/KDE-ANNOUNCE_TEXT.txt
 echo "e-mail me to kde-announce@kde.org" > tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
