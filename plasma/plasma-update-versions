@@ -19,8 +19,7 @@ for project in $WORKSPACE; do
   project=`basename $project`
   if [ $project != "breeze-grub" ]; then
     echo ${project};
-    git clone kde:${projectrepo} ${project};
-    cd ${project}; git checkout ${BRANCH}; cd ..;
+    git clone --depth 1 --branch ${BRANCH} kde:${projectrepo} ${project};
     cd ${project};
     pwd;
     sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
