@@ -42,7 +42,7 @@ on tar day prepare:
  on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata
  run optipng on any new images
  run ./plasma-add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
- tell release-team@kde.org, plasma-devel@kde.org
+ tell release-team@kde.org, plasma-devel@kde.org, kde-announce@kde.org
  tell vdg on forum about announce and get feedback
 
 on release day launch:
@@ -54,7 +54,7 @@ on release day launch:
  [tell a KDE neon person to update forks/base-files and neon/settings to show new version before making ISOs]
  for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
  for beta releases also copy announce to 5.x.0 page and ask for translations
- ./plasma-tag-test to check the tags are really pushed
+ ./plasma-tag-test-test to check the tags are really pushed
 
 TODO:
  remove apt from plasma-release

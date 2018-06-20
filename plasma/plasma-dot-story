@@ -13,7 +13,7 @@ foundStart = False
 foundEnd = False
 output = ""
 for line in response:
-    if "name=\"cp-content" in line:
+    if "aside id=\"cookieWarning" in line:
         foundStart = True
     line = line.replace("../info", "http://www.kde.org/info")
     line = line.replace("href=\"plasma", "href=\"http://www.kde.org/announcements/plasma")

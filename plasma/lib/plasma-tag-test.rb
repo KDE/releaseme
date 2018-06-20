@@ -12,7 +12,7 @@ class PlasmaTagTest
     plasma_versions = PlasmaVersion.new
     @version = plasma_versions.version
     Dir.chdir(plasma_versions.plasma_clones)
-    @version = '5.11.0'
+    @version = '5.13.1'
   end
 
   def grab_git_repos
