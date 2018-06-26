@@ -12,7 +12,7 @@ class PlasmaTagTestTest < Test::Unit::TestCase
   # end
 
   def test_version
-    assert_equal '5.13.1', @tagTest.version, 'Version not set.'
+    assert_equal '5.13.2', @tagTest.version, 'Version not set.'
   end
 
   def test_git_repos
