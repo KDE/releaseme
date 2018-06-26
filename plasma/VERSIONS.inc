@@ -27,7 +27,7 @@ TIMESINCELASTRELEASE="week's" # in sentence 'This release adds a TIMESINCELASTRE
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
-YOUTUBEID="xha6DJ_v1E4" # The video ID used in URL for youtube
+YOUTUBEID="C2kR1_n_d-g" # The video ID used in URL for youtube
 
 GPG_KEY=0xEC94D18F7F05997E
 RELEASE_DUDE="Jonathan Riddell"
