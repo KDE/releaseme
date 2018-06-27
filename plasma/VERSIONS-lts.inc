@@ -2,14 +2,14 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
-VERSION=5.8.6
-SHORT_VERSION=5.8
-OLD_VERSION=5.8.5
+VERSION=5.12.6
+SHORT_VERSION=5.12
+OLD_VERSION=5.12.5
 ORIGIN=lts  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
-BRANCH=Plasma/5.8 # set to master or Plasma/5.x
-MINOR_RELEASE_MONTH=October # for announcement, when was 5.x.0 released
+BRANCH=Plasma/5.12 # set to master or Plasma/5.x
+MINOR_RELEASE_MONTH=February # for announcement, when was 5.x.0 released
 
 RELEASETYPE=Bugfix # for changelog, set to beta, feature or bugfix
 
@@ -20,11 +20,11 @@ WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.k
 UPLOADSERVER="ftpadmin@racnoss.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 21 February 2017" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEMONTH="February" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+RELEASEDATE="Wednesday, 27 June 2018" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEMONTH="June" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="two months'" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
-YOUTUBEID="LgH1Clgr-uE" # The video ID used in URL for youtube
+YOUTUBEID="xha6DJ_v1E4" # The video ID used in URL for youtube
 
 GPG_KEY=0xEC94D18F7F05997E
 RELEASE_DUDE="Jonathan Riddell"
