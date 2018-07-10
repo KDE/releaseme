@@ -13,7 +13,7 @@ set -ex
 
 . VERSIONS.inc
 
-products="systemsettings Powerdevil plasma-nm Oxygen ksysguard KScreen kwin kwayland ksysguard kmenuedit kio-extras kinfocenter khotkeys khelpcenter kde-cli-tools Breeze plasmashell kdeplasma-addons ksshaskpass bluedevil user-manager krunner kde-gtk-config kded-appmenu kstart ksplash Plasma%20Workspace%20Wallpapers policykit-kde-agent-1 kwrited drkonqi klipper knetattach kfontview Plasma%20SDK kwallet-pam plasma-pa kgamma ksmserver kactivitymanagerd Discover plasma-integration"
+products="systemsettings Powerdevil plasma-nm Oxygen ksysguard KScreen kwin kwayland ksysguard kmenuedit kinfocenter khotkeys khelpcenter kde-cli-tools Breeze plasmashell kdeplasma-addons ksshaskpass bluedevil user-manager krunner kde-gtk-config kded-appmenu kstart ksplash Plasma%20Workspace%20Wallpapers policykit-kde-agent-1 kwrited drkonqi klipper knetattach kfontview Plasma%20SDK kwallet-pam plasma-pa kgamma ksmserver kactivitymanagerd Discover plasma-integration"
 
 for PRODUCT in $products; do 
 
