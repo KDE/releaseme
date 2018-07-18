@@ -21,6 +21,8 @@ UPLOADSERVER="ftpadmin@racnoss.kde.org"
 #UPLOADSERVER="weegie"
 PLASMA_CLONES="/home/jr/src/kde/"                       # a directory containing khotkeys/neongit/khotkeys/ etc for each repo
 
+SCRATCH_SERVER=embra:tmp/
+
 RELEASEDATE="Tuesday, 26 June 2018" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="June" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="week's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
