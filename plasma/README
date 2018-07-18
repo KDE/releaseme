@@ -22,13 +22,19 @@ on tar day tar:
  run ./plasma-upload
  check tmp-tests output for important differences
  run ./plasma-update-1-tar as needed for problems/late updates # TODO make this print out git log changes
- [upload to upload.kde.org and tell sysadmins to make tars available to packagers if you don't have permission]
+ [upload to upload.kde.org and tell sysadmins to make tars available to packagers if you do not have permission]
 
 on beta tar day branch:
  on a new 5.x release make branches Plasma/5.x after making the tars:
   run ./plasma-branch
   edit ./plasma-update-versions to override versions to set 5.x.80 and run it for master
-  Update kde:kde-build-metadata/logical-module-structure top use new branch Plasma/5.x and build that branch in build.kde.org
+  Update build.kde.org CI https://community.kde.org/Infrastructure/Continuous_Integration_System#Updating_builds_on_switching_the_.22stable.22_branch
+    Increse kde:kde-build-metadata/logical-module-structure top use new branch Plasma/5.x and build that branch in build.kde.org
+    Trigger build.kde.org to update build setups to latest kde-build-metadata info:
+      https://build.kde.org/view/CI%20Management/job/DSL%20Job%20Seed/
+    When above has completed start global rebuild
+      https://build.kde.org/view/CI%20Management/job/Global%20Rebuild%20Plasma%20kf5-qt5%20SUSEQt5.10/
+      https://build.kde.org/view/CI%20Management/job/Global%20Rebuild%20Plasma%20kf5-qt5%20FreeBSDQt5.10/
   build.kde.org CI: log in, switch to "CI Management", run "DSL Job Seed" to make sure any latest build-metadata is picked up,
       once done trigger "Global Rebuild Plasma stable*" builds, which will first update dependencies to latest needs and then
       trigger rebuild of any modules
@@ -63,4 +69,3 @@ TODO:
  test gpg works with agent before running plasma-tag
  test tag has been pushed
  pkgdiff output https://lvc.github.io/pkgdiff/
- 
