@@ -2,9 +2,9 @@ LANG=en_GB.UTF-8
 LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
-VERSION=5.13.2
+VERSION=5.13.4
 SHORT_VERSION=5.13
-OLD_VERSION=5.13.1
+OLD_VERSION=5.13.3
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -23,9 +23,9 @@ PLASMA_CLONES="/home/jr/src/kde/"                       # a directory containing
 
 SCRATCH_SERVER=embra:tmp/
 
-RELEASEDATE="Tuesday, 26 June 2018" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Tue, 31 Jul 2018" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="June" # usually `LC_ALL=C date "+%B" --date="next Tue"`
-TIMESINCELASTRELEASE="week's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
+TIMESINCELASTRELEASE="three week's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
