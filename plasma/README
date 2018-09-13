@@ -3,9 +3,9 @@
  on make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata 
 
 check for build failures on CI:
- https://build.kde.org/user/jriddell/my-views/view/Plasma/
+ https://build.kde.org/job/Plasma/view/Everything%20-%20kf5-qt5/
 or for a stable version
- https://build.kde.org/view/branchGroup%20stable-kf5-qt5/
+ https://build.kde.org/job/Plasma/view/Everything%20-%20stable-kf5-qt5/
 check for build failures on neon CI:
  http://build.neon.kde.org/
 or for a stable version
@@ -36,7 +36,7 @@ on beta tar day branch:
   Update build.kde.org CI https://community.kde.org/Infrastructure/Continuous_Integration_System#Updating_builds_on_switching_the_.22stable.22_branch
     Increse kde:kde-build-metadata/logical-module-structure top use new branch Plasma/5.x and build that branch in build.kde.org
     Trigger build.kde.org to update build setups to latest kde-build-metadata info:
-      https://build.kde.org/view/CI%20Management/job/DSL%20Job%20Seed/
+      https://build.kde.org/job/Administration/job/DSL%20Job%20Seed/
     When above has completed start global rebuild
       https://build.kde.org/view/CI%20Management/job/Global%20Rebuild%20Plasma%20kf5-qt5%20SUSEQt5.10/
       https://build.kde.org/view/CI%20Management/job/Global%20Rebuild%20Plasma%20kf5-qt5%20FreeBSDQt5.10/
