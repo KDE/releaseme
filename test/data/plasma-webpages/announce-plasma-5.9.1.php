@@ -116,7 +116,7 @@ figure {
 
 	<p>
 		<?php i18n("Tuesday, 14 February 2017.")?>
-		<?php print i18n_var("Today KDE releases a %1 update to KDE Plasma 5, versioned %2", "Bugfix", "5.9.1");?>.
+		<?php print i18n_var("Today KDE releases a Bugfix update to KDE Plasma 5, versioned %1", "5.9.1");?>.
 		<?php print i18n_var("<a href='https://www.kde.org/announcements/plasma-%1.0.php'>Plasma %1</a>
 		was released in %2 with many feature refinements and new modules to complete the desktop experience.", "5.9", "January");?>
 	</p>
