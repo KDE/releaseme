@@ -1,17 +1,17 @@
-LANG=en_GB.UTF-8
+LANG=C.UTF-8
 LANGUAGE=en
-LC_ALL=en_GB.UTF-8
+LC_ALL=C.UTF-8
 
-VERSION=5.13.90
+VERSION=5.14.0
 SHORT_VERSION=5.14
 OLD_VERSION=5.13.5
-ORIGIN=trunk  # git branch as set in projects.k.o, set to trunk or stable
-FTPSTABLE=unstable  # set to unstable or stable
+ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
+FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
-BRANCH=master # set to master or Plasma/5.x
-MINOR_RELEASE_MONTH=September # for announcement, when was 5.x.0 released
+BRANCH=Plasma/5.14 # set to master or Plasma/5.x
+MINOR_RELEASE_MONTH=October # for announcement, when was 5.x.0 released
 
-RELEASETYPE=Beta # for changelog, set to Beta, Feature or Bugfix
+RELEASETYPE=Feature # for changelog, set to Beta, Feature or Bugfix
 
 INFOCHECKOUT="/home/jr/src/www/www/info"                   # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/info/
 ANNOUNCECHECKOUT="/home/jr/src/www/www/announcements"      # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
@@ -23,8 +23,8 @@ PLASMA_CLONES="/home/jr/src/kde/"                       # a directory containing
 
 SCRATCH_SERVER=embra:tmp/
 
-RELEASEDATE="Thu, 13 September 2018" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEMONTH="September" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+RELEASEDATE="Tuesday, 09 October 2018" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEMONTH="October" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
