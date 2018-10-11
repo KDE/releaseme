@@ -109,7 +109,7 @@ figure {
 	
 	<figure class="topImage">
 		<a href="plasma-5.9/plasma-5.9.png">
-			<img src="plasma-5.9/plasma-5.9-wee.png" width="600" height="338" alt="Plasma 5.9" />
+			<img src="plasma-5.9/plasma-5.9-wee.png" height="338" width="600" style="width: 100%; max-width: 600px; height: auto;" alt="Plasma 5.9" />
 		</a>
 		<figcaption><?php print i18n_var("KDE Plasma %1", "5.9")?></figcaption>
 	</figure>
