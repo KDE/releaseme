@@ -19,7 +19,7 @@ WORKSPACE=`cat git-repositories-for-release`
 cd tmp-changelog
 for project in $WORKSPACE; do
  echo ${project};
- git clone kde:${project};
+ git clone git://anongit.kde.org/${project};
  cd ${project}; git checkout ${BRANCH}; cd ..;
  cd ${project};
  pwd;
