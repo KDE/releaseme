@@ -20,17 +20,11 @@ class PlasmaTagTest
 
   def check_tags
     repos.each do |repo|
-      system("git clone --depth 1 --branch master git://anongit.kde.org/#{repo}")
-      Dir.chdir(repo) do
-        found = false
-        system('git fetch --tags')
-        git = Git.open('.')
-        git.tags.each do |tag|
-          found = true if tag.name == "v#{@version}"
-        end
-        puts "Not found #{repo}" if found == false
-        exit 1 if found == false
-      end
+      found = false
+      tag_refs = Git.ls_remote("git://anongit.kde.org/#{repo}")['tags']["v#{@version}"]
+      found = true if tag_refs != nil
+      puts "Not found #{repo}" if found == false
+      exit 1 if found == false
     end
     puts 'All good!'
   end
