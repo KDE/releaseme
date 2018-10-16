@@ -24,6 +24,7 @@ on tar day tar:
  run ./plasma-git-repos to update list of things to package in git-repositories-for-release
  run ./plasma-update-versions (ensure it is using the right branches)
  run ./plasma-tars script to make tars
+      [or run the job on xenon http://xenon.pangea.pub/job/plasma-releaseme-tars/ then ./plasma-xenon-download]
  run ./plasma-upload
  check tmp-tests output for important differences
  run ./plasma-update-1-tar as needed for problems/late updates # TODO make this print out git log changes
@@ -48,6 +49,7 @@ on beta tar day branch:
  
 on tar day prepare:
  run ./plasma-changelog (manually edit file after)
+   [or run xenon job http://xenon.pangea.pub/job/plasma-releaseme-changelog/ ]
  Run ./update-web-svn
  run ./plasma-webpages and check over output opened in firefox
  on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata
@@ -62,10 +64,11 @@ on release day launch:
  ./plasma-release
  this will open tabs in firefox and kate: check the web pages are good, e-mail out the texts, post the social media bits
  check if www/images/teaser teaser image needs an update
- [tell a KDE neon person to update forks/base-files and neon/settings to show new version before making ISOs]
  for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
  for beta releases also copy announce to 5.x.0 page and ask for translations
  ./plasma-tag-test-test to check the tags are really pushed
+
+ [tell a KDE neon person to update forks/base-files and neon/settings to show new version before running 'plasma-rebuild -p' and making ISOs]
 
 TODO:
  remove apt from plasma-release
