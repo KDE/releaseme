@@ -5,6 +5,7 @@
 set -xe
 
 pwd
+ls
 
 . VERSIONS.inc
 
