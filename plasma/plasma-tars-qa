@@ -1,0 +1,33 @@
+#!/bin/bash
+# For CI server to run QA tests
+# Copyright Jonathan Riddell, may be copied under the GNU GPL v2 or later
+
+set -xe
+
+. VERSIONS.inc
+
+echo == download old tars ==
+mkdir -p old-tars
+cd old-tars
+for tar in `cat git-repositories-for-release`; do echo ${tar}; wget https://download.kde.org/${FTPSTABLE}/plasma/${tar}-${OLD_VERSION}.tar.xz; done
+cd -
+
+exit 0
+
+echo == start tarballs l10n probe test, check for diff below
+echo == end tarballs l10n probe test
+
+
+exit 0
+
+echo == start tarballs l10n probe test, check for diff below
+ssh ${UPLOADSERVER} "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${VERSION}-po
+ssh ${UPLOADSERVER} "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${OLD_VERSION}-po
+diff -u tmp-tests/${OLD_VERSION}-po tmp-tests/${VERSION}-po | tee tmp-tests/${VERSION}-po-testoutput
+echo == end tarballs l10n probe test
+
+echo == start tarballs docs probe test, check for diff below
+ssh ${UPLOADSERVER} "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${VERSION}-doc
+ssh ${UPLOADSERVER} "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${OLD_VERSION}-doc
+diff -u tmp-tests/${OLD_VERSION}-doc tmp-tests/${VERSION}-doc | tee tmp-tests/${VERSION}-doc-testoutput
+echo == end tarballs l10n probe test
