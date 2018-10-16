@@ -11,7 +11,6 @@ class PlasmaTagTest
   def initialize
     plasma_versions = PlasmaVersion.new
     @version = plasma_versions.version
-    Dir.chdir(plasma_versions.plasma_clones)
   end
 
   def grab_git_repos
