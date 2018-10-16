@@ -6,7 +6,7 @@ set -xe
 
 . VERSIONS.inc
 
-tars=`cat git-repositories-for-release | sed s,discover,plasma-discover,`
+tars=`cat git-repositories-for-release`
 
 echo == download old tars ==
 mkdir -p old-tars
