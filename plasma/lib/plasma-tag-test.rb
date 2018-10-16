@@ -16,8 +16,6 @@ class PlasmaTagTest
   def grab_git_repos
     file_contents = File.read('git-repositories-for-release')
     @repos = file_contents.split(' ')
-    discover = @repos.find_index('discover')
-    @repos[discover] = 'plasma-discover'
   end
 
   def check_tags
