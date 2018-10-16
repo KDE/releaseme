@@ -7,7 +7,7 @@ set -xe
 pwd
 ls
 
-. VERSIONS.inc
+. ./VERSIONS.inc
 
 # echo for updating version in master after branch override versions here
 # VERSION=5.14.80
