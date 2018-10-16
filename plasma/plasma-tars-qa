@@ -9,7 +9,7 @@ set -xe
 echo == download old tars ==
 mkdir -p old-tars
 cd old-tars
-for tar in `cat git-repositories-for-release`; do echo ${tar}; wget https://download.kde.org/${FTPSTABLE}/plasma/${tar}-${OLD_VERSION}.tar.xz; done
+for tar in `cat ./git-repositories-for-release`; do echo ${tar}; wget https://download.kde.org/${FTPSTABLE}/plasma/${tar}-${OLD_VERSION}.tar.xz; done
 cd -
 
 exit 0
