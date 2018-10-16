@@ -66,7 +66,8 @@ on release day launch:
  check if www/images/teaser teaser image needs an update
  for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
  for beta releases also copy announce to 5.x.0 page and ask for translations
- ./plasma-tag-test-test to check the tags are really pushed
+ ./plasma-tag-test to check the tags are really pushed
+    or run http://xenon.pangea.pub/job/plasma-releaseme-tags-test/ to check tags are really pushed
 
  [tell a KDE neon person to update forks/base-files and neon/settings to show new version before running 'plasma-rebuild -p' and making ISOs]
 
