@@ -22,7 +22,7 @@ class PlasmaTagTest
 
   def check_tags
     repos.each do |repo|
-      system("git clone --depth 1 --branch master kde:#{repo}")
+      system("git clone --depth 1 --branch master git://anongit.kde.org/#{repo}")
       Dir.chdir(repo) do
         found = false
         system('git fetch --tags')
