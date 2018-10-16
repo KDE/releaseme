@@ -6,10 +6,18 @@ set -xe
 
 . VERSIONS.inc
 
+tars=`cat git-repositories-for-release | sed s,discover,plasma-discover,`
+
 echo == download old tars ==
 mkdir -p old-tars
 cd old-tars
-for tar in `cat ../git-repositories-for-release`; do echo ${tar}; wget https://download.kde.org/${FTPSTABLE}/plasma/${OLD_VERSION}/${tar}-${OLD_VERSION}.tar.xz; done
+for tar in $tars; do echo ${tar}; wget https://download.kde.org/${FTPSTABLE}/plasma/${OLD_VERSION}/${tar}-${OLD_VERSION}.tar.xz; done
+echo == old tars downloaded ==
+
+echo == start tarballs l10n probe test, check for diff below
+for tar in $tars; do tar --list -f old-tars/\${tar}-${OLD_VERSION}.tar.xz | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$ | sort; done > ${VERSION}-po-testoutput
+
+
 cd -
 
 exit 0
