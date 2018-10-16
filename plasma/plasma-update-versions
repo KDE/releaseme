@@ -4,6 +4,8 @@
 
 set -xe
 
+pwd
+
 . VERSIONS.inc
 
 # echo for updating version in master after branch override versions here
