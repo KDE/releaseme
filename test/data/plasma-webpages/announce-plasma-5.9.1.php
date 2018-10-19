@@ -102,10 +102,11 @@ figure {
 
 	<?php include "./announce-i18n-bar.inc"; ?>
 
+<!--
 	<figure class="videoBlock">
 		<iframe width="560" height="315" src="https://www.youtube.com/embed/lm0sqqVcotA?rel=0" allowfullscreen='true'></iframe>
 	</figure>
-	
+-->
 	
 	<figure class="topImage">
 		<a href="plasma-5.9/plasma-5.9.png">
