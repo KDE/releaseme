@@ -24,6 +24,7 @@ require 'thwait'
 require_relative 'origin'
 require_relative 'source'
 require_relative 'svn'
+require_relative 'tmpdir'
 
 # Base class for a {Source} that represents a translation unit. This notibly
 # are either message translations as obtained by {L10n} or documentation
