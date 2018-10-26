@@ -39,6 +39,7 @@ class TestArchiveSigner < Testme
     signer = ReleaseMe::ArchiveSigner.new
     signer.sign(archive)
     assert_path_exist(signer.signature)
-    assert(system("gpg2 --verify #{signer.signature}", [:out, :err] => '/dev/null'))
+    assert(system("gpg2 --verify #{signer.signature}",
+                  %i[out err] => File::NULL))
   end
 end

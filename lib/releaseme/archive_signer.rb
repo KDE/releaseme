@@ -32,7 +32,7 @@ module ReleaseMe
     def sign(archive)
       file = archive.filename
       sigfile = "#{file}.sig"
-      args = Silencer.shutup? ? { %i[out err] => '/dev/null' } : {}
+      args = Silencer.shutup? ? { %i[out err] => File::NULL } : {}
       system("gpg2 --armor --detach-sign -o #{sigfile} #{file}", args) || raise
       @signature = File.absolute_path(sigfile)
     end

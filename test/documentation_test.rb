@@ -39,15 +39,15 @@ class TestDocumentation < Testme
     @svn_template_dir = 'tmp_l10n_repo_' + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
     @svn_checkout_dir = 'tmp_l10n_check_' + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
 
-    system("svnadmin create #{@svn_template_dir}", [:out] => '/dev/null')
+    system("svnadmin create #{@svn_template_dir}", [:out] => File::NULL)
     assert_path_exist(@svn_template_dir)
 
     system("svn co file://#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}",
-           [:out] => '/dev/null')
+           [:out] => File::NULL)
     FileUtils.cp_r("#{@repo_data_dir}/trunk", @svn_checkout_dir)
     FileUtils.cp_r("#{@repo_data_dir}/branches", @svn_checkout_dir)
-    system('svn add *', chdir: @svn_checkout_dir, [:out] => '/dev/null')
-    system("svn ci -m 'yolo'", chdir: @svn_checkout_dir, [:out] => '/dev/null')
+    system('svn add *', chdir: @svn_checkout_dir, [:out] => File::NULL)
+    system("svn ci -m 'yolo'", chdir: @svn_checkout_dir, [:out] => File::NULL)
 
     ReleaseMe::DocumentationL10n.languages = nil
   end

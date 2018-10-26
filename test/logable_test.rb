@@ -26,7 +26,7 @@ class FakeClass1
   prepend ReleaseMe::Logable
 
   def create_logger
-    Logger.new('/dev/null')
+    Logger.new(File::NULL)
   end
 end
 

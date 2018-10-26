@@ -8,7 +8,7 @@ class TestTranslationUnit < Testme
   end
 
   def create(type)
-    l = ReleaseMe::TranslationUnit.new(type, 'amarok', '/dev/null')
+    l = ReleaseMe::TranslationUnit.new(type, 'amarok', File::NULL)
     l.target = "#{@dir}/l10n"
     l
   end
@@ -40,7 +40,7 @@ class TestTranslationUnit < Testme
 
     assert_equal("#{@dir}/l10n", l.target)
     assert_equal(ReleaseMe::TranslationUnit::TRUNK, l.type)
-    assert_equal('/dev/null', l.i18n_path)
+    assert_equal(File::NULL, l.i18n_path)
   end
 
   def test_0_repo_url_init_trunk
@@ -73,7 +73,7 @@ class TestTranslationUnit < Testme
 
   def test_invalid_inits
     assert_raises do
-      ReleaseMe::TranslationUnit.new(nil, 'amarok', '/dev/null')
+      ReleaseMe::TranslationUnit.new(nil, 'amarok', File::NULL)
     end
     assert_raises do
       ReleaseMe::TranslationUnit.new(ReleaseMe::TranslationUnit::TRUNK, nil, 'null')
@@ -86,7 +86,7 @@ class TestTranslationUnit < Testme
   def test_invalid_type
     assert_raises do
       # :fishyfishy is a bad type and can't be mapped to a repo path
-      ReleaseMe::TranslationUnit.new(:fishyfishy, 'amarok', '/dev/null')
+      ReleaseMe::TranslationUnit.new(:fishyfishy, 'amarok', File::NULL)
     end
   end
 
@@ -94,7 +94,7 @@ class TestTranslationUnit < Testme
     # Technically we could handle kde4, given this is a fairly low level class
     # we may just get away with this.
     u = ReleaseMe::TranslationUnit.new(ReleaseMe::Origin::TRUNK_KDE4, 'amarok',
-                                       '/dev/null')
+                                       File::NULL)
     assert_equal('svn://anonsvn.kde.org/home/kde//trunk/l10n-kde4/',
                  u.vcs.repository)
   end
