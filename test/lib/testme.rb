@@ -86,22 +86,24 @@ class Testme < Minitest::Test
   #   such as mocha may not get properly applied and cause test malfunctions!
 end
 
-# Only set SANITIZED_PREFIX_SUFFIX in tests. Actual lib code mustn't ever
-# set it as that'd bypass the test.
-module MkTmpDirOverlay
-  def mktmpdir(*a)
-    return super(a) if ENV['SANITIZED_PREFIX_SUFFIX']
-    raise 'Dir.mktmpdir must not be used! Use Releaseme.mktmpdir!'
-  ensure
-    ENV['SANITIZED_PREFIX_SUFFIX'] = nil
+if Gem::Dependency.new('', '~> 2.4.0').match?('', RUBY_VERSION)
+  # Only set SANITIZED_PREFIX_SUFFIX in tests. Actual lib code mustn't ever
+  # set it as that'd bypass the test.
+  module MkTmpDirOverlay
+    def mktmpdir(*a)
+      return super(a) if ENV['SANITIZED_PREFIX_SUFFIX']
+      raise 'Dir.mktmpdir must not be used! Use Releaseme.mktmpdir!'
+    ensure
+      ENV['SANITIZED_PREFIX_SUFFIX'] = nil
+    end
   end
-end
 
-# Prevent tests from using mktmpdir directly and instead expect them to go
-# through our mktmpdir such that the prefix_suffix gets cleaned up.
-# https://bugs.kde.org/show_bug.cgi?id=393011
-class Dir
-  class << self
-    prepend MkTmpDirOverlay
+  # Prevent tests from using mktmpdir directly and instead expect them to go
+  # through our mktmpdir such that the prefix_suffix gets cleaned up.
+  # https://bugs.kde.org/show_bug.cgi?id=393011
+  class Dir
+    class << self
+      prepend MkTmpDirOverlay
+    end
   end
 end
