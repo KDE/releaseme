@@ -43,7 +43,7 @@ class TestL10n < Testme
     `svnadmin create #{@svn_template_dir}`
     assert_path_exist(@svn_template_dir)
 
-    `svn co file://#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}`
+    `svn co file:///#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}`
     FileUtils.cp_r("#{@repo_data_dir}/trunk", @svn_checkout_dir)
     FileUtils.cp_r("#{@repo_data_dir}/branches", @svn_checkout_dir)
     Dir.chdir(@svn_checkout_dir) do
@@ -82,7 +82,7 @@ class TestL10n < Testme
     # rubocop:disable Style/UnneededInterpolation
 
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
@@ -107,7 +107,7 @@ class TestL10n < Testme
 
   def test_get_po_elsewhere
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     @elsewhere = "#{Dir.pwd}/elsewhere_tmp_l10n"
 
@@ -120,7 +120,7 @@ class TestL10n < Testme
   def test_get_po_absolute_srcdir
     # Make sure we can pass an absolute dir as srcdir param.
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
@@ -130,7 +130,7 @@ class TestL10n < Testme
 
   def test_get_po_edit_cmake
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
@@ -142,7 +142,7 @@ class TestL10n < Testme
 
   def test_get_po_no_edit_cmake
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
@@ -153,7 +153,7 @@ class TestL10n < Testme
 
   def test_statistics
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot'), @dir)
@@ -173,7 +173,7 @@ class TestL10n < Testme
 
   def test_variable_potname
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('variable-pot'), @dir)
     assert_raises RuntimeError do
@@ -183,7 +183,7 @@ class TestL10n < Testme
 
   def test_space_and_declared_multi_pot
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('space-and-declared-multi-pot'), @dir)
     l.get(@dir)
@@ -202,7 +202,7 @@ class TestL10n < Testme
     # only some were not found.
 
     l = create_l10n
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot'), @dir)
     l.get(@dir)
@@ -235,7 +235,7 @@ class TestL10n < Testme
     # https://techbase.kde.org/Localization/Concepts/Transcript
 
     l = create_l10n('ki18n', 'frameworks')
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot-script'), @dir)
     l.get(@dir)
@@ -287,7 +287,7 @@ class TestL10n < Testme
     # test at all.
 
     l = create_l10n('ktuberling', 'kdegames')
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     Dir.mkdir(@dir)
     File.write("#{@dir}/CMakeLists.txt", '')
@@ -324,7 +324,7 @@ class TestL10n < Testme
     # behavior is checked elsewhere.
 
     l = create_l10n(origin: ReleaseMe::Origin::TRUNK_KDE4)
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot-kde4'), @dir)
@@ -345,7 +345,7 @@ class TestL10n < Testme
     # ecm_install_po_files_as_qm from ECM.
 
     l = create_l10n('step', 'kdeedu')
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot-qt'), @dir)
@@ -366,7 +366,7 @@ class TestL10n < Testme
     # with how applications handle it: po/ and poqm/.
 
     l = create_l10n('solid', 'frameworks')
-    l.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot-qt-frameworks'), @dir)

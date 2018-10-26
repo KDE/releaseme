@@ -37,7 +37,7 @@ class TestSvn < Testme
   end
 
   def populate_repo
-    `svn co file://#{@svn_repo_dir} #{@svn_checkout_dir}`
+    `svn co file:///#{@svn_repo_dir} #{@svn_checkout_dir}`
     `echo "yolo" > #{@svn_checkout_dir}/foo`
     Dir.mkdir("#{@svn_checkout_dir}/dir")
     `echo "oloy" > #{@svn_checkout_dir}/dir/file`
@@ -49,7 +49,7 @@ class TestSvn < Testme
 
   def new_valid_repo
     s = ReleaseMe::Svn.new
-    s.repository = "file://#{@svn_repo_dir}"
+    s.repository = "file:///#{@svn_repo_dir}"
     s
   end
 
@@ -126,7 +126,7 @@ class TestSvn < Testme
 
   def test_get_repo_valid
     s = ReleaseMe::Svn.new
-    s.repository = "file://#{@svn_repo_dir}"
+    s.repository = "file:///#{@svn_repo_dir}"
     ret = s.get(@svn_checkout_dir)
     assert_equal(true, ret)
     assert_path_exist(@svn_checkout_dir)

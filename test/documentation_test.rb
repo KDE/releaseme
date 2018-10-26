@@ -42,7 +42,7 @@ class TestDocumentation < Testme
     system("svnadmin create #{@svn_template_dir}", [:out] => File::NULL)
     assert_path_exist(@svn_template_dir)
 
-    system("svn co file://#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}",
+    system("svn co file:///#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}",
            [:out] => File::NULL)
     FileUtils.cp_r("#{@repo_data_dir}/trunk", @svn_checkout_dir)
     FileUtils.cp_r("#{@repo_data_dir}/branches", @svn_checkout_dir)
@@ -74,7 +74,7 @@ class TestDocumentation < Testme
     d = ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK,
                                          'frenchfries',
                                          @i18n_path)
-    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    d.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('variable-pot'), @dir)
     d.get(@dir)
@@ -87,7 +87,7 @@ class TestDocumentation < Testme
   def test_get_doc
     # en & de
     d = create_doc
-    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    d.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     d.get(@dir)
@@ -109,7 +109,7 @@ class TestDocumentation < Testme
     # en only (everything works if only doc/ is present in git but not
     # translated)
     d = create_doc_without_translation
-    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    d.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('single-pot'), @dir)
     d.get(@dir)
@@ -127,7 +127,7 @@ class TestDocumentation < Testme
     d = ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK,
                                          'plasma-desktop',
                                          'kde-workspace')
-    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    d.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-doc'), @dir)
     d.get(@dir)
@@ -177,7 +177,7 @@ class TestDocumentation < Testme
 
   def test_man
     d = create_doc
-    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    d.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('source-with-manpage'), @dir)
     d.get(@dir)
@@ -200,7 +200,7 @@ class TestDocumentation < Testme
     # CMakeLists contains lots of excess spacing, regex should handle this and
     # be able to retrieve the l10n.
     d = create_doc
-    d.init_repo_url("file://#{Dir.pwd}/#{@svn_template_dir}")
+    d.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('excess-spacing-doc'), @dir)
     d.get(@dir)
