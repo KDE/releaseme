@@ -41,10 +41,10 @@ class TestSvn < Testme
     `echo "yolo" > #{@svn_checkout_dir}/foo`
     Dir.mkdir("#{@svn_checkout_dir}/dir")
     `echo "oloy" > #{@svn_checkout_dir}/dir/file`
-    Dir.chdir(@svn_checkout_dir)
-    `svn add *`
-    `svn ci -m 'I am a troll'`
-    Dir.chdir('..')
+    Dir.chdir(@svn_checkout_dir) do
+      `svn add *`
+      `svn ci -m 'I am a troll'`
+    end
   end
 
   def new_valid_repo
