@@ -59,6 +59,9 @@ module TestMeExtension
     Dir.chdir(@pwdir)
     FileUtils.rm_rf(@tmpdir)
     # Restore original env
+    ## Explicitly clear to be on the safe side. Sometimes restoring the env
+    ## may bug out slightly (on windows).
+    ENV.clear
     ENV.replace(@orig_env)
     super
   end
