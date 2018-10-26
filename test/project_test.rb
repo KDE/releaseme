@@ -213,6 +213,12 @@ class TestProjectResolver < Testme
 end
 
 class TestProjectConfig < Testme
+  def setup
+    # Project uses ProjectsFile to read data, so we need to make sure it
+    # uses our dummy file.
+    stub_api
+  end
+
   def test_invalid_name
     name = 'kittens'
     assert_raises do
@@ -255,6 +261,14 @@ class TestProjectConfig < Testme
     assert_raises RuntimeError do
       ReleaseMe::Project.from_config(name)
     end
+  end
+
+  def test_plasma_lts
+    ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
+    projects = ReleaseMe::Project.from_xpath('yakuake')
+    assert_equal(projects.size, 1)
+    pr = projects.shift
+    assert_equal(pr.plasma_lts, 'Plasma/5.8')
   end
 end
 
@@ -327,13 +341,6 @@ class TestProject < Testme
     vcs = pr.vcs
     assert_equal(vcs.repository, 'git@git.kde.org:yakuake')
     assert_nil(vcs.branch) # project on its own should not set a branch
-  end
-
-  def test_plasma_lts
-    projects = ReleaseMe::Project.from_xpath('yakuake')
-    assert_equal(projects.size, 1)
-    pr = projects.shift
-    assert_equal(pr.plasma_lts, 'Plasma/5.8')
   end
 
   def test_from_repo_url
