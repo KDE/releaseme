@@ -74,11 +74,11 @@ class TestSvn < Testme
 
     # Valid file.
     ret = s.exist?('/foo')
-    assert_equal(ret, true)
+    assert_equal(true, ret)
 
     # Invalid file.
     ret = s.exist?('/bar')
-    assert_equal(ret, false)
+    assert_equal(false, ret)
   end
 
   def test_list
@@ -87,15 +87,15 @@ class TestSvn < Testme
 
     # Valid path.
     ret = s.list
-    assert_equal(ret, "dir/\nfoo\n")
+    assert_equal("dir/\nfoo\n", ret)
 
     # Invalid path.
     ret = s.list('/invalid')
-    assert_equal(ret, '')
+    assert_equal('', ret)
 
     # Valid path other than /
     ret = s.list('/dir')
-    assert_equal(ret, "file\n")
+    assert_equal("file\n", ret)
   end
 
   def test_export
@@ -107,17 +107,17 @@ class TestSvn < Testme
 
     # Valid target and path
     ret = s.export("#{tmpDir}/file", '/dir/file')
-    assert_equal(ret, true)
+    assert_equal(true, ret)
     assert_path_exist("#{tmpDir}/file")
 
     # Target dir does not exist
     ret = s.export("#{tmpDir}123/file", '/dir/file')
-    assert_equal(ret, false)
+    assert_equal(false, ret)
     refute_path_exist("#{tmpDir}123/file")
 
     # Invalid path
     ret = s.export("#{tmpDir}/file", '/dir/otherfile')
-    assert_equal(ret, false)
+    assert_equal(false, ret)
     refute_path_exist("#{tmpDir}/otherfile")
 
   ensure
