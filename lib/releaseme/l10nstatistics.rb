@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'open3'
+
 module ReleaseMe
   class L10nStatistics
     attr_reader :stats
@@ -38,7 +40,12 @@ module ReleaseMe
             untranslated = 0
 
             Dir.glob('*.po').each do |file|
-              data = `LC_ALL=C LANG=C msgfmt --statistics #{file} -o #{File::NULL} > /dev/stdout 2>&1`
+              _, stderr, status = Open3.capture3(
+                { 'LC_ALL' => 'C', 'LANG' => 'C' },
+                'msgfmt', '--statistics', file, '-o', File::NULL
+              )
+              raise stderr unless status.success?
+              data = stderr.strip
 
               # tear the data apart and create some variables
               data.split(',').each do |x|
