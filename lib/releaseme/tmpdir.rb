@@ -34,6 +34,6 @@ module ReleaseMe
       end
     end
     ENV['SANITIZED_PREFIX_SUFFIX'] = '1' # Used in testme. Resets automatically.
-    Dir.mktmpdir(*prefix_suffix, *args, &block)
+    Dir.mktmpdir(prefix_suffix, *args, &block)
   end
 end
