@@ -42,8 +42,8 @@ class TestSvn < Testme
     Dir.mkdir("#{@svn_checkout_dir}/dir")
     File.write("#{@svn_checkout_dir}/dir/file", 'oloy')
     Dir.chdir(@svn_checkout_dir) do
-      `svn add *`
-      `svn ci -m 'I am a troll'`
+      system('svn', 'add', *Dir.glob('*'), [:out] => File::NULL) || raise
+      system('svn', 'ci', '-m', 'I am a troll', [:out] => File::NULL) || raise
     end
   end
 
