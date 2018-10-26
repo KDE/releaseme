@@ -59,12 +59,12 @@ class TestSvn < Testme
 
     # Valid file.
     ret = s.cat('/foo')
-    assert_equal(0, $?.to_i)
-    assert_equal("yolo", ret)
+    assert(s.send(:status).success?)
+    assert_equal('yolo', ret)
 
     # Invalid file.
     ret = s.cat('/bar')
-    refute_equal(0, $?.to_i)
+    refute(s.send(:status).success?)
     assert_equal('', ret)
   end
 

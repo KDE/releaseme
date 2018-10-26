@@ -19,6 +19,7 @@
 #++
 
 require 'fileutils'
+require 'open3'
 
 require_relative 'logable'
 require_relative 'vcs'
@@ -28,33 +29,6 @@ module ReleaseMe
   class Svn < Vcs
     prepend Logable
 
-    private
-
-    # @return [String] output of command
-    def run(args)
-      cmd = "svn #{args.join(' ')} 2>&1"
-      log_debug cmd
-      output = `#{cmd}`
-      unless logger.level != Logger::DEBUG || output.empty?
-        log_debug '-- output --'
-        output.lines.each { |l| log_debug l.rstrip }
-        log_debug '------------'
-      end
-      # Do not return error output as it will screw with output processing.
-      output = '' unless $?.success?
-      output
-    end
-
-    def url?(path)
-      if path.match('((\w|\W)+)://.*')
-        log_warn 'possbily inverted argument order detected!'
-        return true
-      end
-      false
-    end
-
-    public
-
     # Checkout a path from the remote repository.
     # @param target is the target directory for the checkout
     # @param path is an additional path to append to the repo URL
@@ -63,8 +37,8 @@ module ReleaseMe
       url?(target)
       url = repository.dup # Deep copy since we will patch around
       url.concat("/#{path}") if path && !path.empty?
-      run(['co', url, target])
-      $?.success?
+      _output, status = run(['co', url, target])
+      status.success?
     end
 
     # Removes .svn recursively from target.
@@ -78,14 +52,16 @@ module ReleaseMe
     def list(path = nil)
       url = repository.dup # Deep copy since we will patch around
       url.concat("/#{path}") if path && !path.empty?
-      run(['ls', url])
+      output, _status = run(['ls', url])
+      output
     end
 
     # Concatenate to output.
     # @param file_path filepath to append to the repository URL
     # @return [String] content of cat'd path
     def cat(file_path)
-      run(['cat', "#{repository}/#{file_path}"])
+      output, _status = run(['cat', "#{repository}/#{file_path}"])
+      output
     end
 
     # Export single file from remote repository.
@@ -94,20 +70,52 @@ module ReleaseMe
     # @return [Boolean] whether or not the export was successful
     def export(target, path)
       url?(target)
-      run(['export', "#{repository}/#{path}", target])
-      $?.success?
+      _output, status = run(['export', "#{repository}/#{path}", target])
+      status.success?
     end
 
     # Checks whether a file/dir exists on the remote repository
     # @param filePath filepath to append to the repository URL
     # @return [Boolean] whether or not the path exists
     def exist?(path)
-      run(['info', "#{repository}/#{path}"])
-      $?.success?
+      _output, status = run(['info', "#{repository}/#{path}"])
+      status.success?
     end
 
     def to_s
       "(svn - #{repository})"
     end
+
+    private
+
+    # @return [String, status] output of command
+    def run(args)
+      cmd = %w[svn] + args
+      log_debug cmd.join(' ')
+      output, @status = Open3.capture2e(*cmd)
+      debug_output(output)
+      # Do not return error output as it will screw with output processing.
+      [status.success? ? output : '', status]
+    end
+
+    def debug_output(output)
+      return if logger.level != Logger::DEBUG || output.empty?
+      log_debug '-- output --'
+      output.lines.each { |l| log_debug l.rstrip }
+      log_debug '------------'
+    end
+
+    def url?(path)
+      if path.match('((\w|\W)+)://.*')
+        log_warn 'possbily inverted argument order detected!'
+        return true
+      end
+      false
+    end
+
+    # Calling this on the same instance of svn is not thread safe. Since we
+    # only use it in tests it's marked private!
+    # @return [ProcessStatus] exit status of last command that ran.
+    attr_reader :status
   end
 end
