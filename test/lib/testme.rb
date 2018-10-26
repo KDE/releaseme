@@ -89,8 +89,8 @@ end
 # Only set SANITIZED_PREFIX_SUFFIX in tests. Actual lib code mustn't ever
 # set it as that'd bypass the test.
 module MkTmpDirOverlay
-  def mktmpdir(*a)
-    return super(a) if ENV['SANITIZED_PREFIX_SUFFIX']
+  def mktmpdir(*)
+    return super if ENV['SANITIZED_PREFIX_SUFFIX']
     raise 'Dir.mktmpdir must not be used! Use Releaseme.mktmpdir!'
   ensure
     ENV['SANITIZED_PREFIX_SUFFIX'] = nil
