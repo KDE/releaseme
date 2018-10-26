@@ -101,8 +101,12 @@ class TestRequirementChecker < Testme
   end
 
   def test_existing_binaries
-    FileUtils.touch(all_binaries)
-    FileUtils.chmod('+x', all_binaries)
+    exec_names = all_binaries
+    if ReleaseMe::RequirementChecker::Executable.windows?
+      exec_names = all_binaries.collect { |x| "#{x}.exe" }
+    end
+    FileUtils.touch(exec_names)
+    FileUtils.chmod('+x', exec_names)
     with_path(Dir.pwd) do
       missing_binaries = ReleaseMe::RequirementChecker.new.send(:missing_binaries)
       assert_equal([], missing_binaries)
