@@ -21,7 +21,7 @@ require_relative '../lib/releaseme/tmpdir'
 
 class TestTmpDir < Testme
   def test_prefix
-    Dir.mktmpdir('X::Y??Z**A||') do |tmpdir|
+    ReleaseMe.mktmpdir('X::Y??Z**A||') do |tmpdir|
       # Refute some of the windows unsafe characters.
       # Windows 10 says the following are invalid:
       #   \/:*?"<>|
@@ -35,7 +35,7 @@ class TestTmpDir < Testme
   end
 
   def test_prefix_suffix
-    Dir.mktmpdir(['X::Y??Z**A||', 'X::Y??Z**A||']) do |tmpdir|
+    ReleaseMe.mktmpdir(['X::Y??Z**A||', 'X::Y??Z**A||']) do |tmpdir|
       # Refute some of the windows unsafe characters.
       # Windows 10 says the following are invalid:
       #   \/:*?"<>|

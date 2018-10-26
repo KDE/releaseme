@@ -42,7 +42,9 @@ module TestMeExtension
   def before_setup
     @orig_env = ENV.to_h # to_h causes a full deserialization
     ENV['RELEASEME_SHUTUP'] = 'true'
+    ENV['SANITIZED_PREFIX_SUFFIX'] = '1'
     @tmpdir = Dir.mktmpdir("testme-#{self.class.to_s.tr(':', '_')}")
+    ENV['TEST_SETUP'] = nil
     @testdir = File.expand_path(File.dirname(File.dirname(__FILE__))).to_s
     @datadir = "#{@testdir}/data"
     @pwdir = Dir.pwd
@@ -82,4 +84,24 @@ class Testme < Minitest::Test
 
   # WARNING: with minitest one should extend through a prepend otherwise hooks
   #   such as mocha may not get properly applied and cause test malfunctions!
+end
+
+# Only set SANITIZED_PREFIX_SUFFIX in tests. Actual lib code mustn't ever
+# set it as that'd bypass the test.
+module MkTmpDirOverlay
+  def mktmpdir(*a)
+    return super(a) if ENV['SANITIZED_PREFIX_SUFFIX']
+    raise 'Dir.mktmpdir must not be used! Use Releaseme.mktmpdir!'
+  ensure
+    ENV['SANITIZED_PREFIX_SUFFIX'] = nil
+  end
+end
+
+# Prevent tests from using mktmpdir directly and instead expect them to go
+# through our mktmpdir such that the prefix_suffix gets cleaned up.
+# https://bugs.kde.org/show_bug.cgi?id=393011
+class Dir
+  class << self
+    prepend MkTmpDirOverlay
+  end
 end

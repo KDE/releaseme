@@ -146,7 +146,7 @@ module ReleaseMe
             # naturally end anyway.
             continue
           end
-          Dir.mktmpdir(self.class.to_s) { |tmpdir| yield lang, tmpdir }
+          ReleaseMe.mktmpdir(self.class.to_s) { |tmpdir| yield lang, tmpdir }
         end
       end
     end

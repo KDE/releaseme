@@ -18,27 +18,22 @@
 
 require 'tmpdir'
 
+# ReleaseMe release tool library.
 module ReleaseMe
+  module_function
+
   # Overlay for Dir.mktmpdir to ensure no invalid characters are used for
   # Windows. This is asserted on all platforms for practical reasons... invalid
   # prefixes/suffixes should not be constructed regardless of the platform.
-  module TmpDirWindowsOverlay
-    def mktmpdir(prefix_suffix, *args)
-      if prefix_suffix.is_a?(String)
-        prefix_suffix = prefix_suffix.gsub(/[^0-9A-Za-z.\-_]/, '_')
-      elsif prefix_suffix.is_a?(Array)
-        prefix_suffix = prefix_suffix.collect do |x|
-          x.gsub(/[^0-9A-Za-z.\-_]/, '_')
-        end
+  def mktmpdir(prefix_suffix, *args, &block)
+    if prefix_suffix.is_a?(String)
+      prefix_suffix = prefix_suffix.gsub(/[^0-9A-Za-z.\-_]/, '_')
+    elsif prefix_suffix.is_a?(Array)
+      prefix_suffix = prefix_suffix.collect do |x|
+        x.gsub(/[^0-9A-Za-z.\-_]/, '_')
       end
-      super(prefix_suffix, *args)
     end
-  end
-end
-
-# Prepended with a tmpdir sanitizer.
-class Dir
-  class << self
-    prepend ReleaseMe::TmpDirWindowsOverlay
+    ENV['SANITIZED_PREFIX_SUFFIX'] = '1' # Used in testme. Resets automatically.
+    Dir.mktmpdir(*prefix_suffix, *args, &block)
   end
 end
