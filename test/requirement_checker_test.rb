@@ -16,7 +16,10 @@ class TestRequirementChecker < Testme
       File.chmod(0o700, name)
     end
 
-    def test_exec
+    def test_exec_not_windows
+      # If env looks windowsy, skip this test. It won't pass because we look
+      # for gpg2.exe which obviously won't exist.
+      return if ENV['PATHEXT']
       make_exe('gpg2')
       assert_equal "#{Dir.pwd}/gpg2", Executable.new('gpg2').find
       assert_nil Executable.new('foobar').find
