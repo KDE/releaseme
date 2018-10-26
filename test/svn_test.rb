@@ -38,9 +38,9 @@ class TestSvn < Testme
 
   def populate_repo
     `svn co file:///#{@svn_repo_dir} #{@svn_checkout_dir}`
-    `echo "yolo" > #{@svn_checkout_dir}/foo`
+    File.write("#{@svn_checkout_dir}/foo", 'yolo')
     Dir.mkdir("#{@svn_checkout_dir}/dir")
-    `echo "oloy" > #{@svn_checkout_dir}/dir/file`
+    File.write("#{@svn_checkout_dir}/dir/file", 'oloy')
     Dir.chdir(@svn_checkout_dir) do
       `svn add *`
       `svn ci -m 'I am a troll'`
@@ -60,7 +60,7 @@ class TestSvn < Testme
     # Valid file.
     ret = s.cat('/foo')
     assert_equal(0, $?.to_i)
-    assert_equal("yolo\n", ret)
+    assert_equal("yolo", ret)
 
     # Invalid file.
     ret = s.cat('/bar')
@@ -95,7 +95,7 @@ class TestSvn < Testme
 
     # Valid path other than /
     ret = s.list('/dir')
-    assert_equal("file\n", ret)
+    assert_equal('file', ret.strip)
   end
 
   def test_export
