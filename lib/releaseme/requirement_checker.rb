@@ -61,23 +61,31 @@ module ReleaseMe
 
       private
 
+      class << self
+        def windows?
+          @windows ||= ENV['RELEASEME_FORCE_WINDOWS'] || mswin? || mingw?
+        end
+
+        private
+
+        def mswin?
+          @mswin ||= /mswin/ =~ RUBY_PLATFORM
+        end
+
+        def mingw?
+          @mingw ||= /mingw/ =~ RUBY_PLATFORM
+        end
+      end
+
+      def windows?
+        self.class.windows?
+      end
+
       def executable?(path)
         stat = File.stat(path)
       rescue SystemCallError
       else
         return true if stat.file? && stat.executable?
-      end
-
-      def mswin?
-        @mswin ||= /mswin/ =~ RUBY_PLATFORM
-      end
-
-      def mingw?
-        @mingw ||= /mingw/ =~ RUBY_PLATFORM
-      end
-
-      def windows?
-        @windows ||= ENV['RELEASEME_FORCE_WINDOWS'] || mswin? || mingw?
       end
 
       def unescape_path(path)
