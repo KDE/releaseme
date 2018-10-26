@@ -2,7 +2,7 @@ LANG=C.UTF-8
 LANGUAGE=en
 LC_ALL=C.UTF-8
 
-VERSION=5.14.1
+VERSION=5.14.2
 SHORT_VERSION=5.14
 OLD_VERSION=5.14.0
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
