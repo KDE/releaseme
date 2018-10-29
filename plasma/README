@@ -15,7 +15,7 @@ Check for critical bugs:
 https://bugs.kde.org/buglist.cgi?bug_severity=critical&bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&known_name=Plasma5-All-Critical&list_id=1364199&product=Breeze&product=kde-cli-tools&product=kde-gtk-config&product=kded-appmenu&product=kdeplasma-addons&product=kfontview&product=khelpcenter&product=khotkeys&product=kinfocenter&product=kio-extras&product=klipper&product=kmenuedit&product=knetattach&product=krunner&product=ksmserver&product=ksplash&product=ksshaskpass&product=Plasma%20Vault&product=kstart&product=ksysguard&product=kwin&product=kwrited&product=Discover&product=Plasma%20Workspace%20Wallpapers&product=plasma-mediacenter&product=plasma-nm&product=plasmashell&product=Powerdevil&product=systemsettings&product=Touchpad-KCM&product=user-manager&query_based_on=Plasma5-All-Critical&query_format=advanced
 
 on beta tar day:
- - set QT_MIN_VERSION to version agreed at cycle kickoff
+ - set QT_MIN_VERSION to version agreed at cycle kickoff (except plasma-browser-integration)
  - set KF5_MIN_VERSION to version agreed at cycle kickoff
  - TODO script the above
 
