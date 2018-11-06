@@ -20,10 +20,8 @@ ANNOUNCEINDEX="<\!-- Plasma ${VERSION} -->\n<strong>${RELEASEDATE}<\/strong> - <
 sed -i "s/\(INSERT NEW ENTRIES.*\)/\1\n${ANNOUNCEINDEX}/" ${ANNOUNCECHECKOUT}/index.php
 
 # www/index.php
-
-sed -i s,plasma-${OLD_VERSION},plasma-${VERSION}, ${WWWCHECKOUT}/index.php
-sed -i "s,Plasma ${OLD_VERSION} Released,Plasma ${VERSION} Released," ${WWWCHECKOUT}/index.php
-sed -i "s/.*\. Plasma ${OLD_VERSION} release./${RELEASEDATE}. Plasma ${VERSION} release./" ${WWWCHECKOUT}/index.php
+# Updating www/index.php got ported to Ruby
+./plasma-release-redux
 
 # commit to svn
 pushd ${ANNOUNCECHECKOUT}

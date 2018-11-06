@@ -1,5 +1,4 @@
-# Copyright (C) 2016 Jonathan Riddell <jr@jriddell.org>
-# Copyright (C) 2016 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2018 Jonathan Riddell <jr@jriddell.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -19,8 +18,49 @@
 
 require_relative 'plasma_template'
 
+# Generate new Plasma text block for www.kde.org/index.php
 class PlasmaWWWIndexTemplate < PlasmaTemplate
   def initialize
     super('plasma_www_index_template')
+  end
+end
+
+# Insert the new block into the php file
+class WWWIndexUpdater
+  attr_accessor :wwwcheckout
+
+  def initialize
+    @plasma_versions = PlasmaVersion.new
+    @wwwcheckout = @plasma_versions.wwwcheckout + "/index.php"
+  end
+
+  def rewrite_index
+    index_template = PlasmaWWWIndexTemplate.new
+    new_announce_block_output = index_template.render
+
+    index_html = nil
+    open(@wwwcheckout) do |f|
+        index_html = f.readlines()
+    end
+
+    # take out old text
+    old_announce_block_index = index_html.find_index do |line|
+      line.include?('Today KDE releases a new release of KDE Plasma')
+    end
+    (0..4).each do
+      index_html.delete_at(old_announce_block_index-2)
+    end
+
+    # add in new text
+    marker_line = index_html.index('					<!-- This comment is a marker for Latest Announcements, used by scripts -->
+')
+    index_html.insert(marker_line+1, new_announce_block_output)
+
+    # convert to string
+    output = ''
+    index_html.each do |line|
+      output += line
+    end
+    output
   end
 end

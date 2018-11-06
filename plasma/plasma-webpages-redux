@@ -7,53 +7,7 @@ require 'fileutils'
 require_relative 'lib/plasma_version'
 require_relative 'lib/plasma_www_index_template'
 
-class WWWIndexUpdater
-  attr_accessor :wwwcheckout
-
-  def initialize
-    @plasma_versions = PlasmaVersion.new
-    @wwwcheckout = @plasma_versions.wwwcheckout
-  end
-
-  def rewrite_index
-    index_template = PlasmaWWWIndexTemplate.new
-    new_announce_block_output = index_template.render
-
-    index_html = nil
-    open(@wwwcheckout + "/index.php") do |f|
-        index_html = f.readlines()
-    end
-
-    old_announce_block_index = index_html.find_index do |line|
-      line.include?('Today KDE releases a new release of KDE Plasma')
-    end
-    puts "OLDANNOUNCEINDEX" + old_announce_block_index.to_s
-    (0..4).each do
-      puts "removing!!"
-      index_html.delete_at(old_announce_block_index-2)
-    end
-
-    #index_html index which matches 'This comment is a marker for Latest Announcements' insert after
-    puts "YYY" + index_html.index('					<!-- This comment is a marker for Latest Announcements, used by scripts -->
-').to_s
-    marker_line = index_html.index('					<!-- This comment is a marker for Latest Announcements, used by scripts -->
-')
-    index_html.insert(marker_line+1, new_announce_block_output)
-
-
-    index_html.each do |line|
-      puts "XXX" + line
-    end
-    output = ''
-    index_html.each do |line|
-      output += line
-    end
-    output
-  end
-
-end
-
 wwwindexupdater = WWWIndexUpdater.new
 index_html = wwwindexupdater.rewrite_index
 
-File.write(wwwindexupdater.wwwcheckout + "/index.php", index_html)
+File.write(wwwindexupdater.wwwcheckout, index_html)

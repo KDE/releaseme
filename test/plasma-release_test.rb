@@ -37,4 +37,15 @@ class TestPlasmaRelease < Testme
     output = template.render
     assert_equal(ref, output)
   end
+
+  def test_www_index_updater
+    ref = File.read(data('plasma-release/index-full-edited.php'))
+    refute_equal('', ref)
+
+    wwwindexupdater = WWWIndexUpdater.new
+    wwwindexupdater.wwwcheckout = data('plasma-release/index-full.php')
+    index_html = wwwindexupdater.rewrite_index
+
+    assert_equal(ref, index_html)
+  end
 end

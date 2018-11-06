@@ -84,9 +84,9 @@
 				<ul>
 					<!-- This comment is a marker for Latest Announcements, used by scripts -->
 					<li>
-						<h1>KDE Plasma 5.10.0 Released <i>November 15, 2014</i></h1>
-						<q>Today KDE releases a new release of KDE Plasma 5, versioned 5.10.0</q>
-						<a href="announcements/plasma-5.10.0.php" class="learn-more">Read full announcement</a>
+						<h1>KDE Plasma 5.9.1 Released <i>Tuesday, 14 February 2017</i></h1>
+						<q>Today KDE releases a new release of KDE Plasma 5, versioned 5.9.1</q>
+						<a href="announcements/plasma-5.9.1.php" class="learn-more">Read full announcement</a>
 					</li>
 					<li>
 						<h1>KDE Releases Frameworks 5.51.0 <i>October 15, 2018</i></h1>
