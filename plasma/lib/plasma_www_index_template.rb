@@ -17,20 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require_relative '../../lib/releaseme/template'
-require_relative 'plasma_version'
+require_relative 'plasma_template'
 
-# Base plasma template.
-class PlasmaTemplate < ReleaseMe::Template
-  def initialize(template_name)
-    @name = template_name
-  end
-
-  def render_binding
-    PlasmaVersion.new.the_binding
-  end
-
-  def render
-    super("#{__dir__}/../templates/#{@name}.php.erb")
+class PlasmaWWWIndexTemplate < PlasmaTemplate
+  def initialize
+    super('plasma_www_index_template')
   end
 end

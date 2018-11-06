@@ -1,5 +1,4 @@
 # Copyright (C) 2016 Jonathan Riddell <jr@jriddell.org>
-# Copyright (C) 2016 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -17,20 +16,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require_relative '../../lib/releaseme/template'
-require_relative 'plasma_version'
+require 'fileutils'
 
-# Base plasma template.
-class PlasmaTemplate < ReleaseMe::Template
-  def initialize(template_name)
-    @name = template_name
+require_relative 'lib/testme'
+require_relative '../plasma/lib/plasma_www_index_template'
+
+class TestPlasmaRelease < Testme
+  def setup
+    PlasmaVersion.versions_path = data('plasma-webpages/VERSIONS.inc')
   end
 
-  def render_binding
-    PlasmaVersion.new.the_binding
+  def teardown
+    PlasmaVersion.versions_path = nil
   end
 
-  def render
-    super("#{__dir__}/../templates/#{@name}.php.erb")
+  def test_www_index_render
+    ref = File.read(data('plasma-release/index.php'))
+    refute_equal('', ref)
+    template = PlasmaWWWIndexTemplate.new
+    output = template.render
+    assert_equal(ref, output)
   end
 end
