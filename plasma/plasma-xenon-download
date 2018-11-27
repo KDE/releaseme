@@ -1,0 +1,12 @@
+#!/bin/bash
+# Download tars and changelog generated on the CI machine
+# Author Jonathan Riddell 2018, this file is in the public domain and has no copyright restrictions
+
+set -xe
+
+. VERSIONS.inc
+
+mkdir -p ${VERSION}
+rsync -CvzaP --stats xenon:/var/www/files/plasma/${VERSION}/*xz ${VERSION}/
+rsync -CvzaP --stats xenon:/var/www/files/plasma/${VERSION}/${VERSION}-release-data ${VERSION}/
+scp xenon:/var/www/files/plasma/${VERSION}/plasma-${OLD_VERSION}-${VERSION}-changelog.php .
