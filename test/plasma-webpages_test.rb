@@ -44,6 +44,8 @@ class TestPlasmaWebpages < Testme
     refute_equal('', ref)
     template = PlasmaAnnounceTemplate.new
     output = template.render
+    # File.open('/home/jr/tmp/OUTPUT', 'w') { |file| file.write(output) }
+    # File.open('/home/jr/tmp/REF', 'w') { |file| file.write(ref) }
     assert_equal(ref.split($/), output.split($/))
   end
 

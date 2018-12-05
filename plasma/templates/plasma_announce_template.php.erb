@@ -37,11 +37,11 @@
         <?php i18n("<%= releasedate %>.")?>
         <?php print i18n_var("Today KDE releases a <%= releasetype %> update to KDE Plasma 5, versioned %1", "<%= version %>");?>.
         <?php print i18n_var("<a href='https://www.kde.org/announcements/plasma-%1.0.php'>Plasma %1</a>
-        was released in %2 with many feature refinements and new modules to complete the desktop experience.", "<%= short_version %>", "<%= minor_release_month %>");?>
+        was released in <%= minor_release_month %> with many feature refinements and new modules to complete the desktop experience.", "<%= short_version %>");?>
     </p>
 
     <p>
-<?php        print i18n_var("This release adds a %1 worth of new translations and fixes from KDE's contributors.  The bugfixes are typically small but important and include:", "<%= timesincelastrelease %>");?>
+<?php        i18n("This release adds <%= timesincelastrelease %> worth of new translations and fixes from KDE's contributors.  The bugfixes are typically small but important and include:");?>
     </p>
 
     <ul>
