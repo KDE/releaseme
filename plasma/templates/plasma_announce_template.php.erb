@@ -82,10 +82,10 @@
     <section class="give-feedback">
         <h2><?php i18n("Feedback");?></h2>
 
-        <p>
-            <?php print i18n_var("You can give us feedback and get updates on <a href='%1'><img src='%2' /></a> <a href='%3'>Facebook</a>
-            or <a href='%4'><img src='%5' /></a> <a href='%6'>Twitter</a>
-            or <a href='%7'><img src='%8' /></a> <a href='%9'>Google+</a>.", "https://www.facebook.com/kde", "https://www.kde.org/announcements/facebook.gif", "https://www.facebook.com/kde", "https://twitter.com/kdecommunity", "https://www.kde.org/announcements/twitter.png", "https://twitter.com/kdecommunity", "https://plus.google.com/105126786256705328374/posts", "https://www.kde.org/announcements/googleplus.png", "https://plus.google.com/105126786256705328374/posts"); ?>
+        <p class="kSocialLinks">
+            <?php i18n("You can give us feedback and get updates on <a class='shareFacebook' href='https://www.facebook.com/kde/' rel='nofollow'>Facebook</a>
+            or <a class='shareTwitter' href='https://twitter.com/kdecommunity' rel='nofollow'>Twitter</a>
+            or <a class='shareGoogle' href='https://plus.google.com/105126786256705328374/posts' rel='nofollow'>Google+</a>."); ?>
         </p>
         <p>
             <?php print i18n_var("Discuss Plasma 5 on the <a href='%1'>KDE Forums Plasma 5 board</a>.", "https://forum.kde.org/viewforum.php?f=289");?>
