@@ -14,6 +14,8 @@
     $version = "5.9.1";
 ?>
 
+<script src="/js/use-ekko-lightbox.js" defer="true"></script>
+
 <main class="releaseAnnouncment container">
 
     <h1 class="announce-title"><a href="/announcements/"><?php i18n("Release Announcements")?></a><?php print i18n_var("Plasma %1", $version)?></h1>
@@ -27,7 +29,7 @@
 -->
 
     <figure class="topImage">
-        <a href="plasma-5.9/plasma-5.9.png">
+        <a href="plasma-5.9/plasma-5.9.png" data-toggle="lightbox">
             <img src="plasma-5.9/plasma-5.9-wee.png" height="338" width="600" style="width: 100%; max-width: 600px; height: auto;" alt="Plasma 5.9" />
         </a>
         <figcaption><?php print i18n_var("KDE Plasma %1", "5.9")?></figcaption>
