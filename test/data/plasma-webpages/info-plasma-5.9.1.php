@@ -40,13 +40,12 @@ that might describe or fix your problem.</p>
 
 <p> The easiest way to install and use Plasma 5 is to install
  pre-built packages.  For details of Linux distributions which do so
- see the <a href="https://community.kde.org/Plasma/Packages">Plasma
- Binary Packages wiki page</a>.</p>
+ see the <a href='https://community.kde.org/Get_KDE_Software_on_Your_Linux_Distro'>Get KDE Software on Your Linux Distro wiki page</a>.</p>
 
 <h2>Source Install and Use</h2>
 
 <p>You can compile Plasma yourself if you are a software developer.  See the
- <a href="http://community.kde.org/Plasma/Building">Build instructions</a>
+ <a href="https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source">Build instructions</a>
  on our developer wiki.
 </p>
 
