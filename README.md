@@ -88,6 +88,7 @@ branchme.
 - File a ticket with the sysadmins to move your tarball into a suitable place on
   http://download.kde.org. If you are unsure about where to put it you can
   ask the release-team@kde.org for some guidance.
+  In the ticket, provide both SHA-1 and SHA-256 checksums for the tarball.
 - Run tagme to tag your release in git.
 - Once the sysadmins have processed your ticket announce the release in whatever
   way that seems reasonable (blog post, dot.kde.org, kde-announce-apps@kde.org,
