@@ -8,5 +8,6 @@ set -xe
 
 mkdir -p ${VERSION}
 rsync -CvzaP --stats xenon:/var/www/files/plasma/${VERSION}/*xz ${VERSION}/
+rsync -CvzaP --stats xenon:/var/www/files/plasma/${VERSION}/source-plasma*inc ${VERSION}/
 rsync -CvzaP --stats xenon:/var/www/files/plasma/${VERSION}/${VERSION}-release-data ${VERSION}/
 scp xenon:/var/www/files/plasma/${VERSION}/plasma-${OLD_VERSION}-${VERSION}-changelog.php .
