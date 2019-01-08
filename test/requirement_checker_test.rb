@@ -65,9 +65,6 @@ class TestRequirementChecker < Testme
 
   def test_versions
     compatibles = %w[
-      2.2
-      2.2.0
-      2.2.1
       2.3
       2.3.1
       2.4
@@ -82,6 +79,9 @@ class TestRequirementChecker < Testme
       1.9.0
       2.0
       2.0.99
+      2.2
+      2.2.0
+      2.2.1
       2.7
       2.7.1
     ]
