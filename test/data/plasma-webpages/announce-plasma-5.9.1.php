@@ -47,7 +47,9 @@
     </p>
 
     <ul>
-        <li><?php i18n("FIXME")?></li>
+        <?php i18n("
+FIXME
+")?>
     </ul>
 
     <a href="plasma-5.9.0-5.9.1-changelog.php"><?php print i18n_var("Full Plasma %1 changelog", "5.9.1"); ?></a>
