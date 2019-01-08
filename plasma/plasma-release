@@ -60,7 +60,8 @@ kate tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
 # post on twitter, g+, facebook, reddit (r/kde and r/linux)
 echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://www.kde.org/announcements/plasma-${VERSION}.php" > tmp-announcements/twitter.text
 kate tmp-announcements/twitter.text
-firefox http://twitter.com
+firefox https://tweetdeck.twitter.com
+firefox https://facebook.com/kde
 firefox https://plus.google.com/+KdeOrg
 firefox https://www.reddit.com/r/kde/submit
 firefox https://dot.kde.org/#overlay=node/add/story
