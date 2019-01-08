@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -xe
+
 . VERSIONS.inc
 
 svn --version > /dev/null || { echo "Install subversion"; exit 1; }
@@ -19,5 +21,6 @@ for project in $WORKSPACE; do
   cat release_data >> $VERSION-release-data
 done
 
-
+echo "running create_sources_inc"
 ../create_sources_inc $VERSION > source-plasma-${VERSION}.inc
+echo "ran create_sources_inc"
