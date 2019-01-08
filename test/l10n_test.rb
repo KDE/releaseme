@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2015-2017 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2015-2019 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -65,6 +65,11 @@ class TestL10n < Testme
     l = ReleaseMe::L10n.new(origin, name, i18n_path)
     l.target = "#{@dir}/l10n"
     l
+  end
+
+  def assert_no_dotsvn(dir)
+    svns = Dir.glob("#{dir}/**/.svn")
+    assert_empty(svns, "There should be no lingering .svn dirs:\n  #{svns}")
   end
 
   def test_find_templates
@@ -250,6 +255,8 @@ class TestL10n < Testme
 
     assert_path_exist("#{@dir}/po/sr/scripts/libplasma5/libplasma5.js")
     assert_path_exist("#{@dir}/po/sr/scripts/libplasma5/plasmoid.js")
+
+    assert_no_dotsvn("#{@dir}/po")
   end
 
   def test_pot_detection_without_releaseme
@@ -314,6 +321,8 @@ class TestL10n < Testme
     # Make sure the CMakeLists properly adds our asset dir.
     assert(File.read("#{@dir}/po/CMakeLists.txt").include?('add_subdirectory(de/data/ktuberling)'))
     assert(File.read("#{@dir}/CMakeLists.txt").include?('ecm_optional_add_subdirectory(po)'))
+
+    assert_no_dotsvn("#{@dir}/po")
   end
 
 

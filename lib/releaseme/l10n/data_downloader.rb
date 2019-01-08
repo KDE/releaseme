@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2017 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2017-2019 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -40,14 +40,15 @@ module ReleaseMe
     end
 
     def download
-      @l10n.vcs.get(target_path, remote_path)
+      @l10n.vcs.get(target_path, remote_path, clean: true)
       files = Dir.glob("#{target_path}/*").select { |f| File.file?(f) }
       return [] if files.empty?
       @artifacts = [@tmpdir_assets]
       # Some languages may have a cmake_modules dir to aid with the cmake logic
       # in their data directories. Grab this as well.
       # NB: the L10n class has to move these into po/
-      if @l10n.vcs.get(target_cmake_modules_path, remote_cmake_modules_path)
+      if @l10n.vcs.get(target_cmake_modules_path, remote_cmake_modules_path,
+                       clean: true)
         @artifacts << @tmpdir_modules
       end
       @artifacts

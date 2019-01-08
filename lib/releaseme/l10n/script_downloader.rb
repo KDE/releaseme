@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2017 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2017-2019 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -101,7 +101,7 @@ module ReleaseMe
         name = File.basename(template, '.po')
         next unless @cache[lang].include?(name)
         target_dir = "#{@scripts_dir}/#{name}"
-        @l10n.vcs.get(target_dir, "#{script_file_dir}/#{name}")
+        @l10n.vcs.get(target_dir, "#{script_file_dir}/#{name}", clean: true)
         unless Dir.glob("#{target_dir}/*").select { |f| File.file?(f) }.empty?
           @artifacts = [@scripts_dir]
         end
