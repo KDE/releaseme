@@ -44,7 +44,7 @@ class TestGit < Testme
   end
 
   def test_init
-    g = Git.new
+    g = ReleaseMe::Git.new
     refute_nil(g)
     g.repository = '/repo'
     assert_equal('/repo', g.repository)
@@ -56,7 +56,7 @@ class TestGit < Testme
   end
 
   def test_get
-    g = Git.new
+    g = ReleaseMe::Git.new
     g.repository = @remotedir
     g.get('clone')
     assert_path_exist('clone/abc')
@@ -65,7 +65,7 @@ class TestGit < Testme
   end
 
   def test_clean
-    g = Git.new
+    g = ReleaseMe::Git.new
     g.repository = @remotedir
     g.get('clone')
     assert_path_exist('clone/.git')
@@ -74,7 +74,7 @@ class TestGit < Testme
   end
 
   def create_from_hash
-    Git.from_hash('repository' => '/kitten', 'branch' => 'brunch')
+    ReleaseMe::Git.from_hash('repository' => '/kitten', 'branch' => 'brunch')
   end
 
   def test_from_hash
