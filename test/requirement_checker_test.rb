@@ -74,14 +74,16 @@ class TestRequirementChecker < Testme
       2.4.1
       2.5
       2.5.1
+      2.6
+      2.6.0
     ]
     compatibles.each { |i| assert_ruby_version_compatible(i) }
     incompatibles = %w[
       1.9.0
       2.0
       2.0.99
-      2.6
-      2.6.1
+      2.7
+      2.7.1
     ]
     incompatibles.each { |i| assert_ruby_version_not_compatible(i) }
   end
