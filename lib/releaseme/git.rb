@@ -40,13 +40,12 @@ module ReleaseMe
     # @param shallow whether or not to create a shallow clone
     # @return [Boolean] success
     # FIXME: return actually not implemented, hrrhrr
+    # FIXME: make shallow a keyword
     def get(target, shallow = true)
-      args = []
-      args << 'clone'
+      args = %w[clone]
       args << '--depth 1' if shallow
       args << "--branch #{branch}" unless branch.nil? || branch.empty?
-      args << repository
-      args << target
+      args += [repository, target]
       run(args)
       # Set hash accordingly
       Dir.chdir(target) do
