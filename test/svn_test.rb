@@ -161,4 +161,13 @@ class TestSvn < Testme
     s = ReleaseMe::Svn.from_hash(repository: 'kitten')
     assert_equal('(svn - kitten)', s.to_s)
   end
+
+  def test_get_with_clean
+    populate_repo
+    s = new_valid_repo
+
+    s.get(@svn_checkout_dir, clean: true)
+    refute_path_exist("#{@svn_checkout_dir}/.svn")
+    refute_path_exist("#{@svn_checkout_dir}/dir/.svn")
+  end
 end

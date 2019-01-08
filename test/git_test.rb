@@ -73,6 +73,13 @@ class TestGit < Testme
     refute_path_exist('clone/.git')
   end
 
+  def test_get_and_clean
+    g = ReleaseMe::Git.new
+    g.repository = @remotedir
+    g.get('clone', clean: true)
+    refute_path_exist('clone/.git')
+  end
+
   def create_from_hash
     ReleaseMe::Git.from_hash('repository' => '/kitten', 'branch' => 'brunch')
   end

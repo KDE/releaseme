@@ -33,11 +33,12 @@ module ReleaseMe
     # @param target is the target directory for the checkout
     # @param path is an additional path to append to the repo URL
     # @return [Boolean] whether the checkout was successful
-    def get(target, path = nil)
+    def get(target, path = nil, clean: false)
       url?(target)
       url = repository.dup # Deep copy since we will patch around
       url.concat("/#{path}") if path && !path.empty?
       _output, status = run(['co', url, target])
+      clean!(target) if clean
       status.success?
     end
 

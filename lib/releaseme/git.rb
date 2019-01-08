@@ -41,7 +41,7 @@ module ReleaseMe
     # @return [Boolean] success
     # FIXME: return actually not implemented, hrrhrr
     # FIXME: make shallow a keyword
-    def get(target, shallow = true)
+    def get(target, shallow = true, clean: false)
       args = %w[clone]
       args << '--depth 1' if shallow
       args << "--branch #{branch}" unless branch.nil? || branch.empty?
@@ -51,6 +51,7 @@ module ReleaseMe
       Dir.chdir(target) do
         @hash = `git rev-parse HEAD`.chop
       end
+      clean!(target) if clean
     end
 
     # Removes target/.git.
