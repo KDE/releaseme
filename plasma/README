@@ -14,6 +14,15 @@ or for a stable version
 Check for critical bugs:
 https://bugs.kde.org/buglist.cgi?bug_severity=critical&bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&known_name=Plasma5-All-Critical&list_id=1364199&product=Breeze&product=kde-cli-tools&product=kde-gtk-config&product=kded-appmenu&product=kdeplasma-addons&product=kfontview&product=khelpcenter&product=khotkeys&product=kinfocenter&product=kio-extras&product=klipper&product=kmenuedit&product=knetattach&product=krunner&product=ksmserver&product=ksplash&product=ksshaskpass&product=Plasma%20Vault&product=kstart&product=ksysguard&product=kwin&product=kwrited&product=Discover&product=Plasma%20Workspace%20Wallpapers&product=plasma-mediacenter&product=plasma-nm&product=plasmashell&product=Powerdevil&product=systemsettings&product=Touchpad-KCM&product=user-manager&query_based_on=Plasma5-All-Critical&query_format=advanced
 
+on dep and repo freeze day:
+ - e-mail out list of repos you plan to package
+ - call for features list and ask for etherpad notes e.g. https://notes.kde.org/p/plasma_5_15
+
+on Monday before beta tar day:
+ - make announcement
+ - on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata
+ - Ping Michael@TUXVIDEO and The Linux Experiment <t.linuxexperiment@gmail.com> to ask for videos
+
 on beta tar day:
  - set QT_MIN_VERSION to version agreed at cycle kickoff (except plasma-browser-integration)
  - set KF5_MIN_VERSION to version agreed at cycle kickoff
@@ -52,7 +61,6 @@ on tar day prepare:
    [or run xenon job http://xenon.pangea.pub/job/plasma-releaseme-changelog/ ]
  Run ./update-web-svn
  run ./plasma-webpages and check over output opened in firefox
- on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata
  run optipng on any new images
  run ./plasma-add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
  tell release-team@kde.org, plasma-devel@kde.org, kde-announce@kde.org
