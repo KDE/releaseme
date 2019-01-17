@@ -11,7 +11,7 @@ tars=`cat git-repositories-for-release`
 echo == download old tars ==
 mkdir -p old-tars
 cd old-tars
-for tar in $tars; do echo ${tar}; wget https://download.kde.org/${FTPSTABLE}/plasma/${OLD_VERSION}/${tar}-${OLD_VERSION}.tar.xz; done
+for tar in $tars; do echo ${tar}; wget https://download.kde.org/${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/${tar}-${OLD_VERSION}.tar.xz; done
 cd -
 echo == old tars downloaded ==
 
