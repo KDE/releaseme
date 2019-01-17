@@ -17,20 +17,14 @@ echo == old tars downloaded ==
 
 echo == start tarballs l10n probe test, check for diff below
 for tar in $tars; do tar --list -f old-tars/${tar}-${OLD_VERSION}.tar.xz | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$ | sort; done >> ${VERSION}-po-testoutput
-
-
-
-exit 0
-
 echo == start tarballs l10n probe test, check for diff below
+cat ${VERSION}-po-testoutput
 echo == end tarballs l10n probe test
-
-
-exit 0
 
 echo == start tarballs l10n probe test, check for diff below
 ssh ${UPLOADSERVER} "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${VERSION}-po
 ssh ${UPLOADSERVER} "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${OLD_VERSION}-po
+echo == l10n po files diff:
 diff -u tmp-tests/${OLD_VERSION}-po tmp-tests/${VERSION}-po | tee tmp-tests/${VERSION}-po-testoutput
 echo == end tarballs l10n probe test
 

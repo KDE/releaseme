@@ -3,7 +3,7 @@ LANGUAGE=en
 LC_ALL=C.UTF-8
 
 VERSION=5.14.90
-SHORT_VERSION=5.14
+SHORT_VERSION=5.15
 OLD_VERSION=5.14.5
 ORIGIN=trunk  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=unstable  # set to unstable or stable
