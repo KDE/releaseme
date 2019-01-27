@@ -23,7 +23,7 @@ require 'optparse'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = 'Usage: targe.rb [options]'
+  opts.banner = 'Usage: tagme.rb [options]'
 
   opts.on('--version VERSION',
           'Version.',
