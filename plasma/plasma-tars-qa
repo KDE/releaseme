@@ -8,6 +8,8 @@ set -xe
 
 tars=`cat git-repositories-for-release`
 
+mkdir tmp-tests
+
 echo == download old tars ==
 mkdir -p old-tars
 cd old-tars
@@ -21,15 +23,15 @@ echo == start tarballs l10n probe test, check for diff below
 cat ${VERSION}-po-testoutput
 echo == end tarballs l10n probe test
 
-echo == start tarballs l10n probe test, check for diff below
+echo == start po probe test, check for diff below
 ssh ${UPLOADSERVER} "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${VERSION}-po
 ssh ${UPLOADSERVER} "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /po/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep .po$ | sort; done " > tmp-tests/${OLD_VERSION}-po
 echo == l10n po files diff:
 diff -u tmp-tests/${OLD_VERSION}-po tmp-tests/${VERSION}-po | tee tmp-tests/${VERSION}-po-testoutput
-echo == end tarballs l10n probe test
+echo == end po probe test
 
 echo == start tarballs docs probe test, check for diff below
 ssh ${UPLOADSERVER} "for asdf in ${FTPSTABLE}/plasma/${VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${VERSION}/,, | sed s,.*-${BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${VERSION}-doc
 ssh ${UPLOADSERVER} "for asdf in ${OLD_FTPSTABLE}/plasma/${OLD_VERSION}/*xz; do tar --list -f \${asdf} | awk '{print $6}' | grep /doc/ | sed s,.*-${OLD_VERSION}/,, | sed s,.*-${OLD_BALOO_VERSION}/,, | grep -v /$ | sort; done " > tmp-tests/${OLD_VERSION}-doc
 diff -u tmp-tests/${OLD_VERSION}-doc tmp-tests/${VERSION}-doc | tee tmp-tests/${VERSION}-doc-testoutput
-echo == end tarballs l10n probe test
+echo == end tarballs docs probe test
