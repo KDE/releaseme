@@ -78,7 +78,7 @@ FIXME
             <p>
                 <?php i18n("You can install Plasma 5 directly from source.");?>
             </p>
-            <a href='https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source'><?php i18n("Community instructions to compile it");?></a>
+            <a href='https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source' class='learn-more'><?php i18n("Community instructions to compile it");?></a>
             <a href='../info/plasma-5.9.1.php' class='learn-more'><?php i18n("Source Info Page");?></a>
         </article>
     </section>
