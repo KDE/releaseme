@@ -87,9 +87,16 @@ FIXME
         <h2><?php i18n("Feedback");?></h2>
 
         <p class="kSocialLinks">
-            <?php i18n("You can give us feedback and get updates on <a class='shareFacebook' href='https://www.facebook.com/kde/' rel='nofollow'>Facebook</a>
-            or <a class='shareTwitter' href='https://twitter.com/kdecommunity' rel='nofollow'>Twitter</a>
-            or <a class='shareGoogle' href='https://plus.google.com/105126786256705328374/posts' rel='nofollow'>Google+</a>."); ?>
+            <?php i18n("You can give us feedback and get updates on our social media channels:"); ?>
+            <section id="kSocial" class="container kSocialLinks">
+                <a class="shareFacebook" href="https://www.facebook.com/kde/" rel="nofollow">Post on Facebook</a>
+                <a class="shareTwitter" href="https://twitter.com/kdecommunity" rel="nofollow">Share on Twitter</a>
+                <a class="shareDiaspora" href="https://joindiaspora.com/people/9c3d1a454919ef06" rel="nofollow">Share on Diaspora</a>
+                <a class="shareReddit" href="http://www.reddit.com/r/kde/" rel="nofollow">Share on Reddit</a>
+                <a class="shareYouTube" href="https://www.youtube.com/channel/UCF3I1gf7GcbmAb0mR6vxkZQ" rel="nofollow">Share on YouTube</a>
+                <a class="shareMastodon" href="https://mastodon.technology/@kde" rel="nofollow">Share on Mastodon</a>
+                <a class="shareLinkedIn" href="https://www.linkedin.com/company/29561/" rel="nofollow">Share on LinkedIn</a>
+            </section>
         </p>
         <p>
             <?php print i18n_var("Discuss Plasma 5 on the <a href='%1'>KDE Forums Plasma 5 board</a>.", "https://forum.kde.org/viewforum.php?f=289");?>
