@@ -2,16 +2,16 @@ LANG=C.UTF-8
 LANGUAGE=en
 LC_ALL=C.UTF-8
 
-VERSION=5.15.0
+VERSION=5.15.1
 SHORT_VERSION=5.15
-OLD_VERSION=5.14.5
+OLD_VERSION=5.15.0
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.15 # set to master or Plasma/5.x
 MINOR_RELEASE_MONTH=February # for announcement, when was 5.x.0 released
 
-RELEASETYPE=Feature # for changelog, set to Beta, Feature or Bugfix
+RELEASETYPE=Bugfix # for changelog, set to Beta, Feature or Bugfix
 
 INFOCHECKOUT="/home/jr/src/www/www/info"                   # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/info/
 ANNOUNCECHECKOUT="/home/jr/src/www/www/announcements"      # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
@@ -21,7 +21,7 @@ UPLOADSERVER="ftpadmin@racnoss.kde.org"
 #UPLOADSERVER="weegie"
 PLASMA_CLONES="/home/jr/src/kde/"                       # a directory containing khotkeys/neongit/khotkeys/ etc for each repo
 
-RELEASEDATE="Tuesday, 12 February 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Tuesday, 19 February 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="February" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
 
