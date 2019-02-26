@@ -17,7 +17,7 @@ INFOCHECKOUT="/home/jr/src/www/www/info"                   # svn+ssh://svn@svn.k
 ANNOUNCECHECKOUT="/home/jr/src/www/www/announcements"      # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
 L10NSCRIPTSCHECKOUT="/home/jr/src/www/l10n-kf5/scripts"   # svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kf5/scripts/
 WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/
-UPLOADSERVER="ftpadmin@racnoss.kde.org"
+UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 PLASMA_CLONES="/home/jr/src/kde/"                       # a directory containing khotkeys/neongit/khotkeys/ etc for each repo
 
