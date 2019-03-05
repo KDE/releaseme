@@ -58,7 +58,7 @@ on beta tar day branch:
  
 on tar day prepare:
  run ./plasma-changelog (manually edit file after)
-   [or run xenon job http://xenon.pangea.pub/job/plasma-releaseme-changelog/ ]
+   [or run xenon job http://xenon.pangea.pub/job/plasma-releaseme-changelog/ then ./plasma-xenon-download-changelog]
  Run ./update-web-svn
  run ./plasma-webpages and check over output opened in firefox
  run optipng on any new images
