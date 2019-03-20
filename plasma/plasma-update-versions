@@ -1,6 +1,7 @@
 # Quick script to update version numbers in Plasma 5 modules
 # does a clone, replaces PROJECT_VERSION in CMakeLists.txt and pushes
-# Author Jonathan Riddell 2014, this file is in the public domain and has no copyright restrictions
+# Also updates Appstream metadata files with new version and date
+# Author Jonathan Riddell 2014,2019, this file is in the public domain and has no copyright restrictions
 
 set -xe
 
@@ -26,6 +27,9 @@ for project in $WORKSPACE; do
     cd ${project};
     pwd;
     sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
+    for metainfofile in `find . -name *appdata.xml`; do
+        ${APPSTREAM_UPDATER} ${metainfofile} --version "${VERSION}" --datestring "${RELEASEDATE}" --releases-to-show 4
+    done
     git diff;
     git commit -a -m "Update version number for ${VERSION}
 GIT_SILENT" || true;

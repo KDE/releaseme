@@ -28,5 +28,8 @@ SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
 YOUTUBEID="xha6DJ_v1E4" # The video ID used in URL for youtube
 
+# command from   git clone kde:jriddell/appstream-metainfo-release-update
+APPSTREAM_UPDATER="/home/jr/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"
+
 GPG_KEY=0xEC94D18F7F05997E
 RELEASE_DUDE="Jonathan Riddell"
