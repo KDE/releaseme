@@ -27,7 +27,7 @@ for project in $WORKSPACE; do
     cd ${project};
     pwd;
     sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
-    for metainfofile in `find . -name *appdata.xml -o *metainfo.xml`; do
+    for metainfofile in `find . -name \*appdata.xml -o -name \*metainfo.xml`; do
         ${APPSTREAM_UPDATER} ${metainfofile} --version "${VERSION}" --datestring "${RELEASEDATE}" --releases-to-show 4
     done
     git diff;
