@@ -60,4 +60,4 @@ svn diff source-plasma-${VERSION}.inc
 svn commit -m "update source-plasma-${VERSION}.inc"; cd -
 echo == end updating info page source-plasma-${VERSION}.inc
 
-echo test output in tmp-tests/${VERSION}-doc-testoutput tmp-tests/${VERSION}-po-testoutput tmp-tests/${VERSION}-tars-testoutput
+echo → Read and check the test output in tmp-tests/${VERSION}-doc-testoutput tmp-tests/${VERSION}-po-testoutput tmp-tests/${VERSION}-tars-testoutput
