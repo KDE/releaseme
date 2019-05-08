@@ -26,6 +26,8 @@ require_relative 'vcs'
 module ReleaseMe
   # Wrapper around Git.
   class Git < Vcs
+    class CloneError < StandardError; end
+
     prepend Logable
 
     # Git branch to {#get} from, when nil no explicit argument is passed to git
@@ -77,8 +79,9 @@ module ReleaseMe
         output.lines.each { |l| log_debug l.rstrip }
         log_debug '------------'
       end
-      # Do not return error output as it will screw with output processing.
-      output = '' unless $?.success?
+
+      raise CloneError, output unless $?.success?
+
       output
     end
   end

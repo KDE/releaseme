@@ -64,6 +64,16 @@ class TestGit < Testme
     refute_nil(g.hash)
   end
 
+  def test_get_error
+    g = ReleaseMe::Git.new
+    g.repository = '/this/doesnt/exist'
+    assert_raises ReleaseMe::Git::CloneError do
+      g.get('clone')
+    end
+    refute_path_exist('clone/abc')
+    assert_nil(g.hash)
+  end
+
   def test_clean
     g = ReleaseMe::Git.new
     g.repository = @remotedir
