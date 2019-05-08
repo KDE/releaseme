@@ -35,15 +35,6 @@ class TestSource < Testme
 
     s.get(v)
     assert_path_exist(@dir)
-
-    # Also do not fail on subsequent gets
-    s.get(v)
-    assert_path_exist(@dir)
-
-    # Finally... we still can get
-    FileUtils.rm_rf(@dir)
-    s.get(v)
-    assert_path_exist(@dir)
   end
 
   def test_target
