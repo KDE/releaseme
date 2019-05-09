@@ -1,0 +1,33 @@
+# Quick script to update version numbers in Plasma 5 modules
+# does a clone, replaces PROJECT_VERSION in CMakeLists.txt and pushes
+# Also updates Appstream metadata files with new version and date
+# Author Jonathan Riddell 2014,2019, this file is in the public domain and has no copyright restrictions
+
+set -xe
+
+. ./VERSIONS.inc
+
+# echo for updating version in master after branch override versions here
+# VERSION=5.14.80
+
+WORKSPACE=`cat git-repositories-for-release`
+echo "updating versions for $WORKSPACE"
+rm -rf tmp-version-update-kf5
+mkdir tmp-version-update-kf5
+cd tmp-version-update-kf5
+for project in $WORKSPACE; do
+  projectrepo=$project
+  project=`basename $project`
+  if [ $project != "breeze-grub" ]; then
+    echo ${project};
+    git clone --depth 1 --branch ${BRANCH} kde:${projectrepo} ${project};
+    cd ${project};
+    pwd;
+    sed -i "s,KF5_MIN_VERSION \".*\",KF5_MIN_VERSION \"${KF5_VERSION}\"," CMakeLists.txt;
+    git diff;
+    git commit -a -m "Update kf5 version requirement to ${KF5_VERSION}
+GIT_SILENT" || true;
+    git push;
+    cd ..;
+  fi
+done

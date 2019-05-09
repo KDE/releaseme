@@ -5,6 +5,7 @@ LC_ALL=C.UTF-8
 VERSION=5.15.5
 SHORT_VERSION=5.15
 OLD_VERSION=5.15.4
+KF5_VERSION='5.58.0' # required kf5 version
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
