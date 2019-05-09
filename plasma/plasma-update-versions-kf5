@@ -7,6 +7,9 @@ set -xe
 
 . ./VERSIONS.inc
 
+# override the branch!
+BRANCH=master
+
 # echo for updating version in master after branch override versions here
 # VERSION=5.14.80
 
