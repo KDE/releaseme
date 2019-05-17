@@ -2,15 +2,15 @@ LANG=C.UTF-8
 LANGUAGE=en
 LC_ALL=C.UTF-8
 
-VERSION=5.15.5
-SHORT_VERSION=5.15
-OLD_VERSION=5.15.4
+VERSION=5.15.90
+SHORT_VERSION=5.16
+OLD_VERSION=5.15.5
 KF5_VERSION='5.58.0' # required kf5 version
-ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
-FTPSTABLE=stable  # set to unstable or stable
+ORIGIN=trunk  # git branch as set in projects.k.o, set to trunk or stable
+FTPSTABLE=unstable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
-BRANCH=Plasma/5.15 # set to master or Plasma/5.x
-MINOR_RELEASE_MONTH=February # for announcement, when was 5.x.0 released
+BRANCH=master # set to master or Plasma/5.x
+MINOR_RELEASE_MONTH=May # for announcement, when was 5.x.0 released
 
 RELEASETYPE=Bugfix # for changelog, set to Beta, Feature or Bugfix
 
@@ -22,7 +22,7 @@ UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 PLASMA_CLONES="/home/jr/src/kde/"                       # a directory containing khotkeys/neongit/khotkeys/ etc for each repo
 
-RELEASEDATE="Tuesday, 7 May 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Thursday, 16 May 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="May" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
 

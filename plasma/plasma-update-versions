@@ -11,7 +11,7 @@ ls
 . ./VERSIONS.inc
 
 # echo for updating version in master after branch override versions here
-# VERSION=5.14.80
+#VERSION=5.16.80
 
 WORKSPACE=`cat git-repositories-for-release`
 echo "updating versions for $WORKSPACE"
@@ -27,9 +27,12 @@ for project in $WORKSPACE; do
     cd ${project};
     pwd;
     sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
-    for metainfofile in `find . -name \*appdata.xml -o -name \*metainfo.xml`; do
-        ${APPSTREAM_UPDATER} ${metainfofile} --version "${VERSION}" --datestring "${RELEASEDATE}" --releases-to-show 4
-    done
+    # update appstream files release version unless we are doing a beta
+    if [ ! $ORIGIN == 'trunk' ]; then
+      for metainfofile in `find . -name \*appdata.xml -o -name \*metainfo.xml`; do
+          ${APPSTREAM_UPDATER} ${metainfofile} --version "${VERSION}" --datestring "${RELEASEDATE}" --releases-to-show 4
+      done
+    fi
     git diff;
     git commit -a -m "Update version number for ${VERSION}
 GIT_SILENT" || true;

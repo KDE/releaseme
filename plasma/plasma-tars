@@ -6,7 +6,7 @@ set -xe
 
 svn --version > /dev/null || { echo "Install subversion"; exit 1; }
 
-mkdir $VERSION
+mkdir -p $VERSION
 cd $VERSION
 
 WORKSPACE=`cat ../git-repositories-for-release`
