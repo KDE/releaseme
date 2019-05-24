@@ -22,7 +22,10 @@ require 'logger'
 begin
   require 'logger/colors'
 rescue LoadError
-  puts 'Logging colors are not available. Install logger-colors gem if desired'
+  # entirely optional, don't even mention it unless global debug is enabled.
+  if ENV['RELEASEME_DEBUG']
+    puts 'W: Logging colors are not available. Install logger-colors gem if desired'
+  end
 end
 
 require_relative 'requirements'
