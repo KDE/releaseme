@@ -47,6 +47,10 @@ OptionParser.new do |opts|
     options[:version] = v
   end
 
+  opts.on('--debug', 'Enable debug output.') do |v|
+    ENV['RELEASEME_DEBUG'] = '1'
+  end
+
   opts.separator ''
   opts.separator 'Manual Project Definition:'
 
