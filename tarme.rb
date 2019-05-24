@@ -24,6 +24,9 @@ require 'optparse'
 
 require_relative 'lib/releaseme'
 
+puts '           !! Make sure to read the wiki :) !!'
+puts '     https://community.kde.org/ReleasingSoftware'
+
 options = OpenStruct.new
 OptionParser.new do |opts|
   opts.banner = 'Usage: tarme.rb [options] PROJECT_NAME'
