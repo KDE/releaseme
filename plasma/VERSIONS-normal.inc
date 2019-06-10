@@ -6,9 +6,9 @@ VERSION=5.16.0
 SHORT_VERSION=5.16
 OLD_VERSION=5.15.5
 KF5_VERSION='5.58.0' # required kf5 version
-ORIGIN=trunk  # git branch as set in projects.k.o, set to trunk or stable
+ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
-OLD_FTPSTABLE=unstable  # set to unstable or stable of previous release
+OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.16 # set to master or Plasma/5.x
 MINOR_RELEASE_MONTH=June # for announcement, when was 5.x.0 released
 

@@ -101,7 +101,7 @@ FIXME
             <?php print i18n_var("Discuss Plasma 5 on the <a href='%1'>KDE Forums Plasma 5 board</a>.", "https://forum.kde.org/viewforum.php?f=289");?>
         </p>
 
-        <p><?php print i18n_var("You can provide feedback direct to the developers via the <a href='%1'>Plasma Matrix chat room</a>, <a href='%2'>Plasma-devel mailing list</a> or report issues via <a href='%3'>bugzilla</a>. If you like what the team is doing, please let them know!", "https://webchat.kde.org/#/room/#cutehmi:kde.org", "https://mail.kde.org/mailman/listinfo/plasma-devel", "https://bugs.kde.org/enter_bug.cgi?product=plasmashell&amp;format=guided"); ?>
+        <p><?php print i18n_var("You can provide feedback direct to the developers via the <a href='%1'>Plasma Matrix chat room</a>, <a href='%2'>Plasma-devel mailing list</a> or report issues via <a href='%3'>bugzilla</a>. If you like what the team is doing, please let them know!", "https://webchat.kde.org/#/room/#kde-devel:kde.org", "https://mail.kde.org/mailman/listinfo/plasma-devel", "https://bugs.kde.org/enter_bug.cgi?product=plasmashell&amp;format=guided"); ?>
 
         <p><?php i18n("Your feedback is greatly appreciated.");?></p>
     </section>
