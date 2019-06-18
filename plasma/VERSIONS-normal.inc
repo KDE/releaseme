@@ -2,9 +2,9 @@ LANG=C.UTF-8
 LANGUAGE=en
 LC_ALL=C.UTF-8
 
-VERSION=5.16.0
+VERSION=5.16.1
 SHORT_VERSION=5.16
-OLD_VERSION=5.15.5
+OLD_VERSION=5.16.1
 KF5_VERSION='5.58.0' # required kf5 version
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
@@ -12,7 +12,7 @@ OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.16 # set to master or Plasma/5.x
 MINOR_RELEASE_MONTH=June # for announcement, when was 5.x.0 released
 
-RELEASETYPE=Feature # for changelog, set to Beta, Feature or Bugfix
+RELEASETYPE=Bugfix # for changelog, set to Beta, Feature or Bugfix
 
 INFOCHECKOUT="/home/jr/src/www/www/info"                   # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/info/
 ANNOUNCECHECKOUT="/home/jr/src/www/www/announcements"      # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
@@ -22,13 +22,13 @@ UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 PLASMA_CLONES="/home/jr/src/kde/"                       # a directory containing khotkeys/neongit/khotkeys/ etc for each repo
 
-RELEASEDATE="Tuesday, 11 June 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Tuesday, 18 June 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="June" # usually `LC_ALL=C date "+%B" --date="next Tue"`
-TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
+TIMESINCELASTRELEASE="a week's" # in sentence 'This release adds a TIMESINCELASTRELEASE worth of new'
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
-YOUTUBEID="C2kR1_n_d-g" # The video ID used in URL for youtube
+YOUTUBEID="T-29hJUxoFQ" # The video ID used in URL for youtube
 
 # command from   git clone kde:jriddell/appstream-metainfo-release-update
 APPSTREAM_UPDATER="/home/jr/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"
