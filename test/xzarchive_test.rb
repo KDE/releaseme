@@ -117,4 +117,16 @@ class TestXzArchive < Testme
     assert ret
     assert_equal "#{Dir.pwd}/#{a.filename}", a.path
   end
+
+  def test_format
+    a = ReleaseMe::XzArchive.new
+
+    a.directory = @dir
+    assert(a.create)
+    assert(system("unxz #{a.path}"))
+    output = `file #{tar_file}`.strip
+    assert($?.success?)
+    assert(output.include?('(GNU)'),
+      'tar file was not created with gnu format!')
+  end
 end

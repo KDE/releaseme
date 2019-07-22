@@ -85,7 +85,7 @@ module ReleaseMe
     def compress(dir, xz)
       # Tar and compress in one go. tar supports -J for quite a while now.
       system({ 'XZ_OPT' => "-#{level}" },
-             'tar', 'cfJ', xz, dir,
+             'tar', '--format=gnu', '-cJf', xz, dir,
              %i[out] => File::NULL) || raise
       @filename = xz
       @path = File.realpath(xz)
