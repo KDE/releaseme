@@ -37,6 +37,7 @@ sed "s,>kmenuedit,>KMenuEdit," ${FILE} -i
 sed "s,>user-manager,>User Manager," ${FILE} -i
 sed "s,>baloo,>Baloo," ${FILE} -i
 sed "s,>plasma-nm,>Plasma Networkmanager (plasma-nm)," ${FILE} -i
+sed "s,>drkonqi,>Dr Konqi," ${FILE} -i
 sed "s,>khelpcenter,>KHelpCenter," ${FILE} -i
 sed "s,>kinfocenter,>Info Center," ${FILE} -i
 sed "s,>khotkeys,>KDE Hotkeys," ${FILE} -i
