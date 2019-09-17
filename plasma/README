@@ -75,6 +75,7 @@ on release day launch:
  for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
  for beta releases also copy announce to 5.x.0 page and ask for translations
  Update https://www.kde.org/screenshots/index.php for new version
+ Update https://kde.org/plasma-desktop for new version
  ./plasma-tag-test to check the tags are really pushed
     or run http://xenon.pangea.pub/job/plasma-releaseme-tags-test/ to check tags are really pushed
 
