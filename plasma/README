@@ -88,3 +88,4 @@ TODO:
  test gpg works with agent before running plasma-tag
  test tag has been pushed
  pkgdiff output https://lvc.github.io/pkgdiff/
+ for 5.16.90 the release_data file had the kscreen info duplicated info libkscreen, why?
