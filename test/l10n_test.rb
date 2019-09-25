@@ -22,7 +22,7 @@ require 'fileutils'
 
 require_relative 'lib/testme'
 require_relative '../lib/releaseme/l10n.rb'
-require_relative '../lib/releaseme/l10nstatistics.rb'
+require_relative '../lib/releaseme/l10n_statistics.rb'
 require_relative '../lib/releaseme/documentation.rb'
 
 # FIXME: test stable
@@ -164,16 +164,34 @@ class TestL10n < Testme
     FileUtils.cp_r(data('multi-pot'), @dir)
     l.get(@dir)
 
-    statistics = ReleaseMe::L10nStatistics.new
-    statistics.gather!("#{@dir}/po")
-    assert_equal({"de"=>{:all=>4,
-                    :shown=>3,
-                    :notshown=>1,
-                    :percentage=>75.0},
-                "fr"=>{:all=>4,
-                    :shown=>4,
-                    :notshown=>0,
-                    :percentage=>100.0}}, statistics.stats)
+    statistics = ReleaseMe::L10nStatistics.new(["#{@dir}/po"])
+    de = statistics.languages.find { |x| x.name == 'de' }
+    assert(de)
+    assert_equal(de.all, 4)
+    assert_equal(de.shown, 3)
+    assert_equal(de.notshown, 1)
+    assert_equal(de.percent_translated, 75.0)
+    fr = statistics.languages.find { |x| x.name == 'fr' }
+    assert(fr)
+    assert_equal(fr.all, 4)
+    assert_equal(fr.shown, 3)
+    assert_equal(fr.notshown, 1)
+    assert_equal(fr.fuzzy, 1)
+    assert_equal(fr.percent_translated, 75.0)
+
+    # Tuck this on to the test, we only care if the printer implodes.
+    # Output is not aaaaallll that important and fairly hard to validate
+    # without golden-references which are of course a bit shitty to manage.
+    printer = ReleaseMe::L10nStatisticsHTMLPrinter.new(statistics, '123')
+    out = '123.l10n.html'
+    printer.write(out)
+    assert_path_exist(out)
+    refute(File.empty?(out))
+
+    # Bring up coverage for failure case
+    fake_stat = mock('stat')
+    fake_stat.stubs(:percent_translated).returns(-1)
+    assert_equal('', printer.stat_color(fake_stat))
   end
 
   def test_variable_potname
@@ -325,7 +343,6 @@ class TestL10n < Testme
     assert_no_dotsvn("#{@dir}/po")
   end
 
-
   def test_multi_pot_kde4
     # In KDE4 you could have foo_qt.po to mean anything. In KF5 based code this
     # explicitly means that this is a qt translation compiled to qm.
@@ -387,5 +404,24 @@ class TestL10n < Testme
 
     assert(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(po)'))
     assert(!File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(poqm)'))
+  end
+
+  def test_drop_worthless_po
+    # When a translations has 0 strings translated there is no point in shipping
+    # it, we'll drop it (including data and assets because we can't qualify
+    # them, so we'll use lack of UI translations as indication for poor quality
+    # everywhere).
+
+    l = create_l10n('solid', 'frameworks')
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('multi-pot-qt-frameworks'), @dir)
+    l.get(@dir)
+
+    assert_equal(%w[sr], l.zero_percent_dropped)
+
+    assert_path_exist("#{@dir}/po")
+    refute_path_exist("#{@dir}/po/sr/")
   end
 end

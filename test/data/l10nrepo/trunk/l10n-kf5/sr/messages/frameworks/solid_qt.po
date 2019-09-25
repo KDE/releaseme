@@ -23,9 +23,8 @@ msgstr ""
 
 #: HostConnector.cpp:44
 msgid "Connect Host"
-msgstr "Mit Rechner verbinden"
+msgstr ""
 
 #: Workspace.cpp:263
-#, fuzzy, kde-format
 msgid "There are no tabs that could be deleted."
-msgstr "Es existieren keine Arbeitsblätter, die gelöscht werden könnten."
+msgstr ""

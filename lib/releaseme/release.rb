@@ -93,6 +93,9 @@ module ReleaseMe
       # FIXME: origin should be validated? technically optparse enforces proper values
       l10n = L10n.new(origin, project.identifier, project.i18n_path)
       l10n.get(source.target)
+      stats_printer = L10nStatisticsHTMLPrinter.new(l10n.statistics,
+                                                    source.target)
+      stats_printer.write("#{source.target}.l10n.html")
 
       log_info ' Getting documentation...'
       doc = DocumentationL10n.new(origin, project.identifier, project.i18n_path)

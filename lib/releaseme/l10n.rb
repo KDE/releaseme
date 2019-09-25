@@ -24,6 +24,7 @@ require 'thwait'
 require 'tmpdir'
 
 require_relative 'cmakeeditor'
+require_relative 'l10n_statistics'
 require_relative 'logable'
 require_relative 'source'
 require_relative 'svn'
@@ -37,6 +38,9 @@ module ReleaseMe
   # FIXME: doesn't write master cmake right now...
   class L10n < TranslationUnit
     prepend Logable
+
+    attr_reader :zero_percent_dropped
+    attr_reader :statistics
 
     RELEASEME_TEST_DIR = File.absolute_path("#{__dir__}/../../test").freeze
 
@@ -112,15 +116,33 @@ module ReleaseMe
     end
 
     def post_process(target, qttarget, edit_cmake)
+      @zero_percent_dropped = []
+      @statistics = L10nStatistics.new([target, qttarget])
+      @statistics.languages.each do |stat|
+        next unless stat.percent_translated <= 0.0
+        FileUtils.rm_r(stat.dirs)
+        @zero_percent_dropped << stat.name
+      end
+      unless @zero_percent_dropped.empty?
+        log_info "The following languages had translations files but they" \
+          " amount to no useful strings so they were removed:" \
+          " #{@zero_percent_dropped.join(', ')}"
+      end
+
       if ENV.include?('RELEASEME_L10N_REQUIREMENT')
+        # WARNING: before this could be supported as a general feature
+        # this at the very least needs extension to establish how many strings
+        # are meant to be there and then calculate the overall translated %.
+        # A language that has 100% coverage with one single .po but is missing
+        # 9 other .po files is not complete!
+        # To fix this we could get() x-test or the templates (x-test likely
+        # is easier because it behaves like a translation) and get stats of it.
         completion_requirement = ENV['RELEASEME_L10N_REQUIREMENT'].to_i
-        require_relative 'l10nstatistics'
-        [target, qttarget].each do |dir|
-          stats = L10nStatistics.new.tap { |l| l.gather!(dir) }.stats
-          stats.each do |lang, stat|
-            next if stat[:percentage] >= completion_requirement
-            FileUtils.rm_r("#{dir}/#{lang}")
-          end
+        @statistics.languages.each do |stat|
+          percent = stat.percent_translated
+          next if percent >= completion_requirement
+          FileUtils.rm_r(stat.dirs)
+          log_warn "#{stat.name} wasn't sufficiently translated #{percent}!"
         end
       end
 

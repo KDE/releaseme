@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Statistics of <%= @release %> translations</title>
+</head>
+<body>
+<a name="statistics of <%= @release %> translations">
+<h1>Statistics of <%= @release %> translations</h1><br/>
+
+<table border="1" cellspacing="0"dir="ltr">
+<tr><td align="left" valign="middle" width="60" height="12">
+<font color="#196aff"><i><b>Language</b></i></font>
+</td><td align="center" valign="middle" width="142" height="12">
+<font color="#196aff"><i><b>Fuzzy Strings</b></i></font>
+</td><td align="center" valign="middle" width="168" height="12">
+<font color="#196aff"><i><b>Untranslated Strings</b></i></font>
+</td><td align="center" valign="middle" width="163" height="12">
+<font color="#196aff"><i><b>All Not Shown Strings</b></i></font>
+</td><td align="center" valign="middle" width="163" height="12">
+<font color="#196aff"><i><b>All Strings</b></i></font>
+</td><td align="center" valign="middle" width="163" height="12">
+<font color="#196aff"><i><b>Translated %</b></i></font>
+</td></tr>
+
+<% @stats.languages.each do |stat| %>
+  <% fcolor = stat_color(stat) %>
+  <tr>
+    <td align="left" valign="middle" width="60" height="12">
+    <font color="<%= fcolor %>"><%= stat.name %></font></td>
+    <td align="center" valign="middle" width="142" height="12">
+    <font color="<%= fcolor %>"><%= stat.fuzzy %></font></td>
+    <td align="center" valign="middle" width="168" height="12">
+    <font color="<%= fcolor %>"><%= stat.untranslated %></font></td>
+    <td align="center" valign="middle" width="163" height="12">
+    <font color="<%= fcolor %>"><%= stat.notshown %></font></td>
+    <td align="center" valign="middle" width="163" height="12">
+    <font color="<%= fcolor %>"><%= stat.all %></font></td>
+    <td align="center" valign="middle" width="163" height="12">
+    <font color="<%= fcolor %>"><%= stat.percent_translated.to_i %> %</font></td>
+  </tr>
+<% end %>
+
+</table>
+</body>
