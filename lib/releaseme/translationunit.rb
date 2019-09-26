@@ -140,7 +140,7 @@ module ReleaseMe
         until queue.empty?
           begin
             lang = queue.pop(true)
-          rescue
+          rescue ThreadError
             # When pop runs into an empty queue with non_block=true it raises
             # an exception. We'll simply continue with it as our loop should
             # naturally end anyway.
