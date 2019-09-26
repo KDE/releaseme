@@ -41,14 +41,18 @@ class TestL10n < Testme
     @svn_checkout_dir = 'tmp_l10n_check'
 
     `svnadmin create #{@svn_template_dir}`
+    assert($?.success?)
     assert_path_exist(@svn_template_dir)
 
     `svn co file:///#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}`
+    assert($?.success?)
     FileUtils.cp_r("#{@repo_data_dir}/trunk", @svn_checkout_dir)
     FileUtils.cp_r("#{@repo_data_dir}/branches", @svn_checkout_dir)
     Dir.chdir(@svn_checkout_dir) do
       `svn add *`
+      assert($?.success?)
       `svn ci -m 'yolo'`
+      assert($?.success?)
     end
 
     ReleaseMe::L10n.languages = nil
