@@ -93,7 +93,11 @@ module ReleaseMe
     def run(args)
       cmd = %w[svn] + args
       log_debug cmd.join(' ')
-      output, @status = Open3.capture2e(*cmd)
+      output, status = Open3.capture2e(*cmd)
+      # for testing. we want to verify codes all the time so we need to track
+      # the last most status somewhere. this must not be used for production
+      # code that gets threaded.
+      @status = status.dup
       debug_output(output)
       # Do not return error output as it will screw with output processing.
       [status.success? ? output : '', status]
