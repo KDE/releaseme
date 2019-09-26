@@ -190,7 +190,7 @@ class TestL10n < Testme
     out = '123.l10n.html'
     printer.write(out)
     assert_path_exist(out)
-    refute(File.empty?(out))
+    refute(File.size(out) <= 0)
 
     # Bring up coverage for failure case
     fake_stat = mock('stat')
