@@ -2,14 +2,14 @@ LANG=en_GB.UTF-8
 LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
-VERSION=5.16.90
+VERSION=5.17.0
 SHORT_VERSION=5.17
 OLD_VERSION=5.16.5
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=unstable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=master # set to master or Plasma/5.x
-MINOR_RELEASE_MONTH="September 2019" # for announcement, when was 5.x.0 released
+MINOR_RELEASE_MONTH="October 2019" # for announcement, when was 5.x.0 released
 
 RELEASETYPE=beta # for changelog, set to beta, feature or bugfix
 
@@ -20,8 +20,8 @@ WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.k
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Thursday, 19 September 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEMONTH="September" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+RELEASEDATE="Tuesday, 15 October 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEMONTH="October" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="six months'" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
