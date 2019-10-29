@@ -24,7 +24,7 @@ RELEASEDATE="Tuesday, 14 February 2017" # usually  `LC_ALL=C date "+%A, %d %B %Y
 RELEASEMONTH="January" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
-YOUTUBEID="lm0sqqVcotA" # The video ID used in URL for youtube
+YOUTUBEID="https://www.youtube.com/embed/lm0sqqVcotA" # The video ID used in URL for youtube
 
 GPG_KEY=0xEC94D18F7F05997E
 RELEASE_DUDE="Jonathan Riddell"
