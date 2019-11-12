@@ -21,7 +21,7 @@ sed -i "s/\(INSERT NEW ENTRIES.*\)/\1\n${ANNOUNCEINDEX}/" ${ANNOUNCECHECKOUT}/in
 
 # www/index.php
 # Updating www/index.php got ported to Ruby
-./plasma-release-webpages
+#./plasma-release-webpages
 
 # commit to svn
 pushd ${ANNOUNCECHECKOUT}
