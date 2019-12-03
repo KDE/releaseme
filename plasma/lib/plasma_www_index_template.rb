@@ -45,15 +45,14 @@ class WWWIndexUpdater
 
     # take out old text
     old_announce_block_index = index_html.find_index do |line|
-      line.include?('Today KDE releases a new release of KDE Plasma')
+      line.include?('Today KDE releases a new')
     end
     (0..4).each do
       index_html.delete_at(old_announce_block_index-2)
     end
 
     # add in new text
-    marker_line = index_html.index('					<!-- This comment is a marker for Latest Announcements, used by scripts -->
-')
+    marker_line = index_html.index("                <!-- This comment is a marker for Latest Announcements, used by scripts -->\n")
     index_html.insert(marker_line+1, new_announce_block_output)
 
     # convert to string
