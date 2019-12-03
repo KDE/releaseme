@@ -2,9 +2,9 @@ LANG=en_GB.UTF-8
 LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
-VERSION=5.17.3
+VERSION=5.17.4
 SHORT_VERSION=5.17
-OLD_VERSION=5.17.2
+OLD_VERSION=5.17.3
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -20,9 +20,9 @@ WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.k
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 12 November 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEMONTH="November" # usually `LC_ALL=C date "+%B" --date="next Tue"`
-TIMESINCELASTRELEASE="a fortnight's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
+RELEASEDATE="Tuesday, 3 December 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEMONTH="December" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
