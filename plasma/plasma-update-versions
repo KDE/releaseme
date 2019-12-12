@@ -38,5 +38,10 @@ for project in $WORKSPACE; do
 GIT_SILENT" || true;
     git push;
     cd ..;
+    git clone --depth 1 --branch master kde:${projectrepo} ${project};
+    cd ${project};
+    git cherry-pick origin/${BRANCH};
+    git push;
+    cd ..;
   fi
 done
