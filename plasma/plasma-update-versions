@@ -23,9 +23,10 @@ for project in $WORKSPACE; do
   project=`basename $project`
   if [ $project != "breeze-grub" ]; then
     echo ${project};
-    git clone --depth 1 --branch ${BRANCH} kde:${projectrepo} ${project};
+    git clone --depth 1 --no-single-branch kde:${projectrepo} ${project};
     cd ${project};
     pwd;
+    git checkout ${BRANCH}
     sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
     # update appstream files release version unless we are doing a beta
     if [ ! $ORIGIN == 'trunk' ]; then
@@ -34,14 +35,17 @@ for project in $WORKSPACE; do
       done
     fi
     git diff;
-    git commit -a -m "Update version number for ${VERSION}
-GIT_SILENT" || true;
+    git commit -a -m "Update version number for ${VERSION} GIT_SILENT" || true;
     git push;
-    cd ..;
-    git clone --depth 1 --branch master kde:${projectrepo} ${project};
-    cd ${project};
-    git cherry-pick origin/${BRANCH};
-    git push;
+    # push to master
+    if [ ! $ORIGIN == 'trunk' ]; then
+      git checkout master
+      for metainfofile in `find . -name \*appdata.xml -o -name \*metainfo.xml`; do
+          ${APPSTREAM_UPDATER} ${metainfofile} --version "${VERSION}" --datestring "${RELEASEDATE}" --releases-to-show 4
+      done
+      git commit -a -m "Update version number for ${VERSION} GIT_SILENT" || true;
+      git push;
+    fi
     cd ..;
   fi
 done
