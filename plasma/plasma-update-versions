@@ -35,7 +35,8 @@ for project in $WORKSPACE; do
       done
     fi
     git diff;
-    git commit -a -m "Update version number for ${VERSION} GIT_SILENT" || true;
+    git commit -a -m "Update version number for ${VERSION}
+GIT_SILENT" || true;
     git push;
     # push to master
     if [ ! $ORIGIN == 'trunk' ]; then
@@ -43,7 +44,8 @@ for project in $WORKSPACE; do
       for metainfofile in `find . -name \*appdata.xml -o -name \*metainfo.xml`; do
           ${APPSTREAM_UPDATER} ${metainfofile} --version "${VERSION}" --datestring "${RELEASEDATE}" --releases-to-show 4
       done
-      git commit -a -m "Update version number for ${VERSION} GIT_SILENT" || true;
+      git commit -a -m "Update version number for ${VERSION}
+GIT_SILENT" || true;
       git push;
     fi
     cd ..;
