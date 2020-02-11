@@ -79,7 +79,7 @@ on release day launch:
  ./plasma-tag-test to check the tags are really pushed
     or run http://xenon.pangea.pub/job/plasma-releaseme-tags-test/ to check tags are really pushed
 
- [tell a KDE neon person to update forks/base-files to show new version before running 'plasma-rebuild -p' and making ISOs]
+ [tell a KDE neon person to update forks/base-files and neon/settings (release-lts only) to show new version before running 'jenking_retry -p' and making ISOs and Docker]
 
 TODO:
  remove apt from plasma-release

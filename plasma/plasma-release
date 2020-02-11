@@ -40,9 +40,9 @@ svn commit -m "release plasma ${VERSION}"
 
 popd
 
-firefox https://www.kde.org/info/plasma-${VERSION}.php
-firefox https://www.kde.org/announcements/plasma-${VERSION}.php
-firefox https://www.kde.org/announcements/index.php
+firefox https://www.kde.org/info/plasma-${VERSION}
+firefox https://www.kde.org/announcements/plasma-${VERSION}
+firefox https://www.kde.org/announcements/
 firefox https://www.kde.org/
 
 rm -rf tmp-announcements
