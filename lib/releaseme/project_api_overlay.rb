@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2017 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2017-2020 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -19,6 +19,7 @@
 #++
 
 require_relative 'git'
+require_relative 'logable'
 require_relative 'projects_api'
 
 module ReleaseMe
@@ -26,13 +27,14 @@ module ReleaseMe
   module ProjectAPIOverlay
     # Class methods.
     module ClassMethods
+      prepend Logable
+
       def from_data(api_project)
         # FIXME: not defined in remote QQ
         id = File.basename(api_project.path)
 
         # Resolve git url.
-        vcs = Git.new
-        vcs.repository = "git@git.kde.org:#{api_project.repo}"
+        vcs = invent_or_git_vcs(api_project.repo)
         # FIXME: hack to get readonly. should be RO by default and
         # frontend scripts should opt-into RW by setting a property
         # on us
@@ -94,6 +96,23 @@ module ReleaseMe
       rescue OpenURI::HTTPError => e
         return [] if e.io.status[0] == '404' # Not a thing
         raise e # Otherwise raise, the error was unexpected on an API level.
+      end
+
+      private
+
+      def invent_or_git_vcs(repo)
+        # Repos that have migrated to invent will respond to ls-remote,
+        # repos that have not will not. See if the writable invent repo exists
+        # if not, drop to git.kde.org. If the user doesn't have push access
+        # to invent that will also trip up this check and they'll default
+        # to git.kde.org. This is a bit unfortunate :|
+        vcs = Git.new
+        vcs.repository = "git@invent.kde.org:kde/#{repo}"
+        return vcs if vcs.exist?
+        log_info 'Repo not writable on invent.kde.org. Defaulting to git.kde.org'
+        vcs = Git.new
+        vcs.repository = "git@git.kde.org:#{repo}"
+        vcs
       end
     end
 

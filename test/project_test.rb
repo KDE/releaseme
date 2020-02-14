@@ -37,8 +37,25 @@ def stub_projects_single(url)
   stub_request(:get, url).to_return(body: j([path]))
 end
 
+def git_stubs
+  # Do not let us hit live repos.
+  # We do repo progint to determine whether to use invent.kde.org or git.kde.org
+  ReleaseMe::Git.any_instance.expects(:run).never
+
+  # Pretend everything exists on invent
+  success_status = mock()
+  success_status.responds_like_instance_of(Process::Status)
+  success_status.stubs(:success?).returns(true)
+  ReleaseMe::Git.any_instance.stubs(:run).with do |args|
+    next false unless args.include?('ls-remote')
+    true
+  end.returns(['', success_status])
+end
+
 # FIXME: this should go somewhere central or into a class. having a meth in global scope sucks
 def stub_api
+  git_stubs
+
   stub_request(:get, 'https://projects.kde.org/api/v1/projects/extragear/utils')
     .to_return(body: JSON.generate(%w[extragear/utils/yakuake
                                       extragear/utils/krusader
@@ -339,11 +356,22 @@ class TestProject < Testme
     assert_equal(projects.size, 1)
     pr = projects.shift
     vcs = pr.vcs
-    assert_equal(vcs.repository, 'git@git.kde.org:yakuake')
+    assert_equal(vcs.repository, 'git@invent.kde.org:kde/yakuake')
     assert_nil(vcs.branch) # project on its own should not set a branch
   end
 
   def test_from_repo_url
+    # Mock Git internals to make this repo default to git.kde.org instead
+    # of invent.kde.org by pretending the ls-remote fails.
+    fail_status = mock()
+    fail_status.responds_like_instance_of(Process::Status)
+    fail_status.stubs(:success?).returns(false)
+    ReleaseMe::Git.any_instance.stubs(:run).with do |args|
+      next false unless args.include?('ls-remote')
+      next false unless args.include?('git@invent.kde.org:kde/kfilemetadata')
+      true
+    end.returns(['', fail_status])
+
     projects = ReleaseMe::Project.from_repo_url('git://anongit.kde.org/kfilemetadata')
     assert_equal(1, projects.size)
     pr = projects.shift
