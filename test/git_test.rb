@@ -105,4 +105,15 @@ class TestGit < Testme
     g = create_from_hash
     assert_equal('(git - /kitten [brunch])', g.to_s)
   end
+
+  def test_exist
+    g = ReleaseMe::Git.new
+    g.repository = @remotedir
+    assert(g.exist?)
+
+    # And not
+    g = ReleaseMe::Git.new
+    g.repository = "/dev/null"
+    refute(g.exist?)
+  end
 end

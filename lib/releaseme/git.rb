@@ -1,5 +1,5 @@
 #--
-# Copyright (C) 2007-2015 Harald Sitter <sitter@kde.org>
+# Copyright (C) 2007-2020 Harald Sitter <sitter@kde.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -66,6 +66,12 @@ module ReleaseMe
 
     def to_s
       "(git - #{repository} [#{branch || 'master'}])"
+    end
+
+    # @return true if ls-remote succeeds on the repo
+    def exist?
+      _output, status = run(['ls-remote', repository])
+      status.success?
     end
 
     private
