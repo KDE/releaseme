@@ -52,7 +52,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'webmock'
   # Coverage
   spec.add_development_dependency 'codeclimate-test-reporter', '~> 1.0'
-  spec.add_development_dependency 'coveralls'
+  spec.add_development_dependency 'coveralls_reborn'
   spec.add_development_dependency 'pullreview-coverage'
   spec.add_development_dependency 'simplecov', '>= 0.11'
   # Quality
