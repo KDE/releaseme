@@ -4,7 +4,11 @@ require 'fileutils'
 require_relative '../test_helper'
 
 require 'minitest/unit'
-require 'mocha/mini_test'
+begin
+  require 'mocha/minitest'
+rescue LoadError # 1.0 changed the name, try older name as well for good measure
+  require 'mocha/mini_test'
+end
 require 'webmock/minitest'
 
 module TestMeExtension
