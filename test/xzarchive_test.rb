@@ -129,4 +129,14 @@ class TestXzArchive < Testme
     assert(output.include?('(GNU)'),
       'tar file was not created with gnu format!')
   end
+
+  def test_owner
+    # Inside the tar the file owners should be kde:kde
+    a = ReleaseMe::XzArchive.new
+    a.directory = @dir
+    assert(a.create)
+    output = `tar -tvf #{a.path}`.strip
+    assert($?.success?)
+    assert_includes(output, 'kde/kde')
+  end
 end
