@@ -19,6 +19,7 @@
 #++
 
 require 'fileutils'
+require 'open3'
 
 require_relative 'logable'
 require_relative 'vcs'
@@ -45,15 +46,17 @@ module ReleaseMe
     # FIXME: make shallow a keyword
     def get(target, shallow = true, clean: false)
       args = %w[clone]
-      args << '--depth 1' if shallow
-      args << "--branch #{branch}" unless branch.nil? || branch.empty?
+      args << '--depth' << '1' if shallow
+      args << "--branch" << branch unless branch.nil? || branch.empty?
       args += [repository, target]
-      run(args)
+      output, status = run(args)
+      raise CloneError, output unless status.success?
       # Set hash accordingly
       Dir.chdir(target) do
         @hash = `git rev-parse HEAD`.chop
       end
       clean!(target) if clean
+      status.success?
     end
 
     # Removes target/.git.
@@ -67,22 +70,27 @@ module ReleaseMe
 
     private
 
-    # @return [String] output of command
+    # @return [String, status] output of command
+    def run(args)
+      cmd = %w[git] + args
+      log_debug cmd.join(' ')
+      output, status = Open3.capture2e(*cmd)
+      # for testing. we want to verify codes all the time so we need to track
+      # the last most status somewhere. this must not be used for production
+      # code that gets threaded.
+      @status = status.dup
+      debug_output(output)
+      # Do not return error output as it will screw with output processing.
+      [output, status]
+    end
+
     # FIXME: code dupe from svn, move to joint thingy, alas, logger is a bit in
     #   the way
-    def run(args)
-      cmd = "git #{args.join(' ')} 2>&1"
-      log_debug cmd
-      output = `#{cmd}`
-      unless logger.level != Logger::DEBUG || output.empty?
-        log_debug '-- output --'
-        output.lines.each { |l| log_debug l.rstrip }
-        log_debug '------------'
-      end
-
-      raise CloneError, output unless $?.success?
-
-      output
+    def debug_output(output)
+      return if logger.level != Logger::DEBUG || output.empty?
+      log_debug '-- output --'
+      output.lines.each { |l| log_debug l.rstrip }
+      log_debug '------------'
     end
   end
 end
