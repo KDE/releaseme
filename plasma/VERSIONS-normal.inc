@@ -2,7 +2,7 @@ LANG=en_GB.UTF-8
 LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
-VERSION=5.18.1
+VERSION=5.18.2
 SHORT_VERSION=5.18
 OLD_VERSION=5.18.1
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable or lts
@@ -11,7 +11,7 @@ OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.18 # set to master or Plasma/5.x
 MINOR_RELEASE_MONTH="February 2020" # for announcement, when was 5.x.0 released
 
-RELEASETYPE=feature # for changelog, set to beta, feature or bugfix
+RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
 
 INFOCHECKOUT="/home/jr/src/www/www/info"                   # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/info/
 ANNOUNCECHECKOUT="/home/jr/src/www/www/announcements"      # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
@@ -20,7 +20,7 @@ WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.k
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 18 February 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Tuesday, 25 February 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="February" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a week's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
