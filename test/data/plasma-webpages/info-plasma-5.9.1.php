@@ -19,7 +19,7 @@
 
 <p>This is a Bugfix release of KDE Plasma, featuring Plasma Desktop and
 other essential software for your computer.  Details in the <a
-href="../announcements/plasma-<?php echo $release; ?>.php">Plasma <?php echo $release; ?> announcement</a>.</p>
+href="/announcements/plasma-<?php echo $release; ?>">Plasma <?php echo $release; ?> announcement</a>.</p>
 
 <h2>Security Issues</h2>
 
