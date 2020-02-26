@@ -14,19 +14,6 @@
 <style>
 main {
 	padding-top: 20px;
-	}
-
-.videoBlock {
-	background-color: #334545;
-	border-radius: 2px;
-	text-align: center;
-}
-
-.videoBlock iframe {
-	margin: 0px auto;
-	display: block;
-	padding: 0px;
-	border: 0;
 }
 
 .topImage {
@@ -87,4 +74,4 @@ main {
 
 <main class="releaseAnnouncment container">
 
-<p><a href="plasma-<?php print $release; ?>.php">Plasma <?php print $release; ?></a> Complete Changelog</p>
+<p><a href="plasma-<?php print $release; ?>">Plasma <?php print $release; ?></a> Complete Changelog</p>
