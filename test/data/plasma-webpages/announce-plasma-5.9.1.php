@@ -24,9 +24,9 @@
 
     <h1>NOT OUT YET</h1>
 
-    <figure class="videoBlock">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/lm0sqqVcotA?rel=0" allowfullscreen='true'></iframe>
-    </figure>
+    <figure class="embed-responsive embed-responsive-16by9 mx-auto" style="max-width: 900px">
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/lm0sqqVcotA" allowfullscreen='true    '></iframe>
+ 28 </figure>
 
     <figure class="topImage">
         <a href="plasma-5.9/plasma-5.9.png" data-toggle="lightbox">
@@ -38,7 +38,7 @@
     <p>
         <?php i18n("Tuesday, 14 February 2017.")?>
         <?php print i18n_var("Today KDE releases a Bugfix update to KDE Plasma 5, versioned %1", "5.9.1");?>.
-        <?php print i18n_var("<a href='https://www.kde.org/announcements/plasma-%1.0.php'>Plasma %1</a>
+        <?php print i18n_var("<a href='https://kde.org/announcements/plasma-%1.0'>Plasma %1</a>
         was released in January with many feature refinements and new modules to complete the desktop experience.", "5.9");?>
     </p>
 
@@ -52,7 +52,7 @@ FIXME
 ")?>
     </ul>
 
-    <a href="plasma-5.9.0-5.9.1-changelog.php"><?php print i18n_var("Full Plasma %1 changelog", "5.9.1"); ?></a>
+    <a href="plasma-5.9.0-5.9.1-changelog"><?php print i18n_var("Full Plasma %1 changelog", "5.9.1"); ?></a>
 
     <!-- // Boilerplate again -->
     <section class="row get-it">
@@ -96,6 +96,7 @@ FIXME
             <a class="shareMastodon" href="https://mastodon.technology/@kde" rel="nofollow">Share on Mastodon</a>
             <a class="shareLinkedIn" href="https://www.linkedin.com/company/29561/" rel="nofollow">Share on LinkedIn</a>
             <a class="sharePeerTube" href="https://peertube.mastodon.host/accounts/kde/videos" rel="nofollow">Share on PeerTube</a>
+            <a class="shareVK" href="https://vk.com/kde_ru" rel="nofollow">Share on VK</a>
         </p>
         <p>
             <?php print i18n_var("Discuss Plasma 5 on the <a href='%1'>KDE Forums Plasma 5 board</a>.", "https://forum.kde.org/viewforum.php?f=289");?>
