@@ -4,6 +4,7 @@ set -xe
 
 . VERSIONS.inc
 
+rm -f asdf asdf.asc
 echo asdf > asdf
 gpg --clearsign asdf
 rm -f asdf asdf.asc
