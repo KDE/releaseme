@@ -19,7 +19,6 @@
 #++
 
 require 'thread'
-require 'thwait'
 
 require_relative 'origin'
 require_relative 'source'
@@ -132,7 +131,7 @@ module ReleaseMe
           yield
         end
       end
-      ThreadsWait.all_waits(threads)
+      threads.each(&:join)
     end
 
     def each_language_with_tmpdir(queue = languages_queue)

@@ -20,7 +20,6 @@
 
 require 'English'
 require 'fileutils'
-require 'thwait'
 require 'tmpdir'
 
 require_relative 'cmakeeditor'

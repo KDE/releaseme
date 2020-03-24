@@ -42,7 +42,7 @@ module ReleaseMe
         threads = each_thread do
           loop_queue(queue)
         end
-        ThreadsWait.all_waits(threads)
+        threads.each(&:join)
       end
 
       def [](*args)
