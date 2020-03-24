@@ -82,7 +82,7 @@ module ReleaseMe
       end
 
       def get(path, **query)
-        data = JSON.parse(open(uri(path, query)).read, symbolize_names: true)
+        data = JSON.parse(uri(path, query).open.read, symbolize_names: true)
         Snake.it(data)
       end
     end
