@@ -24,12 +24,7 @@ Rake::TestTask.new('test::integration') do |t|
   t.verbose = true
 end
 
-task :codeclimate do
-  sh 'codeclimate-test-reporter'
-end
-
 task :test => 'test::unit'
-task :test => :codeclimate if ENV.include?('CODECLIMATE_REPO_TOKEN')
 
 require 'rdoc/task'
 RDoc::Task.new do |rdoc|
