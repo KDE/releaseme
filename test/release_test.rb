@@ -71,7 +71,7 @@ class TestRelease < Testme
       :i18n_stable => 'master',
       :i18n_path => ''
     }
-    project = ReleaseMe::Project.new(data)
+    project = ReleaseMe::Project.new(**data)
     project.vcs.repository = @remotedir
 
     r = ReleaseMe::Release.new(project, :trunk, '1.0')
@@ -93,7 +93,7 @@ class TestRelease < Testme
       :i18n_stable => 'master',
       :i18n_path => ''
     }
-    project = ReleaseMe::Project.new(data)
+    project = ReleaseMe::Project.new(**data)
     project.vcs.repository = @remotedir
     ReleaseMe::Release.new(project, :trunk, '1.0')
   end
@@ -130,7 +130,7 @@ class TestRelease < Testme
       :i18n_stable => 'master',
       :i18n_path => ''
     }
-    project = ReleaseMe::Project.new(data)
+    project = ReleaseMe::Project.new(**data)
     project.vcs.repository = @remotedir
 
     assert_raises do
@@ -169,7 +169,7 @@ class TestRelease < Testme
       i18n_stable: 'master',
       i18n_path: ''
     }
-    project = ReleaseMe::Project.new(data)
+    project = ReleaseMe::Project.new(**data)
     project.vcs.repository = @remotedir
 
     ReleaseMe::Release.new(project, ReleaseMe::Origin::TRUNK, '1.0').get
@@ -225,7 +225,7 @@ class TestRelease < Testme
       i18n_stable: 'master',
       i18n_path: ''
     }
-    project = ReleaseMe::Project.new(data)
+    project = ReleaseMe::Project.new(**data)
     project.vcs.repository = @remotedir
 
     # Release.rb will call abort once we tell it to not ignore the shitty jobs.
@@ -247,7 +247,7 @@ class TestRelease < Testme
       i18n_stable: 'master',
       i18n_path: ''
     }
-    project = ReleaseMe::Project.new(data)
+    project = ReleaseMe::Project.new(**data)
     project.vcs.repository = @remotedir
 
     r = ReleaseMe::Release.new(project, :trunk, '1.0')

@@ -316,7 +316,7 @@ class TestProject < Testme
       :i18n_stable => 'master',
       :i18n_path => 'extragear-utils'
     }
-    pr = ReleaseMe::Project.new(data)
+    pr = ReleaseMe::Project.new(**data)
     refute_nil(pr)
     assert_equal(pr.identifier, data[:identifier])
     assert_equal(pr.vcs, data[:vcs])
@@ -393,7 +393,7 @@ class TestProject < Testme
       :i18n_stable => 'master',
       :i18n_path => 'extragear-utils'
     }
-    pr = ReleaseMe::Project.new(data)
+    pr = ReleaseMe::Project.new(**data)
     assert_includes ReleaseMe.constants, :ProjectsFile
     assert_includes ReleaseMe.constants, :ProjectProjectsfileOverlay
     assert_includes pr.instance_variables, :@project_element

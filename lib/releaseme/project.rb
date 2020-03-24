@@ -103,7 +103,7 @@ module ReleaseMe
         next tmphsh
       end
 
-      Project.new(data)
+      Project.new(**data)
     end
 
     def plasma_lts
