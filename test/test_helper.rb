@@ -9,13 +9,6 @@ rescue LoadError
   warn 'coveralls reporter not available, not sending reports to server'
 end
 
-begin
-  require 'pullreview/coverage_reporter'
-  formatters << PullReview::Coverage::Formatter
-rescue LoadError
-  warn 'pullreview reporter not available, not sending reports to server'
-end
-
 # HTML formatter.
 formatters << SimpleCov::Formatter::HTMLFormatter
 

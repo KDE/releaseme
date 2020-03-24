@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.org/apachelogger/releaseme.svg?branch=master)](https://travis-ci.org/apachelogger/releaseme)
 [![Coverage Status](https://coveralls.io/repos/apachelogger/releaseme/badge.svg?branch=master)](https://coveralls.io/r/apachelogger/releaseme?branch=master)
 [![Code Climate](https://codeclimate.com/github/apachelogger/releaseme/badges/gpa.svg)](https://codeclimate.com/github/apachelogger/releaseme)
-[![PullReview stats](https://www.pullreview.com/github/apachelogger/releaseme/badges/master.svg?)](https://www.pullreview.com/github/apachelogger/releaseme/reviews/master)
 [![Inline docs](http://inch-ci.org/github/apachelogger/releaseme.svg?branch=master)](http://inch-ci.org/github/apachelogger/releaseme/branch/master)
 
 Releaseme is a release tool for software hosted on KDE infrastructure. It takes care of the nitty gritty details of creating a high-quality release tarball.
