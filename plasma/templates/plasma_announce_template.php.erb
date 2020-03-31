@@ -97,6 +97,7 @@ FIXME
             <a class="shareLinkedIn" href="https://www.linkedin.com/company/29561/" rel="nofollow">Share on LinkedIn</a>
             <a class="sharePeerTube" href="https://peertube.mastodon.host/accounts/kde/videos" rel="nofollow">Share on PeerTube</a>
             <a class="shareVK" href="https://vk.com/kde_ru" rel="nofollow">Share on VK</a>
+            <a class="shareInstagram" href="https://www.instagram.com/kdecommunity/" rel="nofollow">Share on Instagram</a>
         </p>
         <p>
             <?php print i18n_var("Discuss Plasma 5 on the <a href='%1'>KDE Forums Plasma 5 board</a>.", "https://forum.kde.org/viewforum.php?f=289");?>
