@@ -222,7 +222,7 @@ module ReleaseMe
         File.readlines(file).each do |line|
           line.match(%r{[^/\s=]+\.pot}).to_a.each do |match|
             verify_pot(match)
-            pos << match.sub('.pot', '.po')
+            pos << match.sub(/\.pot$/, '.po')
           end
         end
       end

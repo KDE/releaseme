@@ -428,4 +428,20 @@ class TestL10n < Testme
     assert_path_exist("#{@dir}/po")
     refute_path_exist("#{@dir}/po/sr/")
   end
+
+  def test_pot_with_pot_in_name
+    # Make sure multiple '.pot' aren't messing up the template detection by
+    # incorrectly mangling more than the terminal .pot.
+    # e.g. org.kde.potd.pot is org.kde.potd.po not org.kde.pod.po nor
+    # org.kde.pod.pot
+    # https://bugs.kde.org/show_bug.cgi?id=420574
+
+    l = create_l10n('kdeplasmas-addons', 'kde-workspace')
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('single-pot-pot-name'), @dir)
+    l.get(@dir)
+    assert_path_exist("#{@dir}/po/de/org.kde.potd.po")
+  end
 end
