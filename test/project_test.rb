@@ -149,10 +149,6 @@ end
 
 class TestProjectResolver < Testme
   def setup
-    # Project uses ProjectsFile to read data, so we need to make sure it
-    # uses our dummy file.
-    ReleaseMe::ProjectsFile.xml_path = data('kde_projects_advanced.xml')
-    ReleaseMe::ProjectsFile.load!
     stub_api
   end
 
@@ -192,8 +188,6 @@ end
 
 class TestProjectConfig < Testme
   def setup
-    # Project uses ProjectsFile to read data, so we need to make sure it
-    # uses our dummy file.
     stub_api
   end
 
@@ -252,10 +246,6 @@ end
 
 class TestProject < Testme
   def setup
-    # Project uses ProjectsFile to read data, so we need to make sure it
-    # uses our dummy file.
-    ReleaseMe::ProjectsFile.xml_path = data('kde_projects.xml')
-    ReleaseMe::ProjectsFile.load!
     stub_api
   end
 
@@ -338,25 +328,5 @@ class TestProject < Testme
     pr = projects.shift
     assert_equal('kfilemetadata', pr.identifier)
     assert_equal('git@git.kde.org:kfilemetadata', pr.vcs.repository)
-  end
-
-  def test_projectsfile_removal
-    # TODO: drop project_element once projectsfile support is entirely removed
-    #  - this test can also be dropped then
-    #  - project.xml test data in test/data can also be dropped
-    #  - overlay class as well
-    #  - api overlay can be merged into project
-    #  - api overlay's from_data can be merged into initialize
-    data = {
-      :identifier => 'yakuake',
-      :vcs => ReleaseMe::Vcs.new,
-      :i18n_trunk => 'master',
-      :i18n_stable => 'master',
-      :i18n_path => 'extragear-utils'
-    }
-    pr = ReleaseMe::Project.new(**data)
-    assert_includes ReleaseMe.constants, :ProjectsFile
-    assert_includes ReleaseMe.constants, :ProjectProjectsfileOverlay
-    assert_includes pr.instance_variables, :@project_element
   end
 end
