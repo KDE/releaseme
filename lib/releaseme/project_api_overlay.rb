@@ -62,21 +62,23 @@ module ReleaseMe
       end
 
       def from_xpath(id)
-        # Try to list all projects within a prefix. Can be single match or
-        # multiple if id is a component
-        ProjectsAPI.list(id).collect do |path|
-          from_data(ProjectsAPI.get(path))
-        end
-      rescue OpenURI::HTTPError
-        # If the list comes back with an error try to find by id name.
-        # This is for when the user wants to release 'kinfocenter'
+        # By default assume id is the name of a project and nothing else.
+        # This means we'll get the project if there is a module AND a project
+        # of the same name. More importantly this means listing recursively
+        # is no longer a thing so releasing a "module" as a use case is not
+        # supported. Also ids then need to be unique and from_find asserts that.
+        # https://bugs.kde.org/show_bug.cgi?id=420501
+        warn 'from_xpath is deprecated; use from_find instead'
         from_find(id)
       end
 
       def from_find(id)
-        ProjectsAPI.find(id: id).collect do |path|
+        ret = ProjectsAPI.find(id: id).collect do |path|
           from_data(ProjectsAPI.get(path))
         end
+        # Ensure project names are in fact unique.
+        raise "Unexpectedly found multiple matches for #{id}" if ret.size > 1
+        ret
       rescue OpenURI::HTTPError => e
         return [] if e.io.status[0] == '404' # [0] is code, [1] msg
         raise e

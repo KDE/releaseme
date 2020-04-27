@@ -163,17 +163,18 @@ class TestProjectResolver < Testme
   end
 
   def test_real_project
+    pr = ReleaseMe::Project.from_find('yakuake')
+    assert_valid_project(pr, 'yakuake')
+  end
+
+  def test_xpath
+    # deprecated not used elsewhere
     pr = ReleaseMe::Project.from_xpath('yakuake')
     assert_valid_project(pr, 'yakuake')
   end
 
-  def test_real_project_with_full_path
-    pr = ReleaseMe::Project.from_xpath('extragear/utils/yakuake')
-    assert_valid_project(pr, 'yakuake')
-  end
-
   def test_module_as_project
-    pr = ReleaseMe::Project.from_xpath('networkmanager-qt')
+    pr = ReleaseMe::Project.from_find('networkmanager-qt')
     assert_valid_project(pr, 'networkmanager-qt')
   end
 
@@ -186,46 +187,6 @@ class TestProjectResolver < Testme
       matches.delete(project.identifier)
     end
     assert(matches.empty?, "One or more sub-projects did not get resolved correctly: #{matches}")
-  end
-
-  ####### nested resolution
-
-  def assert_valid_extragear_utils_array(project_array)
-    assert_valid_array(project_array, %w[yakuake krusader krecipes])
-  end
-
-  def test_module
-    pr = ReleaseMe::Project.from_xpath('utils')
-    assert_equal([], pr)
-  end
-
-  def test_module_with_full_path
-    pr = ReleaseMe::Project.from_xpath('extragear/utils')
-    assert_valid_extragear_utils_array(pr)
-  end
-
-  ####### super nested resolution
-
-  def assert_valid_telepathy_array(project_array)
-    assert_valid_array(project_array, %w[ktp1 ktp2])
-  end
-
-  def test_project_with_subprojects
-    pr = ReleaseMe::Project.from_xpath('extragear/network/telepathy')
-    assert_valid_telepathy_array(pr)
-
-    pr = ReleaseMe::Project.from_xpath('extragear/network/telepathy/ktp1')
-    refute_nil(pr)
-    assert_equal('ktp1', pr[0].identifier)
-  end
-
-  def assert_valid_extragear_array(project_array)
-    assert_valid_array(project_array, %w[yakuake krusader krecipes ktp1 ktp2])
-  end
-
-  def test_component
-    pr = ReleaseMe::Project.from_xpath('extragear')
-    assert_valid_extragear_array(pr)
   end
 end
 
@@ -282,7 +243,7 @@ class TestProjectConfig < Testme
 
   def test_plasma_lts
     ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
-    projects = ReleaseMe::Project.from_xpath('yakuake')
+    projects = ReleaseMe::Project.from_find('yakuake')
     assert_equal(projects.size, 1)
     pr = projects.shift
     assert_equal(pr.plasma_lts, 'Plasma/5.8')
@@ -326,7 +287,7 @@ class TestProject < Testme
   end
 
   def test_resolve_valid
-    projects = ReleaseMe::Project.from_xpath('yakuake')
+    projects = ReleaseMe::Project.from_find('yakuake')
     assert_equal(projects.size, 1)
     pr = projects.shift
     assert_equal('yakuake', pr.identifier)
@@ -340,19 +301,19 @@ class TestProject < Testme
     # translation path is component-module. Make sure that we get the correct
     # path for this.
     # Other example would be extragear/graphics/libs/kdiagram.
-    projects = ReleaseMe::Project.from_xpath('ktp-contact-runner')
+    projects = ReleaseMe::Project.from_find('ktp-contact-runner')
     assert_equal(1, projects.size)
     pr = projects.shift
     assert_equal('ktp-contact-runner', pr.identifier)
   end
 
   def test_resolve_invalid
-    projects = ReleaseMe::Project.from_xpath('kitten')
+    projects = ReleaseMe::Project.from_find('kitten')
     assert_equal(projects, [])
   end
 
   def test_vcs
-    projects = ReleaseMe::Project.from_xpath('yakuake')
+    projects = ReleaseMe::Project.from_find('yakuake')
     assert_equal(projects.size, 1)
     pr = projects.shift
     vcs = pr.vcs
