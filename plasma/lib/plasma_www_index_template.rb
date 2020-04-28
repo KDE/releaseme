@@ -44,11 +44,12 @@ class WWWIndexUpdater
     end
 
     # take out old text
-    old_announce_block_index = index_html.find_index do |line|
+    old_announce_block_index = index_html.index do |line|
       line.include?('Today KDE releases a new')
     end
-    (0..4).each do
-      index_html.delete_at(old_announce_block_index-2)
+
+    (0..5).each do
+      index_html.delete_at(old_announce_block_index - 3)
     end
 
     # add in new text

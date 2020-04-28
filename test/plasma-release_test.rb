@@ -46,6 +46,8 @@ class TestPlasmaRelease < Testme
     wwwindexupdater.wwwcheckout = data('plasma-release/index-full.php')
     index_html = wwwindexupdater.rewrite_index
 
+    #File.open('/home/jr/tmp/OUTPUT', 'w') { |file| file.write(index_html) }
+    #File.open('/home/jr/tmp/REF', 'w') { |file| file.write(ref) }
     assert_equal(ref, index_html)
   end
 end

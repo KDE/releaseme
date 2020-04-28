@@ -134,12 +134,12 @@
       <h1 class="mb-3">Announcements</h1>
       <ul class="list-unstyled">
                 <!-- This comment is a marker for Latest Announcements, used by scripts -->
-        <li>
-          <h2>KDE Plasma 5.9.1 Released</h2>
-          <i>Tuesday, 14 February 2017</i><br />
-          <q>Today KDE releases a new release of KDE Plasma 5, versioned 5.9.1</q><br />
-          <a href="announcements/plasma-5.9.1" class="learn-more">Read full announcement</a>
-        </li>
+                <li>
+                    <h2>KDE Plasma 5.9.1 Released</h2>
+                    <i>Tuesday, 14 February 2017</i><br />
+                    <q>Today KDE releases a new release of KDE Plasma 5, versioned 5.9.1</q><br />
+                    <a href="announcements/plasma-5.9.1" class="learn-more">Read full announcement</a>
+                </li>
                 <li>
                     <h2>KDE Releases Frameworks 5.69.0</h2>
                     <i>April 11, 2020</i><br />
@@ -147,12 +147,6 @@
                     making improvements available to developers in a quick and predictable
                     manner. </q><br />
                     <a href="https://www.kde.org/announcements/kde-frameworks-5.69.0.php" class="learn-more">Read full announcement</a>
-                </li>
-                <li>
-                    <h1>KDE Plasma 5.18.4 Released</h2>
-                    <i>Tuesday, 31 March 2020</i><br />
-                    <q>Today KDE releases a new release of KDE Plasma 5, versioned 5.18.4</q><br />
-                    <a href="announcements/plasma-5.18.4" class="learn-more">Read full announcement</a>
                 </li>
                 <li>
                     <h2>March Apps Update Featuring Releases 19.12.3</h2>

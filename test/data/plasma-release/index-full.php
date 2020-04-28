@@ -154,12 +154,6 @@
                     <q>New releases from KDE in the last month.</q><br />
                     <a href="announcements/releases/2020-03-apps-update/" class="learn-more">Read full announcement</a>
                 </li>
-                <li>
-                    <h2>KDE Plasma 5.12.9 LTS Released</h2>
-                    <i>September 10, 2019</i><br />
-                    <q>Today KDE releases a new Long Term Support release of KDE Plasma 5, versioned 5.12.9.</q><br />
-                    <a href="announcements/plasma-5.12.9.php" class="learn-more">Read full announcement</a>
-                </li>
       </ul>
 
       <a href="announcements/" class="learn-more" style="font-weight: bold;">&#x1F4E2; View all announcements</a>
