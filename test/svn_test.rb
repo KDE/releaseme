@@ -1,22 +1,5 @@
-#--
-# Copyright (C) 2014-2015 Harald Sitter <sitter@kde.org>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of
-# the License or (at your option) version 3 or any later version
-# accepted by the membership of KDE e.V. (or its successor approved
-# by the membership of KDE e.V.), which shall act as a proxy
-# defined in Section 14 of version 3 of the license.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#++
+# SPDX-FileCopyrightText: 2014-2020 Harald Sitter <sitter@kde.org>
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 
 require 'fileutils'
 
@@ -111,8 +94,9 @@ class TestSvn < Testme
     assert_path_exist("#{tmpDir}/file")
 
     # Target dir does not exist
-    ret = s.export("#{tmpDir}123/file", '/dir/file')
-    assert_equal(false, ret)
+    assert_raises ReleaseMe::Svn::Error do
+      s.export("#{tmpDir}123/file", '/dir/file')
+    end
     refute_path_exist("#{tmpDir}123/file")
 
     # Invalid path
@@ -136,7 +120,9 @@ class TestSvn < Testme
   def test_get_repo_invalid
     s = ReleaseMe::Svn.new
     s.repository = 'file://foofooofoo'
-    s.get(@svn_checkout_dir)
+    assert_raises ReleaseMe::Svn::Error do
+      s.get(@svn_checkout_dir)
+    end
     refute_path_exist(@svn_checkout_dir)
     FileUtils.rm_rf(@svn_checkout_dir)
   end
@@ -169,5 +155,25 @@ class TestSvn < Testme
     s.get(@svn_checkout_dir, clean: true)
     refute_path_exist("#{@svn_checkout_dir}/.svn")
     refute_path_exist("#{@svn_checkout_dir}/dir/.svn")
+  end
+
+  def test_connection_closed
+    # simulate the remote closing the connection. this can happen when
+    # the connection limit is exhausted on the remote
+
+    err = <<-STDERR
+svn: E170013: Unable to connect to a repository at URL 'svn://anonsvn.kde.org/home/kde/trunk/l10n-kf5/wa/messages/kde-workspace'
+svn: E210002: Network connection closed unexpectedly
+    STDERR
+
+    status = mock('status')
+    status.stubs(:success?).returns(false)
+
+    result = ReleaseMe::Svn::Result.new('svn foo')
+    result.capture3(['', err, status])
+    ex = assert_raises ReleaseMe::Svn::Error do
+      result.maybe_raise
+    end
+    assert_equal([170013, 210002], ex.codes.sort)
   end
 end

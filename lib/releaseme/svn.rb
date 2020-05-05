@@ -1,22 +1,5 @@
-#--
-# Copyright (C) 2007-2015 Harald Sitter <sitter@kde.org>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of
-# the License or (at your option) version 3 or any later version
-# accepted by the membership of KDE e.V. (or its successor approved
-# by the membership of KDE e.V.), which shall act as a proxy
-# defined in Section 14 of version 3 of the license.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#++
+# SPDX-FileCopyrightText: 2007-2020 Harald Sitter <sitter@kde.org>
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 
 require 'fileutils'
 require 'open3'
@@ -29,6 +12,72 @@ module ReleaseMe
   class Svn < Vcs
     prepend Logable
 
+    class Error < StandardError
+      RA_ILLEGAL_URL = 170000
+      ILLEGAL_TARGET = 200009 # list/cat with invalid targets (target path doesnt exist)
+
+      attr_reader :codes
+
+      def initialize(codes, result)
+        @codes = codes.uniq
+        super(<<-EOF)
+Unexpected SVN Errors
+
+Please file a bug against releaseme for investigation at bugs.kde.org.
+Chances are this is a server-side problem though.
+You could try again in a couple minutes.
+
+  cmd: #{result.cmd}
+  status: #{result.status}
+  error(s): #{codes.join(', ')}
+
+    -- stdout --
+#{result.out.rstrip}
+    -- stderr --
+#{result.err.rstrip}
+    ------------
+        EOF
+      end
+    end
+
+    class Result
+      attr_reader :cmd
+      attr_reader :status
+      attr_reader :out
+      attr_reader :err
+
+      def initialize(cmd)
+        @cmd = cmd.freeze
+      end
+
+      def capture3(args)
+        raise unless args.size == 3
+        @out, @err, @status = *args
+      end
+
+      def success?
+        @status.success?
+      end
+
+      def empty?
+        out.empty? && err.empty?
+      end
+
+      def maybe_raise
+        return if success?
+
+        codes = []
+
+        err.lines.each do |line|
+          code = line.match(/^svn: E(?<code>\d+):.*/)&.[](:code)
+          next if !code || code.empty?
+          codes << code.to_i
+        end
+
+        raise Error.new(codes, self) unless codes.empty?
+      end
+    end
+
     # Checkout a path from the remote repository.
     # @param target is the target directory for the checkout
     # @param path is an additional path to append to the repo URL
@@ -40,6 +89,9 @@ module ReleaseMe
       _output, status = run(['co', url, target])
       clean!(target) if clean
       status.success?
+    rescue Error => e
+      raise e unless e.codes == [Error::RA_ILLEGAL_URL]
+      false
     end
 
     # Removes .svn recursively from target.
@@ -55,6 +107,9 @@ module ReleaseMe
       url.concat("/#{path}") if path && !path.empty?
       output, _status = run(['ls', url])
       output
+    rescue Error => e
+      raise e unless e.codes == [Error::ILLEGAL_TARGET]
+      ''
     end
 
     # Concatenate to output.
@@ -63,6 +118,9 @@ module ReleaseMe
     def cat(file_path)
       output, _status = run(['cat', "#{repository}/#{file_path}"])
       output
+    rescue Error => e
+      raise e unless e.codes == [Error::ILLEGAL_TARGET]
+      ''
     end
 
     # Export single file from remote repository.
@@ -73,6 +131,9 @@ module ReleaseMe
       url?(target)
       _output, status = run(['export', "#{repository}/#{path}", target])
       status.success?
+    rescue Error => e
+      raise e unless e.codes == [Error::RA_ILLEGAL_URL]
+      false
     end
 
     # Checks whether a file/dir exists on the remote repository
@@ -81,6 +142,9 @@ module ReleaseMe
     def exist?(path)
       _output, status = run(['info', "#{repository}/#{path}"])
       status.success?
+    rescue Error => e
+      raise e unless e.codes == [Error::ILLEGAL_TARGET]
+      false
     end
 
     def to_s
@@ -93,21 +157,31 @@ module ReleaseMe
     def run(args)
       cmd = %w[svn] + args
       log_debug cmd.join(' ')
-      output, status = Open3.capture2e(*cmd)
+      result = Result.new(cmd)
+      result.capture3(Open3.capture3({ 'LANG' => 'C.UTF-8' }, *cmd))
+      debug_result(result)
+
       # for testing. we want to verify codes all the time so we need to track
       # the last most status somewhere. this must not be used for production
       # code that gets threaded.
-      @status = status.dup
-      debug_output(output)
+      @status = result.status.dup
+
+      result.maybe_raise
       # Do not return error output as it will screw with output processing.
-      [status.success? ? output : '', status]
+      [result.success? ? result.out : '', result.status]
     end
 
-    def debug_output(output)
-      return if logger.level != Logger::DEBUG || output.empty?
-      log_debug '-- output --'
-      output.lines.each { |l| log_debug l.rstrip }
-      log_debug '------------'
+    def debug_result(result)
+      return if logger.level != Logger::DEBUG || result.empty?
+      # log this in one go to be thread synchronized
+      log_debug <<-OUTPUT
+
+-- stdout #{result.status} --
+#{result.out.lines.collect(&:rstrip).join("\n")}
+-- stderr #{status} --
+#{result.err.lines.collect(&:rstrip).join("\n")}
+'------------'
+      OUTPUT
     end
 
     def url?(path)
