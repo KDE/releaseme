@@ -70,7 +70,8 @@ module ReleaseMe
 
       validate_instace_variables
 
-      init_repo_url('svn://anonsvn.kde.org/home/kde/')
+      init_repo_url(ENV.fetch('RELEASEME_SVN_REPO_URL',
+                              'svn://anonsvn.kde.org/home/kde/'))
     end
 
     # @return Array<String> list of excluded languages, defaults to
