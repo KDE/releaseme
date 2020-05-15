@@ -3,10 +3,10 @@ LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
 VERSION=5.18.90
-SHORT_VERSION=5.18
+SHORT_VERSION=5.19
 OLD_VERSION=5.18.5
 ORIGIN=trunk  # git branch as set in projects.k.o, set to trunk or stable or lts
-FTPSTABLE=stable  # set to unstable or stable
+FTPSTABLE=unstable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=master # set to master or Plasma/5.x
 MINOR_RELEASE_MONTH="May 2020" # for announcement, when was 5.x.0 released

@@ -15,7 +15,8 @@ File.write(format('%s/plasma-%s.php', plasma_versions.infocheckout, version), in
 
 announce_template = PlasmaAnnounceTemplate.new
 announce_output = announce_template.render
-File.write(format('%s/plasma-%s.php', plasma_versions.announcecheckout, version), announce_output)
+# write announcement unless it's a beta or final where we do it manually
+File.write(format('%s/plasma-%s.php', plasma_versions.announcecheckout, version), announce_output) unless version[-2..-1] == "90" or version[-2..-1] == "80"
 
 changelog_file = format('plasma-%s-%s-changelog.php',
                         plasma_versions.old_version,
@@ -27,7 +28,7 @@ system('svn', 'add', changelog_file, chdir: plasma_versions.announcecheckout)
 system('svn', 'add', "plasma-#{version}.php", chdir: plasma_versions.infocheckout)
 system('svn', 'commit', '-m', "start webpages for Plasma #{version}",
        chdir: plasma_versions.infocheckout)
-system('svn', 'add', "plasma-#{version}.php", chdir: plasma_versions.announcecheckout)
+system('svn', 'add', "plasma-#{version}.php", chdir: plasma_versions.announcecheckout) unless version[-2..-1] == "90" or version[-2..-1] == "80"
 system('svn', 'commit', '-m', "start webpages for Plasma #{version}",
        chdir: plasma_versions.announcecheckout)
 system('firefox', "https://www.kde.org/announcements/plasma-#{version}.php")
