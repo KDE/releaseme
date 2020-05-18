@@ -43,7 +43,7 @@ def git_stubs
   ReleaseMe::Git.any_instance.expects(:run).never
 
   # Pretend everything exists on invent
-  success_status = mock()
+  success_status = mock
   success_status.responds_like_instance_of(Process::Status)
   success_status.stubs(:success?).returns(true)
   ReleaseMe::Git.any_instance.stubs(:run).with do |args|
