@@ -39,7 +39,7 @@ end
 
 def git_stubs
   # Do not let us hit live repos.
-  # We do repo progint to determine whether to use invent.kde.org or git.kde.org
+  # We do repo ls-remote to check the repo exists on invent.kde.org
   ReleaseMe::Git.any_instance.expects(:run).never
 
   # Pretend everything exists on invent
@@ -307,7 +307,7 @@ class TestProject < Testme
     assert_equal(projects.size, 1)
     pr = projects.shift
     vcs = pr.vcs
-    assert_equal('git@invent.kde.org:kde/yakuake', vcs.repository)
+    assert_equal('git@invent.kde.org:yakuake', vcs.repository)
     assert_nil(vcs.branch) # project on its own should not set a branch
   end
 
@@ -327,6 +327,6 @@ class TestProject < Testme
     assert_equal(1, projects.size)
     pr = projects.shift
     assert_equal('kfilemetadata', pr.identifier)
-    assert_equal('git@git.kde.org:kfilemetadata', pr.vcs.repository)
+    assert_equal('git@invent.kde.org:kfilemetadata', pr.vcs.repository)
   end
 end

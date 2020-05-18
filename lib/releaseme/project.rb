@@ -149,7 +149,7 @@ module ReleaseMe
         # frontend scripts should opt-into RW by setting a property
         # on us
         if ENV.include?('RELEASEME_READONLY')
-          vcs.repository = "https://anongit.kde.org/#{api_project.repo}"
+          vcs.repository = "https://invent.kde.org/#{api_project.repo}"
         end
 
         i18n_trunk = api_project.i18n.trunk_kf5
@@ -219,12 +219,9 @@ module ReleaseMe
         # to invent that will also trip up this check and they'll default
         # to git.kde.org. This is a bit unfortunate :|
         vcs = Git.new
-        vcs.repository = "git@invent.kde.org:kde/#{repo}"
+        vcs.repository = "git@invent.kde.org:#{repo}"
         return vcs if vcs.exist?
-        log_info 'Repo not writable on invent.kde.org. Defaulting to git.kde.org'
-        vcs = Git.new
-        vcs.repository = "git@git.kde.org:#{repo}"
-        vcs
+        raise 'Repo not writable on invent.kde.org. Something is wrong with url resolution'
       end
     end
   end
