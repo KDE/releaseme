@@ -307,7 +307,7 @@ class TestProject < Testme
     assert_equal(projects.size, 1)
     pr = projects.shift
     vcs = pr.vcs
-    assert_equal(vcs.repository, 'git@invent.kde.org:kde/yakuake')
+    assert_equal('git@invent.kde.org:kde/yakuake', vcs.repository)
     assert_nil(vcs.branch) # project on its own should not set a branch
   end
 
