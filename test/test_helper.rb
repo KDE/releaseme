@@ -3,10 +3,10 @@ require 'simplecov'
 formatters = []
 
 begin
-  require 'coveralls'
-  formatters << Coveralls::SimpleCov::Formatter
+  require 'simplecov-cobertura'
+  formatters << SimpleCov::Formatter::CoberturaFormatter
 rescue LoadError
-  warn 'coveralls reporter not available, not sending reports to server'
+  warn 'simplecov-cobertura reporter not available'
 end
 
 # HTML formatter.

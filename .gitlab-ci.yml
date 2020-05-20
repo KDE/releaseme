@@ -1,0 +1,42 @@
+stages:
+  - test
+
+default:
+  before_script:
+    - apt-get -qq update
+    - apt-get install -y gnupg2 gettext git subversion
+    - gem update --system --quiet
+    - gem update bundler
+    - bundle install
+    - gem install minitest-junit simplecov-cobertura
+  artifacts:
+    reports:
+      junit: report.xml
+      cobertura: coverage/coverage.xml
+    paths:
+      - report.xml
+      - coverage/coverage.xml
+
+variables:
+  TESTOPT: '--junit --pride'
+  LANG: 'C.UTF-8' # container has no LANG by default which messes with ruby's utf8 support
+
+test:2.4:
+  image: ruby:2.4
+  script:
+    - rake test
+
+test:2.5:
+  image: ruby:2.5
+  script:
+    - rake test
+
+test:2.6:
+  image: ruby:2.6
+  script:
+    - rake test
+
+test:2.7:
+  image: ruby:2.7
+  script:
+    - rake test
