@@ -6,14 +6,9 @@ set -xe
 
 . VERSIONS.inc
 
-cd ${INFOCHECKOUT}
-svn update
-
-cd ${ANNOUNCECHECKOUT}
-svn update
-
 cd ${L10NSCRIPTSCHECKOUT}
 svn update
 
 cd ${WWWCHECKOUT}
-svn update
+git checkout master
+git pull
