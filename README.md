@@ -1,6 +1,5 @@
 [![pipeline status](https://invent.kde.org/sdk/releaseme/badges/master/pipeline.svg)](https://invent.kde.org/sdk/releaseme/-/commits/master)
 [![coverage report](https://invent.kde.org/sdk/releaseme/badges/master/coverage.svg)](https://invent.kde.org/sdk/releaseme/-/commits/master)
-[![Inline docs](http://inch-ci.org/github/apachelogger/releaseme.svg?branch=master)](http://inch-ci.org/github/apachelogger/releaseme/branch/master)
 
 Releaseme is a release tool for software hosted on KDE infrastructure. It takes care of the nitty gritty details of creating a high-quality release tarball.
 
