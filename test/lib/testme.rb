@@ -59,7 +59,6 @@ module TestMeExtension
   end
 
   def after_teardown
-    teardown_git
     Dir.chdir(@pwdir)
     FileUtils.rm_rf(@tmpdir)
     # Restore original env
@@ -67,6 +66,7 @@ module TestMeExtension
     ## may bug out slightly (on windows).
     ENV.clear
     ENV.replace(@orig_env)
+    teardown_git
     super
   end
 
