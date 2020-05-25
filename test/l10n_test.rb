@@ -24,36 +24,48 @@ require_relative 'lib/testme'
 require_relative '../lib/releaseme/l10n.rb'
 require_relative '../lib/releaseme/l10n_statistics.rb'
 require_relative '../lib/releaseme/documentation.rb'
+require_relative '../lib/releaseme/tmpdir'
 
 # FIXME: test stable
 
 class TestL10n < Testme
+  # Initialize a persistent reference repo. This repo will get copied for each
+  # test to start from a pristine state. svn is fairly expensive so creating
+  # new repos when the content doesn't change is costing multiple seconds!
+  REFERENCE_TMPDIR, REFERENCE_REPO_PATH = begin
+    tmpdir = ReleaseMe.mktmpdir(name) # cleaned via after_run hook
+    repo_data_dir = data('l10nrepo/')
+
+    svn_template_dir = "#{tmpdir}/tmp_l10n_repo"
+
+    assert_run('svnadmin', 'create', svn_template_dir)
+    raise unless File.exist?(svn_template_dir)
+
+    ReleaseMe.mktmpdir(name) do |checkout_dir|
+      checkout_dir = File.join(checkout_dir, "checkout")
+      assert_run('svn', 'co', "file://#{svn_template_dir}", checkout_dir)
+      FileUtils.cp_r("#{repo_data_dir}/trunk", checkout_dir)
+      FileUtils.cp_r("#{repo_data_dir}/branches", checkout_dir)
+      assert_run('svn', 'add', '--force', '.', chdir: checkout_dir)
+      assert_run('svn', 'ci', '-m', 'yolo', chdir: checkout_dir)
+    end
+
+    [tmpdir, svn_template_dir]
+  end
+
+  Minitest.after_run do
+    FileUtils.rm_rf(REFERENCE_TMPDIR)
+  end
+
   def setup
-    @repo_data_dir = data('l10nrepo/')
-
     @i18n_path = 'extragear-multimedia'
-
     @trunk_url = 'trunk/l10n-kf5/'
     @stable_url = 'branches/stable/l10n-kf5'
 
     @dir = 'tmp_l10n'
     @svn_template_dir = 'tmp_l10n_repo'
-    @svn_checkout_dir = 'tmp_l10n_check'
-
-    `svnadmin create #{@svn_template_dir}`
-    assert($?.success?)
+    FileUtils.cp_r(REFERENCE_REPO_PATH, @svn_template_dir)
     assert_path_exist(@svn_template_dir)
-
-    `svn co file:///#{Dir.pwd}/#{@svn_template_dir} #{@svn_checkout_dir}`
-    assert($?.success?)
-    FileUtils.cp_r("#{@repo_data_dir}/trunk", @svn_checkout_dir)
-    FileUtils.cp_r("#{@repo_data_dir}/branches", @svn_checkout_dir)
-    Dir.chdir(@svn_checkout_dir) do
-      `svn add *`
-      assert($?.success?)
-      `svn ci -m 'yolo'`
-      assert($?.success?)
-    end
 
     ReleaseMe::L10n.languages = nil
   end

@@ -1,5 +1,6 @@
-require 'tmpdir'
 require 'fileutils'
+require 'open3'
+require 'tmpdir'
 
 require_relative '../test_helper'
 
@@ -12,6 +13,38 @@ end
 require 'webmock/minitest'
 
 module TestMeExtension
+  module TestMeClassExtension
+    def testdir
+      File.expand_path(File.dirname(File.dirname(__FILE__))).to_s
+    end
+
+    def datadir
+      "#{testdir}/data"
+    end
+
+    def data(path)
+      path = path.partition('data/').last if path.start_with?('data/')
+      "#{datadir}/#{path}"
+    end
+
+    # see instance method. this is a raise-only variant for use in global
+    # test hooks (outside test instances).
+    def assert_run(*args)
+      out, result = Open3.capture2e(*args)
+      raise <<-ERROR unless result.success?
+  === assert_run[#{args.join(' ')}] ===
+  #{out.strip}
+  ===
+      ERROR
+    end
+  end
+
+  def self.prepended(base)
+    class << base
+      prepend TestMeClassExtension
+    end
+  end
+
   attr_reader :tmpdir
   attr_reader :testdir
   attr_reader :datadir
@@ -49,8 +82,8 @@ module TestMeExtension
     ENV['SANITIZED_PREFIX_SUFFIX'] = '1'
     @tmpdir = Dir.mktmpdir("testme-#{self.class.to_s.tr(':', '_')}")
     ENV['TEST_SETUP'] = nil
-    @testdir = File.expand_path(File.dirname(File.dirname(__FILE__))).to_s
-    @datadir = "#{@testdir}/data"
+    @testdir = self.class.testdir
+    @datadir = self.class.datadir
     @pwdir = Dir.pwd
     Dir.chdir(@tmpdir)
     setup_git
@@ -71,8 +104,7 @@ module TestMeExtension
   end
 
   def data(path)
-    path = path.partition('data/').last if path.start_with?('data/')
-    "#{@datadir}/#{path}"
+    self.class.data(path)
   end
 
   def assert_path_exist(path, msg = nil)
@@ -83,6 +115,16 @@ module TestMeExtension
   def refute_path_exist(path, msg = nil)
     msg = message(msg) { "Expected path '#{path}' to NOT exist" }
     refute File.exist?(path), msg
+  end
+
+  # handy overload to assert a command succeeds and if not print its output
+  def assert_run(*args)
+    out, result = Open3.capture2e(*args)
+    assert(result.success?, <<-ERROR)
+=== assert_run[#{args.join(' ')}] ===
+#{out.strip}
+===
+    ERROR
   end
 end
 
