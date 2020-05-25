@@ -52,12 +52,6 @@ class TestDocumentation < Testme
     ReleaseMe::DocumentationL10n.languages = nil
   end
 
-  def teardown
-    FileUtils.rm_rf(@svn_template_dir)
-    FileUtils.rm_rf(@svn_checkout_dir)
-    FileUtils.rm_rf(@dir)
-  end
-
   # TODO: attributes of documentation are not tested....
   def create_doc
     ReleaseMe::DocumentationL10n.new(ReleaseMe::DocumentationL10n::TRUNK,

@@ -58,12 +58,6 @@ class TestL10n < Testme
     ReleaseMe::L10n.languages = nil
   end
 
-  def teardown
-    FileUtils.rm_rf(@svn_template_dir)
-    FileUtils.rm_rf(@svn_checkout_dir)
-    FileUtils.rm_rf(@dir)
-  end
-
   def create_l10n(name = 'amarok', i18n_path = @i18n_path,
                   origin: ReleaseMe::L10n::TRUNK)
     l = ReleaseMe::L10n.new(origin, name, i18n_path)
