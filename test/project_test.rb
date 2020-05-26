@@ -163,6 +163,11 @@ class TestProjectResolver < Testme
     assert_valid_project(pr, 'yakuake')
   end
 
+  def test_real_project_path
+    pr = ReleaseMe::Project.from_find('extragear/utils/yakuake')
+    assert_valid_project(pr, 'yakuake')
+  end
+
   def test_xpath
     # deprecated not used elsewhere
     pr = ReleaseMe::Project.from_xpath('yakuake')

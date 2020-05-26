@@ -182,15 +182,29 @@ module ReleaseMe
         from_find(id)
       end
 
+      # May be a path or a basename.
       def from_find(id)
+        return from_path(id) if id.include?('/')
+
         ret = ProjectsAPI.find(id: id).collect do |path|
           from_data(ProjectsAPI.get(path))
         end
+
         # Ensure project names are in fact unique.
         raise "Unexpectedly found multiple matches for #{id}" if ret.size > 1
+
         ret
       rescue OpenURI::HTTPError => e
         return [] if e.io.status[0] == '404' # [0] is code, [1] msg
+
+        raise e
+      end
+
+      def from_path(path)
+        [from_data(ProjectsAPI.get(path))]
+      rescue OpenURI::HTTPError => e
+        return [] if e.io.status[0] == '404' # [0] is code, [1] msg
+
         raise e
       end
 
