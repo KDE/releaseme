@@ -64,7 +64,8 @@ module ReleaseMe
       id = File.basename(api_project.path)
 
       # Resolve git url.
-      vcs = invent_or_git_vcs(api_project.repo)
+      vcs = Git.new
+      vcs.repository = "git@invent.kde.org:#{api_project.repo}"
       # FIXME: hack to get readonly. should be RO by default and
       # frontend scripts should opt-into RW by setting a property
       # on us
@@ -144,7 +145,8 @@ module ReleaseMe
         id = File.basename(api_project.path)
 
         # Resolve git url.
-        vcs = invent_or_git_vcs(api_project.repo)
+        vcs = Git.new
+        vcs.repository = "git@invent.kde.org:#{api_project.repo}"
         # FIXME: hack to get readonly. should be RO by default and
         # frontend scripts should opt-into RW by setting a property
         # on us
@@ -222,20 +224,6 @@ module ReleaseMe
       rescue OpenURI::HTTPError => e
         return [] if e.io.status[0] == '404' # Not a thing
         raise e # Otherwise raise, the error was unexpected on an API level.
-      end
-
-      private
-
-      def invent_or_git_vcs(repo)
-        # Repos that have migrated to invent will respond to ls-remote,
-        # repos that have not will not. See if the writable invent repo exists
-        # if not, drop to git.kde.org. If the user doesn't have push access
-        # to invent that will also trip up this check and they'll default
-        # to git.kde.org. This is a bit unfortunate :|
-        vcs = Git.new
-        vcs.repository = "git@invent.kde.org:#{repo}"
-        return vcs if vcs.exist?
-        raise 'Repo not writable on invent.kde.org. Something is wrong with url resolution'
       end
     end
   end
