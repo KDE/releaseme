@@ -143,7 +143,7 @@ module ReleaseMe
             # When pop runs into an empty queue with non_block=true it raises
             # an exception. We'll simply continue with it as our loop should
             # naturally end anyway.
-            continue
+            next
           end
           ReleaseMe.mktmpdir(self.class.to_s) { |tmpdir| yield lang, tmpdir }
         end
