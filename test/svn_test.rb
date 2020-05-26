@@ -5,29 +5,44 @@ require 'fileutils'
 
 require_relative 'lib/testme'
 require_relative '../lib/releaseme/svn'
+require_relative '../lib/releaseme/tmpdir'
 
 class TestSvn < Testme
-  def setup
-    @svn_checkout_dir = "#{Dir.pwd}/tmp_check_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
-    @svn_repo_dir = "#{Dir.pwd}/tmp_repo_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
-    system("svnadmin create #{@svn_repo_dir}", [:out] => File::NULL) || raise
-    assert_path_exist(@svn_repo_dir)
-  end
+  # Initialize a persistent reference repo. This repo will get copied for each
+  # test to start from a pristine state. svn is fairly expensive so creating
+  # new repos when the content doesn't change is costing multiple seconds!
+  # FIXME: code copy with l10n
+  REFERENCE_TMPDIR, REFERENCE_REPO_PATH = begin
+    tmpdir = ReleaseMe.mktmpdir(self.class.to_s) # cleaned via after_run hook
+    repo_data_dir = data('svnrepo/')
 
-  def teardown
-    FileUtils.rm_rf(@svn_repo_dir)
-    FileUtils.rm_rf(@svn_checkout_dir)
-  end
+    svn_template_dir = "#{tmpdir}/tmp_svnrepo_repo"
 
-  def populate_repo
-    `svn co file:///#{@svn_repo_dir} #{@svn_checkout_dir}`
-    File.write("#{@svn_checkout_dir}/foo", 'yolo')
-    Dir.mkdir("#{@svn_checkout_dir}/dir")
-    File.write("#{@svn_checkout_dir}/dir/file", 'oloy')
-    Dir.chdir(@svn_checkout_dir) do
-      system('svn', 'add', *Dir.glob('*'), [:out] => File::NULL) || raise
-      system('svn', 'ci', '-m', 'I am a troll', [:out] => File::NULL) || raise
+    assert_run('svnadmin', 'create', svn_template_dir)
+    raise unless File.exist?(svn_template_dir)
+
+    ReleaseMe.mktmpdir(self.class.to_s) do |checkout_dir|
+      checkout_dir = File.join(checkout_dir, "checkout")
+      assert_run('svn', 'co', "file://#{svn_template_dir}", checkout_dir)
+      File.write("#{checkout_dir}/foo", 'yolo')
+      Dir.mkdir("#{checkout_dir}/dir")
+      File.write("#{checkout_dir}/dir/file", 'oloy')
+      assert_run('svn', 'add', '--force', '.', chdir: checkout_dir)
+      assert_run('svn', 'ci', '-m', 'I am a troll', chdir: checkout_dir)
     end
+
+    [tmpdir, svn_template_dir]
+  end
+
+  Minitest.after_run do
+    FileUtils.rm_rf(REFERENCE_TMPDIR)
+  end
+
+  def setup
+    @svn_repo_dir = File.absolute_path('le_repo')
+    @svn_checkout_dir = 'le_checkout'
+    FileUtils.cp_r(REFERENCE_REPO_PATH, @svn_repo_dir)
+    assert_path_exist(@svn_repo_dir)
   end
 
   def new_valid_repo
@@ -37,7 +52,6 @@ class TestSvn < Testme
   end
 
   def test_cat
-    populate_repo
     s = new_valid_repo
 
     # Valid file.
@@ -52,7 +66,6 @@ class TestSvn < Testme
   end
 
   def test_exists
-    populate_repo
     s = new_valid_repo
 
     # Valid file.
@@ -65,7 +78,6 @@ class TestSvn < Testme
   end
 
   def test_list
-    populate_repo
     s = new_valid_repo
 
     # Valid path.
@@ -85,7 +97,6 @@ class TestSvn < Testme
     tmpDir = Dir.pwd + "/tmp_svn_export_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join
     Dir.mkdir(tmpDir)
 
-    populate_repo
     s = new_valid_repo
 
     # Valid target and path
@@ -128,7 +139,6 @@ class TestSvn < Testme
   end
 
   def test_clean
-    populate_repo
     s = new_valid_repo
 
     s.get(@svn_checkout_dir)
@@ -149,7 +159,6 @@ class TestSvn < Testme
   end
 
   def test_get_with_clean
-    populate_repo
     s = new_valid_repo
 
     s.get(@svn_checkout_dir, clean: true)
