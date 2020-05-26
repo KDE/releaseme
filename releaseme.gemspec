@@ -53,5 +53,5 @@ Gem::Specification.new do |spec|
   # Coverage
   spec.add_development_dependency 'simplecov', '>= 0.11'
   # Quality
-  spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop', '~> 0.84.0'
 end

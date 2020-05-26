@@ -7,7 +7,7 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Enabled: false
 
-Style/FileName:
+Naming/FileName:
   Enabled: false
 
 Metrics/AbcSize:
