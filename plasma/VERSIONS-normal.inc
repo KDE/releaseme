@@ -13,10 +13,10 @@ MINOR_RELEASE_MONTH="May 2020" # for announcement, when was 5.x.0 released
 
 RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
 
-INFOCHECKOUT="/home/jr/src/www/www/info"                   # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/info/
-ANNOUNCECHECKOUT="/home/jr/src/www/www/announcements"      # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/announcements/
-L10NSCRIPTSCHECKOUT="/home/jr/src/www/l10n-kf5/scripts"   # svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kde4/scripts/
-WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.kde.org/home/kde/trunk/www/sites/www/
+INFOCHECKOUT="/home/jr/src/www/www/info"                   # git@invent.kde.org:websites/kde-org.git
+ANNOUNCECHECKOUT="/home/jr/src/www/kde-org/announcements"  # git@invent.kde.org:websites/kde-org.git
+L10NSCRIPTSCHECKOUT="/home/jr/src/www/l10n-kf5/scripts"    # svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kde4/scripts/
+WWWCHECKOUT="/home/jr/src/www/kde-org"                     # git@invent.kde.org:websites/kde-org.git
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 

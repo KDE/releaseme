@@ -27,7 +27,7 @@ FileUtils.cp(changelog_file,
 
 # Change work branch
 system('git', 'checkout', 'master', chdir: plasma_versions.wwwcheckout)
-system('git', 'checkout', '-b', "work/plasma-#{version}", chdir: plasma_versions.wwwcheckout)
+system('git', 'checkout', "work/announcements", chdir: plasma_versions.wwwcheckout)
 
 # Add files
 system('git', 'add', "info/plasma-#{version}.php", chdir: plasma_versions.wwwcheckout)           # info file 
@@ -38,8 +38,8 @@ system('git', 'add', "announcements/plasma-#{version}.php", chdir: plasma_versio
 system('git', 'commit', '-m', "feat: Add webpage for Plasma #{version}", chdir: plasma_versions.wwwcheckout)
 
 # And push files :)
-system('git', 'push', '-u', "origin work/plasma-#{version}", chdir: plasma_versions.wwwcheckout)
-system('xdg-open', "https://invent.kde.org/websites/kde-org/-/merge_requests/new?merge_request%5Bsource_branch%5D=work%2Fplasma-#{version}")
+system('git', 'push', chdir: plasma_versions.wwwcheckout)
+system('xdg-open', "https://www-staging.kde.org/announcements/plasma-#{version}?letmein=1")
 
 # I18N data
 system('sed',

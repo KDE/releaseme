@@ -23,18 +23,11 @@ sed -i "s/\(INSERT NEW ENTRIES.*\)/\1\n${ANNOUNCEINDEX}/" ${ANNOUNCECHECKOUT}/in
 # Updating www/index.php got ported to Ruby
 ./plasma-release-webpages
 
-# commit to svn
-pushd ${ANNOUNCECHECKOUT}
-svn diff
-svn commit -m "release plasma ${VERSION}"
-
-cd ${INFOCHECKOUT}
-svn diff
-svn commit -m "release plasma ${VERSION}"
-
+# commit to git
 cd ${WWWCHECKOUT}
-svn diff
-svn commit -m "release plasma ${VERSION}"
+git diff
+git commit -a -m "release plasma ${VERSION}"
+git push
 
 # copy announce over to Dot for publishing
 
