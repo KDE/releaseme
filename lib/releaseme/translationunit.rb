@@ -57,12 +57,11 @@ module ReleaseMe
     # anonsvn only allows 5 concurrent connections.
     THREAD_COUNT = 5
 
-    def initialize(type, project_name, i18n_path)
+    def initialize(type, project_name, i18n_path, vcs: Svn.new)
       @type = type
       @i18n_path = i18n_path
       @project_name = project_name
-
-      @vcs = Svn.new
+      @vcs = vcs
 
       @languages = []
       @default_excluded_languages = nil

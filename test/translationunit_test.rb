@@ -8,13 +8,36 @@ class TestTranslationUnit < Testme
   end
 
   def create(type)
-    l = ReleaseMe::TranslationUnit.new(type, 'amarok', File::NULL)
+    @svn = mock('svn')
+    @svn.stubs(:cat).with('subdirs').returns("de\nx-test\n")
+
+    # mock an attr
+    @repository = ''
+    @svn.stubs(:repository=).with do |v|
+      @repository.replace(v)
+      true
+    end
+    @svn.stubs(:repository).returns(@repository)
+
+    l = ReleaseMe::TranslationUnit.new(type, 'amarok', File::NULL, vcs: @svn)
     l.target = "#{@dir}/l10n"
     l
   end
 
   def create_plasma(type)
-    l = ReleaseMe::TranslationUnit.new(type, 'khotkeys', 'kde-workspace')
+    @svn = mock('svn')
+    @svn.stubs(:cat).with('subdirs').returns("de\nx-test\n")
+
+    # mock an attr
+    @repository = ''
+    @svn.stubs(:repository=).with do |v|
+      @repository.replace(v)
+      true
+    end
+    @svn.stubs(:repository).returns(@repository)
+
+    l = ReleaseMe::TranslationUnit.new(type, 'khotkeys', 'kde-workspace',
+                                       vcs: @svn)
     l.target = "#{@dir}/l10n"
     l
   end
