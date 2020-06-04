@@ -20,7 +20,7 @@ WWWCHECKOUT="/home/jr/src/www/kde-org"                     # git@invent.kde.org:
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="June, 9 June 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Tuesday, 09 June 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="June" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 

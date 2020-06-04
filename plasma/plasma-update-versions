@@ -19,10 +19,7 @@ rm -rf tmp-version-update
 mkdir tmp-version-update
 cd tmp-version-update
 for project in $WORKSPACE; do
-  GITPREFIX="kde:"
-  if [ $project == "breeze-gtk" ]; then
-    GITPREFIX="invent:kde/"
-  fi
+  GITPREFIX="invent:kde/"
   projectrepo=$project
   project=`basename $project`
   if [ $project != "breeze-grub" ]; then
