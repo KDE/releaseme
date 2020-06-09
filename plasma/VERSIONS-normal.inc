@@ -26,7 +26,7 @@ TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTR
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
-YOUTUBEID="https://peertube.mastodon.host/videos/embed/cda402b5-2bcb-4c0c-b232-0fa5a4dacaf5" # The video ID used in URL for youtube
+YOUTUBEID="https://peertube.mastodon.host/videos/embed/8de9155b-a080-4997-9340-f997312b917e" # The video ID used in URL for youtube
 
 # command from   git clone kde:jriddell/appstream-metainfo-release-update
 APPSTREAM_UPDATER="/home/jr/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"
