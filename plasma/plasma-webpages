@@ -16,8 +16,8 @@ File.write(format('%s/plasma-%s.php', plasma_versions.infocheckout, version), in
 
 announce_template = PlasmaAnnounceTemplate.new
 announce_output = announce_template.render
-# write announcement unless it's a beta or final where we do it manually
-File.write(format('%s/plasma-%s.php', plasma_versions.announcecheckout, version), announce_output) unless version[-2..-1] == "90" or version[-2..-1] == "80"
+# write announcement unless it's a .0, beta or final where we do it manually
+File.write(format('%s/plasma-%s.php', plasma_versions.announcecheckout, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
 
 changelog_file = format('plasma-%s-%s-changelog.php',
                         plasma_versions.old_version,
@@ -26,20 +26,22 @@ FileUtils.cp(changelog_file,
              format('%s/%s', plasma_versions.announcecheckout, changelog_file))
 
 # Change work branch
-system('git', 'checkout', 'master', chdir: plasma_versions.wwwcheckout)
-system('git', 'checkout', "work/announcements", chdir: plasma_versions.wwwcheckout)
+#system('git', 'checkout', "work/announcements", chdir: plasma_versions.wwwcheckout)
 
 # Add files
 system('git', 'add', "info/plasma-#{version}.php", chdir: plasma_versions.wwwcheckout)           # info file 
 system('git', 'add', "announcements/#{changelog_file}", chdir: plasma_versions.wwwcheckout)      # changelog file
-system('git', 'add', "announcements/plasma-#{version}.php", chdir: plasma_versions.wwwcheckout, unless version[-2..-1] == "90" or version[-2..-1] == "80")
+system('git', 'add', "announcements/plasma-#{version}.php", chdir: plasma_versions.wwwcheckout) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
 
 # Commit files
 system('git', 'commit', '-m', "feat: Add webpage for Plasma #{version}", chdir: plasma_versions.wwwcheckout)
 
 # And push files :)
 system('git', 'push', chdir: plasma_versions.wwwcheckout)
-system('xdg-open', "https://www-staging.kde.org/announcements/plasma-#{version}?letmein=1")
+system('firefox', "https://www.kde.org/announcements/plasma-#{version}")
+system('firefox', "https://www.kde.org/info/plasma-#{version}")
+system('firefox', "https://www.kde.org/announcements/#{changelog_file}")
+system('firefox', "https://binary-factory.kde.org/view/Websites/job/Website_kde-org/")
 
 # I18N data
 system('sed',
