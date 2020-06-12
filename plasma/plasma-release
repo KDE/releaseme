@@ -15,7 +15,7 @@ sed -i "/NOT OUT YET/d" ${INFOCHECKOUT}/plasma-${VERSION}.php
 
 # www/announcements/index.php
 
-ANNOUNCEINDEX="<\!-- Plasma ${VERSION} -->\n<strong>${RELEASEDATE}<\/strong> - <a href=\"plasma-${VERSION}.php\">Plasma ${VERSION}<\/a>\n<br \/>\n\"<em>KDE Ships Plasma ${VERSION}.<\/em>\"\n<p \/>"
+ANNOUNCEINDEX="<\!-- Plasma ${VERSION} -->\n<strong>${RELEASEDATE}<\/strong> - <a href=\"plasma-${VERSION}\">Plasma ${VERSION}<\/a>\n<br \/>\n\"<em>KDE Ships Plasma ${VERSION}.<\/em>\"\n<p \/>"
 
 sed -i "s/\(INSERT NEW ENTRIES.*\)/\1\n${ANNOUNCEINDEX}/" ${ANNOUNCECHECKOUT}/index.php
 
