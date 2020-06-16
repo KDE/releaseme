@@ -19,7 +19,7 @@ rm -rf tmp-version-update
 mkdir tmp-version-update
 cd tmp-version-update
 for project in $WORKSPACE; do
-  GITPREFIX="invent:kde/"
+  GITPREFIX="invent:plasma/"
   projectrepo=$project
   project=`basename $project`
   if [ $project != "breeze-grub" ]; then

@@ -74,7 +74,7 @@ on release day launch:
  check if www/images/teaser teaser image needs an update
  for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
  for beta releases also copy announce to 5.x.0 page and poke Paul etc to do a final one then ask for translations
- For .0 update invent:websites/kde-org plasma-desktop.php screenshots/index.php for new version
+ For .0 update invent:websites/kde-org plasma-desktop.php screenshots/index.php and invent:websites/product-screenshots plasma/plasma.png  for new version
  For .0 update invent:websites/aether-sass /css/kde-org/plasma-desktop.scss and assets/wallpaper.jpg for new wallpaper
  ./plasma-tag-test to check the tags are really pushed
     or run http://xenon.pangea.pub/job/plasma-releaseme-tags-test/ to check tags are really pushed
