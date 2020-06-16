@@ -30,8 +30,6 @@ href="http://kde.org/info/security/">KDE Security Advisories</a> page.</p>
 
 <h2><a name="bugs">Bugs</a></h2>
 
-<p><a href="https://community.kde.org/Plasma/5.9_Errata">5.9 Errata wiki page</a> lists the most important known problems.</p>
-
 <p>Please check the <a href="http://bugs.kde.org/">bug database</a>
 before filing any bug reports. Also check for possible updates on this page
 that might describe or fix your problem.</p>
