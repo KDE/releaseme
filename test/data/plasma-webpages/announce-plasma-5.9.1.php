@@ -24,16 +24,17 @@
 
     <h1>NOT OUT YET</h1>
 
-    <figure class="embed-responsive embed-responsive-16by9 mx-auto" style="max-width: 900px">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/lm0sqqVcotA" allowfullscreen='true    '></iframe>
- 28 </figure>
-
-    <figure class="topImage">
-        <a href="plasma-5.9/plasma-5.9.png" data-toggle="lightbox">
-            <img src="plasma-5.9/plasma-5.9-wee.png" height="338" width="600" style="width: 100%; max-width: 600px; height: auto;" alt="Plasma 5.9" />
-        </a>
-        <figcaption><?php print i18n_var("KDE Plasma %1", "5.9")?></figcaption>
-    </figure>
+    <div class="laptop-with-overlay d-block my-3 mx-auto" style="max-width: 800px">
+        <img class="laptop img-fluid mt-3" src="/content/plasma-desktop/laptop.png" alt="empty laptop with an overlay">
+        <div class="laptop-overlay">
+        <video controls class="w-100 h-100 mt-3" poster="https://cdn.kde.org/promo/Announcements/Plasma/5.9/Thumbnail.png">
+            <source src="https://cdn.kde.org/promo/Announcements/Plasma/5.9/Video.webm"
+                type="video/webm">
+            <source src="https://cdn.kde.org/promo/Announcements/Plasma/5.9/Video.mp4"
+                type="video/mp4">
+        </video>
+        </div>
+    </div>
 
     <p>
         <?php i18n("Tuesday, 14 February 2017.")?>

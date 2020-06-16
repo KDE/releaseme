@@ -2,16 +2,16 @@ LANG=en_GB.UTF-8
 LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
-VERSION=5.19.0
+VERSION=5.19.1
 SHORT_VERSION=5.19
-OLD_VERSION=5.18.5
+OLD_VERSION=5.18.0
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.19 # set to master or Plasma/5.x
 MINOR_RELEASE_MONTH="June 2020" # for announcement, when was 5.x.0 released
 
-RELEASETYPE=feature # for changelog, set to beta, feature or bugfix
+RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
 
 INFOCHECKOUT="/home/jr/src/websites/kde-org/info"                   # git@invent.kde.org:websites/kde-org.git
 ANNOUNCECHECKOUT="/home/jr/src/websites/kde-org/announcements"  # git@invent.kde.org:websites/kde-org.git
@@ -20,7 +20,7 @@ WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 09 June 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Tuesday, 16 June 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="June" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 

@@ -24,16 +24,17 @@
 
     <h1>NOT OUT YET</h1>
 
-    <figure class="embed-responsive embed-responsive-16by9 mx-auto" style="max-width: 900px">
-        <iframe class="embed-responsive-item" src="<%= youtubeid %>" allowfullscreen='true    '></iframe>
- 28 </figure>
-
-    <figure class="topImage">
-        <a href="plasma-<%= short_version %>/plasma-<%= short_version %>.png" data-toggle="lightbox">
-            <img src="plasma-<%= short_version %>/plasma-<%= short_version %>-wee.png" height="338" width="600" style="width: 100%; max-width: 600px; height: auto;" alt="Plasma <%= short_version %>" />
-        </a>
-        <figcaption><?php print i18n_var("KDE Plasma %1", "<%= short_version %>")?></figcaption>
-    </figure>
+    <div class="laptop-with-overlay d-block my-3 mx-auto" style="max-width: 800px">
+        <img class="laptop img-fluid mt-3" src="/content/plasma-desktop/laptop.png" alt="empty laptop with an overlay">
+        <div class="laptop-overlay">
+        <video controls class="w-100 h-100 mt-3" poster="https://cdn.kde.org/promo/Announcements/Plasma/<%= short_version %>/Thumbnail.png">
+            <source src="https://cdn.kde.org/promo/Announcements/Plasma/<%= short_version %>/Video.webm"
+                type="video/webm">
+            <source src="https://cdn.kde.org/promo/Announcements/Plasma/<%= short_version %>/Video.mp4"
+                type="video/mp4">
+        </video>
+        </div>
+    </div>
 
     <p>
         <?php i18n("<%= releasedate %>.")?>
