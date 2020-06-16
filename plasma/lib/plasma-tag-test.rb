@@ -21,7 +21,7 @@ class PlasmaTagTest
   def check_tags
     missing_tags = []
     repos.each do |repo|
-      tag_refs = Git.ls_remote("git://anongit.kde.org/#{repo}")['tags']["v#{@version}"]
+      tag_refs = Git.ls_remote("invent:plasma/#{repo}")['tags']["v#{@version}"]
       missing_tags.push(repo) if tag_refs == nil
       puts "Repo #{repo} has tag v#{@version}" if tag_refs != nil
       puts "Not found tag v#{@version} in #{repo}" if tag_refs == nil

@@ -28,10 +28,10 @@ cd ${WWWCHECKOUT}
 git diff
 git commit -a -m "release plasma ${VERSION}"
 git push
+cd -
 
 # copy announce over to Dot for publishing
 
-popd
 
 firefox https://www.kde.org/info/plasma-${VERSION}
 firefox https://www.kde.org/announcements/plasma-${VERSION}
