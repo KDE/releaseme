@@ -46,13 +46,13 @@ mkdir tmp-announcements
 kate tmp-announcements/DOT-STORY.html
 
 w3m tmp-announcements/DOT-STORY.html  -dump > tmp-announcements/KDE-ANNOUNCE_TEXT.txt
-sed -i "s,Live Images.*,https://www.kde.org/announcements/plasma-${VERSION}.php\nhttps://www.kde.org/announcements/plasma-${OLD_VERSION}-${VERSION}-changelog.php," tmp-announcements/KDE-ANNOUNCE_TEXT.txt
+sed -i "s,Live Images.*,https://www.kde.org/announcements/plasma-${VERSION}.php\nhttps://www.kde.org/announcements/plasma-${OLD_VERSION}-${VERSION}-changelog," tmp-announcements/KDE-ANNOUNCE_TEXT.txt
 echo "e-mail me to kde-announce@kde.org" > tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
 cat tmp-announcements/KDE-ANNOUNCE_TEXT.txt >> tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
 kate tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
 
 # post on twitter, g+, facebook, reddit (r/kde and r/linux)
-echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://www.kde.org/announcements/plasma-${VERSION}.php" > tmp-announcements/twitter.text
+echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://www.kde.org/announcements/plasma-${VERSION}" > tmp-announcements/twitter.text
 kate tmp-announcements/twitter.text
 firefox https://tweetdeck.twitter.com
 firefox https://facebook.com/kde
@@ -62,5 +62,5 @@ firefox https://dot.kde.org/#overlay=node/add/story
 
 # e-mail release-team@kde.org, plasma-devel@kde.org with the happy news
 echo "e-mail me to kde-announce@kde.org, release-team@kde.org, plasma-devel@kde.org" > tmp-announcements/release-team
-echo "Plasma ${VERSION} is now released https://www.kde.org/announcements/plasma-${VERSION}.php" >> tmp-announcements/release-team
+echo "Plasma ${VERSION} is now released https://www.kde.org/announcements/plasma-${VERSION}" >> tmp-announcements/release-team
 kate tmp-announcements/release-team
