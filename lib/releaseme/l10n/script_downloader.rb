@@ -44,10 +44,6 @@ module ReleaseMe
 
     private
 
-    def templates
-      @l10n.templates
-    end
-
     def script_file_dir
       "#{lang}/scripts/#{@l10n.i18n_path}"
     end

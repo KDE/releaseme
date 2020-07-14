@@ -82,16 +82,6 @@ class TestL10n < Testme
     assert_empty(svns, "There should be no lingering .svn dirs:\n  #{svns}")
   end
 
-  def test_find_templates
-    l = create_l10n
-
-    templates = l.send(:find_templates, data('multi-pot'), skip_dir: nil)
-    assert_equal(templates.count, 2)
-
-    templates = l.send(:find_templates, data('single-pot'), skip_dir: nil)
-    assert_equal(templates.count, 1)
-  end
-
   def test_get_po
     # For visual string consinstency we actually interpolate pointlessly below.
     # rubocop:disable Style/UnneededInterpolation
@@ -204,16 +194,6 @@ class TestL10n < Testme
     assert_equal('', printer.stat_color(fake_stat))
   end
 
-  def test_variable_potname
-    l = create_l10n
-    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
-    FileUtils.rm_rf(@dir)
-    FileUtils.cp_r(data('variable-pot'), @dir)
-    assert_raises RuntimeError do
-      l.get(@dir)
-    end
-  end
-
   def test_space_and_declared_multi_pot
     l = create_l10n
     l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
@@ -222,12 +202,6 @@ class TestL10n < Testme
     l.get(@dir)
     assert_path_exist("#{@dir}/po/de/amarok.po")
     assert_path_exist("#{@dir}/po/de/amarokcollectionscanner.po")
-  end
-
-  def test_find_templates_bogus
-    l = create_l10n
-    templates = l.send(:find_templates, data('bogus-pot'), skip_dir: nil)
-    assert_equal(templates, [])
   end
 
   def test_diff_output_some_not_found_all_not_found
@@ -285,18 +259,6 @@ class TestL10n < Testme
     assert_path_exist("#{@dir}/po/sr/scripts/libplasma5/plasmoid.js")
 
     assert_no_dotsvn("#{@dir}/po")
-  end
-
-  def test_pot_detection_without_releaseme
-    # Do not find templates in the releaseme directory itself.
-    # If releaseme was cloned into a source directory (or submoduled')
-    # we'd otherwise trip over test fixtures.
-    # One such fixture is:
-    assert_path_exist("#{__dir__}/data/variable-pot/Messages.sh")
-    l = ReleaseMe::L10n.new(ReleaseMe::L10n::TRUNK, 'ki18n', 'frameworks')
-    # Make sure this doesn't raise anything.
-    pos = l.send(:find_templates, __dir__)
-    assert_empty(pos)
   end
 
   def test_releaseme_dir

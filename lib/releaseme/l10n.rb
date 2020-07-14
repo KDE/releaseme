@@ -48,7 +48,6 @@ module ReleaseMe
       Dir.mkdir(target)
       Dir.mkdir(qttarget)
 
-      @templates = find_templates(srcdir)
       log_info "Downloading translations for #{srcdir}"
 
       languages_without_translation = []
@@ -210,22 +209,6 @@ module ReleaseMe
       raise "l10n pot appears to be a variable. cannot resolve #{potname}"
     end
 
-    def find_templates(directory, pos = [], skip_dir: RELEASEME_TEST_DIR)
-      Dir.glob("#{directory}/**/**/Messages.sh").each do |file|
-        next if skip_dir && File.absolute_path(file).start_with?(skip_dir)
-        File.readlines(file).each do |line|
-          line.match(%r{[^/\s=]+\.pot}).to_a.each do |match|
-            verify_pot(match)
-            pos << match.sub(/\.pot$/, '.po')
-          end
-        end
-      end
-      # Templates must be unique as multiple lines can contribute to the same
-      # template, as such it can happen that a.pot appears twice which can
-      # have unintended consequences by an outside user of the Array.
-      pos.uniq
-    end
-
     def po_file_dir(lang)
       "#{lang}/messages/#{@i18n_path}"
     end
@@ -258,7 +241,6 @@ module ReleaseMe
       if (languages - missing).empty?
         path = po_file_dir('$lang')
         log_warn "!!! No translations found at SVN path #{path} !!!"
-        log_warn "Looked for templates: #{@templates}"
       else
         log_info "No translations for: #{missing.join(', ')}"
       end
