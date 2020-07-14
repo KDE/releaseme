@@ -6,3 +6,8 @@
 /.yardoc
 /plasma/bugzilla-cookies.inc
 /plasma/wordpress_access.rb
+/.sig
+/.tags*
+/.bundle/
+/Gemfile.lock
+/release_data
