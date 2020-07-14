@@ -76,11 +76,7 @@ module ReleaseMe
         # before even looking at the templates in detail.
         files += L10nDataDownloader.new(lang, tmpdir, self).download
 
-        if templates.count > 1
-          files += get_multiple(lang, tmpdir)
-        elsif templates.count == 1
-          files += get_single(lang, tmpdir)
-        end
+        files += get_messages(lang, tmpdir)
         # No translations need fetching. But continue because not
         # all assets are template bound.
 
@@ -236,29 +232,21 @@ module ReleaseMe
       "#{lang}/messages/#{@i18n_path}"
     end
 
-    def get_single(lang, tmpdir)
-      # TODO: maybe class this
-      po_file_name = templates[0]
-      vcs_file_path = "#{po_file_dir(lang)}/#{po_file_name}"
-      po_file_path = "#{tmpdir}/#{po_file_name}"
-
-      vcs.export(po_file_path, vcs_file_path)
-
-      files = []
-      files << po_file_path if File.exist?(po_file_path)
-      files
-    end
-
-    def get_multiple(lang, tmpdir)
+    def get_messages(lang, tmpdir)
       vcs_path = po_file_dir(lang)
 
-      return [] if @vcs.list(vcs_path).empty?
       @vcs.get(tmpdir, vcs_path)
 
-      files = templates.collect do |po|
-        po_file_path = tmpdir.dup.concat("/#{po}")
-        next nil unless File.exist?(po_file_path)
-        po_file_path if File.exist?(po_file_path)
+      files = Dir.glob(File.join(tmpdir, '*')).collect do |file|
+        name = File.basename(file)
+        # xml extraction: folded back into xml by scripty
+        next nil if name.start_with?('xml_')
+        # desktop extraction: folded back into .deskto by scripty
+        # https://bugs.kde.org/show_bug.cgi?id=424031
+        next nil if name.include?('._desktop_.')
+
+        # everything else is presumed a desirable artifact
+        file
       end
 
       files

@@ -452,4 +452,33 @@ class TestL10n < Testme
     l.get(@dir)
     assert_path_exist("#{@dir}/po/de/org.kde.potd.po")
   end
+
+  def test_modern_get
+    # Modern getting doesn't rely on template detection.
+    # Since the move to gitlab l10n sports a different directory structure
+    # which enables us to blanket handle entire directories. To that end
+    # .pot detection was removed in place of always using the entire directory
+    # (- filtered stuff anyway).
+    # Also relates to https://bugs.kde.org/show_bug.cgi?id=424031
+
+    l = create_l10n('kcoreaddons', 'kcoreaddons')
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('kcoreaddons'), @dir)
+    l.get(@dir)
+
+    assert_path_exist("#{@dir}/po")
+    # These are not mentioned in messages.sh but we want them!
+    assert_path_exist("#{@dir}/po/de/kdirwatch.po")
+    # https://bugs.kde.org/show_bug.cgi?id=424031
+    assert_path_exist("#{@dir}/po/de/kf5_entry.desktop")
+    # This is a file extracted from .desktop files, they get merged back into
+    # their .desktop file by scripty, they needn't be shipped in the tarball.
+    refute_path_exist("#{@dir}/po/de/l10n._desktop_.po")
+    # This is a file extra from .xml files, same behavior as for .desktop.
+    refute_path_exist("#{@dir}/po/de/xml_mimetypes5.po")
+
+    assert(File.read("#{@dir}/CMakeLists.txt").include?('ki18n_install(po)'))
+  end
 end
