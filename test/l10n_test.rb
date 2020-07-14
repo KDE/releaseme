@@ -58,7 +58,7 @@ class TestL10n < Testme
   end
 
   def setup
-    @i18n_path = 'extragear-multimedia'
+    @i18n_path = 'amarok'
     @trunk_url = 'trunk/l10n-kf5/'
     @stable_url = 'branches/stable/l10n-kf5'
 
@@ -267,7 +267,7 @@ class TestL10n < Testme
   def test_script
     # https://techbase.kde.org/Localization/Concepts/Transcript
 
-    l = create_l10n('ki18n', 'frameworks')
+    l = create_l10n('ki18n', 'ki18n')
     l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
     FileUtils.rm_rf(@dir)
     FileUtils.cp_r(data('multi-pot-script'), @dir)
@@ -321,7 +321,7 @@ class TestL10n < Testme
     # tree without breaking anything. As such we need no source tree for the
     # test at all.
 
-    l = create_l10n('ktuberling', 'kdegames')
+    l = create_l10n('ktuberling', 'ktuberling')
     l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     Dir.mkdir(@dir)
@@ -380,7 +380,7 @@ class TestL10n < Testme
     # Qt strings get put into a foo_qt.po, they are meant to get installed via
     # ecm_install_po_files_as_qm from ECM.
 
-    l = create_l10n('step', 'kdeedu')
+    l = create_l10n('step', 'step')
     l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
@@ -401,7 +401,7 @@ class TestL10n < Testme
     # frameworks using both, but I'd like to think that it would be consistent
     # with how applications handle it: po/ and poqm/.
 
-    l = create_l10n('solid', 'frameworks')
+    l = create_l10n('solid', 'solid')
     l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
@@ -422,7 +422,7 @@ class TestL10n < Testme
     # them, so we'll use lack of UI translations as indication for poor quality
     # everywhere).
 
-    l = create_l10n('solid', 'frameworks')
+    l = create_l10n('solid', 'solid')
     l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 
     FileUtils.rm_rf(@dir)
@@ -442,6 +442,8 @@ class TestL10n < Testme
     # org.kde.pod.pot
     # https://bugs.kde.org/show_bug.cgi?id=420574
 
+    # NB: this is intentionally a different i18n_path to implicitly make sure
+    # that works
     l = create_l10n('kdeplasmas-addons', 'kde-workspace')
     l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
 

@@ -57,7 +57,7 @@ class TestDocumentation < Testme
   end
 
   def setup
-    @i18n_path = 'extragear-multimedia'
+    @i18n_path = 'amarok'
     @trunk_url = 'trunk/l10n-kf5/'
     @stable_url = 'branches/stable/l10n-kf5'
 
