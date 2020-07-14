@@ -67,7 +67,6 @@ module ReleaseMe
     private
 
     def download(srcdir, languages_without_translation, target, qttarget)
-      script_cache = L10nScriptDownloader::TemplateCache.new(self)
       each_language_with_tmpdir do |lang, tmpdir|
         log_debug "#{srcdir} - downloading #{lang}"
         files = []
@@ -80,8 +79,7 @@ module ReleaseMe
         # No translations need fetching. But continue because not
         # all assets are template bound.
 
-        files += L10nScriptDownloader.new(lang, tmpdir, script_cache,
-                                          self).download
+        files += L10nScriptDownloader.new(lang, tmpdir, self).download
 
         files = files.compact.uniq
 
