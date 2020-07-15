@@ -436,7 +436,7 @@ class TestL10n < Testme
     # found in Messages.sh. The modern behavior is to exclude unwanted things.
     # https://bugs.kde.org/show_bug.cgi?id=424031
     contents = Dir.chdir("#{@dir}/po/de") { Dir.glob("**/**") }
-    assert_equal(%w[kdirwatch.po kf5_entry.desktop], contents)
+    assert_equal(%w[kdirwatch.po kf5_entry.desktop].sort, contents.sort)
     # This excludes scripty managed artifacts  (get automaticaly folded back into their original file by l10n scripty):
     # - kdirwatch._json_.po
     # - kdirwatch_xml_mimetypes.po
