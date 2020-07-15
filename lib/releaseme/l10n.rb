@@ -218,13 +218,12 @@ module ReleaseMe
 
       @vcs.get(tmpdir, vcs_path)
 
+      managed_types = %w[._desktop_ xml_mimetypes .appdata .metainfo ._json_]
       files = Dir.glob(File.join(tmpdir, '*')).collect do |file|
         name = File.basename(file)
-        # xml extraction: folded back into xml by scripty
-        next nil if name.start_with?('xml_')
         # desktop extraction: folded back into .deskto by scripty
         # https://bugs.kde.org/show_bug.cgi?id=424031
-        next nil if name.include?('._desktop_.')
+        next nil if managed_types.any? { |t| name.end_with?("#{t}.po") }
 
         # everything else is presumed a desirable artifact
         file

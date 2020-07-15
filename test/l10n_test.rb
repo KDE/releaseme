@@ -432,14 +432,17 @@ class TestL10n < Testme
 
     assert_path_exist("#{@dir}/po")
     # These are not mentioned in messages.sh but we want them!
-    assert_path_exist("#{@dir}/po/de/kdirwatch.po")
+    # Legeacy behavior would be to only fetch translations for templates
+    # found in Messages.sh. The modern behavior is to exclude unwanted things.
     # https://bugs.kde.org/show_bug.cgi?id=424031
-    assert_path_exist("#{@dir}/po/de/kf5_entry.desktop")
-    # This is a file extracted from .desktop files, they get merged back into
-    # their .desktop file by scripty, they needn't be shipped in the tarball.
-    refute_path_exist("#{@dir}/po/de/l10n._desktop_.po")
-    # This is a file extra from .xml files, same behavior as for .desktop.
-    refute_path_exist("#{@dir}/po/de/xml_mimetypes5.po")
+    contents = Dir.chdir("#{@dir}/po/de") { Dir.glob("**/**") }
+    assert_equal(%w[kdirwatch.po kf5_entry.desktop], contents)
+    # This excludes scripty managed artifacts  (get automaticaly folded back into their original file by l10n scripty):
+    # - kdirwatch._json_.po
+    # - kdirwatch_xml_mimetypes.po
+    # - l10n._desktop_.po
+    # - org.kde.kdirwatch.appdata.po
+    # - org.kde.kdirwatch.metainfo.po
 
     assert(File.read("#{@dir}/CMakeLists.txt").include?('ki18n_install(po)'))
   end
