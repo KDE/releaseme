@@ -54,7 +54,7 @@ that might describe or fix your problem.</p>
 
 <p>GPG signatures are available alongside the source code for
 verification. They are signed by release manager <a
-href="https://sks-keyservers.net/pks/lookup?op=vindex&search=0xEC94D18F7F05997E">Jonathan Riddell with 0xEC94D18F7F05997E</a>.  Git tags are also signed by the
+href="http://hkps.pool.sks-keyservers.net/pks/lookup?op=get&search=0xEC94D18F7F05997E">Jonathan Riddell with 0xEC94D18F7F05997E</a>.  Git tags are also signed by the
 same key. <a href="plasma-signing-keys.pgp">PGP Keyring for all Plasma Release Managers</a>.</p>
 
 <?php
