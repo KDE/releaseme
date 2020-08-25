@@ -1,19 +1,56 @@
-#!/bin/bash
+#!/usr/bin/env ruby
+# Copyright (C) 2020 Jonathan Riddell <jr@jriddell.org>, may be copied under the GNU GPL v2 or later
 
 # get a list of git repositories we want to make part of the release
 
-set -xe
+require 'net/http'
+require 'json'
+require 'optparse'
+require 'fileutils'
 
-rm -f kde_projects.xml*
-wget http://projects.kde.org/kde_projects.xml
-WORKSPACE=`grep path kde_projects.xml  | grep kde/workspace/ | sed "s,<path>kde/workspace/,,"  | sed "s,</path>,," | sed 's/^ *//'`
-WORKSPACE="$WORKSPACE
-"
+# What projects in repo-metadata plasma/ directory are excluded from the release?  Add a new array for each release.
+V_518lts_exclusions = %w(plasma-disks kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd)
+V_519_exclusions = %w(plasma-disks kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd)
+V_520_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd)
+releases = {"5.18" => V_518lts_exclusions, "5.19" => V_519_exclusions, "5.20" => V_520_exclusions}
 
-mv git-repositories-for-release git-repositories-for-release-old
-echo $WORKSPACE > git-repositories-for-release
-cat git-repositories-for-release | tr " " "\n" | sort | tr "\n" " " > git-repositories-for-release-sorted
-mv git-repositories-for-release-sorted git-repositories-for-release
-#sed "s,plasma-browser-integration ,," -i git-repositories-for-release
-wdiff git-repositories-for-release-old git-repositories-for-release
-echo == git-repositories-for-release updated
+options = {}
+OptionParser.new do |parser|
+  parser.banner = "Usage: plasma-git-repos -r 5.19"
+
+  parser.on('-r', '--release RELEASE', 'Release RELEASE version') { |v| options[:release] = v }
+end.parse!
+
+if not options.include?(:release) then
+  puts "required -r RELEASE"
+  exit
+end
+
+uri = URI('https://projects.kde.org/api/v1/projects/plasma')
+
+plasma_projects_string = Net::HTTP.get(uri)
+
+plasma_projects = JSON.parse(plasma_projects_string)
+
+
+plasma_projects.each do |plasma_project|
+  plasma_project.gsub!(/plasma\//, "")
+end
+
+release_projects = []
+exclusions = releases[options[:release]]
+release_projects = plasma_projects.select do |plasma_project|
+  not exclusions.include?(plasma_project)
+end
+
+FileUtils.move("git-repositories-for-release", "git-repositories-for-release-old")
+File.open("git-repositories-for-release", 'w') do |f|
+  release_projects.each do |project|
+    f.write(project)
+    f.write(" ")
+  end
+end
+
+puts("== git-repositories-for-release updated")
+system("wdiff", "-s", "git-repositories-for-release-old", "git-repositories-for-release")
+puts("\n")
