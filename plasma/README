@@ -24,13 +24,13 @@ on Monday before beta tar day:
  - Ping Michael@TUXVIDEO and The Linux Experiment <t.linuxexperiment@gmail.com> to ask for videos
 
 on beta tar day:
+ - Add release exceptions array to ./plasma-git-repos and run "./plasma-git-repos -r 5.xx" to update list of things to package in git-repositories-for-release
  - set QT_MIN_VERSION to version agreed at cycle kickoff (except plasma-browser-integration)
  - set KF5_MIN_VERSION to version agreed at cycle kickoff
  - TODO check out Harald's plasma-update-versions-kf5 to see if it works for the above
 
 on tar day tar:
  update VERSIONS.inc
- run ./plasma-git-repos to update list of things to package in git-repositories-for-release
  run ./plasma-update-versions (ensure it is using the right branches)
  run ./plasma-tars script to make tars
       [or run the job on xenon http://xenon.pangea.pub/job/plasma-releaseme-tars/ then ./plasma-xenon-download]
