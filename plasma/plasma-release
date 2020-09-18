@@ -4,7 +4,7 @@ set -xe
 
 . VERSIONS.inc
 
-sudo apt install w3m
+#sudo apt install w3m
 
 ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
 

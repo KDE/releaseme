@@ -19,7 +19,7 @@ WORKSPACE=`cat git-repositories-for-release`
 cd tmp-changelog
 for project in $WORKSPACE; do
  echo ${project};
- git clone invent:plasma/${project};
+ git clone --reference "/home/bshah/kdesrc/source/${project}" invent:plasma/${project};
  cd ${project}; git checkout ${BRANCH}; cd ..;
  cd ${project};
  pwd;
@@ -31,7 +31,7 @@ cat templates/plasma-changelog.php > ${FILE}
 sed -i s,VERSION,${VERSION}, ${FILE}
 
 echo running create_log
-./create_log.py >> ${FILE}
+python2 create_log.py >> ${FILE}
 
 sed "s,>kmenuedit,>KMenuEdit," ${FILE} -i
 sed "s,>user-manager,>User Manager," ${FILE} -i

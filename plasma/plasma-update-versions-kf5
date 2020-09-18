@@ -12,6 +12,8 @@ BRANCH=master
 
 # echo for updating version in master after branch override versions here
 # VERSION=5.14.80
+KF5_VERSION=5.74
+QT_VERSION=5.15.0
 
 WORKSPACE=`cat git-repositories-for-release`
 echo "updating versions for $WORKSPACE"
@@ -21,14 +23,18 @@ cd tmp-version-update-kf5
 for project in $WORKSPACE; do
   projectrepo=$project
   project=`basename $project`
-  if [ $project != "breeze-grub" ]; then
+  if [ $project != "breeze-grub" ] && [ $project != "plasma-browser-integration" ] && [ $project != "kinfocenter" ]; then
     echo ${project};
-    git clone --depth 1 --branch ${BRANCH} kde:${projectrepo} ${project};
+    git clone --depth 1 --branch ${BRANCH} kde:plasma/${projectrepo} ${project};
     cd ${project};
     pwd;
     sed -i "s,KF5_MIN_VERSION \".*\",KF5_MIN_VERSION \"${KF5_VERSION}\"," CMakeLists.txt;
-    git diff;
+    git --no-pager diff;
     git commit -a -m "Update kf5 version requirement to ${KF5_VERSION}
+GIT_SILENT" || true;
+    sed -i "s,QT_MIN_VERSION \".*\",QT_MIN_VERSION \"${QT_VERSION}\"," CMakeLists.txt;
+    git --no-pager diff;
+    git commit -a -m "Update qt5 version requirement to ${QT_VERSION}
 GIT_SILENT" || true;
     git push;
     cd ..;

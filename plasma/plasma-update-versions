@@ -24,7 +24,7 @@ for project in $WORKSPACE; do
   project=`basename $project`
   if [ $project != "breeze-grub" ]; then
     echo ${project};
-    git clone --depth 1 --no-single-branch ${GITPREFIX}${projectrepo} ${project};
+    git clone --depth 1 --single-branch ${GITPREFIX}${projectrepo} ${project};
     cd ${project};
     pwd;
     git checkout ${BRANCH}
@@ -35,7 +35,7 @@ for project in $WORKSPACE; do
           ${APPSTREAM_UPDATER} ${metainfofile} --version "${VERSION}" --datestring "${RELEASEDATE}" --releases-to-show 4
       done
     fi
-    git diff;
+    git --no-pager diff;
     git commit -a -m "Update version number for ${VERSION}
 GIT_SILENT" || true;
     git push;

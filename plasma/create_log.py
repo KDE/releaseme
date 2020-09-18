@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 # stolen from release-tools Applications/15.04 branch, thanks Albert
 # TODO: make it so we can share
