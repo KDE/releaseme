@@ -2,14 +2,14 @@ LANG=en_GB.UTF-8
 LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
-VERSION=5.12.8
-SHORT_VERSION=5.12
-OLD_VERSION=5.12.7
+VERSION=5.18.6
+SHORT_VERSION=5.18
+OLD_VERSION=5.18.5
 ORIGIN=lts  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
-BRANCH=Plasma/5.12 # set to master or Plasma/5.x
-MINOR_RELEASE_MONTH="February 2018" # for announcement, when was 5.x.0 released
+BRANCH=Plasma/5.18 # set to master or Plasma/5.x
+MINOR_RELEASE_MONTH="February 2020" # for announcement, when was 5.x.0 released
 
 RELEASETYPE=Bugfix # for changelog, set to beta, feature or bugfix
 
@@ -20,13 +20,13 @@ WWWCHECKOUT="/home/jr/src/www/www"                         # svn+ssh://svn@svn.k
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 05 March 2019" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEMONTH="March" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+RELEASEDATE="Tuesday, 29 September 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEMONTH="September" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="six months'" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
-YOUTUBEID="xha6DJ_v1E4" # The video ID used in URL for youtube
+YOUTUBEID="https://peertube.mastodon.host/videos/embed/cda402b5-2bcb-4c0c-b232-0fa5a4dacaf5" # The video ID used in URL for youtube
 
 # command from   git clone kde:jriddell/appstream-metainfo-release-update
 APPSTREAM_UPDATER="/home/jr/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"
