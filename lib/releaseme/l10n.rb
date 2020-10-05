@@ -132,7 +132,7 @@ module ReleaseMe
         completion_requirement = ENV['RELEASEME_L10N_REQUIREMENT'].to_i
         @statistics.languages.each do |stat|
           percent = stat.percent_translated
-          next if percent >= completion_requirement
+          next if percent >= completion_requirement || zero_percent_dropped.include?(stat.name)
           FileUtils.rm_r(stat.dirs)
           log_warn "#{stat.name} wasn't sufficiently translated #{percent}!"
         end
