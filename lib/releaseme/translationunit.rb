@@ -163,7 +163,8 @@ module ReleaseMe
       when Origin::TRUNK, Origin::STABLE
         return 'l10n-kf5'
       when Origin::LTS
-        return url_l10n_dir_lts
+        return 'l10n-kf5-plasma-lts'
+        #return url_l10n_dir_lts
       when Origin::TRUNK_KDE4, Origin::STABLE_KDE4
         return 'l10n-kde4'
       end

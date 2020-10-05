@@ -82,7 +82,7 @@ module ReleaseMe
 
       # LTS branch only used for Plasma so unless it's set in a config file
       # just use stable branch
-      i18n_lts = i18n_path == 'kde-workspace' ? plasma_lts : i18n_stable
+      i18n_lts = i18n_path == 'plasma' ? plasma_lts : i18n_stable
 
       Project.new(identifier: id,
                   vcs: vcs,
@@ -163,7 +163,7 @@ module ReleaseMe
 
         # LTS branch only used for Plasma so unless it's set in a config file
         # just use stable branch
-        i18n_lts = i18n_path == 'kde-workspace' ? plasma_lts : i18n_stable
+        i18n_lts = api_project.repo.include?('plasma') ? plasma_lts : i18n_stable
 
         Project.new(identifier: id,
                     vcs: vcs,

@@ -8,16 +8,16 @@ parser.add_argument("-v", "--version", required=True, help="Plasma version")
 args = parser.parse_args()
 version = args.version
 
-response = urllib2.urlopen('http://www.kde.org/announcements/plasma-'+version+'.php')
+response = urllib2.urlopen('https://kde.org/announcements/plasma-'+version)
 foundStart = False
 foundEnd = False
 output = ""
 for line in response:
     if "aside id=\"cookieWarning" in line:
         foundStart = True
-    line = line.replace("../info", "http://www.kde.org/info")
-    line = line.replace("href=\"plasma", "href=\"http://www.kde.org/announcements/plasma")
-    line = line.replace("src=\"plasma", "src=\"http://www.kde.org/announcements/plasma")
+    line = line.replace("../info", "https://kde.org/info")
+    line = line.replace("href=\"plasma", "href=\"https://kde.org/announcements/plasma")
+    line = line.replace("src=\"plasma", "src=\"https://kde.org/announcements/plasma")
     if foundStart == True and foundEnd == False and "Also available in" not in line:
         output += line
     if "Your feedback is greatly appreciated" in line:
