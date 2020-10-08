@@ -59,7 +59,7 @@ end
 source_dir = File.expand_path(ARGV.pop)
 
 elements =
-  ReleaseMe::Project.from_repo_url("git://anongit.kde.org/#{options.project}")
+  ReleaseMe::Project.from_repo_url("https://invent.kde.org/#{options.project}")
 unless elements.count == 1
   abort "Found #{elements.count} elements for #{options.project}"
 end

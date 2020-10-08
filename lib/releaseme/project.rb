@@ -70,7 +70,7 @@ module ReleaseMe
       # frontend scripts should opt-into RW by setting a property
       # on us
       if ENV.include?('RELEASEME_READONLY')
-        vcs.repository = "https://anongit.kde.org/#{api_project.repo}"
+        vcs.repository = "https://invent.kde.org/#{api_project.repo}"
       end
 
       i18n_trunk = api_project.i18n.trunk_kf5
