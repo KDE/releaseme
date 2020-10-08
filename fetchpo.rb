@@ -74,5 +74,6 @@ project_information = elements[0]
 
 l10n = ReleaseMe::L10n.new(options.origin, options.project,
                            project_information.i18n_path)
+l10n.default_excluded_languages = []
 l10n.get(source_dir, options.output_dir, options.output_poqm_dir,
          edit_cmake: false)
