@@ -29,9 +29,9 @@ FileUtils.cp(changelog_file,
 #system('git', 'checkout', "work/announcements", chdir: plasma_versions.wwwcheckout)
 
 # Add files
-system('git', 'add', "info/plasma-#{version}.php", chdir: plasma_versions.wwwcheckout)           # info file 
+#system('git', 'add', "info/plasma-#{version}.php", chdir: plasma_versions.wwwcheckout)           # info file 
 system('git', 'add', "announcements/#{changelog_file}", chdir: plasma_versions.wwwcheckout)      # changelog file
-system('git', 'add', "announcements/plasma-#{version}.php", chdir: plasma_versions.wwwcheckout) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+#system('git', 'add', "announcements/plasma-#{version}.php", chdir: plasma_versions.wwwcheckout) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
 
 # Commit files
 system('git', 'commit', '-m', "feat: Add webpage for Plasma #{version}", chdir: plasma_versions.wwwcheckout)

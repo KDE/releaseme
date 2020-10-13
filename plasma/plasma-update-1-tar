@@ -26,7 +26,7 @@ echo == diff to previous tar
 cd tmp-tests
 scp ${UPLOADSERVER}:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
 pkgdiff old.tar.xz ../${VERSION}/${TAR}-${VERSION}.tar.xz || true
-firefox pkgdiff_reports/old/X_to_${VERSION}/changes_report.html
+$BROWSER pkgdiff_reports/old/X_to_${VERSION}/changes_report.html
 cd ..
 echo == end diff to previous tar
 

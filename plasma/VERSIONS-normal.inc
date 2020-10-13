@@ -9,10 +9,10 @@ MINOR_RELEASE_MONTH="October 2020" # for announcement, when was 5.x.0 released
 
 RELEASETYPE=feature # for changelog, set to beta, feature or bugfix
 
-INFOCHECKOUT="~/src/Websites/kde-org/info"                   # git@invent.kde.org:websites/kde-org.git
-ANNOUNCECHECKOUT="~/src/Websites/kde-org/announcements"  # git@invent.kde.org:websites/kde-org.git
-L10NSCRIPTSCHECKOUT="~/src/Websites/l10n-kf5/scripts"    # svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kde4/scripts/
-WWWCHECKOUT="~/src/Websites/kde-org"                     # git@invent.kde.org:websites/kde-org.git
+INFOCHECKOUT="/home/jr/src/Websites/kde-org/info"                   # git@invent.kde.org:websites/kde-org.git
+ANNOUNCECHECKOUT="/home/jr/src/Websites/kde-org/announcements"  # git@invent.kde.org:websites/kde-org.git
+L10NSCRIPTSCHECKOUT="/home/jr/src/Websites/l10n-kf5/scripts"    # svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kde4/scripts/
+WWWCHECKOUT="/home/jr/src/Websites/kde-org"                     # git@invent.kde.org:websites/kde-org.git
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
@@ -25,8 +25,10 @@ SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
 YOUTUBEID="https://peertube.mastodon.host/videos/embed/8de9155b-a080-4997-9340-f997312b917e" # The video ID used in URL for youtube
 
-# command from   git clone kde:jriddell/appstream-metainfo-release-update
-APPSTREAM_UPDATER="~/src/appstream-metainfo-release-update/appstream-metainfo-release-update"
+# command from   git clone invent:sysadmin/appstream-metainfo-release-update
+APPSTREAM_UPDATER="/home/jr/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"
 
 GPG_KEY=0xEC94D18F7F05997E
 RELEASE_DUDE="Jonathan Riddell"
+
+BROWSER=chromium  # chromium, firefox etc

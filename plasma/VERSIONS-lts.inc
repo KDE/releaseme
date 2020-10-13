@@ -28,7 +28,7 @@ SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
 YOUTUBEID="https://peertube.mastodon.host/videos/embed/cda402b5-2bcb-4c0c-b232-0fa5a4dacaf5" # The video ID used in URL for youtube
 
-# command from   git clone kde:jriddell/appstream-metainfo-release-update
+# command from   git clone invent:sysadmin/appstream-metainfo-release-update
 APPSTREAM_UPDATER="~/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"
 
 GPG_KEY=0xEC94D18F7F05997E
