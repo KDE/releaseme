@@ -74,4 +74,4 @@ for PRODUCT in $products; do
 done
 
 echo "opening plasma-nm as example to verify"
-firefox "https://bugs.kde.org/editproducts.cgi?action=edit&product=plasma-nm"
+$BROWSER "https://bugs.kde.org/editproducts.cgi?action=edit&product=plasma-nm"

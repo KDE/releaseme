@@ -1,13 +1,13 @@
-VERSION=5.20.0
+VERSION=5.20.1
 SHORT_VERSION=5.20
-OLD_VERSION=5.19.5
+OLD_VERSION=5.20.0
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.20 # set to master or Plasma/5.x
 MINOR_RELEASE_MONTH="October 2020" # for announcement, when was 5.x.0 released
 
-RELEASETYPE=feature # for changelog, set to beta, feature or bugfix
+RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
 
 INFOCHECKOUT="/home/jr/src/Websites/kde-org/info"                   # git@invent.kde.org:websites/kde-org.git
 ANNOUNCECHECKOUT="/home/jr/src/Websites/kde-org/announcements"  # git@invent.kde.org:websites/kde-org.git
@@ -16,14 +16,14 @@ WWWCHECKOUT="/home/jr/src/Websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 13 October 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Tuesday, 20 October 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="October" # usually `LC_ALL=C date "+%B" --date="next Tue"`
-TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
+TIMESINCELASTRELEASE="a week's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
 #SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
-YOUTUBEID="https://peertube.mastodon.host/videos/embed/8de9155b-a080-4997-9340-f997312b917e" # The video ID used in URL for youtube
+YOUTUBEID="https://cdn.kde.org/promo/Announcements/Plasma/5.20/Video.webm" # The video ID used in URL for youtube
 
 # command from   git clone invent:sysadmin/appstream-metainfo-release-update
 APPSTREAM_UPDATER="/home/jr/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"

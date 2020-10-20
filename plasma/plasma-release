@@ -33,11 +33,11 @@ cd -
 # copy announce over to Dot for publishing
 
 
-firefox https://kde.org/info/plasma-${VERSION}
-firefox https://kde.org/announcements/plasma-${VERSION}
-firefox https://kde.org/announcements/
-firefox https://kde.org/
-firefox https://binary-factory.kde.org/view/Websites/job/Website_kde-org/
+$BROWSER https://kde.org/info/plasma-${VERSION}
+$BROWSER https://kde.org/announcements/plasma-${VERSION}
+$BROWSER https://kde.org/announcements/
+$BROWSER https://kde.org/
+$BROWSER https://binary-factory.kde.org/view/Websites/job/Website_kde-org/
 
 rm -rf tmp-announcements
 mkdir tmp-announcements
@@ -54,11 +54,11 @@ kate tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
 # post on twitter, g+, facebook, reddit (r/kde and r/linux)
 echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://kde.org/announcements/plasma-${VERSION}" > tmp-announcements/twitter.text
 kate tmp-announcements/twitter.text
-firefox https://tweetdeck.twitter.com
-firefox https://facebook.com/kde
-firefox https://mastodon.technology/
-firefox https://www.reddit.com/r/kde/submit
-firefox https://dot.kde.org/#overlay=node/add/story
+$BROWSER https://tweetdeck.twitter.com
+$BROWSER https://facebook.com/kde
+$BROWSER https://mastodon.technology/
+$BROWSER https://www.reddit.com/r/kde/submit
+$BROWSER https://dot.kde.org/#overlay=node/add/story
 
 # e-mail release-team@kde.org, plasma-devel@kde.org with the happy news
 echo "e-mail me to kde-announce@kde.org, release-team@kde.org, plasma-devel@kde.org" > tmp-announcements/release-team
