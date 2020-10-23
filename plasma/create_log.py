@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 # stolen from release-tools Applications/15.04 branch, thanks Albert
 # TODO: make it so we can share
@@ -25,19 +25,6 @@ repos = line.split(" ")
 repos.sort()
 
 versionsDir = os.getcwd() + "/versions"
-
-print "<script type='text/javascript'>"
-print "function toggle(toggleUlId, toggleAElem) {"
-print "var e = document.getElementById(toggleUlId)"
-print "if (e.style.display == 'none') {"
-print "e.style.display='block'"
-print "toggleAElem.innerHTML = '[Hide]'"
-print "} else {"
-print "e.style.display='none'"
-print "toggleAElem.innerHTML = '[Show]'"
-print "}"
-print "}"
-print "</script>"
 
 for repo in repos:
 	toVersion = getVersionFrom(repo)
@@ -78,8 +65,8 @@ for repo in repos:
 	if retval != 0:
                 #jr changed to not have show line
 		#print "<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a> <a href='#" + repo + "' onclick='toggle(\"ul" + repo +"\", this)'>[Show]</a></h3>"
-		print "<h3><a name='" + repo + "' href='https://commits.kde.org/"+repo+"'>" + repo + "</a></h3>"
-		print "<ul id='ul" + repo + "' style='display: block'><li>New in this release</li></ul>"
+		print("### [{0}](https://commmits.kde.org/{0}))\n".format(repo))
+		print("+ New in this release")
 		continue
 
 	p = subprocess.Popen('git diff '+fromVersion+'..'+toVersion, shell=True, stdout=subprocess.PIPE)
@@ -128,10 +115,7 @@ for repo in repos:
 			commits.append(commit)
 		
 		if len(commits):
-                        # jr changed to now have show line
-			#print "<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a> <a href='#" + repo + "' onclick='toggle(\"ul" + repo +"\", this)'>[Show]</a></h3>"
-			print "<h3><a name='" + repo + "' href='https://commits.kde.org/"+repo+"'>" + repo + "</a> </h3>" 
-			print "<ul id='ul" + repo + "' style='display: block'>"
+			print("<details><summary><h3>[{O}](https://commmits.kde.org/{0}) <a href='#{0}' onclick='toggle(\"ul{0}\", this)'>[Show]</a></h3></summary>".format(repo))
 			for commit in commits:
 				extra = ""
 				changelog = commit[1]
@@ -144,35 +128,35 @@ for repo in repos:
 							if bugNumber.isdigit():
 								if extra:
 									extra += ". "
-								extra += "Fixes bug <a href='https://bugs.kde.org/" + bugNumber + "'>#" + bugNumber + "</a>"
+								extra += "Fixes bug [#{0}](https://bugs.kde.org/{0})".format(bugNumber)
 					elif line.startswith("BUG:"):
 						bugNumber = line[line.find(":") + 1:].strip()
 						if bugNumber.isdigit():
 							if extra:
 								extra += ". "
-							extra += "Fixes bug <a href='https://bugs.kde.org/" + bugNumber + "'>#" + bugNumber + "</a>"
+							extra += "Fixes bug [#{0}](https://bugs.kde.org/{0})".format(bugNumber)
 					elif line.startswith("REVIEW:"):
 						if extra:
 							extra += ". "
 						reviewNumber = line[line.find(":") + 1:].strip()
-						extra += "Code review <a href='https://git.reviewboard.kde.org/r/" + reviewNumber + "'>#" + reviewNumber + "</a>"
+						extra += "Code review [#{0}](https://git.reviewboard.kde.org/r/{0})"
 						# jr addition 2017-02 phab link
 					elif line.startswith("Differential Revision:"):
 						if extra:
 							extra += ". "
 						reviewNumber = line[line.find("org/") + 4:].strip()
-						extra += "Phabricator Code review <a href='https://phabricator.kde.org/" + reviewNumber + "'>" + reviewNumber + "</a>"
+						extra += "Phabricator Code review [{0}](https://phabricator.kde.org/{0})").format(reviewNumber)
 					elif line.startswith("CCBUG:"):
 						if extra:
 							extra += ". "
 						bugNumber = line[line.find(":") + 1:].strip()
-						extra += "See bug <a href='https://bugs.kde.org/" + bugNumber + "'>#" + bugNumber + "</a>"
+						extra += "See bug [#{0}](https://bugs.kde.org/{0})".format(bugNumber)
 					elif line.startswith("FEATURE:"):
 						feature = line[line.find(":") + 1:].strip()
 						if feature.isdigit():
 							if extra:
 								extra += ". "
-							extra += "Implements feature <a href='https://bugs.kde.org/" + feature + "'>#" + feature + "</a>"
+							extra += "Implements feature [#{0}](https://bugs.kde.org/{0})".format(feature)
 						else:
 							if feature:
 								changelog = feature
@@ -189,10 +173,10 @@ for repo in repos:
 				if not changelog.endswith("."):
 					changelog = changelog + "."
 				capitalizedChangelog = changelog[0].capitalize() + changelog[1:]
-				print "<li>" + capitalizedChangelog + " <a href='https://commits.kde.org/"+repo+"/"+commitHash+"'>Commit.</a> " + extra + "</li>"
+				print("+ {} [Commit.](http://commits.kde.org/{}/{}) {}".format(capitalizedChangelog, repo, commitHash, extra))
 
 				# edited jr, add newlines
-			print "</ul>\n\n"
+			print("\n\n")
 		retval = p.wait()
 		if retval != 0:
 			raise NameError('git log failed', repo, fromVersion, toVersion)

@@ -31,5 +31,5 @@ YOUTUBEID="https://peertube.mastodon.host/videos/embed/cda402b5-2bcb-4c0c-b232-0
 # command from   git clone invent:sysadmin/appstream-metainfo-release-update
 APPSTREAM_UPDATER="~/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"
 
-GPG_KEY=0xEC94D18F7F05997E
+GPG_KEY=EC94D18F7F05997E
 RELEASE_DUDE="Jonathan Riddell"
