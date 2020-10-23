@@ -32,7 +32,7 @@ class TestPlasmaWebpages < Testme
   end
 
   def test_info_render
-    ref = File.read(data('plasma-webpages/info-plasma-5.9.1.php'))
+    ref = File.read(data('plasma-webpages/info-plasma-5.9.1.md'))
     refute_equal('', ref)
     template = PlasmaInfoTemplate.new
     output = template.render
@@ -40,7 +40,7 @@ class TestPlasmaWebpages < Testme
   end
 
   def test_announce_render
-    ref = File.read(data('plasma-webpages/announce-plasma-5.9.1.php'))
+    ref = File.read(data('plasma-webpages/announce-plasma-5.9.1.md'))
     refute_equal('', ref)
     template = PlasmaAnnounceTemplate.new
     output = template.render

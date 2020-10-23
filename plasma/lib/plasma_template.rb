@@ -31,6 +31,6 @@ class PlasmaTemplate < ReleaseMe::Template
   end
 
   def render
-    super("#{__dir__}/../templates/#{@name}.php.erb")
+    super("#{__dir__}/../templates/#{@name}.md.erb")
   end
 end
