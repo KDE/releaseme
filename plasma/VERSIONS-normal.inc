@@ -11,7 +11,7 @@ RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
 
 INFOCHECKOUT="/home/jr/src/Websites/kde-org/content/info"                   # git@invent.kde.org:websites/kde-org.git
 ANNOUNCECHECKOUT="/home/jr/src/Websites/kde-org/content/announcements"  # git@invent.kde.org:websites/kde-org.git
-L10NSCRIPTSCHECKOUT="/home/jr/src/Websites/l10n-kf5/scripts"    # svn+ssh://svn@svn.kde.org/home/kde/trunk/l10n-kde4/scripts/
+L10NSCRIPTSCHECKOUT="/home/jr/src/Websites/l10n-kf5/scripts"    # svn co svn://anonsvn.kde.org/home/kde/trunk/l10n-kf5/scripts
 WWWCHECKOUT="/home/jr/src/Websites/kde-org"                     # git@invent.kde.org:websites/kde-org.git
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
@@ -31,4 +31,4 @@ APPSTREAM_UPDATER="/home/jr/src/appstream-metainfo-release-update/appstream-meta
 GPG_KEY=EC94D18F7F05997E
 RELEASE_DUDE="Jonathan Riddell"
 
-BROWSER=chromium  # chromium, firefox etc
+BROWSER=firefox  # chromium, firefox etc
