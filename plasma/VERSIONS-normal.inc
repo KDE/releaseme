@@ -1,6 +1,6 @@
-VERSION=5.20.1
+VERSION=5.20.2
 SHORT_VERSION=5.20
-OLD_VERSION=5.20.0
+OLD_VERSION=5.20.1
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -16,7 +16,7 @@ WWWCHECKOUT="/home/jr/src/Websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 20 October 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATE="Tuesday, 27 October 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEMONTH="October" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a week's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
