@@ -115,7 +115,7 @@ for repo in repos:
 			commits.append(commit)
 		
 		if len(commits):
-			print("<details><summary><h3>[{0}](https://commits.kde.org/{0}) <a href='#{0}' onclick='toggle(\"ul{0}\", this)'>[Show]</a></h3></summary>".format(repo))
+			print("{{< details title="{0}" href="https://commits.kde.org/{0}" >}}".format(repo))
 			for commit in commits:
 				extra = ""
 				changelog = commit[1]
@@ -176,7 +176,7 @@ for repo in repos:
 				print("+ {} [Commit.](http://commits.kde.org/{}/{}) {}".format(capitalizedChangelog, repo, commitHash, extra))
 
 				# edited jr, add newlines
-			print("\n\n")
+			print("{{< /details >}}\n")
 		retval = p.wait()
 		if retval != 0:
 			raise NameError('git log failed', repo, fromVersion, toVersion)
