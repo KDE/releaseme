@@ -10,25 +10,17 @@ ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
 
 # remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
 
-sed -i "/NOT OUT YET/d" ${ANNOUNCECHECKOUT}/plasma-${VERSION}.php
-sed -i "/NOT OUT YET/d" ${INFOCHECKOUT}/plasma-${VERSION}.php
+sed -i "/NOT OUT YET/d" ${ANNOUNCECHECKOUT}/plasma-${VERSION}.md
+sed -i "/NOT OUT YET/d" ${INFOCHECKOUT}/plasma-${VERSION}.md
 
 # www/announcements/index.php
 
 ANNOUNCEINDEX="<\!-- Plasma ${VERSION} -->\n<strong>${RELEASEDATE}<\/strong> - <a href=\"plasma-${VERSION}\">Plasma ${VERSION}<\/a>\n<br \/>\n\"<em>KDE Ships Plasma ${VERSION}.<\/em>\"\n<p \/>"
 
-sed -i "s/\(INSERT NEW ENTRIES.*\)/\1\n${ANNOUNCEINDEX}/" ${ANNOUNCECHECKOUT}/index.php
-
 # www/index.php
 # Updating www/index.php got ported to Ruby
-./plasma-release-webpages
+#./plasma-release-webpages
 
-# commit to git
-cd ${WWWCHECKOUT}
-git diff
-git commit -a -m "release plasma ${VERSION}"
-git push
-cd -
 
 # copy announce over to Dot for publishing
 

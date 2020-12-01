@@ -52,13 +52,13 @@ echo == end tarballs l10n probe test
 #cd -
 #echo == end pkgdiff to previous tar
 
-echo == start updating info page source-plasma-${VERSION}.html
-cp ${VERSION}/source-plasma-${VERSION}.html ${INFOCHECKOUT}/sources/source-plasma-${VERSION}.html
+echo == start updating info page source-plasma-${VERSION}.inc
+cp ${VERSION}/source-plasma-${VERSION}.inc ${INFOCHECKOUT}/sources/source-plasma-${VERSION}.inc
 cd ${INFOCHECKOUT}
-git add sources/source-plasma-${VERSION}.html || true
-git diff sources/source-plasma-${VERSION}.html
-git commit -m "update source-plasma-${VERSION}.html"; cd -
+git add sources/source-plasma-${VERSION}.inc || true
+git diff sources/source-plasma-${VERSION}.inc
+git commit -m "update source-plasma-${VERSION}.inc"; cd -
 git push
-echo == end updating info page source-plasma-${VERSION}.html
+echo == end updating info page source-plasma-${VERSION}.inc
 
 echo → Read and check the test output in tmp-tests/${VERSION}-doc-testoutput tmp-tests/${VERSION}-po-testoutput tmp-tests/${VERSION}-tars-testoutput
