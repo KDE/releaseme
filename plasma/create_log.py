@@ -115,7 +115,7 @@ for repo in repos:
 			commits.append(commit)
 		
 		if len(commits):
-			print("{{< details title="{0}" href="https://commits.kde.org/{0}" >}}".format(repo))
+			print("{{{{< details title=\"{0}\" href=\"https://commits.kde.org/{0}\" >}}}}".format(repo))
 			for commit in commits:
 				extra = ""
 				changelog = commit[1]
