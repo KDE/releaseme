@@ -4,6 +4,7 @@ LC_ALL=en_US.UTF-8
 
 VERSION=5.9.1
 SHORT_VERSION=5.9
+SHORT_VERSION_DASH=5-9
 OLD_VERSION=5.9.0
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
