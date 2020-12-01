@@ -10,8 +10,8 @@ ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
 
 # remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
 
-sed -i "/NOT OUT YET/d" ${ANNOUNCECHECKOUT}/plasma-${VERSION}.md
-sed -i "/NOT OUT YET/d" ${INFOCHECKOUT}/plasma-${VERSION}.md
+sed -i "s/draft: true/draft: false/" ${ANNOUNCECHECKOUT}/plasma-${VERSION}.md
+sed -i "s/draft: true/draft: false/" ${INFOCHECKOUT}/plasma-${VERSION}.md
 
 # www/announcements/index.php
 
@@ -21,6 +21,12 @@ ANNOUNCEINDEX="<\!-- Plasma ${VERSION} -->\n<strong>${RELEASEDATE}<\/strong> - <
 # Updating www/index.php got ported to Ruby
 #./plasma-release-webpages
 
+# commit to git
+cd ${WWWCHECKOUT}
+git diff
+git commit -a -m "release plasma ${VERSION}"
+git push
+cd -
 
 # copy announce over to Dot for publishing
 
@@ -34,14 +40,14 @@ $BROWSER https://binary-factory.kde.org/view/Websites/job/Website_kde-org/
 rm -rf tmp-announcements
 mkdir tmp-announcements
 
-./plasma-dot-story -v ${VERSION} > tmp-announcements/DOT-STORY.html
-kate tmp-announcements/DOT-STORY.html
+#./plasma-dot-story -v ${VERSION} > tmp-announcements/DOT-STORY.html
+#kate tmp-announcements/DOT-STORY.html
 
-w3m tmp-announcements/DOT-STORY.html  -dump > tmp-announcements/KDE-ANNOUNCE_TEXT.txt
-sed -i "s,Live Images.*,https://kde.org/announcements/plasma-${VERSION}.php\nhttps://kde.org/announcements/plasma-${OLD_VERSION}-${VERSION}-changelog," tmp-announcements/KDE-ANNOUNCE_TEXT.txt
-echo "e-mail me to kde-announce@kde.org" > tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
-cat tmp-announcements/KDE-ANNOUNCE_TEXT.txt >> tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
-kate tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
+#w3m tmp-announcements/DOT-STORY.html  -dump > tmp-announcements/KDE-ANNOUNCE_TEXT.txt
+#sed -i "s,Live Images.*,https://kde.org/announcements/plasma-${VERSION}.php\nhttps://kde.org/announcements/plasma-${OLD_VERSION}-${VERSION}-changelog," tmp-announcements/KDE-ANNOUNCE_TEXT.txt
+#echo "e-mail me to kde-announce@kde.org" > tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
+#cat tmp-announcements/KDE-ANNOUNCE_TEXT.txt >> tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
+#kate tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
 
 # post on twitter, g+, facebook, reddit (r/kde and r/linux)
 echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://kde.org/announcements/plasma-${VERSION}" > tmp-announcements/twitter.text

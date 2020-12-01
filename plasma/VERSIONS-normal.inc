@@ -1,5 +1,6 @@
 VERSION=5.20.4
 SHORT_VERSION=5.20
+SHORT_VERSION_DASH=5-20 # used for plasma webpage template
 OLD_VERSION=5.20.3
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
