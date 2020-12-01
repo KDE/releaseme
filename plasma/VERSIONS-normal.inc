@@ -18,6 +18,7 @@ UPLOADSERVER="ftpadmin@deino.kde.org"
 #UPLOADSERVER="weegie"
 
 RELEASEDATE="Tuesday, 1 December 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2020-12-01" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 RELEASEMONTH="December" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
