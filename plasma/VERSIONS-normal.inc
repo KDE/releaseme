@@ -1,7 +1,7 @@
-VERSION=5.20.4
+VERSION=5.20.5
 SHORT_VERSION=5.20
 SHORT_VERSION_DASH=5-20 # used for plasma webpage template
-OLD_VERSION=5.20.3
+OLD_VERSION=5.20.4
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -17,9 +17,9 @@ WWWCHECKOUT="/home/jr/src/Websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@deino.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 1 December 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2020-12-01" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
-RELEASEMONTH="December" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+RELEASEDATE="Tuesday, 5 January 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2020-01-05" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEMONTH="January" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
 #SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
