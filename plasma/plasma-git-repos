@@ -12,7 +12,8 @@ require 'fileutils'
 V_518lts_exclusions = %w(plasma-disks kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd)
 V_519_exclusions = %w(plasma-disks kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd)
 V_520_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd user-manager)
-releases = {"5.18" => V_518lts_exclusions, "5.19" => V_519_exclusions, "5.20" => V_520_exclusions}
+V_521_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu user-manager)
+releases = {"5.18" => V_518lts_exclusions, "5.19" => V_519_exclusions, "5.20" => V_520_exclusions, "5.21" => V_521_exclusions}
 
 options = {}
 OptionParser.new do |parser|
