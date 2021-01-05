@@ -12,6 +12,8 @@ set -xe
 echo == making directory
 ssh ${UPLOADSERVER} mkdir -p ${FTPSTABLE}/plasma/${VERSION}/
 ssh ${UPLOADSERVER} chmod 750 ${FTPSTABLE}/plasma/${VERSION}/
+ssh ${UPLOADSERVER} chown .packager ${FTPSTABLE}/plasma/${VERSION}/
+
 echo == uploading
 rsync -CvzaP --stats ${VERSION}/*xz ${VERSION}/*xz.sig ${UPLOADSERVER}:${FTPSTABLE}/plasma/${VERSION}/
 
