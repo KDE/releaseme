@@ -7,7 +7,7 @@ set -xe
 . VERSIONS.inc
 
 cd ${L10NSCRIPTSCHECKOUT}
-svn update
+git pull
 
 cd ${WWWCHECKOUT}
 git checkout master
