@@ -84,7 +84,7 @@ module ReleaseMe
       # for testing. we want to verify codes all the time so we need to track
       # the last most status somewhere. this must not be used for production
       # code that gets threaded.
-      @status = status.dup
+      @status = status.freeze
       debug_output(output)
       # Do not return error output as it will screw with output processing.
       [output, status]

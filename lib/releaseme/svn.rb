@@ -164,7 +164,7 @@ You could try again in a couple minutes.
       # for testing. we want to verify codes all the time so we need to track
       # the last most status somewhere. this must not be used for production
       # code that gets threaded.
-      @status = result.status.dup
+      @status = result.status.freeze
 
       result.maybe_raise
       # Do not return error output as it will screw with output processing.
