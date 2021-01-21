@@ -27,7 +27,7 @@ on beta tar day:
  - Add release exceptions array to ./plasma-git-repos and run "./plasma-git-repos -r 5.xx" to update list of things to package in git-repositories-for-release
  - set QT_MIN_VERSION to version agreed at cycle kickoff (except plasma-browser-integration)
  - set KF5_MIN_VERSION to version agreed at cycle kickoff
- - TODO check out Harald's plasma-update-versions-kf5 to see if it works for the above
+ - run plasma-update-versions-kf5 to update the above
 
 on tar day tar:
  update VERSIONS.inc

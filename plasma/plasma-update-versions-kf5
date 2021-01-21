@@ -14,6 +14,7 @@ BRANCH=master
 # VERSION=5.14.80
 KF5_VERSION=5.78
 QT_VERSION=5.15.0
+GITPREFIX="invent:plasma/"
 
 WORKSPACE=`cat git-repositories-for-release`
 echo "updating versions for $WORKSPACE"
@@ -25,7 +26,7 @@ for project in $WORKSPACE; do
   project=`basename $project`
   if [ $project != "breeze-grub" ] && [ $project != "plasma-browser-integration" ] && [ $project != "kinfocenter" ]; then
     echo ${project};
-    git clone --depth 1 --branch ${BRANCH} kde:plasma/${projectrepo} ${project};
+    git clone --depth 1 --branch ${BRANCH} ${GITPREFIX}${projectrepo} ${project};
     cd ${project};
     pwd;
     sed -i "s,KF5_MIN_VERSION \".*\",KF5_MIN_VERSION \"${KF5_VERSION}\"," CMakeLists.txt;
