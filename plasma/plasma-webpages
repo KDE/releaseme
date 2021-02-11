@@ -2,10 +2,28 @@
 # Copyright (C) 2020 Carl Schwan <carl@carlschwan.eu>
 
 require 'fileutils'
+require 'optparse'
 
 require_relative 'lib/plasma_info_template'
 require_relative 'lib/plasma_announce_template'
 require_relative 'lib/plasma_version'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: example.rb [options]"
+
+  opts.on("-n", "--no-announce", "No Announce") do |v|
+    options[:noannounce] = v
+  end
+end.parse!
+
+if not options.include?(:noannounce)
+    puts "announce"
+else
+    puts "noannounce"
+end
+
+exit
 
 plasma_versions = PlasmaVersion.new
 version = plasma_versions.version
@@ -14,10 +32,12 @@ info_template = PlasmaInfoTemplate.new
 info_output = info_template.render
 File.write(format('%s/plasma-%s.md', plasma_versions.infocheckout, version), info_output)
 
-announce_template = PlasmaAnnounceTemplate.new
-announce_output = announce_template.render
-# write announcement unless it's a .0, beta or final where we do it manually
-File.write(format('%s/plasma-%s.md', plasma_versions.announcecheckout, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+if not options.include?(:noannounce)
+    announce_template = PlasmaAnnounceTemplate.new
+    announce_output = announce_template.render
+    # write announcement unless it's a .0, beta or final where we do it manually
+    File.write(format('%s/plasma-%s.md', plasma_versions.announcecheckout, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+end
 
 changelog_file = format('plasma-%s-%s-changelog.md',
                         plasma_versions.old_version,
@@ -28,7 +48,9 @@ FileUtils.cp(changelog_file,
 # Add files
 system('git', 'add', "content/info/plasma-#{version}.md", chdir: plasma_versions.wwwcheckout)           # info file 
 system('git', 'add', "content/announcements/#{changelog_file}", chdir: plasma_versions.wwwcheckout)      # changelog file
-system('git', 'add', "content/announcements/plasma-#{version}.md", chdir: plasma_versions.wwwcheckout) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+if not options.include?(:noannounce)
+    system('git', 'add', "content/announcements/plasma-#{version}.md", chdir: plasma_versions.wwwcheckout) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+end
 
 # Commit files
 system('git', 'commit', '-m', "feat: Add webpage for Plasma #{version}", chdir: plasma_versions.wwwcheckout)
