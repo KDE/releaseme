@@ -17,14 +17,6 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-if not options.include?(:noannounce)
-    puts "announce"
-else
-    puts "noannounce"
-end
-
-exit
-
 plasma_versions = PlasmaVersion.new
 version = plasma_versions.version
 
