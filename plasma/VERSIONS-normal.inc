@@ -1,14 +1,14 @@
-VERSION=5.20.90
+VERSION=5.21.0
 SHORT_VERSION=5.21
 SHORT_VERSION_DASH=5-21 # used for plasma webpage template
 OLD_VERSION=5.20.5
-ORIGIN=trunk  # git branch as set in projects.k.o, set to trunk or stable or lts
-FTPSTABLE=unstable  # set to unstable or stable
+ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable or lts
+FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
-BRANCH=master # Plasma/5.21 # set to master or Plasma/5.x
-MINOR_RELEASE_MONTH="January 2021" # for announcement, when was 5.x.0 released
+BRANCH=Plasma/5.21 # set to master or Plasma/5.x
+MINOR_RELEASE_MONTH="February 2021" # for announcement, when was 5.x.0 released
 
-RELEASETYPE=beta # for changelog, set to beta, feature or bugfix
+RELEASETYPE=feature # for changelog, set to beta, feature or bugfix
 
 INFOCHECKOUT="/home/jr/src/Websites/kde-org/content/info"                   # git@invent.kde.org:websites/kde-org.git
 ANNOUNCECHECKOUT="/home/jr/src/Websites/kde-org/content/announcements"  # git@invent.kde.org:websites/kde-org.git
@@ -17,9 +17,9 @@ WWWCHECKOUT="/home/jr/src/Websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@deino.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Thursday, 21 January 2021" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2021-01-21" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
-RELEASEMONTH="January" # usually `LC_ALL=C date "+%B" --date="next Tue"`
+RELEASEDATE="Tuesday, 16 February 2021" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2021-02-16" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEMONTH="February" # usually `LC_ALL=C date "+%B" --date="next Tue"`
 TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
 #SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
