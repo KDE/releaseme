@@ -19,6 +19,7 @@ rsync -CvzaP --stats ${VERSION}/*xz ${VERSION}/*xz.sig ${UPLOADSERVER}:${FTPSTAB
 
 echo == uploading release-data file to http://embra.edinburghlinux.co.uk/~jr/tmp/${VERSION}-release-data
 scp ${VERSION}/${VERSION}-release-data ${SCRATCH_SERVER}
+$BROWSER ${SCRATCH_SERVER_URL}/${VERSION}-release-data
 
 mkdir -p tmp-tests
 

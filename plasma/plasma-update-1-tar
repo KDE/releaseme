@@ -12,9 +12,14 @@ TAR=$1
 svn --version > /dev/null || { echo "Install subversion"; exit 1; }
 pkgdiff --version > /dev/null || { echo "Install pkgdiff"; exit 1; }
 
+echo asdf > /tmp/test-gpg
+gpg --clearsign /tmp/test-gpg
+rm -f /tmp/test-gpg /tmp/test-gpg.asc
+
 cd $VERSION
 
 rm -fr ${TAR}-${VERSION}/
+mv ${TAR}-5.21.0.tar.xz.sig ${TAR}-5.21.0.tar.xz.sig.old || true
 ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${TAR}
 RELEASE_DATA=`cat release_data`
 sed "s,${TAR};.*,$RELEASE_DATA," ${VERSION}-release-data -i
@@ -26,7 +31,8 @@ echo == diff to previous tar
 cd tmp-tests
 scp ${UPLOADSERVER}:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
 pkgdiff old.tar.xz ../${VERSION}/${TAR}-${VERSION}.tar.xz || true
-$BROWSER pkgdiff_reports/old/X_to_${VERSION}/changes_report.html
+scp pkgdiff_reports/old/X_to_${VERSION}/changes_report.html ${SCRATCH_SERVER}/${TAR}-${VERSION}-changes_report.html
+$BROWSER ${SCRATCH_SERVER_URL}/${TAR}-${VERSION}-changes_report.html
 cd ..
 echo == end diff to previous tar
 

@@ -61,7 +61,7 @@ on tar day prepare:
    [or run xenon job http://xenon.pangea.pub/job/plasma-releaseme-changelog/ then ./plasma-xenon-download-changelog]
  Run ./update-web-svn
  run ./plasma-webpages [-n] and check over output opened in firefox (use -n for noannounce on e.g. .0 releases where the announce is written manually)
- run optipng on any new images
+ run cwebp on the images to convert to WebP and update URLs https://developers.google.com/speed/webp
  run ./plasma-add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
  tell release-team@kde.org, plasma-devel@kde.org, kde-announce@kde.org
  tell vdg on forum about announce and get feedback

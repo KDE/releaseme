@@ -24,6 +24,7 @@ TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTR
 
 #SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
+SCRATCH_SERVER_URL=http://embra.edinburghlinux.co.uk/~jr/tmp # URL to view this
 
 YOUTUBEID="https://cdn.kde.org/promo/Announcements/Plasma/5.20/Video.webm" # The video ID used in URL for youtube
 
