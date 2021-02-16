@@ -10,7 +10,7 @@ ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
 
 # remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
 
-sed -i "s/draft: true/draft: false/" ${ANNOUNCECHECKOUT}/plasma-${VERSION}.md
+sed -i "s/draft: true/draft: false/" ${ANNOUNCECHECKOUT}/plasma/5/${VERSION}.md
 sed -i "s/draft: true/draft: false/" ${INFOCHECKOUT}/plasma-${VERSION}.md
 
 # www/announcements/index.php
@@ -50,7 +50,7 @@ mkdir tmp-announcements
 #kate tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
 
 # post on twitter, g+, facebook, reddit (r/kde and r/linux)
-echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://kde.org/announcements/plasma-${VERSION}" > tmp-announcements/twitter.text
+echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://kde.org/announcements/plasma/5/${VERSION}" > tmp-announcements/twitter.text
 kate tmp-announcements/twitter.text
 $BROWSER https://tweetdeck.twitter.com
 $BROWSER https://facebook.com/kde
