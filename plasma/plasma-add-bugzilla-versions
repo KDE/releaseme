@@ -55,6 +55,7 @@ products="\
     kactivitymanagerd \
     Discover \
     plasma-integration \
+    plasma-systemmonitor \
 "
 
 for PRODUCT in $products; do 
