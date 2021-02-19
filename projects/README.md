@@ -1,3 +1,8 @@
+<!--
+    SPDX-License-Identifier: CC0-1.0
+    SPDX-FileCopyrightText: 2017 Harald Sitter <sitter@kde.org>
+-->
+
 You really really really should not use this!
 
 # I MEAN IT DO NOT USE THIS!

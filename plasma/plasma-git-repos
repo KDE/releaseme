@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
-# Copyright (C) 2020 Jonathan Riddell <jr@jriddell.org>, may be copied under the GNU GPL v2 or later
+# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-FileCopyrightText: 2020 Jonathan Riddell <jr@jriddell.org>
 
 # get a list of git repositories we want to make part of the release
 

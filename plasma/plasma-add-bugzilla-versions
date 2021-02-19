@@ -1,4 +1,6 @@
-# Jonathan Riddell 2015 may be copied under GNU GPL v2 or later
+# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-FileCopyrightText: 2015 Jonathan Riddell <jr@jriddell.org>
+
 # Update Buzgilla versions
 # There seems to be no API to do this
 # so here we use curl to get the page with the magic token then update the version

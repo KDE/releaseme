@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: 2015-2020 Harald Sitter <sitter@kde.org>
+
 # rubocop:disable Style/HashSyntax
 
 # Adds gem management tasks among others build|install|release

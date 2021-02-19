@@ -1,6 +1,8 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-FileCopyrightText: Jonathan Riddell
+
 # For CI server to run QA tests
-# Copyright Jonathan Riddell, may be copied under the GNU GPL v2 or later
 
 set -xe
 

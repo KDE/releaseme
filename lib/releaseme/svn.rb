@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2007-2020 Harald Sitter <sitter@kde.org>
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2007-2020 Harald Sitter <sitter@kde.org>
 
 require 'fileutils'
 require 'open3'
