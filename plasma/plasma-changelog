@@ -46,7 +46,7 @@ sed 's,="kdeplasma-addons",="Plasma Addons",' ${FILE} -i
 sed 's,="kgamma5",="Gamma Monitor Calibration Tool",' ${FILE} -i
 sed 's,="khelpcenter,="KHelpCenter",' ${FILE} -i
 sed 's,="khotkeys",="KDE Hotkeys",' ${FILE} -i
-sed 's,="kinfocenter",="Info Center,"' ${FILE} -i
+sed 's,="kinfocenter",="Info Center",' ${FILE} -i
 sed 's,="kio-extras",="KIO Extras",' ${FILE} -i
 sed 's,="kmenuedit",="KMenuEdit",' ${FILE} -i
 sed 's,="kscreen",="KScreen",' ${FILE} -i

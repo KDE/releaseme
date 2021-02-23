@@ -28,7 +28,7 @@ if not options.include?(:noannounce)
     announce_template = PlasmaAnnounceTemplate.new
     announce_output = announce_template.render
     # write announcement unless it's a .0, beta or final where we do it manually
-    File.write(format('%s/plasma-%s.md', plasma_versions.announcecheckout, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+    File.write(format('%s/announcements/plasma/5/%s.md', plasma_versions.announcecheckout, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
 end
 
 changelog_file = format('plasma-%s-%s-changelog.md',
@@ -41,7 +41,7 @@ FileUtils.cp(changelog_file,
 system('git', 'add', "content/info/plasma-#{version}.md", chdir: plasma_versions.wwwcheckout)           # info file 
 system('git', 'add', "content/announcements/changelogs/plasma/5/#{changelog_file}", chdir: plasma_versions.wwwcheckout)      # changelog file
 if not options.include?(:noannounce)
-    system('git', 'add', "content/announcements/plasma-#{version}.md", chdir: plasma_versions.wwwcheckout) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+    system('git', 'add', "content/announcements/plasma/5/#{version}.md", chdir: plasma_versions.wwwcheckout) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
 end
 
 # Commit files
@@ -49,7 +49,7 @@ system('git', 'commit', '-m', "feat: Add webpage for Plasma #{version}", chdir: 
 
 # And push files :)
 system('git', 'push', chdir: plasma_versions.wwwcheckout)
-system(plasma_versions.browser, "https://kde.org/announcements/plasma-#{version}/")
+system(plasma_versions.browser, "https://kde.org/announcements/plasma/5/#{version}/")
 system(plasma_versions.browser, "https://kde.org/info/plasma-#{version}/")
 system(plasma_versions.browser, "https://kde.org/announcements/changelogs/plasma/5/#{changelog_file}/")
 system(plasma_versions.browser, "https://binary-factory.kde.org/view/Websites/job/Website_kde-org/")
