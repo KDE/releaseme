@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
 # stolen from release-tools Applications/15.04 branch, thanks Albert
 # TODO: make it so we can share
@@ -80,33 +80,33 @@ for repo in repos:
 		commit = []
 		commits = []
 		for line in p.stdout.readlines():
-			if line.startswith("commit"):
+			ignoreCommit = False
+			if str(line).startswith("commit"):
 				if len(commit) > 1 and not ignoreCommit:
 					commits.append(commit)
 				commitHash = line[7:].strip()
-				ignoreCommit = False
 				commit = [commitHash]
-			elif line.startswith("Author"):
+			elif str(line).startswith("Author"):
 				pass
-			elif line.startswith("Date"):
+			elif str(line).startswith("Date"):
 				pass
-			elif line.startswith("Merge"):
-					ignoreCommit = True
+			elif str(line).startswith("Merge"):
+				ignoreCommit = True
 			else:
 				line = line.strip()
-				if line.startswith("Merge remote-tracking branch"):
+				if str(line).startswith("Merge remote-tracking branch"):
 					ignoreCommit = True
-				elif line.startswith("SVN_SILENT"):
+				elif str(line).startswith("SVN_SILENT"):
 					ignoreCommit = True
-				elif line.startswith("GIT_SILENT"):
+				elif str(line).startswith("GIT_SILENT"):
 					ignoreCommit = True
-				elif line.startswith("Merge branch"):
+				elif str(line).startswith("Merge branch"):
 					ignoreCommit = True
-                                #added jr 2017-02-07 for merges
-				elif line.startswith("Merge Plasma"):
+                                    #added jr 2017-02-07 for merges
+				elif str(line).startswith("Merge Plasma"):
 					ignoreCommit = True
                                 # changed jr ignore update version commits
-				elif line.startswith("Update version number for"):
+				elif str(line).startswith("Update version number for"):
 					ignoreCommit = True
 				elif line:
 					commit.append(line)
@@ -122,36 +122,36 @@ for repo in repos:
 				
 				for line in commit:
 					line = cgi.escape(line)
-					if line.startswith("BUGS:"):
+					if str(line).startswith("BUGS:"):
 						bugNumbers = line[line.find(":") + 1:].strip()
 						for bugNumber in bugNumbers.split(","):
 							if bugNumber.isdigit():
 								if extra:
 									extra += ". "
 								extra += "Fixes bug [#{0}](https://bugs.kde.org/{0})".format(bugNumber)
-					elif line.startswith("BUG:"):
+					elif str(line).startswith("BUG:"):
 						bugNumber = line[line.find(":") + 1:].strip()
 						if bugNumber.isdigit():
 							if extra:
 								extra += ". "
 							extra += "Fixes bug [#{0}](https://bugs.kde.org/{0})".format(bugNumber)
-					elif line.startswith("REVIEW:"):
+					elif str(line).startswith("REVIEW:"):
 						if extra:
 							extra += ". "
 						reviewNumber = line[line.find(":") + 1:].strip()
 						extra += "Code review [#{0}](https://git.reviewboard.kde.org/r/{0})"
 						# jr addition 2017-02 phab link
-					elif line.startswith("Differential Revision:"):
+					elif str(line).startswith("Differential Revision:"):
 						if extra:
 							extra += ". "
 						reviewNumber = line[line.find("org/") + 4:].strip()
 						extra += "Phabricator Code review [{0}](https://phabricator.kde.org/{0})".format(reviewNumber)
-					elif line.startswith("CCBUG:"):
+					elif str(line).startswith("CCBUG:"):
 						if extra:
 							extra += ". "
 						bugNumber = line[line.find(":") + 1:].strip()
 						extra += "See bug [#{0}](https://bugs.kde.org/{0})".format(bugNumber)
-					elif line.startswith("FEATURE:"):
+					elif str(line).startswith("FEATURE:"):
 						feature = line[line.find(":") + 1:].strip()
 						if feature.isdigit():
 							if extra:
@@ -161,12 +161,12 @@ for repo in repos:
 							if feature:
 								changelog = feature
 							
-					elif line.startswith("CHANGELOG:"):
+					elif str(line).startswith("CHANGELOG:"):
 						#extra += "CHANGELOG" + line
 						#edited jr don't break
 						#raise NameError('Unhandled CHANGELOG')
                                                 changelog = line[11:] # remove word "CHANGELOG: "
-					elif line.startswith("Merge Plasma"):
+					elif str(line).startswith("Merge Plasma"):
                                                 pass
 				
 				commitHash = commit[0]

@@ -90,3 +90,7 @@ TODO:
  pkgdiff output https://lvc.github.io/pkgdiff/
  for 5.16.90 the release_data file had the kscreen info duplicated info libkscreen, why?
  block running plasma-release unless plasma-tags-test has been run
+ Why changelog name substitution not working?
+ Update plasma-web for new locations
+ Update shortcode for plasma-5-21-video etc
+ 
