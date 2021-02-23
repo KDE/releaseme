@@ -60,5 +60,5 @@ $BROWSER https://dot.kde.org/#overlay=node/add/story
 
 # e-mail release-team@kde.org, plasma-devel@kde.org with the happy news
 echo "e-mail me to kde-announce@kde.org, release-team@kde.org, plasma-devel@kde.org" > tmp-announcements/release-team
-echo "Plasma ${VERSION} is now released https://kde.org/announcements/plasma-${VERSION}" >> tmp-announcements/release-team
+echo "Plasma ${VERSION} is now released https://kde.org/announcements/plasma/5/${VERSION}" >> tmp-announcements/release-team
 kate tmp-announcements/release-team

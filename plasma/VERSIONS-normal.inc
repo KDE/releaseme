@@ -26,7 +26,7 @@ TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTR
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER_URL=http://embra.edinburghlinux.co.uk/~jr/tmp # URL to view this
 
-YOUTUBEID="https://cdn.kde.org/promo/Announcements/Plasma/5.21/High.webm" # The video ID used in URL for youtube
+YOUTUBEID="ahEWG4JCA1w" # The video ID used in URL for youtube
 
 # command from   git clone invent:sysadmin/appstream-metainfo-release-update
 APPSTREAM_UPDATER="/home/jr/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"
