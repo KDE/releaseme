@@ -1,3 +1,9 @@
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2015-2021 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2019 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2020 Bhushan Shah <bhush94@gmail.com>
+# SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
+
 VERSION=5.21.1
 SHORT_VERSION=5.21
 SHORT_VERSION_DASH=5-21 # used for plasma webpage template

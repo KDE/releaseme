@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
-# Copyright (C) 2020 Carl Schwan <carl@carlschwan.eu>
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2014-2021 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2015 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
 require 'fileutils'
 require 'optparse'
@@ -38,7 +41,7 @@ FileUtils.cp(changelog_file,
              format('%s/changelogs/plasma/5/%s', plasma_versions.announcecheckout, changelog_file))
 
 # Add files
-system('git', 'add', "content/info/plasma-#{version}.md", chdir: plasma_versions.wwwcheckout)           # info file 
+system('git', 'add', "content/info/plasma-#{version}.md", chdir: plasma_versions.wwwcheckout)           # info file
 system('git', 'add', "content/announcements/changelogs/plasma/5/#{changelog_file}", chdir: plasma_versions.wwwcheckout)      # changelog file
 if not options.include?(:noannounce)
     system('git', 'add', "content/announcements/plasma/5/#{version}.md", chdir: plasma_versions.wwwcheckout) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"

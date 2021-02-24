@@ -1,7 +1,11 @@
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2014-2021 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2015-2019 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2018-2020 Bhushan Shah <bhush94@gmail.com>
+
 # Quick script to update version numbers in Plasma 5 modules
 # does a clone, replaces PROJECT_VERSION in CMakeLists.txt and pushes
 # Also updates Appstream metadata files with new version and date
-# Author Jonathan Riddell 2014,2019, this file is in the public domain and has no copyright restrictions
 
 set -xe
 

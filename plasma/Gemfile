@@ -1,2 +1,5 @@
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2017-2018 Jonathan Riddell <jr@jriddell.org>
+
 gem 'git'
 gem 'rubypress'
