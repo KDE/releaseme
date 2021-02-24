@@ -21,7 +21,7 @@ on dep and repo freeze day:
 on Monday before beta tar day:
  - make announcement
  - on feature release make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata
- - Ping Michael@TUXVIDEO and The Linux Experiment <t.linuxexperiment@gmail.com> to ask for videos
+ - Ping Skye, aronkvh and veggero to make a video
 
 on beta tar day:
  - Add release exceptions array to ./plasma-git-repos and run "./plasma-git-repos -r 5.xx" to update list of things to package in git-repositories-for-release
