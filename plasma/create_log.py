@@ -1,4 +1,10 @@
 #!/usr/bin/env python2
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: Albert Astals Cid <aacid@kde.org>
+# SPDX-FileCopyrightText: 2015 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2016 David Edmundson <kde@davidedmundson.co.uk>
+# SPDX-FileCopyrightText: 2020 Bhushan Shah <bhush94@gmail.com>
+# SPDX-FileCopyrightText: 2020-2021 Carl Schwan <carl@carlschwan.eu>
 
 # stolen from release-tools Applications/15.04 branch, thanks Albert
 # TODO: make it so we can share
@@ -13,7 +19,7 @@ def getVersionFrom(repo):
         return ""
 #	f = open(versionsDir + '/' + repo)
 #	return f.readlines()[1].strip()
-	
+
 
 f = open('git-repositories-for-release')
 #srcdir="/d/kde/src/5/"
@@ -113,13 +119,13 @@ for repo in repos:
 		# Add the last commit
 		if len(commit) > 1 and not ignoreCommit:
 			commits.append(commit)
-		
+
 		if len(commits):
 			print("{{{{< details title=\"{0}\" href=\"https://commits.kde.org/{0}\" >}}}}".format(repo))
 			for commit in commits:
 				extra = ""
 				changelog = commit[1]
-				
+
 				for line in commit:
 					line = cgi.escape(line)
 					if str(line).startswith("BUGS:"):
@@ -160,7 +166,7 @@ for repo in repos:
 						else:
 							if feature:
 								changelog = feature
-							
+
 					elif str(line).startswith("CHANGELOG:"):
 						#extra += "CHANGELOG" + line
 						#edited jr don't break
@@ -168,7 +174,7 @@ for repo in repos:
                                                 changelog = line[11:] # remove word "CHANGELOG: "
 					elif str(line).startswith("Merge Plasma"):
                                                 pass
-				
+
 				commitHash = commit[0]
 				if not changelog.endswith("."):
 					changelog = changelog + "."

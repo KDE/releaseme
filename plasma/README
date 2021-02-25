@@ -1,6 +1,13 @@
+<!--
+    SPDX-License-Identifier: CC0-1.0
+    SPDX-FileCopyrightText: 2014-2021 Jonathan Riddell <jr@jriddell.org>
+    SPDX-FileCopyrightText: 2015 Harald Sitter <sitter@kde.org>
+    SPDX-FileCopyrightText: 2016 David Edmundson <kde@davidedmundson.co.uk>
+-->
+
 1 week before beta tar day:
  ask for changes to highlight on plasma-devel and ask for screenshots of them
- on make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata 
+ on make an errata page and ask people to add bugs https://community.kde.org/Plasma/5.1_Errata
 
 check for build failures on CI:
  https://build.kde.org/job/Plasma/view/Everything%20-%20kf5-qt5/
@@ -55,7 +62,7 @@ on beta tar day branch:
       trigger rebuild of any modules
   ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages and update repo-metadata
   Update https://community.kde.org/Plasma/Live_Images
- 
+
 on tar day prepare:
  run ./plasma-changelog (manually edit file after)
    [or run xenon job http://xenon.pangea.pub/job/plasma-releaseme-changelog/ then ./plasma-xenon-download-changelog]
@@ -90,4 +97,3 @@ TODO:
  pkgdiff output https://lvc.github.io/pkgdiff/
  for 5.16.90 the release_data file had the kscreen info duplicated info libkscreen, why?
  block running plasma-release unless plasma-tags-test has been run
- 

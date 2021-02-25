@@ -1,4 +1,7 @@
 #!/usr/bin/python2
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2015-2020 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2016 David Edmundson <kde@davidedmundson.co.uk>
 
 import argparse
 import urllib2

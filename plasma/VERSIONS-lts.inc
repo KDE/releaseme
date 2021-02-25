@@ -1,3 +1,8 @@
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2015-2021 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2016 David Edmundson <kde@davidedmundson.co.uk>
+# SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
+
 LANG=en_GB.UTF-8
 LANGUAGE=en
 LC_ALL=en_GB.UTF-8
