@@ -1,3 +1,9 @@
+<!--
+    SPDX-License-Identifier: CC0-1.0
+    SPDX-FileCopyrightText: 2015-2020 Harald Sitter <sitter@kde.org>
+    SPDX-FileCopyrightText: 2017 Jonathan Riddell <jr@jriddell.org>
+-->
+
 [![pipeline status](https://invent.kde.org/sdk/releaseme/badges/master/pipeline.svg)](https://invent.kde.org/sdk/releaseme/-/commits/master)
 [![coverage report](https://invent.kde.org/sdk/releaseme/badges/master/coverage.svg)](https://invent.kde.org/sdk/releaseme/-/commits/master)
 
@@ -85,7 +91,6 @@ branchme.
 - File a ticket with the sysadmins to move your tarball into a suitable place on
   http://download.kde.org. If you are unsure about where to put it you can
   ask the release-team@kde.org for some guidance.
-  In the ticket, provide both SHA-1 and SHA-256 checksums for the tarball.
 - Run tagme to tag your release in git.
 - Once the sysadmins have processed your ticket announce the release in whatever
   way that seems reasonable (blog post, dot.kde.org, kde-announce-apps@kde.org,
