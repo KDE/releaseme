@@ -24,6 +24,16 @@ variables:
   TESTOPT: '--junit --pride'
   LANG: 'C.UTF-8' # container has no LANG by default which messes with ruby's utf8 support
 
+reuse:
+  inherit:
+    default: false
+    variables: false
+  image:
+    name: fsfe/reuse:latest
+    entrypoint: [""] # image by default has some custom script as entrypoint :S
+  script:
+    - reuse lint
+
 test:2.4:
   image: ruby:2.4
   script:
