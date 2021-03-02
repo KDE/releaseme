@@ -2,15 +2,14 @@ LANG=en_US.UTF-8
 LANGUAGE=en
 LC_ALL=en_US.UTF-8
 
+MAJOR_VERSION=5
 VERSION=5.9.1
 SHORT_VERSION=5.9
-SHORT_VERSION_DASH=5-9
 OLD_VERSION=5.9.0
 ORIGIN=stable  # git branch as set in projects.k.o, set to trunk or stable
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.9 # set to master or Plasma/5.x
-MINOR_RELEASE_MONTH=January # for announcement, when was 5.x.0 released
 
 RELEASETYPE=Bugfix # for changelog, set to Beta, Feature or Bugfix
 
@@ -23,10 +22,9 @@ UPLOADSERVER="ftpadmin@depot.kde.org"
 
 RELEASEDATE="Tuesday, 14 February 2017" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEDATEISO="2017-02-14" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
-RELEASEMONTH="January" # usually `LC_ALL=C date "+%B" --date="next Tue"`
-TIMESINCELASTRELEASE="a month's" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
 
-YOUTUBEID="lm0sqqVcotA" # The video ID used in URL for youtube
+VIDEO_KEY="youtube" # type of video: "youtube", "peertube", "video"
+VIDEO_VALUE="lm0sqqVcotA" # The video ID used in URL for "youtube" and "peertube", and "true" for "video"
 
 GPG_KEY=EC94D18F7F05997E
 RELEASE_DUDE="Jonathan Riddell"

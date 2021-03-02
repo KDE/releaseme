@@ -14,12 +14,8 @@ ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
 
 # remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
 
-sed -i "s/draft: true/draft: false/" ${ANNOUNCECHECKOUT}/plasma/5/${VERSION}.md
+sed -i "s/draft: true/draft: false/" ${ANNOUNCECHECKOUT}/plasma/${MAJOR_VERSION}/${VERSION}.md
 sed -i "s/draft: true/draft: false/" ${INFOCHECKOUT}/plasma-${VERSION}.md
-
-# www/announcements/index.php
-
-ANNOUNCEINDEX="<\!-- Plasma ${VERSION} -->\n<strong>${RELEASEDATE}<\/strong> - <a href=\"plasma-${VERSION}\">Plasma ${VERSION}<\/a>\n<br \/>\n\"<em>KDE Ships Plasma ${VERSION}.<\/em>\"\n<p \/>"
 
 # www/index.php
 # Updating www/index.php got ported to Ruby
@@ -36,7 +32,7 @@ cd -
 
 
 $BROWSER https://kde.org/info/plasma-${VERSION}
-$BROWSER https://kde.org/announcements/plasma-${VERSION}
+$BROWSER https://kde.org/announcements/plasma/${MAJOR_VERSION}/${VERSION}
 $BROWSER https://kde.org/announcements/
 $BROWSER https://kde.org/
 $BROWSER https://binary-factory.kde.org/view/Websites/job/Website_kde-org/
@@ -54,7 +50,7 @@ mkdir tmp-announcements
 #kate tmp-announcements/KDE-ANNOUNCE_TEXT2.txt
 
 # post on twitter, g+, facebook, reddit (r/kde and r/linux)
-echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://kde.org/announcements/plasma/5/${VERSION}" > tmp-announcements/twitter.text
+echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://kde.org/announcements/plasma/${MAJOR_VERSION}/${VERSION}" > tmp-announcements/twitter.text
 kate tmp-announcements/twitter.text
 $BROWSER https://tweetdeck.twitter.com
 $BROWSER https://facebook.com/kde
@@ -64,5 +60,5 @@ $BROWSER https://dot.kde.org/#overlay=node/add/story
 
 # e-mail release-team@kde.org, plasma-devel@kde.org with the happy news
 echo "e-mail me to kde-announce@kde.org, release-team@kde.org, plasma-devel@kde.org" > tmp-announcements/release-team
-echo "Plasma ${VERSION} is now released https://kde.org/announcements/plasma/5/${VERSION}" >> tmp-announcements/release-team
+echo "Plasma ${VERSION} is now released https://kde.org/announcements/plasma/${MAJOR_VERSION}/${VERSION}" >> tmp-announcements/release-team
 kate tmp-announcements/release-team

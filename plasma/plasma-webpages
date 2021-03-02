@@ -22,6 +22,7 @@ end.parse!
 
 plasma_versions = PlasmaVersion.new
 version = plasma_versions.version
+major_version = plasma_versions.major_version
 
 info_template = PlasmaInfoTemplate.new
 info_output = info_template.render
@@ -31,20 +32,20 @@ if not options.include?(:noannounce)
     announce_template = PlasmaAnnounceTemplate.new
     announce_output = announce_template.render
     # write announcement unless it's a .0, beta or final where we do it manually
-    File.write(format('%s/plasma/5/%s.md', plasma_versions.announcecheckout, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+    File.write(format('%s/plasma/%s/%s.md', plasma_versions.announcecheckout, major_version, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
 end
 
-changelog_file = format('plasma-%s-%s-changelog.md',
+changelog_file = format('%s-%s.md',
                         plasma_versions.old_version,
                         version)
 FileUtils.cp(changelog_file,
-             format('%s/changelogs/plasma/5/%s-%s.md', plasma_versions.announcecheckout, plasma_versions.old_version, version))
+             format('%s/changelogs/plasma/%s/%s', plasma_versions.announcecheckout, major_version, changelog_file))
 
 # Add files
 system('git', 'add', "content/info/plasma-#{version}.md", chdir: plasma_versions.wwwcheckout)           # info file
-system('git', 'add', "content/announcements/changelogs/plasma/5/#{changelog_file}", chdir: plasma_versions.wwwcheckout)      # changelog file
+system('git', 'add', "content/announcements/changelogs/plasma/#{major_version}/#{changelog_file}", chdir: plasma_versions.wwwcheckout)      # changelog file
 if not options.include?(:noannounce)
-    system('git', 'add', "content/announcements/plasma/5/#{version}.md", chdir: plasma_versions.wwwcheckout) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+    system('git', 'add', "content/announcements/plasma/#{major_version}/#{version}.md", chdir: plasma_versions.wwwcheckout) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
 end
 
 # Commit files
@@ -52,8 +53,8 @@ system('git', 'commit', '-m', "feat: Add webpage for Plasma #{version}", chdir: 
 
 # And push files :)
 system('git', 'push', chdir: plasma_versions.wwwcheckout)
-system(plasma_versions.browser, "https://kde.org/announcements/plasma/5/#{version}/")
+system(plasma_versions.browser, "https://kde.org/announcements/plasma/#{major_version}/#{version}/")
 system(plasma_versions.browser, "https://kde.org/info/plasma-#{version}/")
-system(plasma_versions.browser, "https://kde.org/announcements/changelogs/plasma/5/#{changelog_file}/")
+system(plasma_versions.browser, "https://kde.org/announcements/changelogs/plasma/#{major_version}/#{changelog_file}/")
 system(plasma_versions.browser, "https://binary-factory.kde.org/view/Websites/job/Website_kde-org/")
 puts "Note: Webpages will not appear until draft: true is unset"

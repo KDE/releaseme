@@ -7,6 +7,7 @@ LANG=en_GB.UTF-8
 LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
+MAJOR_VERSION=5
 VERSION=5.18.6
 SHORT_VERSION=5.18
 OLD_VERSION=5.18.5
@@ -14,7 +15,6 @@ ORIGIN=lts  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.18 # set to master or Plasma/5.x
-MINOR_RELEASE_MONTH="February 2020" # for announcement, when was 5.x.0 released
 
 RELEASETYPE=Bugfix # for changelog, set to beta, feature or bugfix
 
@@ -26,12 +26,12 @@ UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
 RELEASEDATE="Tuesday, 29 September 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEMONTH="September" # usually `LC_ALL=C date "+%B" --date="next Tue"`
-TIMESINCELASTRELEASE="six months'" # in sentence 'This release adds TIMESINCELASTRELEASE worth of new'
+RELEASEDATEISO="2020-09-29" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
-YOUTUBEID="https://peertube.mastodon.host/videos/embed/cda402b5-2bcb-4c0c-b232-0fa5a4dacaf5" # The video ID used in URL for youtube
+VIDEO_KEY="youtube" # type of video: "youtube", "peertube", "video"
+VIDEO_VALUE="ahEWG4JCA1w" # The video ID used in URL for "youtube" and "peertube", and "true" for "video"
 
 # command from   git clone invent:sysadmin/appstream-metainfo-release-update
 APPSTREAM_UPDATER="~/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"

@@ -14,7 +14,7 @@ set -xe
 # override old version for a feature release so we still include changes from last feature not from last beta
 # OLD_VERSION=5.3.2
 
-FILE=plasma-${OLD_VERSION}-${VERSION}-changelog.md
+FILE=${OLD_VERSION}-${VERSION}.md
 
 rm -rf ${FILE}
 rm -rf tmp-changelog

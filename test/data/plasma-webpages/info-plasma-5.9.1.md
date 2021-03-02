@@ -9,4 +9,4 @@ draft: true
 
 This is a Bugfix release of KDE Plasma, featuring Plasma Desktop and
 other essential software for your computer. Details in the
-[Plasma 5.9.1 announcement](/announcements/plasma-5.9.1).
+[Plasma 5.9.1 announcement](/announcements/plasma/5/5.9.1).
