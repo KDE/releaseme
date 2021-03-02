@@ -31,14 +31,14 @@ if not options.include?(:noannounce)
     announce_template = PlasmaAnnounceTemplate.new
     announce_output = announce_template.render
     # write announcement unless it's a .0, beta or final where we do it manually
-    File.write(format('%s/announcements/plasma/5/%s.md', plasma_versions.announcecheckout, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+    File.write(format('%s/plasma/5/%s.md', plasma_versions.announcecheckout, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
 end
 
 changelog_file = format('plasma-%s-%s-changelog.md',
                         plasma_versions.old_version,
                         version)
 FileUtils.cp(changelog_file,
-             format('%s/changelogs/plasma/5/%s', plasma_versions.announcecheckout, changelog_file))
+             format('%s/changelogs/plasma/5/%s-%s.md', plasma_versions.announcecheckout, plasma_versions.old_version, version))
 
 # Add files
 system('git', 'add', "content/info/plasma-#{version}.md", chdir: plasma_versions.wwwcheckout)           # info file
