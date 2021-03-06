@@ -28,7 +28,7 @@ to software that has its translations in the kdelibs4 directories on SVN.
 
 Releaseme uses 'origins' to control which branch to release and where to draw
 translations from. An origin is basically the i18n association as configured in:
-https://phabricator.kde.org/source/sysadmin-repo-metadata/
+https://invent.kde.org/sysadmin/repo-metadata/
 It is imperative that you make sure the data configured there is
 correct and up to date!
 
@@ -48,10 +48,10 @@ The corner stone script to create a tarball is tarme.rb.
 Tarme requires three arguments
 
 - **origin**: either trunk or stable referring to the i18n branch configured in
-  https://phabricator.kde.org/source/sysadmin-repo-metadata/
+  https://invent.kde.org/sysadmin/repo-metadata/
 - **version**: the version you wish to release
 - The name of the project you want to release. This technically can be the
-  full path in https://phabricator.kde.org/source/sysadmin-repo-metadata/browse/master/projects/
+  full path in https://invent.kde.org/sysadmin/repo-metadata/-/tree/master/projects-invent/
   (e.g. kde/workspace/ksysguard) but does not need to be in most cases as
   tarme will try to figure this out for itself.
 
@@ -79,7 +79,7 @@ branchme.
   14 days is recommendable.
 - When string freeze draws closer make sure the correct branches are set for
   i18n trunk or i18n stable (depending on what you want to release) in
-  https://phabricator.kde.org/source/sysadmin-repo-metadata/.
+  https://invent.kde.org/sysadmin/repo-metadata/.
   When you change the i18n settings also make sure to inform the
   translators of the move either on IRC or by mail at kde-i18n-doc@kde.org
 - Inform the translation teams when you start string freeze and tell them when
