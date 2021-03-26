@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2017 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2017-2021 Harald Sitter <sitter@kde.org>
+
+class DeprecationError < RuntimeError; end
 
 # :nocov:
 # realpath so we get compat.rb not a symlink, vs. absolute_path so we get when
@@ -18,6 +20,13 @@ end
 # :nocov:
 
 basename = File.basename(__FILE__)
+
+unless 'yes' == ENV['I_AM_A_TERRIBLE_PERSON_AND_REFUSE_TO_STOP_USING_COMPAT_CODE']
+  raise DeprecationError, 'This code is using the releasme compatibility layer!' \
+                          " 'lib/#{basename}' is required but 'lib/releaseme/#{basename}' ought to be!" \
+                          ' File a bug somewhere plz.'
+end
+
 warn <<-EOF
 Warning: requiring old file #{basename}, should require releaseme/#{basename}
   instead @ #{caller[0]}

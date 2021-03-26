@@ -32,8 +32,8 @@ end
 
 #################
 
-require_relative 'lib/project'
-require_relative 'lib/source'
+require_relative 'lib/releaseme/project'
+require_relative 'lib/releaseme/source'
 
 class TagProject
   attr_accessor :project
@@ -74,6 +74,7 @@ unless dupes.empty?
         ' broken. Best start from scratch or manually repair the data to only' \
         " contain each entity once.\nDuplicates:\n#{dupes.join(', ')}"
 end
+
 tag_projects.each do |tag_project|
   puts "--- #{tag_project.project.identifier} ---"
   source = Source.new

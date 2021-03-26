@@ -5,8 +5,8 @@
 require 'erb'
 require 'tmpdir'
 
-require_relative 'lib/project'
-require_relative 'lib/source'
+require_relative 'lib/releaseme/project'
+require_relative 'lib/releaseme/source'
 
 class LogHtmlFormatter
   class EntryHtmlFormatter
