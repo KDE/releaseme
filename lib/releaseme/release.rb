@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2007-2017 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2007-2021 Harald Sitter <sitter@kde.org>
 
 require_relative 'archive_signer'
 require_relative 'documentation'
@@ -56,7 +56,7 @@ module ReleaseMe
                              end
       end
 
-      source.target = "#{project.identifier}-#{version}"
+      source.target = artifact_name
     end
 
     # Get the source
@@ -107,6 +107,22 @@ module ReleaseMe
     end
 
     private
+
+    def artifact_name
+      # WARNING: DO NOT ADD ANY NEW MAPPINGS HERE!
+      # Certainly not without review by sitter. This mapping table is exclusively here for legacy stuff.
+      # We've pretty much agreed that the repo name should always be the tarball name to keep everyone sane and the
+      # tech simple: https://markmail.org/message/jr4za6d7c2n7bw73
+      base = case project.identifier
+             when 'phonon-vlc'
+               'phonon-backend-vlc'
+             when 'phonon-gstreamer'
+               'phonon-backend-gstreamer'
+             else
+               project.identifier
+             end
+      "#{base}-#{version}"
+    end
 
     def sysadmin_ticket(tar, sig)
       title = "Publish #{tar}"

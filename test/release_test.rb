@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2011-2020 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2011-2021 Harald Sitter <sitter@kde.org>
 
 require_relative 'lib/testme'
 
@@ -260,5 +260,20 @@ class TestRelease < Testme
     # We do not particularly care about the output at this time. What matters
     # is that it passes.
     r.help
+  end
+
+  def test_phonon_compat_mapping
+    data = {
+      identifier: 'phonon-vlc',
+      vcs: ReleaseMe::Git.new,
+      i18n_trunk: 'master',
+      i18n_stable: 'master',
+      i18n_path: ''
+    }
+    project = ReleaseMe::Project.new(**data)
+    project.vcs.repository = @remotedir
+
+    r = ReleaseMe::Release.new(project, :trunk, '1.0')
+    assert_equal('phonon-backend-vlc-1.0', r.source.target)
   end
 end
