@@ -8,9 +8,9 @@ LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
 MAJOR_VERSION=5
-VERSION=5.18.6
+VERSION=5.18.7
 SHORT_VERSION=5.18
-OLD_VERSION=5.18.5
+OLD_VERSION=5.18.6
 ORIGIN=lts  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -25,8 +25,8 @@ WWWCHECKOUT=/home/jr/src/Websites/kde-org                     # git@invent.kde.o
 UPLOADSERVER="ftpadmin@master.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 29 September 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2020-09-29" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Tuesday, 30 March 2020" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2021-03-30" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 
