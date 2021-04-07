@@ -106,6 +106,10 @@ for repo in repos:
 					ignoreCommit = True
 				elif str(line).startswith("GIT_SILENT"):
 					ignoreCommit = True
+				elif str(line).startswith("In case of conflict in i18n"):
+					ignoreCommit = True
+				elif str(line).startswith("To resolve a particular conflict"):
+					ignoreCommit = True
 				elif str(line).startswith("Merge branch"):
 					ignoreCommit = True
                                     #added jr 2017-02-07 for merges
