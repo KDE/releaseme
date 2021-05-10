@@ -73,7 +73,6 @@ end
 
 release_data_file = File.open('release_data', 'w')
 releases = release_projects.collect do |project|
-  project_name = project.identifier
   release = ReleaseMe::Release.new(project, options[:origin], options[:version])
 
   # FIXME: ALL gets() need to have appropriate handling and must be able to
