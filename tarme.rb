@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2014-2015 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2014-2021 Harald Sitter <sitter@kde.org>
 
 require 'ostruct'
 require 'optparse'
@@ -12,7 +12,7 @@ puts '     https://community.kde.org/ReleasingSoftware'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
-  opts.banner = 'Usage: tarme.rb [options] PROJECT_NAME'
+  opts.banner = 'Usage: tarme.rb [options] PROJECT_NAME(S)'
 
   opts.separator ''
   opts.separator 'Automatic Project Definition via projects.kde.org:'
@@ -43,7 +43,7 @@ OptionParser.new do |opts|
 end.parse!
 
 if ARGV.empty?
-  warn 'You need to define a PROJECT_NAME'
+  warn 'You need to define at least one PROJECT_NAME'
   exit 1
 end
 
@@ -54,11 +54,10 @@ unless (options.origin || options.from_config) && options.version
   exit 1
 end
 
-project_name = ARGV.pop
-
 release_projects = []
 if options[:from_config].nil?
-  release_projects = ReleaseMe::Project.from_find(project_name)
+  # Flatten because finding returns an array!
+  release_projects += ARGV.collect { |x| ReleaseMe::Project.from_find(x) }.flatten
   if release_projects.empty?
     warn "The project #{project_name} could not be resolved." \
            ' Please note that you need to provide a concret name or path.'
@@ -68,7 +67,7 @@ if options[:from_config].nil?
   # FIXME: runtime deps are not checked first
   # e.g. svn, git, xz...
 else
-  release_projects << ReleaseMe::Project.from_config(project_name)
+  release_projects += ARGV.collect { |x| ReleaseMe::Project.from_config(x) }
 end
 
 release_data_file = File.open('release_data', 'w')
