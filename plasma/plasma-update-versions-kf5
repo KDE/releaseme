@@ -16,7 +16,7 @@ BRANCH=master
 
 # echo for updating version in master after branch override versions here
 # VERSION=5.14.80
-KF5_VERSION=5.78
+KF5_VERSION=5.82
 QT_VERSION=5.15.0
 GITPREFIX="invent:plasma/"
 
@@ -28,7 +28,7 @@ cd tmp-version-update-kf5
 for project in $WORKSPACE; do
   projectrepo=$project
   project=`basename $project`
-  if [ $project != "breeze-grub" ] && [ $project != "plasma-browser-integration" ] && [ $project != "kinfocenter" ]; then
+  if [ $project != "breeze-grub" ] && [ $project != "plasma-browser-integration" ] && [ $project != "kinfocenter" ]  && [ $project != "ksysguard" ]; then
     echo ${project};
     git clone --depth 1 --branch ${BRANCH} ${GITPREFIX}${projectrepo} ${project};
     cd ${project};

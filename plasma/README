@@ -32,9 +32,7 @@ on Monday before beta tar day:
 
 on beta tar day:
  - Add release exceptions array to ./plasma-git-repos and run "./plasma-git-repos -r 5.xx" to update list of things to package in git-repositories-for-release
- - set QT_MIN_VERSION to version agreed at cycle kickoff (except plasma-browser-integration)
- - set KF5_MIN_VERSION to version agreed at cycle kickoff
- - run plasma-update-versions-kf5 to update the above
+ - set QT_VERSION and KF5_VERSION in ./plasma-update-versions-kf5 and run that script to set version agreed at cycle kickoff (make sure to check the exceptions)
 
 on tar day tar:
  update VERSIONS.inc
@@ -51,7 +49,7 @@ on beta tar day branch:
   run ./plasma-branch
   edit ./plasma-update-versions to override versions to set 5.x.80 and run it for master
   Update build.kde.org CI https://community.kde.org/Infrastructure/Continuous_Integration_System#Updating_builds_on_switching_the_.22stable.22_branch
-    Increse kde:kde-build-metadata/logical-module-structure top use new branch Plasma/5.x and build that branch in build.kde.org
+    Increse invent:sysadmin/repo-metadata dependencies/logical-module-structure top use new branch Plasma/5.x and build that branch in build.kde.org
     Trigger build.kde.org to update build setups to latest kde-build-metadata info:
       https://build.kde.org/job/Administration/job/DSL%20Job%20Seed/
     When above has completed start global rebuild

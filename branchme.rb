@@ -51,7 +51,7 @@ def read_release_data
       # 1 = branch
       # 2 = git rev
       project = TagProject.new
-      project.project = Project.from_find(parts[0])[0]
+      project.project = ReleaseMe::Project.from_find(parts[0])[0]
       project.project.vcs.branch = parts[1]
       project.git_rev = parts[2]
       projects << project
@@ -77,7 +77,7 @@ end
 
 tag_projects.each do |tag_project|
   puts "--- #{tag_project.project.identifier} ---"
-  source = Source.new
+  source = ReleaseMe::Source.new
   source.target = 'tmp-branchme'
   source.cleanup
   source.get(tag_project.project.vcs, false)
