@@ -80,5 +80,6 @@ sed 's,="powerdevil",="Powerdevil",' ${FILE} -i
 sed 's,="sddm-kcm",="SDDM KCM",' ${FILE} -i
 sed 's,="systemsettings",="System Settings",' ${FILE} -i
 sed 's,="user-manager",="User Manager",' ${FILE} -i
+sed 's,="plasma-disks",="Plasma Disks",' ${FILE} -i
 
 echo now edit manually  emacs ${FILE}
