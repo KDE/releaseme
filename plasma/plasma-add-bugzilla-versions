@@ -60,6 +60,7 @@ products="\
 
 for PRODUCT in $products; do 
 
+ # Add the new version
  tokenline=`curl -s --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep 'name="token"'`
  if [ -z "$tokenline" ]; then
      echo 'No id="token" line in the bugzilla HTML output'
@@ -74,6 +75,23 @@ for PRODUCT in $products; do
    exit 1
  fi
  echo "=== DONE"
+
+ # Set the old version to inactive
+ tokenline=`curl -s --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=edit&product=khotkeys&version=${OLD_VERSION}" | grep 'name="token"'`
+ if [ -z "$tokenline" ]; then
+     echo 'No id="token" line in the bugzilla HTML output'
+     exit 1
+ fi
+ TOKEN=`echo $tokenline | sed "s,.*value=\",," | sed "s,\".,,"`
+ echo token for inactive setting is: $TOKEN
+
+ curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" --data "version=${OLD_VERSION}&versionold=${OLD_VERSION}&action=update&product=${PRODUCT}&token=${TOKEN}" https://bugs.kde.org/editversions.cgi -o curlpushout2.html
+ if grep -q 'needs a legitimate login and password to continue' curlpushout2.html; then
+   echo "Login failure"
+   exit 1
+ fi
+ echo "=== DONE"
+
 done
 
 echo "opening plasma-nm as example to verify"
