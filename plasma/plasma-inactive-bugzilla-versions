@@ -16,6 +16,20 @@ set -ex
 . VERSIONS.inc
 
 products="\
+    systemsettings \
+    Powerdevil \
+    plasma-nm \
+    Oxygen \
+    ksysguard \
+    KScreen \
+    kwin \
+    ksysguard \
+    kmenuedit \
+    kinfocenter \
+    kde-cli-tools \
+    Breeze \
+    plasmashell \
+    kdeplasma-addons \
     ksshaskpass \
     bluedevil \
     user-manager \

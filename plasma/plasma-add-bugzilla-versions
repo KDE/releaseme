@@ -26,7 +26,6 @@ products="\
     ksysguard \
     kmenuedit \
     kinfocenter \
-    khotkeys \
     kde-cli-tools \
     Breeze \
     plasmashell \
