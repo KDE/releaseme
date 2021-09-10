@@ -16,22 +16,6 @@ set -ex
 . VERSIONS.inc
 
 products="\
-#    systemsettings \
-#    Powerdevil \
-#    plasma-nm \
-#    Oxygen \
-#    ksysguard \
-#    KScreen \
-#    kwin \
-#    kwayland \
-#    ksysguard \
-#    kmenuedit \
-#    kinfocenter \
-#    khotkeys \
-#    kde-cli-tools \
-#    Breeze \
-#    plasmashell \
-#    kdeplasma-addons \
     ksshaskpass \
     bluedevil \
     user-manager \
@@ -238,6 +222,36 @@ for PRODUCT in $products; do
  echo "=== DONE"
 
  done
+
+ # Add the new version
+ tokenline=`curl -s --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep 'name="token"'`
+ if [ -z "$tokenline" ]; then
+     echo 'No id="token" line in the bugzilla HTML output'
+     exit 1
+ fi
+ TOKEN=`echo $tokenline | sed "s,.*value=\",," | sed "s,\".,,"`
+ echo token is: $TOKEN
+
+ curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" --data "version=git-master&action=new&product=${PRODUCT}&token=${TOKEN}" https://bugs.kde.org/editversions.cgi -o curlpushout.html
+ if grep -q 'needs a legitimate login and password to continue' curlpushout.html; then
+   echo "Login failure"
+   exit 1
+ fi
+
+ # Add the new version
+ tokenline=`curl -s --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep 'name="token"'`
+ if [ -z "$tokenline" ]; then
+     echo 'No id="token" line in the bugzilla HTML output'
+     exit 1
+ fi
+ TOKEN=`echo $tokenline | sed "s,.*value=\",," | sed "s,\".,,"`
+ echo token is: $TOKEN
+
+ curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" --data "version=git-stable-Plasma/5.22&action=new&product=${PRODUCT}&token=${TOKEN}" https://bugs.kde.org/editversions.cgi -o curlpushout.html
+ if grep -q 'needs a legitimate login and password to continue' curlpushout.html; then
+   echo "Login failure"
+   exit 1
+ fi
 
 done
 

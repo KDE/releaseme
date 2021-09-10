@@ -60,6 +60,7 @@ on beta tar day branch:
       trigger rebuild of any modules
   ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages and update repo-metadata
   Update https://community.kde.org/Plasma/Live_Images
+  Run ./plasma-active-bugzilla-versions to add the new Git-stable-Plasma/5.xx version (edit the script first)
 
 on tar day prepare:
  run ./plasma-changelog (manually edit file after)
@@ -81,6 +82,7 @@ on release day launch:
  for beta releases also copy announce to 5.x.0 page and poke Paul etc to do a final one then ask for translations
  For .0 update invent:websites/kde-org plasma-desktop.php screenshots/index.php and invent:websites/product-screenshots plasma/plasma.png  for new version
  For .0 update invent:websites/aether-sass /css/kde-org/plasma-desktop.scss and assets/wallpaper.jpg for new wallpaper
+ For .0 release edit and run ./plasma-inactive-bugzilla-versions to set beta .90 version and all previous release versions to inactive
  ./plasma-tag-test to check the tags are really pushed
     or run http://xenon.pangea.pub/job/plasma-releaseme-tags-test/ to check tags are really pushed
 
