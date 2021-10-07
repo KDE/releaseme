@@ -5,15 +5,15 @@
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
 MAJOR_VERSION=5
-VERSION=5.22.5
-SHORT_VERSION=5.22
-OLD_VERSION=5.22.4
+VERSION=5.23.0
+SHORT_VERSION=5.23
+OLD_VERSION=5.22.5
 ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
-BRANCH=Plasma/5.22 # set to master or Plasma/5.x
+BRANCH=Plasma/5.23 # set to master or Plasma/5.x
 
-RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
+RELEASETYPE=feature # for changelog, set to beta, feature or bugfix
 
 INFOCHECKOUT="/home/jr/src/Websites/kde-org/content/info"                   # git@invent.kde.org:websites/kde-org.git
 ANNOUNCECHECKOUT="/home/jr/src/Websites/kde-org/content/announcements"  # git@invent.kde.org:websites/kde-org.git
@@ -22,8 +22,8 @@ WWWCHECKOUT="/home/jr/src/Websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@deino.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 31 August 2021" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2021-08-31" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Thursday, 14 October 2021" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2021-10-14" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 #SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
@@ -36,6 +36,6 @@ VIDEO_VALUE="HdirtBXW8bI" # The video ID used in URL for "youtube" and "peertube
 APPSTREAM_UPDATER="/home/jr/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"
 
 GPG_KEY=EC94D18F7F05997E
-RELEASE_DUDE="Jonathan Riddell"
+RELEASE_DUDE="Jonathan Esk-Riddell"
 
 BROWSER=firefox  # chromium, firefox etc
