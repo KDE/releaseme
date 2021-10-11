@@ -48,6 +48,7 @@ on beta tar day branch:
  on a new 5.x release make branches Plasma/5.x after making the tars:
   run ./plasma-branch
   edit ./plasma-update-versions to override versions to set 5.x.80 and run it for master
+  edit and run ./plasma-update-versions-kf5 to set the min qt and kf5 version
   Update build.kde.org CI https://community.kde.org/Infrastructure/Continuous_Integration_System#Updating_builds_on_switching_the_.22stable.22_branch
     Increse invent:sysadmin/repo-metadata dependencies/logical-module-structure top use new branch Plasma/5.x and build that branch in build.kde.org
     Trigger build.kde.org to update build setups to latest kde-build-metadata info:
