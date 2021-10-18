@@ -8,9 +8,9 @@ LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
 MAJOR_VERSION=5
-VERSION=5.18.7
+VERSION=5.18.8
 SHORT_VERSION=5.18
-OLD_VERSION=5.18.6
+OLD_VERSION=5.18.7
 ORIGIN=lts  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -37,7 +37,7 @@ VIDEO_VALUE="ahEWG4JCA1w" # The video ID used in URL for "youtube" and "peertube
 # command from   git clone invent:sysadmin/appstream-metainfo-release-update
 APPSTREAM_UPDATER="/home/jr/src/appstream-metainfo-release-update/appstream-metainfo-release-update/appstream-metainfo-release-update"
 
-GPG_KEY=EC94D18F7F05997E
-RELEASE_DUDE="Jonathan Riddell"
+GPG_KEY=D7574483BB57B18D
+RELEASE_DUDE="Jonathan Esk-Riddell"
 
 BROWSER=firefox  # chromium, firefox etc
