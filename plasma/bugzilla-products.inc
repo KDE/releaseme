@@ -40,5 +40,6 @@ products="\
     Discover \
     plasma-integration \
     plasma-systemmonitor \
-    kscreenlocker
+    kscreenlocker \
+    xdg-desktop-portal-kde
 "
