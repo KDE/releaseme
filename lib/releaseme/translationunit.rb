@@ -147,7 +147,7 @@ module ReleaseMe
       when Origin::TRUNK, Origin::STABLE
         return 'l10n-kf5'
       when Origin::LTS
-        return url_l10n_dir_lts
+        return 'l10n-kf5-plasma-lts'
       when Origin::TRUNK_KDE4, Origin::STABLE_KDE4
         return 'l10n-kde4'
       end
@@ -161,7 +161,8 @@ module ReleaseMe
     # as we effectively do not know what LTS means for the given product.
     # Since we have no access to higher level data this is derived from i18n_path.
     def url_l10n_dir_lts
-      return 'l10n-kf5-plasma-lts' if i18n_path == 'kde-workspace'
+      puts "XXX i18n_path #{i18n_path}"
+      return 'l10n-kf5-plasma-lts' if i18n_path == 'plasma'
       raise "Unknown lts type for path #{i18n_path}."
     end
 
