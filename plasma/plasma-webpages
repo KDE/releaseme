@@ -53,8 +53,8 @@ system('git', 'commit', '-m', "feat: Add webpage for Plasma #{version}", chdir: 
 
 # And push files :)
 system('git', 'push', chdir: plasma_versions.wwwcheckout)
-system(plasma_versions.browser, "https://kde.org/announcements/plasma/#{major_version}/#{version}/")
-system(plasma_versions.browser, "https://kde.org/info/plasma-#{version}/")
-system(plasma_versions.browser, "https://kde.org/announcements/changelogs/plasma/#{major_version}/#{changelog_file}/")
-system(plasma_versions.browser, "https://binary-factory.kde.org/view/Websites/job/Website_kde-org/")
-puts "Note: Webpages will not appear until draft: true is unset"
+system(plasma_versions.browser, "https://www-staging.kde.org/announcements/plasma/#{major_version}/#{version}/")
+system(plasma_versions.browser, "https://www-staging.kde.org/info/plasma-#{version}/")
+system(plasma_versions.browser, "https://www-staging.kde.org/announcements/changelogs/plasma/#{major_version}/#{changelog_file}/")
+system(plasma_versions.browser, "https://binary-factory.kde.org/view/Websites/job/Website_www-staging-kde-org/")
+puts "Note: Webpages will not appear on kde.org until draft: true is unset"
