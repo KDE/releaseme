@@ -27,8 +27,8 @@ git diff
 git commit -a -m "release plasma ${VERSION}"
 git push
 git checkout master
+git pull
 git merge staging
-git commit -a -m "merge staging"
 git push
 cd -
 

@@ -23,7 +23,7 @@ WORKSPACE=`cat git-repositories-for-release`
 cd tmp-changelog
 for project in $WORKSPACE; do
  echo ${project};
- git clone --reference "/home/jr/src/kde/${project}/kdegit/${project}" invent:plasma/${project};
+ git clone --reference /home/jr/src/*/${project}/kdegit/${project} invent:plasma/${project};
  cd ${project}; git checkout ${BRANCH}; cd ..;
  cd ${project};
  pwd;
