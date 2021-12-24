@@ -27,6 +27,8 @@ module ReleaseMe
       @srcdir = File.expand_path(srcdir)
       @podir = podir_from(@srcdir)
 
+      return if any_target_exists?(srcdir, "#{srcdir}/po", "#{srcdir}/poqm")
+
       langs_with_documentation = []
       langs_without_documentation = []
 

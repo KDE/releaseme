@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2007-2017 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2007-2021 Harald Sitter <sitter@kde.org>
 
 require 'thread'
 
@@ -13,6 +13,9 @@ require_relative 'tmpdir'
 # translations as obtained by {Documentation}.
 module ReleaseMe
   class TranslationUnit < Source
+    class InstallMissingError < StandardError
+    end
+
     # The VCS to use to obtain the l10n sources
     attr_reader :vcs
     # The type of the release (stable,trunk)
@@ -51,6 +54,29 @@ module ReleaseMe
 
       init_repo_url(ENV.fetch('RELEASEME_SVN_REPO_URL',
                               'svn://anonsvn.kde.org/home/kde/'))
+    end
+
+    def any_target_exists?(srcdir, target, qttarget)
+      { target => 'ki18n_install', qttarget => 'ecm_install_po_files_as_qm' }.any? do |dir, pattern|
+        next false unless File.exist?(dir)
+
+        languages = Dir.glob("#{dir}/*").select { |x| File.directory?(x) }.collect { |x| File.basename(x) }
+        @languages += languages
+        log_info "Found existing translations: #{languages.join(', ')}"
+
+        cmake_assert_pattern!(srcdir, subdir: dir, pattern: pattern)
+        true
+      end
+    end
+
+    def cmake_assert_pattern!(srcdir, subdir:, pattern:)
+      cmakelists = "#{srcdir}/CMakeLists.txt"
+      return unless File.exist?(cmakelists)
+      return if CMakeEditor::SubdirMethodCall.new(data: File.read(cmakelists), subdir: File.basename(subdir),
+                                                  method_pattern: pattern).check
+
+      raise InstallMissingError,
+            'Your source contains a po or poqm directory but no suitable install instruction in CMakeLists.txt'
     end
 
     # @return Array<String> list of excluded languages, defaults to

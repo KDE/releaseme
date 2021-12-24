@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2015-2019 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2015-2021 Harald Sitter <sitter@kde.org>
 
 require 'fileutils'
 
@@ -426,6 +426,33 @@ class TestL10n < Testme
     # - l10n._desktop_.po
     # - org.kde.kdirwatch.appdata.po
     # - org.kde.kdirwatch.metainfo.po
+
+    assert(File.read("#{@dir}/CMakeLists.txt").include?('ki18n_install(po)'))
+  end
+
+  def test_po_already_exists
+    # A select few repos already contain the po,qm,docbooks because of new tech that imports them back into
+    # git from svn. Make sure this doesn't blow up.
+
+    l = create_l10n('kcoreaddons', 'kcoreaddons')
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('kcoreaddons'), @dir)
+    FileUtils.mkpath("#{@dir}/po/de")
+    FileUtils.touch("#{@dir}/po/de/kdirwatch.po")
+    assert_raises ReleaseMe::TranslationUnit::InstallMissingError do
+      # Should raise if the cmakelists is malformed
+      l.get(@dir)
+    end
+    # Correct the cmakelists and it should pass
+    File.open("#{@dir}/CMakeLists.txt", 'a') { |f| f.write("ki18n_install(po)\n") }
+    l.get(@dir)
+
+    assert_path_exist("#{@dir}/po")
+    contents = Dir.chdir("#{@dir}/po/de") { Dir.glob("**/**") }
+    assert_equal(%w[kdirwatch.po].sort, contents.sort)
+    # Do only expect kdirwatch.po. We want nothing else!
 
     assert(File.read("#{@dir}/CMakeLists.txt").include?('ki18n_install(po)'))
   end

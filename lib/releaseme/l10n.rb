@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2007-2017 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2007-2021 Harald Sitter <sitter@kde.org>
 
 require 'English'
 require 'fileutils'
@@ -28,12 +28,20 @@ module ReleaseMe
 
     def get(srcdir, target = File.expand_path("#{srcdir}/po"),
             qttarget = File.expand_path("#{target}/../poqm"), edit_cmake: true)
+      languages_without_translation = []
+
+      if any_target_exists?(srcdir, target, qttarget)
+        Dir.chdir(srcdir) do
+          post_process(target, qttarget, false)
+        end
+        return
+      end
+
       Dir.mkdir(target)
       Dir.mkdir(qttarget)
 
       log_info "Downloading translations for #{srcdir}"
 
-      languages_without_translation = []
       # FIXME: due to threading we do explicit pathing, so this probably can go
       Dir.chdir(srcdir) do
         # FIXME: languages_without_translation is super naughty here. it is
@@ -183,8 +191,8 @@ module ReleaseMe
       end
 
       # Remove the empty translations directory
-      Dir.delete(target) unless has_po_translations
-      Dir.delete(qttarget) unless has_qt_translations
+      FileUtils.rm_rf(target) unless has_po_translations
+      FileUtils.rm_rf(qttarget) unless has_qt_translations
     end
 
     def verify_pot(potname)

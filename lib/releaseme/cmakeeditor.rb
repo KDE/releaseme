@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2007-2017 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2007-2021 Harald Sitter <sitter@kde.org>
 
 require 'fileutils'
 require 'pathname'
@@ -19,6 +19,25 @@ module ReleaseMe
         rel = Pathname.new(rel).relative_path_from(Pathname.new(relative_to))
       end
       "add_subdirectory(#{rel})\n"
+    end
+
+    # Checks if a given
+    class SubdirMethodCall
+      attr_reader :data, :subdir, :method_pattern
+
+      def initialize(data:, subdir:, method_pattern:)
+        @data = data
+        @subdir = subdir
+        @method_pattern = method_pattern
+      end
+
+      def check
+        data =~ method_call_regex_of(method_pattern)
+      end
+
+      def method_call_regex_of(method_pattern)
+        /^\s*(#{method_pattern})\s*\(\s*#{subdir}\s*\).*$/i
+      end
     end
 
     # Base class for cmake editor implementations.
@@ -75,11 +94,7 @@ module ReleaseMe
 
       # Checks if data contains a cmake method call with subdir as argument
       def subdir_method_call?(method_pattern)
-        data =~ method_call_regex_of(method_pattern)
-      end
-
-      def method_call_regex_of(method_pattern)
-        /^\s*(#{method_pattern})\s*\(\s*#{subdir}\s*\).*$/i
+        SubdirMethodCall.new(data: data, subdir: subdir, method_pattern: method_pattern).check
       end
 
       def skip?
