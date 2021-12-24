@@ -84,13 +84,6 @@ class TestTranslationUnit < Testme
     assert_equal(l.vcs.repository, 'file://a/branches/stable/l10n-kf5/')
   end
 
-  # LTS translations should be used but only for Plasma repos
-  def test_0_repo_url_init_lts
-    assert_raises do
-      create_lts
-    end
-  end
-
   def test_0_repo_url_init_lts_plasma
     l = create_lts_plasma
     assert_equal(ReleaseMe::TranslationUnit::LTS, l.type)
