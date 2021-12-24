@@ -27,8 +27,6 @@ module ReleaseMe
       @srcdir = File.expand_path(srcdir)
       @podir = podir_from(@srcdir)
 
-      return if any_target_exists?(srcdir, "#{srcdir}/po", "#{srcdir}/poqm")
-
       langs_with_documentation = []
       langs_without_documentation = []
 
@@ -123,11 +121,14 @@ Skipping documentation :(
     end
 
     def get_language(language, tmpdir)
+      target_dir = "#{@podir}/#{language}/docs"
+      return true if File.exist?(target_dir) # already exists in git
+
       @vcs.get(tmpdir, "#{language}/docs/#{@i18n_path}")
 
       selection = (find_all_docs(tmpdir) + find_all_manpages(tmpdir)).uniq
       selection.each do |d|
-        dest = "#{@podir}/#{language}/docs/#{File.dirname(d)}"
+        dest = "#{target_dir}/#{File.dirname(d)}"
         FileUtils.mkpath(dest)
         FileUtils.cp_r("#{tmpdir}/#{d}", dest)
       end
