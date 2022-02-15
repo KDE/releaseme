@@ -5,15 +5,15 @@
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
 MAJOR_VERSION=5
-VERSION=5.24.0
+VERSION=5.24.1
 SHORT_VERSION=5.24
-OLD_VERSION=5.23.5
+OLD_VERSION=5.24.1
 ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
 BRANCH=Plasma/5.24 # set to master or Plasma/5.x
 
-RELEASETYPE=feature # for changelog, set to beta, feature or bugfix
+RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
 
 INFOCHECKOUT="/home/jr/src/websites/kde-org/content/info"                   # git@invent.kde.org:websites/kde-org.git
 ANNOUNCECHECKOUT="/home/jr/src/websites/kde-org/content/announcements"  # git@invent.kde.org:websites/kde-org.git
@@ -22,8 +22,8 @@ WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@deino.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 08 February 2022" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2022-02-08" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Tuesday, 15 February 2022" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2022-02-15" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 #SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
