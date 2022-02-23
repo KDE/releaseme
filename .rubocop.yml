@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2017-2020 Harald Sitter <sitter@kde.org>
 
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.6
   NewCops: enable
 
 Layout/HeredocIndentation:

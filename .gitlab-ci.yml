@@ -34,16 +34,6 @@ reuse:
   script:
     - reuse lint
 
-test:2.4:
-  image: ruby:2.4
-  script:
-    - rake test
-
-test:2.5:
-  image: ruby:2.5
-  script:
-    - rake test
-
 test:2.6:
   image: ruby:2.6
   script:
@@ -56,5 +46,10 @@ test:2.7:
 
 test:3.0:
   image: ruby:3.0
+  script:
+    - rake test
+
+test:3.1:
+  image: ruby:3.1
   script:
     - rake test
