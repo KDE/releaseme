@@ -3,6 +3,8 @@
 
 require 'delegate'
 
+#encoding: utf-8
+
 module ReleaseMe
   # Wraps around an asset file (pofile, script, whathaveyou) to allow
   # streamlined handling of files.
