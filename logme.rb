@@ -3,10 +3,27 @@
 # SPDX-FileCopyrightText: 2015 Harald Sitter <sitter@kde.org>
 
 require 'erb'
+require 'ostruct'
+require 'optparse'
 require 'tmpdir'
 
 require_relative 'lib/releaseme/project'
 require_relative 'lib/releaseme/source'
+
+options = OpenStruct.new
+OptionParser.new do |opts|
+  opts.banner = 'Usage: logme.rb [options]'
+
+  opts.separator 'Saving change log based on previous tag as html <ul> fragment in <project>.html'
+  opts.separator ''
+
+  opts.on('--ancestor TAG', 'Specify ancestor tag.',
+          'logme.rb currently requires to be called before tagme.rb. ' \
+          'To avoid getting an empty changelog in the other case,' \
+          ' the ancestor tag can be specified with this parameter.') do |v|
+    options[:ancestor] = v
+  end
+end.parse!
 
 class LogHtmlFormatter
   class EntryHtmlFormatter
@@ -42,8 +59,13 @@ class Log
   attr_reader :entries
 
   # FIXME: shit name
-  def parse(rev)
-    ancestor = `git describe --abbrev=0 --tags`.strip
+  def parse(rev, options)
+    if options[:ancestor].nil?
+        ancestor = `git describe --abbrev=0 --tags`.strip
+    else
+        ancestor = options.ancestor
+    end
+    puts "using ancestor tag '#{ancestor}'"
     lines = `git log #{ancestor}..#{rev} --oneline --no-merges`
     lines = lines.split($/).collect(&:strip)
     @entries = []
@@ -95,7 +117,7 @@ projects.each do | project |
     source.cleanup
     source.get(project.project.vcs, false)
     Dir.chdir(tmpdir) do
-      log = Log.new.parse(project.git_rev)
+      log = Log.new.parse(project.git_rev, options)
       html = LogHtmlFormatter.format(log)
       File.write(File.join(output_dir, "#{project.project.identifier}.html"),
                  html)
