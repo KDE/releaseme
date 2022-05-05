@@ -20,6 +20,9 @@ V_524_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-activ
 V_525_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard)
 releases = {"5.18" => V_518lts_exclusions, "5.19" => V_519_exclusions, "5.20" => V_520_exclusions, "5.21" => V_521_exclusions, "5.22" => V_522_exclusions, "5.23" => V_523_exclusions, "5.24" => V_524_exclusions, "5.25" => V_525_exclusions}
 
+V_525_additions = %w(plasma-remotecontrol)
+release_additions = {"5.25" => V_525_additions}
+
 options = {}
 OptionParser.new do |parser|
   parser.banner = "Usage: plasma-git-repos -r 5.19"
@@ -48,6 +51,11 @@ exclusions = releases[options[:release]]
 release_projects = plasma_projects.select do |plasma_project|
   not exclusions.include?(plasma_project)
 end
+
+if release_additions.key?(options[:release])
+  release_projects = release_projects + release_additions[options[:release]]
+end
+
 
 FileUtils.move("git-repositories-for-release", "git-repositories-for-release-old")
 File.open("git-repositories-for-release", 'w') do |f|
