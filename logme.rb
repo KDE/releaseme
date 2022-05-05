@@ -73,7 +73,7 @@ class Log
       # TODO: Move filter into entry init?
       entry = Entry.new(line)
       next if entry.subject.downcase.include?('update version number')
-      next if entry.subject.include?('SVN_SILENT')
+      next if entry.subject.include?('_SILENT')
       entries << entry
     end
     self
