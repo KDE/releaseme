@@ -7,11 +7,11 @@
 MAJOR_VERSION=5
 VERSION=5.24.90
 SHORT_VERSION=5.25
-OLD_VERSION=5.25.5
+OLD_VERSION=5.24.5
 ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=unstable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
-BRANCH=Plasma/5.25 # set to master or Plasma/5.x
+BRANCH=master # set to master or Plasma/5.x
 
 RELEASETYPE=beta # for changelog, set to beta, feature or bugfix
 

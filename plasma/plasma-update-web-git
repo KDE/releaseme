@@ -18,7 +18,7 @@ git pull
 
 git checkout staging
 git pull
-git merge master
+git rebase master
 git commit -a -m 'merge master'
 git push
 echo "> staging now is up to date with master"

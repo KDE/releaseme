@@ -45,7 +45,7 @@ git-master
  done
 
  # Add the new version
- tokenline=`curl -s --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep 'name="token"'`
+ tokenline=`curl -s --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=drkonqi" | grep 'name="token"'`
  if [ -z "$tokenline" ]; then
      echo 'No id="token" line in the bugzilla HTML output'
      exit 1
@@ -60,7 +60,7 @@ git-master
  fi
 
  # Add the new version
- tokenline=`curl -s --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep 'name="token"'`
+ tokenline=`curl -s --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=drkonqi" | grep 'name="token"'`
  if [ -z "$tokenline" ]; then
      echo 'No id="token" line in the bugzilla HTML output'
      exit 1
