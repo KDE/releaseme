@@ -28,7 +28,7 @@ git commit -a -m "release plasma ${VERSION}"
 git push
 git checkout master
 git pull
-git merge staging
+git merge work/staging
 git push
 cd -
 
