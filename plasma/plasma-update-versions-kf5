@@ -16,8 +16,8 @@ set -xe
 
 # echo for updating version in master after branch override versions here
 # VERSION=5.23.0
-KF5_VERSION=5.86
-QT_VERSION=5.15.0
+KF5_VERSION=5.94
+QT_VERSION=5.15.2
 GITPREFIX="invent:plasma/"
 
 WORKSPACE=`cat git-repositories-for-release`
