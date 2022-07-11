@@ -1,1 +1,1 @@
-VERSIONS-normal.inc
+VERSIONS-lts.inc
