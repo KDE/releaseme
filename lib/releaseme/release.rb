@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2007-2021 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2007-2022 Harald Sitter <sitter@kde.org>
 
 require_relative 'archive_signer'
 require_relative 'documentation'
+require_relative 'gitlab'
 require_relative 'hash_template'
-require_relative 'jenkins'
 require_relative 'l10n'
 require_relative 'logable'
 require_relative 'source'
@@ -140,31 +140,31 @@ module ReleaseMe
       uri
     end
 
-    def warn_job_state(job)
+    def warn_job_state(pipeline)
       log_warn format(
-        if job.building?
-          'build.kde.org: %s is still building %s'
+        if %w[failed canceled skipped].none? { |x| x == pipeline['status'] }
+          'invent.kde.org: pipeline %s is still building [%s]'
         else
-          'build.kde.org: %s is not of sufficient quality %s'
-        end, job.display_name, job.url
+          'invent.kde.org: pipeline %s is not of sufficient quality [%s]'
+        end, pipeline['id'], pipeline['status']
       )
     end
 
     def check_ci!
-      jobs = Jenkins::Job.from_name_and_branch(project.identifier,
-                                               project.vcs.branch)
-      jobs.select! do |job|
-        next false if job.sufficient_quality?
-        warn_job_state(job)
-        true
+      GitLab::Pipeline.each_from_repository_and_branch(project.vcs.repository, project.vcs.branch) do |pipeline|
+        auto_continue = pipeline['status'] == 'success'
+        break if auto_continue
+
+        warn_job_state(pipeline)
+        continue?
+        break
       end
-      continue?(jobs)
     end
 
-    def continue?(jobs)
-      return if jobs.empty?
+    def continue?
       loop do
-        puts 'Continue despite unexpected job states? [y/n]' unless shutup?
+        ARGV.clear
+        puts 'Continue despite unexpected pipeline states? [y/n]' unless shutup?
         case gets.strip
         when 'y'
           break

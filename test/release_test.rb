@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2011-2021 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2011-2022 Harald Sitter <sitter@kde.org>
 
 require_relative 'lib/testme'
 
@@ -47,8 +47,12 @@ class TestRelease < Testme
 
     setup_repo_content
 
-    stub_request(:get, 'https://build.kde.org/api/json?tree=jobs%5Bname,url%5D,views%5Bname%5D')
-      .to_return(body: JSON.generate(jobs: []))
+    stub_request(:get, %r{https://invent.kde.org/api/v4/projects/.+/pipelines\?page=0&ref=master})
+      .to_return(body: <<~JSON)
+        [
+          {"id":209072,"iid":140,"project_id":2823,"sha":"79e4a8166394efcb772eea55cab871c37e239231","ref":"master","status":"success","source":"push","created_at":"2022-07-25T23:46:53.398Z","updated_at":"2022-07-25T23:47:36.958Z","web_url":"https://invent.kde.org/utilities/yakuake/-/pipelines/209072"}
+        ]
+      JSON
     WebMock.enable!
 
     # Disable all SVN nonesense so we don't hit live servers.
@@ -146,24 +150,12 @@ class TestRelease < Testme
     # too complex it will be better to moch the objects themself. Moddelling
     # the http interaction litters a lot.
 
-    stub_request(:get, 'https://build.kde.org/api/json?tree=jobs%5Bname,url%5D,views%5Bname%5D')
-      .to_return(body: JSON.generate(
-        jobs: [
-          {
-            name: 'clone master kf5-qt5',
-            url: 'https://build.kde.org/job/clone/'
-          }
+    stub_request(:get, %r{https://invent.kde.org/api/v4/projects/.+/pipelines\?page=0&ref=master})
+      .to_return(body: <<~JSON)
+        [
+          {"id":209072,"iid":140,"project_id":2823,"sha":"79e4a8166394efcb772eea55cab871c37e239231","ref":"master","status":"success","source":"push","created_at":"2022-07-25T23:46:53.398Z","updated_at":"2022-07-25T23:47:36.958Z","web_url":"https://invent.kde.org/utilities/yakuake/-/pipelines/209072"}
         ]
-      ))
-
-    stub_request(:get, 'https://build.kde.org/job/clone/lastBuild/api/json')
-      .to_return(body: JSON.generate(id: 17))
-    stub_request(:get, 'https://build.kde.org/job/clone/lastSuccessfulBuild/api/json')
-      .to_return(body: JSON.generate(id: 17))
-    stub_request(:get, 'https://build.kde.org/job/clone/lastStableBuild/api/json')
-      .to_return(body: JSON.generate(id: 17))
-    stub_request(:get, 'https://build.kde.org/job/clone/lastCompletedBuild/api/json')
-      .to_return(body: JSON.generate(id: 17))
+      JSON
 
     data = {
       identifier: 'clone',
@@ -183,43 +175,13 @@ class TestRelease < Testme
     # too complex it will be better to moch the objects themself. Moddelling
     # the http interaction litters a lot.
 
-    stub_request(:get, 'https://build.kde.org/api/json?tree=jobs%5Bname,url%5D,views%5Bname%5D')
-      .to_return(body: JSON.generate(
-        jobs: [
-          {
-            name: 'clone master kf5-qt5',
-            url: 'https://build.kde.org/job/clone/'
-          },
-          {
-            name: 'clone master kf5-qt5-kitten',
-            url: 'https://build.kde.org/job/clone2/'
-          }
+    stub_request(:get, %r{https://invent.kde.org/api/v4/projects/.+/pipelines\?page=0&ref=master})
+      .to_return(body: <<~JSON)
+        [
+          {"id":210853,"iid":141,"project_id":2823,"sha":"ad9819d56839ba0380fafad97d2ca043f9424b59","ref":"master","status":"pending","source":"push","created_at":"2022-07-31T01:53:32.240Z","updated_at":"2022-07-31T01:53:32.240Z","web_url":"https://invent.kde.org/utilities/yakuake/-/pipelines/210853"},
+          {"id":210853,"iid":141,"project_id":2823,"sha":"ad9819d56839ba0380fafad97d2ca043f9424b59","ref":"master","status":"failed","source":"push","created_at":"2022-07-31T01:53:32.240Z","updated_at":"2022-07-31T01:53:32.240Z","web_url":"https://invent.kde.org/utilities/yakuake/-/pipelines/210853"}
         ]
-      ))
-
-    # clone is still building
-    stub_request(:get, 'https://build.kde.org/job/clone/api/json')
-      .to_return(body: JSON.generate(displayName: 'clone'))
-    stub_request(:get, 'https://build.kde.org/job/clone/lastBuild/api/json')
-      .to_return(body: JSON.generate(id: 17))
-    stub_request(:get, 'https://build.kde.org/job/clone/lastSuccessfulBuild/api/json')
-      .to_return(body: JSON.generate(id: 16))
-    stub_request(:get, 'https://build.kde.org/job/clone/lastStableBuild/api/json')
-      .to_return(body: JSON.generate(id: 16))
-    stub_request(:get, 'https://build.kde.org/job/clone/lastCompletedBuild/api/json')
-      .to_return(body: JSON.generate(id: 16))
-
-    # clone2 has bad quality
-    stub_request(:get, 'https://build.kde.org/job/clone2/api/json')
-      .to_return(body: JSON.generate(displayName: 'clone2'))
-    stub_request(:get, 'https://build.kde.org/job/clone2/lastBuild/api/json')
-      .to_return(body: JSON.generate(id: 16))
-    stub_request(:get, 'https://build.kde.org/job/clone2/lastSuccessfulBuild/api/json')
-      .to_return(body: JSON.generate(id: 15))
-    stub_request(:get, 'https://build.kde.org/job/clone2/lastStableBuild/api/json')
-      .to_return(body: JSON.generate(id: 15))
-    stub_request(:get, 'https://build.kde.org/job/clone2/lastCompletedBuild/api/json')
-      .to_return(body: JSON.generate(id: 16))
+      JSON
 
     data = {
       identifier: 'clone',
