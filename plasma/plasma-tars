@@ -21,9 +21,9 @@ echo "making tars for $WORKSPACE"
 for project in $WORKSPACE; do
   echo ${project}
   if [ $project = "plasma-mediacenter" ]; then
-    ../../tarme.rb --origin ${ORIGIN} --version $VERSION --from-config plasma-mediacenter
+    yes | ../../tarme.rb --origin ${ORIGIN} --version $VERSION --from-config plasma-mediacenter
   else
-    ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${project}
+    yes | ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${project}
   fi
   cat release_data >> $VERSION-release-data
 done

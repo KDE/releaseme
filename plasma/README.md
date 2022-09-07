@@ -22,6 +22,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 ## On Beta day (setting versions)
  - Add release exceptions array to ./plasma-git-repos and run "./plasma-git-repos -r 5.xx" to update list of things to package in git-repositories-for-release
  - set QT_VERSION and KF5_VERSION in ./plasma-update-versions-kf5 and run that script to set version agreed at cycle kickoff (make sure to check the exceptions)
+ - Edit plasma-bugzilla-versions to add a new version git-stable-Plasma/5.xx
 
 ## On Tar days (making tars)
  - update VERSIONS.inc
@@ -71,7 +72,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - for beta releases also copy announce to 5.x.0 page and poke Paul etc to do a final one then ask for translations
  - For .0 update invent:websites/kde-org plasma-desktop.php screenshots/index.php and invent:websites/product-screenshots plasma/plasma.png  for new version
  - For .0 update invent:websites/aether-sass /css/kde-org/plasma-desktop.scss and assets/wallpaper.jpg for new wallpaper
- - For .0 release edit and run ./plasma-inactive-bugzilla-versions to set beta .90 version and all previous release versions to inactive
+ - For LTS .0 release edit and run ./plasma-bugzilla-versions to set beta .90 version and versions prior to the old old LTS release to inactive (we like to allow people to select the version they are using so if in doubt keep it enabled)
 
  - (tell a KDE neon person to update forks/base-files and neon/settings (release-lts only) to show new version before running 'jenking_retry -p' and making ISOs and Docker)
 
