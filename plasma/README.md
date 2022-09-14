@@ -22,7 +22,8 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 ## On Beta day (setting versions)
  - Add release exceptions array to ./plasma-git-repos and run "./plasma-git-repos -r 5.xx" to update list of things to package in git-repositories-for-release
  - set QT_VERSION and KF5_VERSION in ./plasma-update-versions-kf5 and run that script to set version agreed at cycle kickoff (make sure to check the exceptions)
- - Edit plasma-bugzilla-versions to add a new version git-stable-Plasma/5.xx
+ - Edit and run plasma-bugzilla-versions to add a new version git-stable-Plasma/5.xx
+ - Update bug closing bot versions at https://invent.kde.org/sysadmin/bugzilla-bot/-/blob/master/data/versions.yml
 
 ## On Tar days (making tars)
  - update VERSIONS.inc
@@ -49,7 +50,6 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
   - once done trigger "Global Rebuild Plasma stable*" builds, which will first update dependencies to latest needs and then trigger rebuild of any modules
   - ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages and update repo-metadata
   - Update https://community.kde.org/Plasma/Live_Images
-  - Edit and run ./plasma-active-bugzilla-versions to add the new Git-stable-Plasma/5.xx version
 
 ## On tar day (prepare)
  - run ./plasma-changelog (manually edit file after)
@@ -70,6 +70,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - check if www/images/teaser teaser image needs an update
  - for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
  - for beta releases also copy announce to 5.x.0 page and poke Paul etc to do a final one then ask for translations
+ - For .0 update bug closing bot versions at https://invent.kde.org/sysadmin/bugzilla-bot/-/blob/master/data/versions.yml
  - For .0 update invent:websites/kde-org plasma-desktop.php screenshots/index.php and invent:websites/product-screenshots plasma/plasma.png  for new version
  - For .0 update invent:websites/aether-sass /css/kde-org/plasma-desktop.scss and assets/wallpaper.jpg for new wallpaper
  - For LTS .0 release edit and run ./plasma-bugzilla-versions to set beta .90 version and versions prior to the old old LTS release to inactive (we like to allow people to select the version they are using so if in doubt keep it enabled)
