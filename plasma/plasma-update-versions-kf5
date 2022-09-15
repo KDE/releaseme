@@ -16,9 +16,9 @@ set -xe
 
 # echo for updating version in master after branch override versions here
 # VERSION=5.23.0
-KF5_VERSION=5.94
+KF5_VERSION=5.98.0
 QT_VERSION=5.15.2
-GITPREFIX="invent:plasma/"
+GITPREFIX="invent:"
 
 WORKSPACE=`cat git-repositories-for-release`
 echo "updating versions for $WORKSPACE"
@@ -30,7 +30,7 @@ for project in $WORKSPACE; do
   project=`basename $project`
   if [ $project != "breeze-grub" ] && [ $project != "plasma-browser-integration" ] && [ $project != "kinfocenter" ]  && [ $project != "ksysguard" ]; then
     echo ${project};
-    git clone --depth 1 --branch ${BRANCH} ${GITPREFIX}${projectrepo} ${project};
+    git clone --depth 1 --branch ${BRANCH} ${GITPREFIX}/plasma/${projectrepo} ${project} ||     git clone --depth 1 --branch ${BRANCH} ${GITPREFIX}/plasma-bigscreen/${projectrepo} ${project};
     cd ${project};
     pwd;
     sed -i "s,KF5_MIN_VERSION \".*\",KF5_MIN_VERSION \"${KF5_VERSION}\"," CMakeLists.txt;
