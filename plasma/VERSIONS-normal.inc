@@ -8,8 +8,8 @@ MAJOR_VERSION=5
 VERSION=5.26.0
 SHORT_VERSION=5.26
 OLD_VERSION=5.25.5
-ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts
-FTPSTABLE=unstable  # set to unstable or stable
+ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
+FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release for changelog
 BRANCH=master # set to master or Plasma/5.x
 
