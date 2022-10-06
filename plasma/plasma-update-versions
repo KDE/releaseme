@@ -15,7 +15,7 @@ ls
 . ./VERSIONS.inc
 
 # echo for updating version in master after branch override versions here
-VERSION=5.26.80
+#VERSION=5.26.80
 
 WORKSPACE=`cat git-repositories-for-release`
 echo "updating versions for $WORKSPACE"

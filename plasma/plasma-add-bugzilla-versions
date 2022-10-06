@@ -15,7 +15,7 @@ set -ex
 
 . VERSIONS.inc
 
-#VERSION="master"
+VERSION="git-stable-Plasma/5.26"
 
 . bugzilla-products.inc
 

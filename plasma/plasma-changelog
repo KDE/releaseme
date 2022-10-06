@@ -22,7 +22,7 @@ mkdir tmp-changelog
 WORKSPACE=`cat git-repositories-for-release`
 cd tmp-changelog
 for project in $WORKSPACE; do
- if [ $project == "plasma-remotecontrollers" ]; then
+ if [ $project == "plasma-remotecontrollers" ] || [ $project == "aura-browser" ] || [ $project == "plank-player" ] ; then
    GITPREFIX="invent:plasma-bigscreen/"
  else
    GITPREFIX="invent:plasma/"
@@ -86,5 +86,9 @@ sed 's,="sddm-kcm",="SDDM KCM",' ${FILE} -i
 sed 's,="systemsettings",="System Settings",' ${FILE} -i
 sed 's,="user-manager",="User Manager",' ${FILE} -i
 sed 's,="plasma-disks",="Plasma Disks",' ${FILE} -i
+sed 's,="plasma-bigscreen",="Plasma Bigscreen",' ${FILE} -i
+sed 's,="aura-browser",="Aura Browser",' ${FILE} -i
+sed 's,="plank-player",="Plank Player",' ${FILE} -i
+sed 's,="plasma-remotecontrollers",="Plasma Remotecontrollers",' ${FILE} -i
 
 echo now edit manually  emacs ${FILE}
