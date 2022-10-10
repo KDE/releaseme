@@ -174,16 +174,6 @@ module ReleaseMe
       if has_qt_translations
         final_target = qttarget # Can get modified.
 
-        unless has_po_translations
-          log_info 'Found Qt translations, but no Gettext translations.' \
-                   ' Storing Qt translations in po/ dir.'
-          FileUtils.rm_r(target)
-          FileUtils.mv(qttarget, target)
-          # Prevent us from getting deleted in the new target.
-          has_po_translations = has_qt_translations
-          final_target = target
-        end
-
         if edit_cmake
           # Update $srcdir/CMakeLists.txt
           CMakeEditor.append_poqm_install_instructions!(final_target)

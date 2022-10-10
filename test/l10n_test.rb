@@ -340,27 +340,6 @@ class TestL10n < Testme
     assert(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(poqm)'))
   end
 
-  def test_poqm_frameworks_movery
-    # In frameworks po/ is used in place of poqm/ when a source uses Qt
-    # translations exclusively. I couldn't actually find an example of
-    # frameworks using both, but I'd like to think that it would be consistent
-    # with how applications handle it: po/ and poqm/.
-
-    l = create_l10n('solid', 'solid')
-    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
-
-    FileUtils.rm_rf(@dir)
-    FileUtils.cp_r(data('multi-pot-qt-frameworks'), @dir)
-    l.get(@dir)
-
-    assert_path_exist("#{@dir}/po")
-    assert_path_exist("#{@dir}/po/de/solid_qt.po")
-    refute_path_exist("#{@dir}/poqm")
-
-    assert(File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(po)'))
-    assert(!File.read("#{@dir}/CMakeLists.txt").include?('ecm_install_po_files_as_qm(poqm)'))
-  end
-
   def test_drop_worthless_po
     # When a translations has 0 strings translated there is no point in shipping
     # it, we'll drop it (including data and assets because we can't qualify
@@ -376,8 +355,8 @@ class TestL10n < Testme
 
     assert_equal(%w[sr], l.zero_percent_dropped)
 
-    assert_path_exist("#{@dir}/po")
-    refute_path_exist("#{@dir}/po/sr/")
+    assert_path_exist("#{@dir}/poqm")
+    refute_path_exist("#{@dir}/poqm/sr/")
   end
 
   def test_pot_with_pot_in_name
