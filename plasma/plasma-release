@@ -8,6 +8,29 @@ set -xe
 
 . VERSIONS.inc
 
+#sudo apt install w3m
+
+ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
+
+# remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
+
+sed -i "s/draft: true/draft: false/" ${ANNOUNCECHECKOUT}/plasma/${MAJOR_VERSION}/${VERSION}.md
+sed -i "s/draft: true/draft: false/" ${INFOCHECKOUT}/plasma-${VERSION}.md
+
+# www/index.php
+# Updating www/index.php got ported to Ruby
+#./plasma-release-webpages
+
+# commit to git
+cd ${WWWCHECKOUT}
+git diff
+git commit -a -m "release plasma ${VERSION}"
+git push
+git checkout master
+git pull
+git merge work/staging
+git push
+cd -
 
 # copy announce over to Dot for publishing
 
