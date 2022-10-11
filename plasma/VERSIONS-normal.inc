@@ -11,7 +11,7 @@ OLD_VERSION=5.25.5
 ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release for changelog
-BRANCH=master # set to master or Plasma/5.x
+BRANCH=Plasma/5.26 # set to master or Plasma/5.x
 
 RELEASETYPE=feature # for changelog, set to beta, feature or bugfix
 
