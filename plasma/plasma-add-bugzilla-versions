@@ -14,8 +14,7 @@ set -ex
 . bugzilla-cookies.inc
 
 . VERSIONS.inc
-
-VERSION="git-stable-Plasma/5.26"
+#VERSION="git-stable-Plasma/5.26"
 
 . bugzilla-products.inc
 

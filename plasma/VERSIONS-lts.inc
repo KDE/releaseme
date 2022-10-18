@@ -8,9 +8,9 @@ LANGUAGE=en
 LC_ALL=en_GB.UTF-8
 
 MAJOR_VERSION=5
-VERSION=5.24.6
+VERSION=5.24.7
 SHORT_VERSION=5.24
-OLD_VERSION=5.24.5
+OLD_VERSION=5.24.6
 ORIGIN=lts  # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release
@@ -25,8 +25,8 @@ WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@deino.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Monday, 11 July 2022" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2022-07-11" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Friday, 14 October 2022" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2022-10-14" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER_URL=http://embra.edinburghlinux.co.uk/~jr/tmp # URL to view this
