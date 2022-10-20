@@ -57,7 +57,7 @@ module ReleaseMe
     end
 
     def any_target_exists?(srcdir, target, qttarget)
-      { target => 'ki18n_install', qttarget => 'ecm_install_po_files_as_qm', doctoolstarget => 'kdoctools_install' }.any? do |dir, pattern|
+      { target => '(ki18n_install|kdoctools_install)', qttarget => 'ecm_install_po_files_as_qm' }.any? do |dir, pattern|
         next false unless File.exist?(dir)
 
         languages = Dir.glob("#{dir}/*").select { |x| File.directory?(x) }.collect { |x| File.basename(x) }

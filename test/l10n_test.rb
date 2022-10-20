@@ -456,9 +456,9 @@ class TestL10n < Testme
 
     assert_path_exist("#{@dir}/po")
     contents = Dir.chdir("#{@dir}/po/de") { Dir.glob("**/**") }
-    assert_equal(%w[man-kded5.8.docbook].sort, contents.sort)
+    assert_equal(%w[docs docs/kded5 docs/kded5/man-kded5.8.docbook].sort, contents.sort)
     # Do only expect man-kded5.8.docbook. We want nothing else!
 
     assert(File.read("#{@dir}/CMakeLists.txt").include?('kdoctools_install(po)'))
-  end  
+  end
 end
