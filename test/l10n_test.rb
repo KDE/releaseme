@@ -435,4 +435,30 @@ class TestL10n < Testme
 
     assert(File.read("#{@dir}/CMakeLists.txt").include?('ki18n_install(po)'))
   end
+
+  # kded only has manpages to translate, do not fail on this
+  def test_manpages_already_exists
+    # A select few repos already contain the po,qm,docbooks because of new tech that imports them back into
+    # git from svn. Make sure this doesn't blow up.
+
+    l = create_l10n('kded', 'kded')
+    l.init_repo_url("file:///#{Dir.pwd}/#{@svn_template_dir}")
+
+    FileUtils.rm_rf(@dir)
+    FileUtils.cp_r(data('kded'), @dir)
+    assert_raises ReleaseMe::TranslationUnit::InstallMissingError do
+      # Should raise if the cmakelists is malformed
+      l.get(@dir)
+    end
+    # Correct the cmakelists and it should pass
+    File.open("#{@dir}/CMakeLists.txt", 'a') { |f| f.write("kdoctools_install(po)\n") }
+    l.get(@dir)
+
+    assert_path_exist("#{@dir}/po")
+    contents = Dir.chdir("#{@dir}/po/de") { Dir.glob("**/**") }
+    assert_equal(%w[man-kded5.8.docbook].sort, contents.sort)
+    # Do only expect man-kded5.8.docbook. We want nothing else!
+
+    assert(File.read("#{@dir}/CMakeLists.txt").include?('kdoctools_install(po)'))
+  end  
 end
