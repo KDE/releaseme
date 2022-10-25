@@ -5,9 +5,9 @@
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
 MAJOR_VERSION=5
-VERSION=5.26.1
+VERSION=5.26.2
 SHORT_VERSION=5.26
-OLD_VERSION=5.26.0
+OLD_VERSION=5.26.1
 ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release for changelog
@@ -22,8 +22,8 @@ WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@deino.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 18 October 2022" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2022-10-18" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Tuesday, 25 October 2022" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2022-10-25" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 #SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
