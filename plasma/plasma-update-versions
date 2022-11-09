@@ -24,11 +24,8 @@ rm -rf tmp-version-update
 mkdir tmp-version-update
 cd tmp-version-update
 for project in $WORKSPACE; do
-  if [ $project == "plasma-remotecontrollers" ] || [ $project == "aura-browser" ] || [ $project == "plank-player" ] ; then
-    GITPREFIX="invent:plasma-bigscreen/"
-  else
-    GITPREFIX="invent:plasma/"
-  fi
+  INVENT_PATH=$(../lib/kde_identify.rb $project)
+  GITPREFIX="invent:${INVENT_PATH}/"
   projectrepo=$project
   project=`basename $project`
   if [ $project != "breeze-grub" ]; then
