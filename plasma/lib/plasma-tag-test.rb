@@ -4,6 +4,8 @@
 
 require_relative 'plasma_version'
 require 'git'
+require 'json'
+require 'httparty'
 
 # check the tag has been pushed
 class PlasmaTagTest
@@ -23,7 +25,8 @@ class PlasmaTagTest
   def check_tags
     missing_tags = []
     repos.each do |repo|
-      tag_refs = Git.ls_remote("invent:plasma/#{repo}")['tags']["v#{@version}"]
+      path = get_kde_category(repo)
+      tag_refs = Git.ls_remote("invent:#{path}/#{repo}")['tags']["v#{@version}"]
       missing_tags.push(repo) if tag_refs == nil
       puts "Repo #{repo} has tag v#{@version}" if tag_refs != nil
       puts "Not found tag v#{@version} in #{repo}" if tag_refs == nil
@@ -33,5 +36,17 @@ class PlasmaTagTest
     else
       puts 'All good!'
     end
+  end
+
+  def get_kde_category(project)
+    # download https://projects.kde.org/api/v1/identifier/#{project}
+    response = HTTParty.get("https://projects.kde.org/api/v1/identifier/#{project}")
+    # parse json
+    identifier_json = JSON.parse(response.body)
+    # get result['path']
+    path = identifier_json['path']
+    # return split ('/')[0]
+    result = path.split('/')
+    result[0]
   end
 end
