@@ -22,11 +22,8 @@ mkdir tmp-changelog
 WORKSPACE=`cat git-repositories-for-release`
 cd tmp-changelog
 for project in $WORKSPACE; do
- if [ $project == "plasma-remotecontrollers" ] || [ $project == "aura-browser" ] || [ $project == "plank-player" ] ; then
-   GITPREFIX="invent:plasma-bigscreen/"
- else
-   GITPREFIX="invent:plasma/"
- fi
+ INVENT_PATH=$(../lib/kde_identify.rb $project)
+ GITPREFIX="invent:${INVENT_PATH}/"
  echo ${project};
  git clone --reference /home/jr/src/*/${project}/kdegit/${project} ${GITPREFIX}${project};
  cd ${project}; git checkout ${BRANCH}; cd ..;
