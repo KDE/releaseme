@@ -54,6 +54,11 @@ unless (options.origin || options.from_config) && options.version
   exit 1
 end
 
+if options.version.count('.') < 2
+  warn 'You need a version number with at least 2 dots'
+  exit 1
+end
+
 release_projects = []
 if options[:from_config].nil?
   # Flatten because finding returns an array!
