@@ -5,13 +5,13 @@
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
 MAJOR_VERSION=5
-VERSION=5.26.5
-SHORT_VERSION=5.26
-OLD_VERSION=5.26.4
-ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
-FTPSTABLE=stable  # set to unstable or stable
+VERSION=5.26.90
+SHORT_VERSION=5.27
+OLD_VERSION=5.26.5
+ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts
+FTPSTABLE=unstable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release for changelog
-BRANCH=Plasma/5.26 # set to master or Plasma/5.x
+BRANCH=master # set to master or Plasma/5.x
 
 RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
 
@@ -22,8 +22,8 @@ WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@tinami.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Tuesday, 03 January 2023" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2023-01-03" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Thursday, 19 January 2023" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2023-01-19" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 #SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to

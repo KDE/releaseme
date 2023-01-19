@@ -16,7 +16,7 @@ set -xe
 
 # echo for updating version in master after branch override versions here
 # VERSION=5.23.0
-KF5_VERSION=5.98.0
+KF5_VERSION=5.102.0
 QT_VERSION=5.15.2
 GITPREFIX="invent:"
 
