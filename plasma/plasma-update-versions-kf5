@@ -12,7 +12,7 @@ set -xe
 . ./VERSIONS.inc
 
 # override the branch!
-# BRANCH=master
+BRANCH=Plasma/5.27
 
 # echo for updating version in master after branch override versions here
 # VERSION=5.23.0
