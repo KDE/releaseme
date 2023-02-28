@@ -87,5 +87,6 @@ sed 's,="plasma-bigscreen",="Plasma Bigscreen",' ${FILE} -i
 sed 's,="aura-browser",="Aura Browser",' ${FILE} -i
 sed 's,="plank-player",="Plank Player",' ${FILE} -i
 sed 's,="plasma-remotecontrollers",="Plasma Remotecontrollers",' ${FILE} -i
+sed 's,="flatpak-kcm",="Flatpak Permissions",' ${FILE} -i
 
 echo now edit manually  emacs ${FILE}
