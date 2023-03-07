@@ -56,7 +56,11 @@ module ReleaseMe
         vcs.repository = "https://invent.kde.org/#{api_project.repo}"
       end
 
-      i18n_trunk = api_project.i18n.trunk_kf5
+      if api_project.i18n.data.include?(:trunk_kf6)
+        i18n_trunk = api_project.i18n.trunk_kf6
+      else
+        i18n_trunk = api_project.i18n.trunk_kf5
+      end
       i18n_stable = api_project.i18n.stable_kf5
 
       # Figure out which i18n path to use.
@@ -137,7 +141,12 @@ module ReleaseMe
           vcs.repository = "https://invent.kde.org/#{api_project.repo}"
         end
 
-        i18n_trunk = api_project.i18n.trunk_kf5
+
+        if api_project.i18n.data.include?(:trunk_kf6)
+          i18n_trunk = api_project.i18n.trunk_kf6
+        else
+          i18n_trunk = api_project.i18n.trunk_kf5
+        end
         i18n_stable = api_project.i18n.stable_kf5
 
         # Figure out which i18n path to use.
