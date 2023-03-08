@@ -14,10 +14,12 @@ end
 def default_i18n
   { stable: nil, stableKF5: nil, trunk: nil, trunkKF5: 'master', component: 'default' }
 end
+
 def frameworks_i18n
   { stable: nil, stableKF5: nil, trunk: nil, trunkKF5: 'kf5', trunkKF6: nil, component: 'default' }
 end
-def plasma_i18n
+
+def plasma_kf6_i18n
   { stable: nil, stableKF5: 'Plasma/5.27', trunk: nil, trunkKF5: nil, trunkKF6: 'master', component: 'default' }
 end
 
@@ -147,7 +149,7 @@ def stub_api
   stub_request(:get, 'https://projects.kde.org/api/v1/project/plasma/khotkeys')
     .to_return(body: j(path: 'plasma/khotkeys',
                        repo: 'khotkeys',
-                       i18n: plasma_i18n))
+                       i18n: plasma_kf6_i18n))
 
   # By Repo
   stub_request(:get, 'https://projects.kde.org/api/v1/repo/kfilemetadata')
@@ -184,14 +186,12 @@ class TestProjectResolver < Testme
   end
 
   def test_frameworks_kf6
-    # deprecated not used elsewhere
-    pr = ReleaseMe::Project.from_xpath('attica')
+    pr = ReleaseMe::Project.from_find('attica')
     assert_valid_project(pr, 'attica')
   end
 
   def test_plasma_kf6
-    # deprecated not used elsewhere
-    pr = ReleaseMe::Project.from_xpath('khotkeys')
+    pr = ReleaseMe::Project.from_find('khotkeys')
     assert_valid_project(pr, 'khotkeys')
   end
 
