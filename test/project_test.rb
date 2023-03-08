@@ -14,6 +14,12 @@ end
 def default_i18n
   { stable: nil, stableKF5: nil, trunk: nil, trunkKF5: 'master', component: 'default' }
 end
+def frameworks_i18n
+  { stable: nil, stableKF5: nil, trunk: nil, trunkKF5: 'kf5', trunkKF6: nil, component: 'default' }
+end
+def plasma_i18n
+  { stable: nil, stableKF5: 'Plasma/5.27', trunk: nil, trunkKF5: nil, trunkKF6: 'master', component: 'default' }
+end
 
 def stub_projects_single(url)
   path = url.gsub('https://projects.kde.org/api/v1/projects/', '')
@@ -63,6 +69,16 @@ def stub_api
     .to_return(status: 404)
   stub_request(:get, 'https://projects.kde.org/api/v1/find?id=networkmanager-qt')
     .to_return(body: j(%w[frameworks/networkmanager-qt]))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/attica')
+    .to_return(status: 404)
+  stub_request(:get, 'https://projects.kde.org/api/v1/find?id=attica')
+    .to_return(body: j(%w[frameworks/attica]))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/khotkeys')
+    .to_return(status: 404)
+  stub_request(:get, 'https://projects.kde.org/api/v1/find?id=khotkeys')
+    .to_return(body: j(%w[plasma/khotkeys]))
 
   stub_request(:get, 'https://projects.kde.org/api/v1/projects/ktp-contact-runner')
     .to_return(status: 404)
@@ -123,6 +139,16 @@ def stub_api
                        repo: 'networkmanager-qt',
                        i18n: default_i18n))
 
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/frameworks/attica')
+    .to_return(body: j(path: 'frameworks/attica',
+                       repo: 'attica',
+                       i18n: frameworks_i18n))
+
+  stub_request(:get, 'https://projects.kde.org/api/v1/project/plasma/khotkeys')
+    .to_return(body: j(path: 'plasma/khotkeys',
+                       repo: 'khotkeys',
+                       i18n: plasma_i18n))
+
   # By Repo
   stub_request(:get, 'https://projects.kde.org/api/v1/repo/kfilemetadata')
     .to_return(body: j(path: 'frameworks/kfilemetadata',
@@ -155,6 +181,18 @@ class TestProjectResolver < Testme
     # deprecated not used elsewhere
     pr = ReleaseMe::Project.from_xpath('yakuake')
     assert_valid_project(pr, 'yakuake')
+  end
+
+  def test_frameworks_kf6
+    # deprecated not used elsewhere
+    pr = ReleaseMe::Project.from_xpath('attica')
+    assert_valid_project(pr, 'attica')
+  end
+
+  def test_plasma_kf6
+    # deprecated not used elsewhere
+    pr = ReleaseMe::Project.from_xpath('khotkeys')
+    assert_valid_project(pr, 'khotkeys')
   end
 
   def test_module_as_project
