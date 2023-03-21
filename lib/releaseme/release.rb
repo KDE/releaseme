@@ -5,7 +5,6 @@ require_relative 'archive_signer'
 require_relative 'documentation'
 require_relative 'gitlab'
 require_relative 'hash_template'
-require_relative 'l10n'
 require_relative 'logable'
 require_relative 'source'
 require_relative 'template'
@@ -69,20 +68,6 @@ module ReleaseMe
       play if ENV.key?('RELEASE_THE_BEAT')
       source.cleanup
       source.get(project.vcs)
-
-      # FIXME: one would think that perhaps l10n could be disabled entirely
-      log_info ' Getting translations...'
-      # FIXME: why not pass project itself? Oo
-      # FIXME: origin should be validated? technically optparse enforces proper values
-      l10n = L10n.new(origin, project.identifier, project.i18n_path)
-      l10n.get(source.target)
-      stats_printer = L10nStatisticsHTMLPrinter.new(l10n.statistics,
-                                                    source.target)
-      stats_printer.write("#{source.target}.l10n.html")
-
-      log_info ' Getting documentation...'
-      doc = DocumentationL10n.new(origin, project.identifier, project.i18n_path)
-      doc.get(source.target)
     end
 
     # FIXME: archive is an attr and a method, lovely
