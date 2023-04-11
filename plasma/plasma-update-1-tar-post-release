@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+# SPDX-License-Identifier: GPL-2.1-or-later
+# SPDX-FileCopyrightText: 2023 Jonathan Esk-Riddell <jr@jriddell.org>
+
+# get a list of git repositories we want to make part of the release
+
+require 'optparse'
+require_relative 'lib/plasma_version'
+
+options = {}
+OptionParser.new do |parser|
+  parser.banner = "Usage: plasma-update-1-tar-post-release -v 5.27.4.1 REPO"
+
+  parser.on('-v', '--version VERSION', 'Version Niumber') { |v| options[:version] = v }
+end.parse!
+
+if not options.include?(:version) then
+  puts "required -v VERSION"
+  exit 1
+end
+
+if ARGV.empty?
+  warn 'You need a project REPO'
+  exit 1
+end
+
+version = options[:version]
+repo = ARGV[0]
+
+begin
+    Dir.mkdir(version)
+rescue Errno::EEXIST => e
+    puts "Using existing directory"
+rescue => e
+    puts "Error creating directory #{e}"
+    exit
+end
+
+plasma_versions = PlasmaVersion.new
+
+Dir.chdir(version) do
+  system("../../tarme.rb", "--origin", plasma_versions.origin, "--version", version, repo)
+end

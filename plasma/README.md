@@ -30,6 +30,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - run ./plasma-update-versions (ensure it is using the right branches)
  - run ./plasma-tars script to make tars (or run the job on xenon http://xenon.pangea.pub/job/plasma-releaseme-tars/ then ./plasma-xenon-download)
  - check tmp-tests output for important differences
+ - run ./plasma-update-web-git
  - run ./plasma-upload
  - run ./plasma-update-1-tar as needed for problems/late updates # TODO make this print out git log changes
  - (or upload to upload.kde.org and tell sysadmins to make tars available to packagers if you do not have permission)
