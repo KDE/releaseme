@@ -7,15 +7,18 @@
 require 'optparse'
 require_relative 'lib/plasma_version'
 
+plasma_versions = PlasmaVersion.new
+
 options = {}
 OptionParser.new do |parser|
-  parser.banner = "Usage: plasma-update-1-tar-post-release -v 5.27.4.1 REPO"
+  parser.banner = "Usage: plasma-update-1-tar-post-release -u 1 REPO"
 
-  parser.on('-v', '--version VERSION', 'Version Niumber') { |v| options[:version] = v }
+  parser.on('-u', '--update-version UPDATE_VERSION', 'Point Number for Update Version e.g. 1') { |u| options[:update_version] = u }
+  parser.on('-s', '--scratch', 'Use scratch server for uploading to for tests') { |s| options[:scratch] = s }
 end.parse!
 
-if not options.include?(:version) then
-  puts "required -v VERSION"
+if not options.include?(:update_version) then
+  puts "required -u UPDATE_VERSION"
   exit 1
 end
 
@@ -24,20 +27,36 @@ if ARGV.empty?
   exit 1
 end
 
-version = options[:version]
+scratch = options.include?(:scratch)
+server = scratch ?  "#{plasma_versions.scratch_server}/" : "#{plasma_versions.uploadserver}:"
+version = plasma_versions.version + "." + options[:update_version]
 repo = ARGV[0]
 
 begin
-    Dir.mkdir(version)
+  Dir.mkdir(plasma_versions.version)
 rescue Errno::EEXIST => e
-    puts "Using existing directory"
+  puts "Using existing directory"
 rescue => e
-    puts "Error creating directory #{e}"
-    exit
+  puts "Error creating directory #{e}"
+  exit
 end
 
-plasma_versions = PlasmaVersion.new
-
-Dir.chdir(version) do
+Dir.chdir(plasma_versions.version) do
   system("../../tarme.rb", "--origin", plasma_versions.origin, "--version", version, repo)
 end
+
+puts("== writing test output")
+Dir.chdir("tmp-tests") do
+  system("scp #{server}#{plasma_versions.ftpstable}/plasma/#{plasma_versions.version}/#{repo}-#{plasma_versions.version}.tar.xz old.tar.xz")
+  puts("pkgdiff old.tar.xz ../#{plasma_versions.version}/#{repo}-#{plasma_versions.version}.tar.xz")
+  system("pkgdiff old.tar.xz ../#{plasma_versions.version}/#{repo}-#{plasma_versions.version}.tar.xz")
+  puts("scp pkgdiff_reports/old/X_to_#{plasma_versions.version}/changes_report.html #{plasma_versions.scratch_server}/#{repo}-#{version}-changes_report.html")
+  system("scp pkgdiff_reports/old/X_to_#{plasma_versions.version}/changes_report.html #{plasma_versions.scratch_server}/#{repo}-#{version}-changes_report.html")
+  puts("#{plasma_versions.browser} #{plasma_versions.scratch_server_url}/#{repo}-#{version}-changes_report.html")
+  system("#{plasma_versions.browser} #{plasma_versions.scratch_server_url}/#{repo}-#{version}-changes_report.html")
+end
+
+puts("== uploading")
+system("rsync -CvzaP --stats #{plasma_versions.version}/*xz #{plasma_versions.version}/*xz.sig #{server}#{plasma_versions.ftpstable}/plasma/#{plasma_versions.version}/")
+
+puts("== editing kde.org")
