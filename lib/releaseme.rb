@@ -2,7 +2,6 @@
 # SPDX-FileCopyrightText: 2017 Harald Sitter <sitter@kde.org>
 
 require_relative 'releaseme/archive_signer'
-require_relative 'releaseme/cmakeeditor'
 require_relative 'releaseme/git'
 require_relative 'releaseme/gitlab'
 require_relative 'releaseme/hash_template'
