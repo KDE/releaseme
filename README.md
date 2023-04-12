@@ -26,8 +26,8 @@ to software that has its translations in the kdelibs4 directories on SVN.
 
 ## KDE Frameworks 5.x
 
-Releaseme uses 'origins' to control which branch to release and where to draw
-translations from. An origin is basically the i18n association as configured in:
+Releaseme uses 'origins' to control which branch to release. An origin is 
+basically the i18n association as configured in:
 https://invent.kde.org/sysadmin/repo-metadata/
 It is imperative that you make sure the data configured there is
 correct and up to date!
@@ -128,15 +128,8 @@ that point.
 
 ## Translations
 
-Releaseme automatically tries to grab translations and documentation translation
-from the data it can find in the repo-metadata. It also tries to automatically
-wire up CMake to build both. If you need the CMake code block placed at a
-specific place in your root CMakeLists.txt you can use a place holder macro to
-tell releaseme where to put its code. `#PO_SUBDIR`.
-
-NOTE: releaseme will try to be smart and only add the code block when it isn't
-already there. So you can actually use ki18n_install(po) in a conditional and
-releaseme will not add another one.
+Translations are now added by the nightly scripy scripts.  Verify this has been 
+done before releasing.
 
 ## Issues
 
