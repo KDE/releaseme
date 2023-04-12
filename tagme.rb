@@ -85,5 +85,4 @@ tag_projects.each do |tag_project|
     `git push origin v#{options[:version]}`
   end
 
-  # TODO: impl l10n and docs and what have you
 end

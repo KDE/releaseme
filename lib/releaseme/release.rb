@@ -2,7 +2,6 @@
 # SPDX-FileCopyrightText: 2007-2022 Harald Sitter <sitter@kde.org>
 
 require_relative 'archive_signer'
-require_relative 'documentation'
 require_relative 'gitlab'
 require_relative 'hash_template'
 require_relative 'logable'
@@ -59,7 +58,6 @@ module ReleaseMe
     end
 
     # Get the source
-    # FIXME: l10n and documentation have no test backing
     def get
       log_info 'Getting CI states.'
       check_ci!

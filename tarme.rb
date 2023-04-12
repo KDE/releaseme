@@ -90,7 +90,6 @@ releases = release_projects.collect do |project|
   # cannot add svn data
   next nil if release.project.vcs.is_a?(ReleaseMe::Svn)
 
-  # FIXME: technically we need to track SVN revs for l10n as well...........
   # FIXME FIXME FIXME FIXME: need version
   project = release.project.identifier
   branch = release.project.vcs.branch

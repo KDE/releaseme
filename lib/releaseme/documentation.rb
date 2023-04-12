@@ -19,10 +19,6 @@ module ReleaseMe
     MANPAGE_REGEX =
       'kdoctools_create_manpage\s*\(\s*(?<item>man-[^\)\s]+\.docbook)'.freeze
 
-    def vcs_l10n_path(lang)
-      "#{lang}/docs/#{@i18n_path}/#{@project_name}"
-    end
-
     def get(srcdir)
       @srcdir = File.expand_path(srcdir)
       @podir = podir_from(@srcdir)
