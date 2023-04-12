@@ -5,14 +5,16 @@ require 'fileutils'
 require 'open3'
 
 require_relative 'logable'
-require_relative 'vcs'
 
 module ReleaseMe
   # Wrapper around Git.
-  class Git < Vcs
+  class Git
     class CloneError < StandardError; end
 
     prepend Logable
+
+    # The repository URL
+    attr_accessor :repository
 
     # Git branch to {#get} from, when nil no explicit argument is passed to git
     attr_accessor :branch
@@ -21,6 +23,16 @@ module ReleaseMe
     # successfully
     # FIXME: might need to move to Vcs base?
     attr_reader :hash
+
+    # Construct a VCS instance from a hash defining its attributes.
+    # FIXME: why is this not simply an init? Oo
+    def self.from_hash(hash)
+      vcs = new
+      hash.each do |key, value|
+        vcs.send("#{key}=".to_sym, value)
+      end
+      vcs
+    end
 
     # Clones repository into target directory
     # @param shallow whether or not to create a shallow clone
@@ -62,6 +74,7 @@ module ReleaseMe
     # @return [String, status] output of command
     def run(args)
       cmd = %w[git] + args
+      puts cmd
       log_debug cmd.join(' ')
       output, status = Open3.capture2e(*cmd)
       # for testing. we want to verify codes all the time so we need to track
