@@ -2,9 +2,12 @@
 # SPDX-License-Identifier: GPL-2.1-or-later
 # SPDX-FileCopyrightText: 2023 Jonathan Esk-Riddell <jr@jriddell.org>
 
-# get a list of git repositories we want to make part of the release
+# After a release is published we sometimes get requests for another update, this script
+# will make the tar, give you a diff, if confirmed as ok then it's upload, edit kde.org and give you an
+# e-mail template, just give it the point-version number to use e.g. 5.27.4.x
 
 require 'optparse'
+require 'tty/prompt'
 require_relative 'lib/plasma_version'
 
 plasma_versions = PlasmaVersion.new
@@ -28,7 +31,7 @@ if ARGV.empty?
 end
 
 scratch = options.include?(:scratch)
-server = scratch ?  "#{plasma_versions.scratch_server}/" : "#{plasma_versions.uploadserver}:"
+server = options.include?(:scratch) ? "#{plasma_versions.scratch_server}/" : "#{plasma_versions.uploadserver}:"
 version = plasma_versions.version + "." + options[:update_version]
 repo = ARGV[0]
 
@@ -48,15 +51,82 @@ end
 puts("== writing test output")
 Dir.chdir("tmp-tests") do
   system("scp #{server}#{plasma_versions.ftpstable}/plasma/#{plasma_versions.version}/#{repo}-#{plasma_versions.version}.tar.xz old.tar.xz")
-  puts("pkgdiff old.tar.xz ../#{plasma_versions.version}/#{repo}-#{plasma_versions.version}.tar.xz")
-  system("pkgdiff old.tar.xz ../#{plasma_versions.version}/#{repo}-#{plasma_versions.version}.tar.xz")
-  puts("scp pkgdiff_reports/old/X_to_#{plasma_versions.version}/changes_report.html #{plasma_versions.scratch_server}/#{repo}-#{version}-changes_report.html")
-  system("scp pkgdiff_reports/old/X_to_#{plasma_versions.version}/changes_report.html #{plasma_versions.scratch_server}/#{repo}-#{version}-changes_report.html")
+  puts("pkgdiff old.tar.xz ../#{plasma_versions.version}/#{repo}-#{version}.tar.xz")
+  system("pkgdiff old.tar.xz ../#{plasma_versions.version}/#{repo}-#{version}.tar.xz")
+  puts("scp pkgdiff_reports/old/X_to_#{version}/changes_report.html #{plasma_versions.scratch_server}/#{repo}-#{version}-changes_report.html")
+  system("scp pkgdiff_reports/old/X_to_#{version}/changes_report.html #{plasma_versions.scratch_server}/#{repo}-#{version}-changes_report.html")
   puts("#{plasma_versions.browser} #{plasma_versions.scratch_server_url}/#{repo}-#{version}-changes_report.html")
   system("#{plasma_versions.browser} #{plasma_versions.scratch_server_url}/#{repo}-#{version}-changes_report.html")
+end
+
+gitCommit = File.read("#{plasma_versions.version}/release_data").split(';')[2]
+branch = File.read("#{plasma_versions.version}/release_data").split(';')[1]
+
+system("#{plasma_versions.browser} https://invent.kde.org/plasma/kwin/-/commits/#{branch}")
+
+if TTY::Prompt.new.no?("Tar made with https://invent.kde.org/plasma/#{repo}/-/commit/#{gitCommit}" \
+  ' Publish this tar?')
+  abort
 end
 
 puts("== uploading")
 system("rsync -CvzaP --stats #{plasma_versions.version}/*xz #{plasma_versions.version}/*xz.sig #{server}#{plasma_versions.ftpstable}/plasma/#{plasma_versions.version}/")
 
 puts("== editing kde.org")
+sha256sum = File.read("#{plasma_versions.version}/release_data").split(';')[4].chomp!
+Dir.chdir(plasma_versions.wwwcheckout) do
+  updated_source_plasma = []
+  found_line_no = -99
+  system("git checkout master")
+  system("git pull")
+  File.foreach("content/info/sources/source-plasma-#{plasma_versions.version}.html").with_index do |line, line_no|
+    #puts "#{line_no}: #{line}"
+    found_line = line.match?("#{repo}-#{plasma_versions.version}")
+    if found_line
+      puts "found_line! #{found_line}"
+      found_line_no = line_no
+      line.gsub!("#{repo}-#{plasma_versions.version}", "#{repo}-#{version}")
+    end
+    if line_no == found_line_no + 2
+      puts "line_no #{line_no} found_line_no #{found_line_no} found_line_no + 2 #{found_line_no + 2}"
+      line.gsub!(/>([0-9a-fA-F]+)</, ">#{sha256sum}<")
+    end
+    updated_source_plasma << line
+  end
+  File.open("content/info/sources/source-plasma-#{plasma_versions.version}.html", "w+") do |f|
+    f.puts(updated_source_plasma)
+  end
+  system("git diff")
+  if scratch
+    system("git reset --hard")
+  else
+    system("git commit -a -m 'Post-release update to #{repo} #{plasma_versions.version}'")
+    system("git push")
+  end
+end
+
+puts("== pushing tag kde.org")
+Dir.chdir(plasma_versions.version) do
+  if scratch
+    puts("../../tagme.rb --version #{version}")
+  else
+    system("../../tagme.rb --version #{version}")
+  end
+end
+
+puts("== opening e-mail text")
+File.open("tmp-announcements/release-team-update-#{repo}", "w+") do |f|
+  f.puts("e-mail me to kde-announce@kde.org, release-team@kde.org, plasma-devel@kde.org")
+  f.puts()
+  f.puts("Subject: Plasma ${repo} ${version} update")
+  f.puts()
+  f.puts("There has been an update to Plasma #{plasma_versions.version}")
+  f.puts()
+  f.puts("#{repo} now has #{repo}-#{version} tar available to download for packaging")
+  sha256sum = File.read("#{plasma_versions.version}/release_data").split(';')[4].chomp!
+  gitCommit = File.read("#{plasma_versions.version}/release_data").split(';')[2]
+  f.puts("sha256sum: #{sha256sum} Git commit: #{gitCommit}")
+  f.puts()
+  f.puts("https://kde.org/info/plasma-#{plasma_versions.version}/")
+end
+system("kate tmp-announcements/release-team-update-#{repo}")
