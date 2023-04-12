@@ -78,12 +78,13 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 
  - (tell a KDE neon person to update forks/base-files and neon/settings (release-lts only) to show new version before running 'jenking_retry -p' and making ISOs and Docker)
 
+## Post Release Bugfix update
+ - If you need an update between releases use plasma-update-1-tar-post-release for the tar in question
+
 ## TODO
  - remove apt from plasma-release
  - update-web-svn has hardcoded paths src/www
  - check .sig matches the key in VERSION
  - test gpg works with agent before running plasma-tag
- - test tag has been pushed
- - pkgdiff output https://lvc.github.io/pkgdiff/
  - for 5.16.90 the release_data file had the kscreen info duplicated info libkscreen, why?
  - block running plasma-release unless plasma-tags-test has been run
