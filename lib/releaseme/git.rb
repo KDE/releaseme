@@ -73,8 +73,6 @@ module ReleaseMe
       [output, status]
     end
 
-    # FIXME: code dupe from svn, move to joint thingy, alas, logger is a bit in
-    #   the way
     def debug_output(output)
       return if logger.level != Logger::DEBUG || output.empty?
       log_debug '-- output --'

@@ -32,13 +32,11 @@ class TestRequirementChecker < Testme
       # windows
       ENV['RELEASEME_FORCE_WINDOWS']
       make_exe('gpg2.exe')
-      make_exe('svn.com')
 
       ENV['PATHEXT'] = '.COM;.EXE'.downcase # downcase so this passes on Linux
       ENV['PATH'] = Dir.pwd
 
       assert_equal "#{Dir.pwd}/gpg2.exe", Executable.new('gpg2').find
-      assert_equal "#{Dir.pwd}/svn.com", Executable.new('svn').find
       assert_nil Executable.new('foobar').find
     end
   end

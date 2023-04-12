@@ -7,8 +7,6 @@ require_relative 'lib/testme'
 require_relative '../lib/releaseme/git'
 require_relative '../lib/releaseme/source'
 
-# FIXME: source should be tested not only with git but also svn
-
 class TestSource < Testme
   def setup
     @dir = "tmp_src_" + (0...16).map{ ('a'..'z').to_a[rand(26)] }.join

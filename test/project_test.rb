@@ -237,14 +237,6 @@ class TestProjectConfig < Testme
     assert_equal('extragear-utils', pr.i18n_path)
   end
 
-  def test_valid_svn
-    ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
-    name = 'valid-svn'
-    pr = ReleaseMe::Project.from_config(name)
-    refute_nil(pr)
-    assert_equal('svn://anonsvn.kde.org/home', pr.vcs.repository)
-  end
-
   def test_invalid_vcs
     ReleaseMe::Project.class_variable_set(:@@configdir, data('projects/'))
     name = 'invalid-vcs'

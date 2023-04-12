@@ -89,7 +89,7 @@ module ReleaseMe
     # here must be followed by running `rake test` to pass the entire test suite
     # Also see the section on bumping versions in the REAMDE.
     COMPATIBLE_RUBIES = %w[2.6.0 2.7.0 3.0.0 3.1.0].freeze
-    REQUIRED_BINARIES = %w[svn git tar xz msgfmt gpg2].freeze
+    REQUIRED_BINARIES = %w[git tar xz msgfmt gpg2].freeze
 
     def initialize
       @ruby_version = RUBY_VERSION

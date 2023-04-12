@@ -70,7 +70,7 @@ if options[:from_config].nil?
   end
 
   # FIXME: runtime deps are not checked first
-  # e.g. svn, git, xz...
+  # e.g. git, xz...
 else
   release_projects += ARGV.collect { |x| ReleaseMe::Project.from_config(x) }
 end
@@ -85,10 +85,6 @@ releases = release_projects.collect do |project|
   #        better b) check the retvalue c) throw exception accordingly
   release.get
   release.archive
-
-  # FIXME: present release_data format assumes that everything is git, so we
-  # cannot add svn data
-  next nil if release.project.vcs.is_a?(ReleaseMe::Svn)
 
   # FIXME FIXME FIXME FIXME: need version
   project = release.project.identifier
