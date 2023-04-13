@@ -55,14 +55,6 @@ class TestRelease < Testme
       JSON
     WebMock.enable!
 
-    # Disable all SVN nonesense so we don't hit live servers.
-    fake_svn = mock('svn')
-    fake_svn.stubs(:repository=)
-    fake_svn.stubs(:cat).returns('')
-    fake_svn.stubs(:list).returns('')
-    fake_svn.stubs(:get).returns(true)
-    ReleaseMe::Svn.stubs(:new).returns(fake_svn)
-
     # Teardown happens automatically when the @tmpdir is torn down
   end
 
@@ -92,22 +84,8 @@ class TestRelease < Testme
     r
   end
 
-  def new_test_release_svn
-    data = {
-      :identifier => 'clone',
-      :vcs => ReleaseMe::Svn.new,
-      :i18n_trunk => 'master',
-      :i18n_stable => 'master',
-      :i18n_path => ''
-    }
-    project = ReleaseMe::Project.new(**data)
-    project.vcs.repository = @remotedir
-    ReleaseMe::Release.new(project, :trunk, '1.0')
-  end
-
   def test_init
     new_test_release
-    new_test_release_svn
   end
 
   def test_get_archive_cleanup
