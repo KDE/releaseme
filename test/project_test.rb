@@ -5,7 +5,7 @@ require 'fileutils'
 
 require_relative 'lib/testme'
 require_relative '../lib/releaseme/project'
-require_relative '../lib/releaseme/vcs'
+require_relative '../lib/releaseme/git'
 
 def j(*args)
   JSON.generate(*args)
@@ -280,7 +280,7 @@ class TestProject < Testme
   def test_manual_construction_success
     data = {
       :identifier => 'yakuake',
-      :vcs => ReleaseMe::Vcs.new,
+      :vcs => ReleaseMe::Git.new,
       :i18n_trunk => 'master',
       :i18n_stable => 'master',
       :i18n_path => 'extragear-utils'
