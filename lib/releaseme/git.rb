@@ -74,7 +74,6 @@ module ReleaseMe
     # @return [String, status] output of command
     def run(args)
       cmd = %w[git] + args
-      puts cmd
       log_debug cmd.join(' ')
       output, status = Open3.capture2e(*cmd)
       # for testing. we want to verify codes all the time so we need to track
