@@ -16,9 +16,9 @@ cd ${WWWCHECKOUT}
 git checkout master
 git pull
 
-git checkout work/staging
-git pull
-git rebase master
-git commit -a -m 'merge master'
-git push
-echo "> work/staging now is up to date with master"
+#git checkout work/staging
+#git rebase -Xtheirs master
+#git pull -Xtheirs --rebase
+#git commit -a -m 'merge master'
+#git push
+#echo "> work/staging now is up to date with master"

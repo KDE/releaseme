@@ -16,7 +16,7 @@ options = {}
 OptionParser.new do |parser|
   parser.banner = "Usage: plasma-update-1-tar-post-release -u 1 REPO"
 
-  parser.on('-u', '--update-version UPDATE_VERSION', 'Point Number for Update Version e.g. 1') { |u| options[:update_version] = u }
+  parser.on('-u', '--update-version UPDATE_VERSION e.g. "1"', 'Point Number for Update Version e.g. 1') { |u| options[:update_version] = u }
   parser.on('-s', '--scratch', 'Use scratch server for uploading to for tests') { |s| options[:scratch] = s }
 end.parse!
 
@@ -118,7 +118,7 @@ puts("== opening e-mail text")
 File.open("tmp-announcements/release-team-update-#{repo}", "w+") do |f|
   f.puts("e-mail me to kde-announce@kde.org, release-team@kde.org, plasma-devel@kde.org")
   f.puts()
-  f.puts("Subject: Plasma ${repo} ${version} update")
+  f.puts("Subject: Plasma #{repo} #{version} update")
   f.puts()
   f.puts("There has been an update to Plasma #{plasma_versions.version}")
   f.puts()

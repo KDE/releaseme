@@ -26,10 +26,10 @@ cd ${WWWCHECKOUT}
 git diff
 git commit -a -m "release plasma ${VERSION}"
 git push
-git checkout master
-git pull
-git merge work/staging
-git push
+#git checkout master
+#git pull
+#git merge work/staging
+#git push
 cd -
 
 # copy announce over to Dot for publishing
