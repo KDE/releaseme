@@ -21,7 +21,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 
 ## On Beta day (setting versions)
  - Add release exceptions array to ./plasma-git-repos and run "./plasma-git-repos -r 5.xx" to update list of things to package in git-repositories-for-release
- - set QT_VERSION and KF5_VERSION in ./plasma-update-versions-kf5 and run that script to set version agreed at cycle kickoff (make sure to check the exceptions)
+ - set QT_VERSION and KF5_VERSION in ./plasma-update-versions-qtkf and run that script to set version agreed at cycle kickoff (make sure to check the exceptions)
  - Edit and run plasma-bugzilla-versions to add a new version git-stable-Plasma/5.xx
  - Update bug closing bot versions at https://invent.kde.org/sysadmin/bugzilla-bot/-/blob/master/data/versions.yml
 
