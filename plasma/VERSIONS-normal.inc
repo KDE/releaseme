@@ -4,8 +4,10 @@
 # SPDX-FileCopyrightText: 2020 Bhushan Shah <bhush94@gmail.com>
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
+PRODUCT="frameworks"
+
 MAJOR_VERSION=6
-VERSION=5.27.80
+VERSION=5.245.0
 SHORT_VERSION=6.0
 OLD_VERSION=5.27.9
 ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts

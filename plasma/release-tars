@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2014-2023 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2014-2015 Harald Sitter <sitter@kde.org>
+
+require 'net/http'
+require 'json'
+require 'optparse'
+require 'fileutils'
+require_relative 'lib/plasma_version'
+
+class MakeTars
+  def initialize
+    @plasma_versions = PlasmaVersion.new
+  end
+
+  # Run gpg at the start so hopefully pinentry will remember the password and you won't need it for all the tars
+  def testGpg
+    `echo asdf > /tmp/test-gpg`
+    `gpg --clearsign /tmp/test-gpg`
+    `rm -f /tmp/test-gpg /tmp/test-gpg.asc`
+  end
+
+  def makeTars
+    tars = File.readlines("git-repositories-for-release-#{@plasma_versions.product}", chomp: true)
+    puts "= Making tars for #{tars} ="
+    begin
+      Dir.mkdir("#{@plasma_versions.product}-#{@plasma_versions.version}")
+    rescue Errno::EEXIST
+    end
+    Dir.chdir("#{@plasma_versions.product}-#{@plasma_versions.version}") do
+      tars.each do |tar|
+        puts "== #{tar} =="
+        `yes | ../../tarme.rb --origin #{@plasma_versions.origin} --version #{@plasma_versions.version} #{tar}`
+        `cat release_data >> #{@plasma_versions.version}-release-data`
+      end
+    end
+  end
+
+  def makeSourcesList
+    puts "running create_sources_inc"
+    Dir.chdir("#{@plasma_versions.product}-#{@plasma_versions.version}") do
+      `../create_sources_inc #{@plasma_versions.version} > source-plasma-#{@plasma_versions.version}.inc`
+    end
+  end
+end
+
+makeTars = MakeTars.new
+makeTars.testGpg
+#makeTars.makeTars
+makeTars.makeSourcesList
