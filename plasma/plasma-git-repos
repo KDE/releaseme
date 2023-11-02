@@ -2,39 +2,49 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 # SPDX-FileCopyrightText: 2020 Jonathan Riddell <jr@jriddell.org>
 
-# get a list of git repositories we want to make part of the release
+# get a list of git repositories we want to make part of the release using the
+# invent gitlab category plus a manual list of exclusions and additions
+
 
 require 'net/http'
 require 'json'
 require 'optparse'
 require 'fileutils'
 
-# What projects in repo-metadata plasma/ directory are excluded from the release?  Add a new array for each release.
-V_518lts_exclusions = %w(plasma-disks kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-firewall plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd kwayland-server qqc2-breeze-style plasma-nano plasma-phone-components layer-shell-qt ksystemstats)
-V_519_exclusions = %w(plasma-disks kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd)
-V_520_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd user-manager)
-V_521_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager layer-shell-qt ksystemstats)
-V_522_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard)
-V_523_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard)
-V_524_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard oxygen-sounds kpipewire pico-wizard flatpak-kcm plasma-welcome)
-V_525_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard kwayland-server kpipewire pico-wizard flatpak-kcm plasma-welcome)
-V_526_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard kwayland-server pico-wizard flatpak-kcm plasma-welcome)
-V_527_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard kwayland-server pico-wizard plasma5support kglobalacceld plasma-tests)
-V_60_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard kwayland-server pico-wizard plasma5support kglobalacceld plasma-tests plasma-bigscreen aura-browser plank-player plasma-remotecontrollers khotkeys krdp)
-releases = {"5.18" => V_518lts_exclusions, "5.19" => V_519_exclusions, "5.20" => V_520_exclusions, "5.21" => V_521_exclusions, "5.22" => V_522_exclusions, "5.23" => V_523_exclusions, "5.24" => V_524_exclusions, "5.25" => V_525_exclusions, "5.26" => V_526_exclusions, "5.27" => V_527_exclusions, "6.0" => V_60_exclusions}
+product = :plasma
+apiUrl = {plasma:"https://projects.kde.org/api/v1/projects/plasma",
+          frameworks:"https://projects.kde.org/api/v1/projects/frameworks"}
 
-V_525_additions = %w()
+# What projects in repo-metadata plasma/ directory are excluded from the release?  Add a new array for each release.
+@plasma5_18lts_exclusions = %w(plasma-disks kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-firewall plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd kwayland-server qqc2-breeze-style plasma-nano plasma-phone-components layer-shell-qt ksystemstats)
+@plasma5_19_exclusions = %w(plasma-disks kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd)
+@plasma5_20_exclusionss = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu plasma-systemmonitor smaragd user-manager)
+@plasma5_21_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager layer-shell-qt ksystemstats)
+@plasma5_22_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard)
+@plasma5_23_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard)
+@plasma5_24_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard oxygen-sounds kpipewire pico-wizard flatpak-kcm plasma-welcome)
+@plasma5_25_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-bigscreen plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard kwayland-server kpipewire pico-wizard flatpak-kcm plasma-welcome)
+@plasma5_26_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard kwayland-server pico-wizard flatpak-kcm plasma-welcome)
+@plasma5_27_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard kwayland-server pico-wizard plasma5support kglobalacceld plasma-tests)
+@plasma5_28_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard kwayland-server pico-wizard plasma5support kglobalacceld plasma-tests plasma-bigscreen aura-browser plank-player plasma-remotecontrollers khotkeys krdp)
+@plasma6_0_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard kwayland-server pico-wizard plasma5support kglobalacceld plasma-tests plasma-bigscreen aura-browser plank-player plasma-remotecontrollers khotkeys krdp)
+
+@frameworks6_0_exclusions = %w(kwayland plasma-framework kactivities kactivities-stats kdelibs4support kdesignerplugin kdewebkit khtml kjs kjsembed kmediaplayer kross kxmlrpcclient kemoticons)
+
+@plasma5_25_additions = %w()
 # Stuff in https://invent.kde.org/plasma-bigscreen/
-V_526_additions = %w(plasma-remotecontrollers aura-browser plank-player)
-V_527_additions = %w(plasma-remotecontrollers aura-browser plank-player)
-V_60_additions = %w(kwayland plasma-framework kactivities kactivities-stats print-manager wacomtablet)
-release_additions = {"5.25" => V_525_additions, "5.27" => V_527_additions, "6.0" => V_60_additions}
+@plasma5_26_additions = %w(plasma-remotecontrollers aura-browser plank-player)
+@plasma5_27_additions = %w(plasma-remotecontrollers aura-browser plank-player)
+@plasma6_0_additions = %w(kwayland plasma-framework kactivities kactivities-stats print-manager wacomtablet)
+
+@frameworks6_0_additions = %w(kuserfeedback)
 
 options = {}
 OptionParser.new do |parser|
   parser.banner = "Usage: plasma-git-repos -r 5.19"
 
   parser.on('-r', '--release RELEASE', 'Release RELEASE version') { |v| options[:release] = v }
+  parser.on('-f', '--frameworks', 'Make a Frameworks release') { |v| product = :frameworks }
 end.parse!
 
 if not options.include?(:release) then
@@ -42,37 +52,41 @@ if not options.include?(:release) then
   exit
 end
 
-uri = URI('https://projects.kde.org/api/v1/projects/plasma')
+uri = URI(apiUrl[product])
 
 plasma_projects_string = Net::HTTP.get(uri)
 
 plasma_projects = JSON.parse(plasma_projects_string)
 
-
 plasma_projects.each do |plasma_project|
-  plasma_project.gsub!(/plasma\//, "")
+  plasma_project.gsub!(/#{product}\//, "")
 end
 
 release_projects = []
-exclusions = releases[options[:release]]
+# e.g. variable named @plasma5_19_exclusions
+exclusions = instance_variable_get("@#{product.to_s+options[:release].sub('.', '_')+'_exclusions'}")
 release_projects = plasma_projects.select do |plasma_project|
   not exclusions.include?(plasma_project)
 end
 
-if release_additions.key?(options[:release])
-  release_projects = release_projects + release_additions[options[:release]]
+# e.g. variable named @plasma5_19_additions
+additions = instance_variable_get("@#{product.to_s+options[:release].sub('.', '_')}"+'_additions')
+if additions
+  release_projects = release_projects + additions
 end
 
 release_projects.sort!
 
-FileUtils.move("git-repositories-for-release", "git-repositories-for-release-old")
-File.open("git-repositories-for-release", 'w') do |f|
+file = "git-repositories-for-release-#{product.to_s}"
+`touch #{file}`
+FileUtils.move(file, "#{file}-old")
+File.open(file, 'w') do |f|
   release_projects.each do |project|
     f.write(project)
-    f.write(" ")
+    f.write("\n")
   end
 end
 
-puts("== git-repositories-for-release updated")
-system("wdiff", "-s", "git-repositories-for-release-old", "git-repositories-for-release")
+puts("== #{file} updated")
+system("diff", "-s", "#{file}-old", "#{file}")
 puts("\n")
