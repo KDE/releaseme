@@ -37,7 +37,7 @@ apiUrl = {plasma:"https://projects.kde.org/api/v1/projects/plasma",
 @plasma5_27_additions = %w(plasma-remotecontrollers aura-browser plank-player)
 @plasma6_0_additions = %w(kwayland plasma-framework kactivities kactivities-stats print-manager wacomtablet)
 
-@frameworks6_0_additions = %w(kuserfeedback)
+@frameworks6_0_additions = %w()
 
 options = {}
 OptionParser.new do |parser|
@@ -88,5 +88,5 @@ File.open(file, 'w') do |f|
 end
 
 puts("== #{file} updated")
-system("diff", "-s", "#{file}-old", "#{file}")
+system("diff", "-u", "#{file}-old", "#{file}")
 puts("\n")
