@@ -7,6 +7,8 @@
 # does a clone, replaces PROJECT_VERSION in CMakeLists.txt and pushes
 # Also updates Appstream metadata files with new version and date
 
+# Todo rewrite this in Ruby so that it can easily switch between plasma and frameworks and whatever else
+
 set -xe
 
 pwd
@@ -15,10 +17,10 @@ ls
 . ./VERSIONS.inc
 
 # echo for updating version in master after branch override versions here
-#BRANCH=master
-#VERSION=5.27.80
+BRANCH=master
+VERSION=5.245.0
 
-WORKSPACE=`cat git-repositories-for-release`
+WORKSPACE=`cat git-repositories-for-release-frameworks`
 echo "updating versions for $WORKSPACE"
 rm -rf tmp-version-update
 mkdir tmp-version-update
@@ -34,7 +36,7 @@ for project in $WORKSPACE; do
     cd ${project};
     pwd;
     git checkout ${BRANCH}
-    sed -i "s,PROJECT_VERSION \".*\",PROJECT_VERSION \"${VERSION}\"," CMakeLists.txt;
+    sed -i "s,KF_VERSION \".*\",KF_VERSION \"${VERSION}\"," CMakeLists.txt;
     # update appstream files release version unless we are doing a beta
     if [ ! $ORIGIN == 'trunk' ]; then
       for metainfofile in `find . -name \*appdata.xml -o -name \*metainfo.xml`; do
