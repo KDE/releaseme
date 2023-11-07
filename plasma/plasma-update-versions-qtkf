@@ -17,10 +17,10 @@ BRANCH=master
 # echo for updating version in master after branch override versions here
 # VERSION=5.23.0
 KF6_VERSION=5.240.0
-QT_VERSION=6.6.0
+QT_VERSION=6.5.0
 GITPREFIX="invent:"
 
-WORKSPACE=`cat git-repositories-for-release`
+WORKSPACE=`cat git-repositories-for-release-plasma`
 echo "updating versions for $WORKSPACE"
 rm -rf tmp-version-update-qtkf
 mkdir tmp-version-update-qtkf
