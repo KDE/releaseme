@@ -27,7 +27,7 @@ V_525_additions = %w()
 # Stuff in https://invent.kde.org/plasma-bigscreen/
 V_526_additions = %w(plasma-remotecontrollers aura-browser plank-player)
 V_527_additions = %w(plasma-remotecontrollers aura-browser plank-player)
-V_60_additions = %w(kwayland plasma-framework kactivities kactivities-stats print-manager wacomtablet)
+V_60_additions = %w()
 release_additions = {"5.25" => V_525_additions, "5.27" => V_527_additions, "6.0" => V_60_additions}
 
 options = {}
