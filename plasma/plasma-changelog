@@ -19,7 +19,7 @@ FILE=${OLD_VERSION}-${VERSION}.md
 rm -rf ${FILE}
 rm -rf tmp-changelog
 mkdir tmp-changelog
-WORKSPACE=`cat git-repositories-for-release`
+WORKSPACE=`cat git-repositories-for-release-frameworks`
 cd tmp-changelog
 for project in $WORKSPACE; do
  INVENT_PATH=$(../lib/kde_identify.rb $project)

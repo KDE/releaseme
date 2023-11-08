@@ -48,5 +48,5 @@ end
 
 makeTars = MakeTars.new
 makeTars.testGpg
-#makeTars.makeTars
+makeTars.makeTars
 makeTars.makeSourcesList
