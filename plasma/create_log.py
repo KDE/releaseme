@@ -71,7 +71,7 @@ for repo in repos:
 	if retval != 0:
                 #jr changed to not have show line
 		#print "<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a> <a href='#" + repo + "' onclick='toggle(\"ul" + repo +"\", this)'>[Show]</a></h3>"
-		print("### [{0}](https://commits.kde.org/{0}))\n".format(repo))
+		print("### [{0}](https://commits.kde.org/{0})\n".format(repo))
 		print("+ New in this release")
 		continue
 
