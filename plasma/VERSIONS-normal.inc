@@ -37,7 +37,7 @@ VIDEO_VALUE="false" # The video ID used in URL for "youtube" and "peertube", and
 # command from   git clone invent:sysadmin/appstream-metainfo-release-update
 APPSTREAM_UPDATER="/home/jr/src/sysadmin/appstream-metainfo-release-update/appstream-metainfo-release-update"
 
-GPG_KEY=D7574483BB57B18D
+GPG_KEY=E0A3EB202F8E57528E13E72FD7574483BB57B18D
 RELEASE_DUDE="Jonathan Esk-Riddell"
 
 BROWSER=firefox  # chromium, firefox etc
