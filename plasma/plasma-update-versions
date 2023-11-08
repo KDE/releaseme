@@ -9,6 +9,8 @@
 
 # Todo rewrite this in Ruby so that it can easily switch between plasma and frameworks and whatever else
 
+# Frameworks needs to do ECM update then two steps to stop CI getting confused, first updates KF_VERSION then second does KF_DEP_VERSION
+
 set -xe
 
 pwd
@@ -37,6 +39,7 @@ for project in $WORKSPACE; do
     pwd;
     git checkout ${BRANCH}
     sed -i "s,KF_VERSION \".*\",KF_VERSION \"${VERSION}\"," CMakeLists.txt;
+    sed -i "s,KF_DEP_VERSION \".*\",KF_DEP_VERSION \"${VERSION}\"," CMakeLists.txt;
     # update appstream files release version unless we are doing a beta
     if [ ! $ORIGIN == 'trunk' ]; then
       for metainfofile in `find . -name \*appdata.xml -o -name \*metainfo.xml`; do
