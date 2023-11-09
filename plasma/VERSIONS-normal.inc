@@ -5,7 +5,7 @@
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
 MAJOR_VERSION=6
-VERSION=5.27.80
+VERSION=5.81.0
 SHORT_VERSION=6.0
 OLD_VERSION=5.27.9
 ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts
