@@ -88,3 +88,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - test gpg works with agent before running plasma-tag
  - for 5.16.90 the release_data file had the kscreen info duplicated info libkscreen, why?
  - block running plasma-release unless plasma-tags-test has been run
+
+## TODO Frameworks
+ - Update version update to have two steps
+ - Update tags to do tag branch thing instead of master as done on old scripts

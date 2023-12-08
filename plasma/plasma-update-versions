@@ -20,7 +20,7 @@ ls
 
 # echo for updating version in master after branch override versions here
 BRANCH=master
-VERSION=5.245.0
+VERSION=5.247.0
 
 WORKSPACE=`cat git-repositories-for-release-frameworks`
 echo "updating versions for $WORKSPACE"
@@ -39,7 +39,7 @@ for project in $WORKSPACE; do
     pwd;
     git checkout ${BRANCH}
     sed -i "s,KF_VERSION \".*\",KF_VERSION \"${VERSION}\"," CMakeLists.txt;
-    sed -i "s,KF_DEP_VERSION \".*\",KF_DEP_VERSION \"${VERSION}\"," CMakeLists.txt;
+    #sed -i "s,KF_DEP_VERSION \".*\",KF_DEP_VERSION \"${VERSION}\"," CMakeLists.txt;
     # update appstream files release version unless we are doing a beta
     if [ ! $ORIGIN == 'trunk' ]; then
       for metainfofile in `find . -name \*appdata.xml -o -name \*metainfo.xml`; do
