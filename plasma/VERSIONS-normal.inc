@@ -7,7 +7,8 @@
 PRODUCT="frameworks"
 
 MAJOR_VERSION=6
-VERSION=5.246.0
+VERSION=5.300.0
+NEXT_VERSION=5.400.0 # what will the next release be for ./update-verions --next
 SHORT_VERSION=6.0
 OLD_VERSION=5.245.0
 ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts

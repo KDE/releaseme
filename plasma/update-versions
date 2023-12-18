@@ -1,0 +1,98 @@
+#!/usr/bin/env ruby
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2023 Jonathan Riddell <jr@jriddell.org>
+
+# Run before making tars
+# ./update-versions
+# and just after a release update versions for next release run
+# ./update-versions --next
+
+require 'net/http'
+require 'json'
+require 'optparse'
+require 'fileutils'
+require_relative 'lib/plasma_version'
+require_relative 'lib/kde_identify'
+
+class UpdateVersions
+  def initialize
+    @plasma_versions = PlasmaVersion.new
+    @next = false
+    @trial = false
+    OptionParser.new do |opts|
+      opts.banner = "Usage: update-versions [options]"
+
+      opts.on("-t", "--trial", "Trial Run (do not push)") do |v|
+        @trial = v
+      end
+      opts.on("-n", "--next", "Next") do |v|
+        @next = v
+      end
+    end.parse!
+    @variable = "PLASMA_VERSION"
+    @variable = "KF_DEP_VERSION" if @plasma_versions.product == "frameworks"
+    @variable = "KF_VERSION" if @plasma_versions.product == "frameworks" and @next
+    @special_variables = {"kapidox": "VERSION", "extra-cmake-module": "VERSION", "breeze-grub": nil}
+    @directory = "tmp-version-update"
+    @new_version = @plasma_versions.version
+    if @next
+      @new_version = @plasma_versions.next_version
+    end
+  end
+
+  def doUpdates
+    #
+    FileUtils.rm_rf(@directory)
+    FileUtils.mkdir(@directory)
+    Dir.chdir(@directory) do
+      # Get products
+      repos = File.readlines("../git-repositories-for-release-#{@plasma_versions.product}", chomp: true)
+      repos.each do |repo|
+        # Get KDE invent path
+        invent_category = KDEIndentify.get_kde_category(repo)
+        # git clone
+        puts ":: Git cloning #{repo} Branch #{@plasma_versions.branch}"
+        `git clone --depth 1 --no-single-branch invent:#{invent_category}/#{repo} #{repo}`
+        Dir.chdir(repo) do
+          `git checkout #{@plasma_versions.branch}`
+          # do sed
+          system('sed', '-i', "s,#{@variable} " + '\".*\"' + ",#{@variable} " + '\"' + "#{@new_version}" + '\",', "CMakeLists.txt")
+          system("echo", 'sed', '-i', "s,#{@variable} " + '\".*\"' + ",#{@variable} " + '\"' + "#{@new_version}" + '\",', "CMakeLists.txt")
+          puts "Done SED"
+          if @plasma_versions.origin != "trunk"
+            appstream = Dir.glob("**/*.appdata.xml")
+            appstream << Dir.glob("**/*.metainfo.xml")
+            appstream.each do |appstream_file|
+              puts "::#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datastring #{@plasma_versions.releasedate} --releases-to-show 4"
+              `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datastring #{@plasma_versions.releasedate} --releases-to-show 4`
+            end
+          end
+          system("git --no-pager diff")
+          `git commit -a -m 'update version for new release'`
+          if not @trial
+            `git push`
+          end
+          # push to master
+          if @plasma_versions.origin != "trunk" and @plasma_versions.origin != "lts"
+            `git checkout master`
+            appstream = Dir.glob("**/*.appdata.xml")
+            appstream << Dir.glob("**/*.metainfo.xml")
+            appstream.each do |appstream_file|
+              `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datastring #{@plasma_versions.releasedate} --releases-to-show 4`
+            end
+          end
+          system("git --no-pager diff")
+          `git commit -a -m 'update version for new release'`
+          if not @trial
+            `git push`
+          end
+        end
+      end
+    end
+  end
+
+end
+
+updateVersions = UpdateVersions.new
+updateVersions.doUpdates

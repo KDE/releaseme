@@ -4,7 +4,7 @@
     SPDX-FileCopyrightText: 2015 Harald Sitter <sitter@kde.org>
     SPDX-FileCopyrightText: 2016 David Edmundson <kde@davidedmundson.co.uk>
 -->
-# Plasma Release Process
+# Frameworks and Plasma Release Process
 
 ## on dep and repo freeze day:
  - Work with Plasma team and Promo team to make an beta and final announce and get the video going
@@ -27,8 +27,8 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 
 ## On Tar days (making tars)
  - update VERSIONS.inc
- - run ./plasma-update-versions (ensure it is using the right branches)
- - run ./plasma-tars script to make tars (or run the job on xenon http://xenon.pangea.pub/job/plasma-releaseme-tars/ then ./plasma-xenon-download)
+ - run ./update-versions (ensure it is using the right branches)
+ - run ./release-tars script to make tars
  - check tmp-tests output for important differences
  - run ./plasma-update-web-git
  - run ./plasma-upload
