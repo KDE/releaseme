@@ -93,3 +93,4 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 ## TODO Frameworks
  - Update version update to have two steps
  - Update tags to do tag branch thing instead of master as done on old scripts
+ - consider updating PROJECT_VERSION in plasma deps to e.g. PROJECT_DEP_VERSION similar to frameworks for CI happiness.  e.g. kscreen should dep on current released version of libkscreen
