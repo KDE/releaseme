@@ -92,5 +92,5 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 
 ## TODO Frameworks
  - Update version update to have two steps
- - Update tags to do tag branch thing instead of master as done on old scripts
+ - Frameworks pushed tags with v5.100.0-rc1 on packaging then any plasma-update-1-tar calls should use that tag and local branch and a cherry-pick (or master) and push v5.100.0-rc2 see ./make_rc_tag.sh and ./make_updated_tarball.sh
  - consider updating PROJECT_VERSION in plasma deps to e.g. PROJECT_DEP_VERSION similar to frameworks for CI happiness.  e.g. kscreen should dep on current released version of libkscreen
