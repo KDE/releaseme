@@ -8,12 +8,15 @@
 # and just after a release update versions for next release run
 # ./update-versions --next
 
+# It'll update the version and the dep version for the next release
+
 require 'net/http'
 require 'json'
 require 'optparse'
 require 'fileutils'
 require_relative 'lib/plasma_version'
 require_relative 'lib/kde_identify'
+require_relative 'retry'
 
 class UpdateVersions
   def initialize
@@ -30,14 +33,15 @@ class UpdateVersions
         @next = v
       end
     end.parse!
-    @variable = "PLASMA_VERSION"
+    @variable = "PROJECT_VERSION"
     @variable = "KF_DEP_VERSION" if @plasma_versions.product == "frameworks"
     @variable = "KF_VERSION" if @plasma_versions.product == "frameworks" and @next
-    @special_variables = {"kapidox": "VERSION", "extra-cmake-module": "VERSION", "breeze-grub": nil}
+    @special_variables = {"extra-cmake-modules"=> "VERSION"}
     @directory = "tmp-version-update"
-    @new_version = @plasma_versions.version
     if @next
       @new_version = @plasma_versions.next_version
+    else
+      @new_version = @plasma_versions.version
     end
   end
 
@@ -53,19 +57,29 @@ class UpdateVersions
         invent_category = KDEIndentify.get_kde_category(repo)
         # git clone
         puts ":: Git cloning #{repo} Branch #{@plasma_versions.branch}"
-        `git clone --depth 1 --no-single-branch invent:#{invent_category}/#{repo} #{repo}`
+        sleep(2) # meh invent.kde.org seems to block git clone if you do several
+        Retry.retry_it(times: 3, sleep: 4) { `git clone --depth 1 --no-single-branch invent:#{invent_category}/#{repo} #{repo}` || raise }
         Dir.chdir(repo) do
           `git checkout #{@plasma_versions.branch}`
           # do sed
-          system('sed', '-i', "s,#{@variable} " + '\".*\"' + ",#{@variable} " + '\"' + "#{@new_version}" + '\",', "CMakeLists.txt")
-          system("echo", 'sed', '-i', "s,#{@variable} " + '\".*\"' + ",#{@variable} " + '\"' + "#{@new_version}" + '\",', "CMakeLists.txt")
-          puts "Done SED"
+          if @special_variables.include?(repo) and @next
+            @sub_variable = @special_variables[repo]
+          else
+            @sub_variable = @variable
+          end
+          if File.exist?("CMakeLists.txt")
+            system('sed', '-i', "s,set(#{@sub_variable} " + '\".*\"' + ",set(#{@sub_variable} " + '\"' + "#{@new_version}" + '\",', "CMakeLists.txt")
+          end
+          # kapidox has a setup.py
+          if File.exist?("setup.py") and @next
+            system('sed', '-i', "s,version=" + "'.*'" + ",version=" + "'#{@new_version}',", "setup.py")
+          end
+
           if @plasma_versions.origin != "trunk"
-            appstream = Dir.glob("**/*.appdata.xml")
-            appstream << Dir.glob("**/*.metainfo.xml")
+            appstream = Dir.glob("**/*.appdata.xml") + Dir.glob("**/*.metainfo.xml")
             appstream.each do |appstream_file|
               puts "::#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datastring #{@plasma_versions.releasedate} --releases-to-show 4"
-              `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datastring #{@plasma_versions.releasedate} --releases-to-show 4`
+              `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datestring #{@plasma_versions.releasedate} --releases-to-show 4`
             end
           end
           system("git --no-pager diff")
@@ -79,7 +93,7 @@ class UpdateVersions
             appstream = Dir.glob("**/*.appdata.xml")
             appstream << Dir.glob("**/*.metainfo.xml")
             appstream.each do |appstream_file|
-              `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datastring #{@plasma_versions.releasedate} --releases-to-show 4`
+              `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datestring #{@plasma_versions.releasedate} --releases-to-show 4`
             end
           end
           system("git --no-pager diff")

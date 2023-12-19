@@ -68,6 +68,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - ./plasma-tag-test to check the tags are really pushed or run http://xenon.pangea.pub/job/plasma-releaseme-tags-test/ to check tags are really pushed
  - ./plasma-release
  - this will open tabs in firefox and kate: check the web pages are good, e-mail out the texts, post the social media bits
+ - run ./update-versions --next to update the version ahead of the next release
  - check if www/images/teaser teaser image needs an update
  - for feature release schedule a kickoff meeting for next feature release for scheduling and feature planning
  - for beta releases also copy announce to 5.x.0 page and poke Paul etc to do a final one then ask for translations
