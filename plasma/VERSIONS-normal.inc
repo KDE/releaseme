@@ -10,7 +10,7 @@ SHORT_VERSION=6.0
 OLD_VERSION=5.90.0
 ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=unstable  # set to unstable or stable
-OLD_FTPSTABLE=stable  # set to unstable or stable of previous release for changelog
+OLD_FTPSTABLE=unstable  # set to unstable or stable of previous release for changelog
 BRANCH=master # set to master or Plasma/5.x
 
 RELEASETYPE=beta # for changelog, set to beta, feature or bugfix
