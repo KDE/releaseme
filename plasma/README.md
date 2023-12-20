@@ -94,3 +94,9 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - Update version update to have two steps
  - Frameworks pushed tags with v5.100.0-rc1 on packaging then any plasma-update-1-tar calls should use that tag and local branch and a cherry-pick (or master) and push v5.100.0-rc2 see ./make_rc_tag.sh and ./make_updated_tarball.sh
  - consider updating PROJECT_VERSION in plasma deps to e.g. PROJECT_DEP_VERSION similar to frameworks for CI happiness.  e.g. kscreen should dep on current released version of libkscreen
+ - consider a script to update copyright years for KAboutData in Plasma
+ - plasma-upload for Frameworks (to upload to ftpadmin, run some checks compared to previous release, and update info page
+ - plasma-changelog works ok for frameworks but does need fixes
+ - plasma-webpages needs frameworksified
+ - ./plasma-add-bugzilla-versions needs frameworksified (for now use ./create_bugzilla_versions.sh)
+ - ./plasma-tag needs frameworkified
