@@ -27,7 +27,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 
 ## On Tar days (making tars)
  - update VERSIONS.inc
- - run ./update-versions (ensure it is using the right branches)
+ - run ./update-versions to update the DEP version to the current one
  - run ./release-tars script to make tars
  - check tmp-tests output for important differences
  - run ./plasma-update-web-git
