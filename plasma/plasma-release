@@ -14,7 +14,7 @@ ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/plasma/${VERSION}"
 
 # remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
 
-sed -i "s/draft: true/draft: false/" ${ANNOUNCECHECKOUT}/plasma/${MAJOR_VERSION}/${VERSION}.md
+#sed -i "s/draft: true/draft: false/" ${ANNOUNCECHECKOUT}/plasma/${MAJOR_VERSION}/${VERSION}.md
 sed -i "s/draft: true/draft: false/" ${INFOCHECKOUT}/plasma-${VERSION}.md
 
 # www/index.php
