@@ -12,15 +12,15 @@ def j(*args)
 end
 
 def default_i18n
-  { stable: nil, stableKF5: nil, trunk: nil, trunkKF5: 'master', component: 'default' }
+  { stable: nil, stableKF5: nil, stableKF6: nil, trunk: nil, trunkKF5: nil, trunkKF6: 'master', component: 'default' }
 end
 
 def frameworks_i18n
-  { stable: nil, stableKF5: nil, trunk: nil, trunkKF5: 'kf5', trunkKF6: nil, component: 'default' }
+  { stable: nil, stableKF5: nil, stableKF6: nil, trunk: nil, trunkKF5: 'kf5', trunkKF6: 'master', component: 'default' }
 end
 
 def plasma_kf6_i18n
-  { stable: nil, stableKF5: 'Plasma/5.27', trunk: nil, trunkKF5: nil, trunkKF6: 'master', component: 'default' }
+  { stable: nil, stableKF5: 'Plasma/5.27', stableKF6: 'Plasma/6.0', trunk: nil, trunkKF5: nil, trunkKF6: 'master', component: 'default' }
 end
 
 def stub_projects_single(url)
@@ -108,8 +108,8 @@ def stub_api
   stub_request(:get, 'https://projects.kde.org/api/v1/project/extragear/utils/yakuake')
     .to_return(body: j(path: 'extragear/utils/yakuake',
                        repo: 'yakuake',
-                       i18n: { stable: nil, stableKF5: 'notmaster', trunk: nil,
-                               trunkKF5: 'master', component: 'extragear-utils' }))
+                       i18n: { stable: nil, stableKF5: nil, stableKF6: 'notmaster', trunk: nil,
+                               trunkKF5: nil, trunkKF6: 'master', component: 'extragear-utils' }))
 
   stub_request(:get, 'https://projects.kde.org/api/v1/project/extragear/utils/krusader')
     .to_return(body: j(path: 'extragear/utils/krusader',

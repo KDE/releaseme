@@ -56,12 +56,8 @@ module ReleaseMe
         vcs.repository = "https://invent.kde.org/#{api_project.repo}"
       end
 
-      i18n_trunk = if api_project.i18n.data[:trunk_kf6] and not api_project.i18n.trunk_kf6.nil?
-                     api_project.i18n.trunk_kf6
-                   else
-                     api_project.i18n.trunk_kf5
-                   end
-      i18n_stable = api_project.i18n.stable_kf5
+      i18n_trunk = api_project.i18n.trunk_kf6 ? api_project.i18n.trunk_kf6 : api_project.i18n.trunk_kf5
+      i18n_stable = api_project.i18n.stable_kf6 ? api_project.i18n.stable_kf6 : api_project.i18n.stable_kf5
 
       # Figure out which i18n path to use.
       i18n_path = api_project.i18n.component
@@ -142,12 +138,8 @@ module ReleaseMe
         end
 
 
-        if api_project.i18n.data.include?(:trunk_kf6) and not api_project.i18n.trunk_kf6.nil?
-          i18n_trunk = api_project.i18n.trunk_kf6
-        else
-          i18n_trunk = api_project.i18n.trunk_kf5
-        end
-        i18n_stable = api_project.i18n.stable_kf5
+        i18n_trunk = api_project.i18n.trunk_kf6 ? api_project.i18n.trunk_kf6 : api_project.i18n.trunk_kf5
+        i18n_stable = api_project.i18n.stable_kf6 ? api_project.i18n.stable_kf6 : api_project.i18n.stable_kf5
 
         # Figure out which i18n path to use.
         i18n_path = api_project.i18n.component
