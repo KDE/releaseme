@@ -39,18 +39,9 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  On a new 5.x release make branches Plasma/5.x after making the tars
 
  - run ./make-branch for Plasma (but not Frameworks)
- - edit ./plasma-update-versions to override versions to set 5.x.80 and run it for master
- - Update build.kde.org CI https://community.kde.org/Infrastructure/Continuous_Integration_System#Updating_builds_on_switching_the_.22stable.22_branch
- - Increse invent:sysadmin/repo-metadata dependencies/logical-module-structure top use new branch Plasma/5.x and build that branch in build.kde.org
- - Trigger build.kde.org to update build setups to latest kde-build-metadata info:
-   - https://build.kde.org/job/Administration/job/DSL%20Job%20Seed/
- - When above has completed start global rebuild
-   - https://build.kde.org/view/CI%20Management/job/Global%20Rebuild%20Plasma%20kf5-qt5%20SUSEQt5.10/
-   - https://build.kde.org/view/CI%20Management/job/Global%20Rebuild%20Plasma%20kf5-qt5%20FreeBSDQt5.10/
-  - build.kde.org CI: log in, switch to "CI Management", run "DSL Job Seed" to make sure any latest build-metadata is picked up,
-  - once done trigger "Global Rebuild Plasma stable*" builds, which will first update dependencies to latest needs and then trigger rebuild of any modules
-  - ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages and update repo-metadata
-  - Update https://community.kde.org/Plasma/Live_Images
+ - edit ./update-versions to override versions to set 5.x.80 and run it for master
+ - ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages and update repo-metadata
+ - Update https://community.kde.org/Plasma/Live_Images
 
 ## On tar day (prepare)
  - run ./plasma-changelog (manually edit file after)
@@ -58,7 +49,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - Run ./plasma-update-web-git
  - run ./plasma-webpages [-n] and check over output opened in firefox (use -n for noannounce on e.g. .0 releases where the announce is written manually)
  - run cwebp on the images to convert to WebP and update URLs https://developers.google.com/speed/webp
- - run ./plasma-add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
+ - run ./add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
  - tell release-team@kde.org, plasma-devel@kde.org
  - tell VDG and Plasma team about announce and get feedback
 
@@ -98,5 +89,5 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - plasma-upload for Frameworks (to upload to ftpadmin, run some checks compared to previous release, and update info page
  - plasma-changelog works ok for frameworks but does need fixes
  - plasma-webpages needs frameworksified
- - ./plasma-add-bugzilla-versions needs frameworksified (for now use ./create_bugzilla_versions.sh)
+ - ./add-bugzilla-versions needs frameworksified (for now use ./create_bugzilla_versions.sh)
  - ./plasma-tag needs frameworkified
