@@ -1,0 +1,17 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2015-2021 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
+
+# checkout/update web svn bits for announcement
+
+set -xe
+
+. VERSIONS.inc
+
+cd ${WWWCHECKOUT}
+git checkout master
+git pull --rebase
+
+git checkout -b work/${PRODUCT}-${VERSION}
+git push -u origin work/${PRODUCT}-${VERSION}

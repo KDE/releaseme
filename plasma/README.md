@@ -30,7 +30,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - run ./update-versions to update the DEP version to the current one
  - run ./release-tars script to make tars
  - check tmp-tests output for important differences
- - run ./plasma-update-web-git
+ - run ./update-web-git
  - run ./upload-tars
  - run ./plasma-update-1-tar as needed for problems/late updates # TODO make this print out git log changes
  - (or upload to upload.kde.org and tell sysadmins to make tars available to packagers if you do not have permission)
