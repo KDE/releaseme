@@ -22,8 +22,8 @@ INFOCHECKOUT="/home/jr/src/websites/kde-org/content/info"                   # gi
 ANNOUNCECHECKOUT="/home/jr/src/websites/kde-org/content/announcements"  # git@invent.kde.org:websites/kde-org.git
 L10NSCRIPTSCHECKOUT="/home/jr/src/sysadmin/l10n-scripty"    # git clone git@invent.kde.org:sysadmin/l10n-scripty.git
 WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde.org:websites/kde-org.git
-UPLOADSERVER="ftpadmin@tinami.kde.org"
-#UPLOADSERVER="weegie"
+#UPLOADSERVER="ftpadmin@tinami.kde.org"
+UPLOADSERVER="embra"
 
 RELEASEDATE="Wednesday, 10 January 2023" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEDATEISO="2024-01-10" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`

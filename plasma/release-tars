@@ -41,7 +41,7 @@ class MakeTars
   def makeSourcesList
     puts "running create_sources_inc"
     Dir.chdir("#{@plasma_versions.product}-#{@plasma_versions.version}") do
-      `../create_sources_inc #{@plasma_versions.version} > source-plasma-#{@plasma_versions.version}.inc`
+      `../create_sources_inc #{@plasma_versions.version} > source-#{@plasma_versions.product}-#{@plasma_versions.version}.inc`
     end
   end
 end
