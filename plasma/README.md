@@ -38,7 +38,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 ## On Beta day (making branches)
  On a new 5.x release make branches Plasma/5.x after making the tars
 
- - run ./plasma-branch
+ - run ./make-branch for Plasma (but not Frameworks)
  - edit ./plasma-update-versions to override versions to set 5.x.80 and run it for master
  - Update build.kde.org CI https://community.kde.org/Infrastructure/Continuous_Integration_System#Updating_builds_on_switching_the_.22stable.22_branch
  - Increse invent:sysadmin/repo-metadata dependencies/logical-module-structure top use new branch Plasma/5.x and build that branch in build.kde.org
