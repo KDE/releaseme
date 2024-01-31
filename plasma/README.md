@@ -82,6 +82,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - block running plasma-release unless plasma-tags-test has been run
 
 ## TODO Frameworks
+ - Update version for ECM deps in Frameworks
  - Update version update to have two steps
  - Frameworks pushed tags with v5.100.0-rc1 on packaging then any plasma-update-1-tar calls should use that tag and local branch and a cherry-pick (or master) and push v5.100.0-rc2 see ./make_rc_tag.sh and ./make_updated_tarball.sh
  - consider updating PROJECT_VERSION in plasma deps to e.g. PROJECT_DEP_VERSION similar to frameworks for CI happiness.  e.g. kscreen should dep on current released version of libkscreen

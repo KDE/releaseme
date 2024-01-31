@@ -4,13 +4,13 @@
 # SPDX-FileCopyrightText: 2020 Bhushan Shah <bhush94@gmail.com>
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
-PRODUCT="plasma" # frameworks or plasma
+PRODUCT="frameworks" # frameworks or plasma
 
 MAJOR_VERSION=6
-VERSION=5.248.0
-NEXT_VERSION=5.249.0 # what will the next release be for ./update-verions --next
+VERSION=5.249.0
+NEXT_VERSION=5.250.0 # what will the next release be for ./update-verions --next
 SHORT_VERSION=6.0
-OLD_VERSION=5.247.0
+OLD_VERSION=5.248.0
 ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=unstable  # set to unstable or stable
 OLD_FTPSTABLE=unstable  # set to unstable or stable of previous release for changelog
@@ -21,8 +21,8 @@ RELEASETYPE=RC # for changelog, set to beta, feature or bugfix
 INFOCHECKOUT="/home/jr/src/websites/kde-org/content/info"                   # git@invent.kde.org:websites/kde-org.git
 ANNOUNCECHECKOUT="/home/jr/src/websites/kde-org/content/announcements"  # git@invent.kde.org:websites/kde-org.git
 WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde.org:websites/kde-org.git
-#UPLOADSERVER="ftpadmin@tinami.kde.org"
-UPLOADSERVER="embra"
+UPLOADSERVER="ftpadmin@tinami.kde.org"
+#UPLOADSERVER="embra"
 
 RELEASEDATE="Wednesday, 10 January 2023" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
 RELEASEDATEISO="2024-01-10" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
