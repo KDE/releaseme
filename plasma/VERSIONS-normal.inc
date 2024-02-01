@@ -8,13 +8,13 @@ PRODUCT="frameworks" # frameworks or plasma
 
 MAJOR_VERSION=6
 VERSION=5.249.0
-NEXT_VERSION=5.250.0 # what will the next release be for ./update-verions --next
+NEXT_VERSION=6.0.0 # what will the next release be for ./update-verions --next
 SHORT_VERSION=6.0
 OLD_VERSION=5.248.0
 ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=unstable  # set to unstable or stable
 OLD_FTPSTABLE=unstable  # set to unstable or stable of previous release for changelog
-BRANCH=master # set to master or Plasma/5.x
+BRANCH=Plasma/6.0 # set to master or Plasma/5.x
 
 RELEASETYPE=RC # for changelog, set to beta, feature or bugfix
 

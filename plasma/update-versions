@@ -69,7 +69,7 @@ class UpdateVersions
           end
           if File.exist?("CMakeLists.txt")
             system('sed', '-i', "s,set(#{@sub_variable} " + '\".*\"' + ",set(#{@sub_variable} " + '\"' + "#{@new_version}" + '\",', "CMakeLists.txt")
-            #system('sed', '-i', "s,find_package(ECM [0-9\.]\\+,find_package(ECM #{@new_version},", "CMakeLists.txt")
+            system('sed', '-i', "s,find_package(ECM [0-9\.]\\+,find_package(ECM #{@new_version},", "CMakeLists.txt")
           end
           # kapidox has a setup.py
           if File.exist?("setup.py") and @next

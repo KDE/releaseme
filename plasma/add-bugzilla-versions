@@ -27,8 +27,8 @@ fi
 
 for PROJECT in `cat $file`; do
 
- if [ $PRODUCT = "frameworks" ]; then
-   PROJECT="framworks-${PROJECT}"
+ if [ $PRODUCT = "frameworks" -a $PROJECT != "extra-cmake-modules"]; then
+   PROJECT="frameworks-${PROJECT}"
  fi
 
  # Add the new version
@@ -50,6 +50,8 @@ for PROJECT in `cat $file`; do
 done
 
 verify=`head -n1 git-repositories-for-release-frameworks`
-
+if [ $PRODUCT = "frameworks" ]; then
+  verify="frameworks-${verify}"
+fi
 echo "opening $verify as example to verify"
 $BROWSER "https://bugs.kde.org/editproducts.cgi?action=edit&product=${verify}"
