@@ -75,8 +75,10 @@ class UploadTars
   end
 
   def webpages
+    product_webpage = "plasma"
+    product_webpage = "kf" if @product == "frameworks"
     puts "== start updating info page source-#{@product}-#{@version}.html"
-    FileUtils.cp("#{@product}-#{@version}/source-#{@product}-#{@version}.inc", "#{@infocheckout}/sources/source-#{@product}-#{@version}.html")
+    FileUtils.cp("#{@product}-#{@version}/source-#{@product}-#{@version}.inc", "#{@infocheckout}/sources/source-#{product_webpage}-#{@version}.html")
     Dir.chdir("#{@infocheckout}") do
       system("git add sources/source-#{@product}-#{@version}.html || true")
       system("git diff sources/source-#{@product}-#{@version}.html")

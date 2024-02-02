@@ -2,8 +2,10 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2015-2021 Jonathan Riddell <jr@jriddell.org>
 
-# Use this script to update 1 tar
+# Use this script to update 1 tar prior to release
 # ./plasma-update-1-tar plasma-workspace
+
+# Note for Frameworks it should do a local checkout of the existing tag and cherry-pick or merge from there then push that to a new tag
 
 set -xe
 
@@ -11,14 +13,13 @@ TAR=$1
 
 . VERSIONS.inc
 
-svn --version > /dev/null || { echo "Install subversion"; exit 1; }
 pkgdiff --version > /dev/null || { echo "Install pkgdiff"; exit 1; }
 
 echo asdf > /tmp/test-gpg
 gpg --clearsign /tmp/test-gpg
 rm -f /tmp/test-gpg /tmp/test-gpg.asc
 
-cd $VERSION
+cd $PRODUCT-$VERSION
 
 rm -fr ${TAR}-${VERSION}/
 mv ${TAR}-5.21.0.tar.xz.sig ${TAR}-5.21.0.tar.xz.sig.old || true
@@ -38,4 +39,4 @@ $BROWSER ${SCRATCH_SERVER_URL}/${TAR}-${VERSION}-changes_report.html
 cd ..
 echo == end diff to previous tar
 
-echo now run ./plasma-upload
+echo now run ./upload-tars

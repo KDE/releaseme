@@ -15,12 +15,12 @@
  - or for a stable version http://build.neon.kde.org/view/1%20stable%20%E2%9A%9B%20git%20stable/
 
  -  Check for critical bugs: https://bugs.kde.org/buglist.cgi?bug_severity=critical&bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&known_name=Plasma5-All-Critical&list_id=1364199&product=Breeze&product=kde-cli-tools&product=kde-gtk-config&product=kded-appmenu&product=kdeplasma-addons&product=kfontview&product=khotkeys&product=kinfocenter&product=klipper&product=kmenuedit&product=knetattach&product=krunner&product=ksmserver&product=ksplash&product=ksshaskpass&product=Plasma%20Vault&product=kstart&product=ksysguard&product=kwin&product=kwrited&product=Discover&product=Plasma%20Workspace%20Wallpapers&product=plasma-mediacenter&product=plasma-nm&product=plasmashell&product=Powerdevil&product=systemsettings&product=Touchpad-KCM&product=user-manager&query_based_on=Plasma5-All-Critical&query_format=advanced
- -  Update plasma-git-repos and generate git-repositories-for-release then e-mail out list of repos you plan to package and highlight any differences to last release
+ -  Update git-repos and generate git-repositories-for-release-plasma then e-mail out list of repos you plan to package and highlight any differences to last release
 
 Tars get made and release same day for beta releases, bugfix releases but not .0 releases.  Beta also has some extra steps as well as the tar making steps.
 
 ## On Beta day (setting versions)
- - Add release exceptions array to ./plasma-git-repos and run "./plasma-git-repos -r 5.xx" to update list of things to package in git-repositories-for-release
+ - Add release exceptions array to ./git-repos and run "./git-repos -r 6.xx" to update list of things to package in git-repositories-for-release
  - set QT_VERSION and KF5_VERSION in ./plasma-update-versions-qtkf and run that script to set version agreed at cycle kickoff (make sure to check the exceptions)
  - Edit and run plasma-bugzilla-versions to add a new version git-stable-Plasma/5.xx
  - Update bug closing bot versions at https://invent.kde.org/sysadmin/bugzilla-bot/-/blob/master/data/versions.yml
@@ -82,13 +82,9 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - block running plasma-release unless plasma-tags-test has been run
 
 ## TODO Frameworks
- - Update version for ECM deps in Frameworks
- - Update version update to have two steps
- - Frameworks pushed tags with v5.100.0-rc1 on packaging then any plasma-update-1-tar calls should use that tag and local branch and a cherry-pick (or master) and push v5.100.0-rc2 see ./make_rc_tag.sh and ./make_updated_tarball.sh
- - consider updating PROJECT_VERSION in plasma deps to e.g. PROJECT_DEP_VERSION similar to frameworks for CI happiness.  e.g. kscreen should dep on current released version of libkscreen
+ - Frameworks pushed tags with v5.100.0-rc1 on packaging then any plasma-update-1-tar calls should use that tag and local branch and a cherry-pick (or master) and push v5.100.0-rc2 see ./make_rc_tag.sh and ./make_updated_tarball.sh, port into plasma-update-1-tar
  - consider a script to update copyright years for KAboutData in Plasma
  - plasma-upload for Frameworks (to upload to ftpadmin, run some checks compared to previous release, and update info page
  - plasma-changelog works ok for frameworks but does need fixes
  - plasma-webpages needs frameworksified
- - ./add-bugzilla-versions needs frameworksified (for now use ./create_bugzilla_versions.sh)
  - ./plasma-tag needs frameworkified

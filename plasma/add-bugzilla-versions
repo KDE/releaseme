@@ -49,7 +49,7 @@ for PROJECT in `cat $file`; do
 
 done
 
-verify=`head -n1 git-repositories-for-release-frameworks`
+verify=`head -n1 git-repositories-for-release-${PRODUCT}`
 if [ $PRODUCT = "frameworks" ]; then
   verify="frameworks-${verify}"
 fi
