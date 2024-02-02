@@ -2,16 +2,19 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 # SPDX-FileCopyrightText: 2020 Jonathan Riddell <jr@jriddell.org>
 
-# get a list of git repositories we want to make part of the release using the
-# invent gitlab category plus a manual list of exclusions and additions
-
+# Get a list of git repositories we want to make part of the release using the
+# invent gitlab category plus a manual list of exclusions and additions.
+# Product is set in VERSIONS.inc
 
 require 'net/http'
 require 'json'
 require 'optparse'
 require 'fileutils'
+require_relative 'lib/plasma_version'
 
-product = :plasma
+plasma_versions = PlasmaVersion.new
+
+product = plasma_versions.product.to_sym
 apiUrl = {plasma:"https://projects.kde.org/api/v1/projects/plasma",
           frameworks:"https://projects.kde.org/api/v1/projects/frameworks"}
 
@@ -41,10 +44,9 @@ apiUrl = {plasma:"https://projects.kde.org/api/v1/projects/plasma",
 
 options = {}
 OptionParser.new do |parser|
-  parser.banner = "Usage: plasma-git-repos -r 5.19"
+  parser.banner = "Usage: git-repos -r 5.19"
 
   parser.on('-r', '--release RELEASE', 'Release RELEASE version') { |v| options[:release] = v }
-  parser.on('-f', '--frameworks', 'Make a Frameworks release') { |v| product = :frameworks }
 end.parse!
 
 if not options.include?(:release) then
