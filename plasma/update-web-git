@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: 2015-2021 Jonathan Riddell <jr@jriddell.org>
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
-# checkout/update web svn bits for announcement
+# Update and branch the web Git repo before making additions
 
 set -xe
 
@@ -13,5 +13,8 @@ cd ${WWWCHECKOUT}
 git checkout master
 git pull --rebase
 
-git checkout -b work/${PRODUCT}-${VERSION}
-git push -u origin work/${PRODUCT}-${VERSION}
+# work branches do not allow dots so replace with dash e.g. work/frameworks-6-0-0
+BRANCH=${VERSION//./-}
+
+git checkout -b work/${PRODUCT}-${BRANCH}
+git push -u origin work/${PRODUCT}-${BRANCH}

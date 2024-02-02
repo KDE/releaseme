@@ -18,8 +18,6 @@ BRANCH=master # set to master or Plasma/5.x
 
 RELEASETYPE=RC # for changelog, set to beta, feature or bugfix
 
-INFOCHECKOUT="/home/jr/src/websites/kde-org/content/info"                   # git@invent.kde.org:websites/kde-org.git
-ANNOUNCECHECKOUT="/home/jr/src/websites/kde-org/content/announcements"  # git@invent.kde.org:websites/kde-org.git
 WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde.org:websites/kde-org.git
 UPLOADSERVER="ftpadmin@tinami.kde.org"
 #UPLOADSERVER="embra"

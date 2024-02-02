@@ -44,9 +44,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - Update https://community.kde.org/Plasma/Live_Images
 
 ## On tar day (prepare)
- - run ./plasma-changelog (manually edit file after)
-   [or run xenon job http://xenon.pangea.pub/job/plasma-releaseme-changelog/ then ./plasma-xenon-download-changelog]
- - Run ./plasma-update-web-git
+ - run ./make-changelog (manually edit file after)
  - run ./plasma-webpages [-n] and check over output opened in firefox (use -n for noannounce on e.g. .0 releases where the announce is written manually)
  - run cwebp on the images to convert to WebP and update URLs https://developers.google.com/speed/webp
  - run ./add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
@@ -88,3 +86,4 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - plasma-changelog works ok for frameworks but does need fixes
  - plasma-webpages needs frameworksified
  - ./plasma-tag needs frameworkified
+ - make-changelog has a Jonathan specific path in it for git repos

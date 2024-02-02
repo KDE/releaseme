@@ -4,6 +4,8 @@
 # SPDX-FileCopyrightText: 2015 Harald Sitter <sitter@kde.org>
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
+# Makes the Plasma announce page, info page and copies in the changelog and pushes to invent git repo
+
 require 'fileutils'
 require 'optparse'
 
@@ -24,22 +26,26 @@ plasma_versions = PlasmaVersion.new
 version = plasma_versions.version
 major_version = plasma_versions.major_version
 
+announcecheckout = plasma_versions.wwwcheckout + '/content/announcements'
+infocheckout = plasma_versions.wwwcheckout + '/content/info'
+
 info_template = PlasmaInfoTemplate.new
 info_output = info_template.render
-File.write(format('%s/plasma-%s.md', plasma_versions.infocheckout, version), info_output)
+File.write(format('%s/plasma-%s.md', infocheckout, version), info_output)
+
 
 if not options.include?(:noannounce)
     announce_template = PlasmaAnnounceTemplate.new
     announce_output = announce_template.render
     # write announcement unless it's a .0, beta or final where we do it manually
-    File.write(format('%s/plasma/%s/%s.md', plasma_versions.announcecheckout, major_version, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
+    File.write(format('%s/plasma/%s/%s.md', announcecheckout, major_version, version), announce_output) unless version[-2..-1] == "0" or version[-2..-1] == "90" or version[-2..-1] == "80"
 end
 
 changelog_file = format('%s-%s.md',
                         plasma_versions.old_version,
                         version)
 FileUtils.cp(changelog_file,
-             format('%s/changelogs/plasma/%s/%s', plasma_versions.announcecheckout, major_version, changelog_file))
+             format('%s/changelogs/plasma/%s/%s', announcecheckout, major_version, changelog_file))
 
 # Add files
 system('git', 'add', "content/info/plasma-#{version}.md", chdir: plasma_versions.wwwcheckout)           # info file
@@ -53,8 +59,10 @@ system('git', 'commit', '-m', "feat: Add webpage for Plasma #{version}", chdir: 
 
 # And push files :)
 system('git', 'push', chdir: plasma_versions.wwwcheckout)
-system(plasma_versions.browser, "https://www-staging.kde.org/announcements/plasma/#{major_version}/#{version}/")
-system(plasma_versions.browser, "https://www-staging.kde.org/info/plasma-#{version}/")
-system(plasma_versions.browser, "https://www-staging.kde.org/announcements/changelogs/plasma/#{major_version}/" + format("%s-%s/", plasma_versions.old_version, version))
-system(plasma_versions.browser, "https://binary-factory.kde.org/view/Websites/job/Website_www-staging-kde-org/")
-puts "Note: Webpages will not appear on kde.org until draft: true is unset"
+
+# Todo work out where invent puts these previews now
+puts 'Find the URL and add:'
+puts "announcements/plasma/#{major_version}/#{version}/index.html"
+puts "info/plasma-#{version}/index.html"
+puts "announcements/changelogs/plasma/#{major_version}/#{plasma_versions.old_version}-#{version}/index.html"
+system(plasma_versions.browser, "https://invent.kde.org/websites/kde-org/-/pipelines")
