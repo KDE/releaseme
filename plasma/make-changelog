@@ -2,32 +2,147 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2024 Jonathan Riddell <jr@jriddell.org>
 
-require 'net/http'
-require 'json'
 require 'optparse'
 require 'fileutils'
 require_relative 'lib/plasma_version'
 require_relative 'lib/kde_identify'
-require_relative 'retry'
-
-
 
 class MakeChangelog
 
   def initialize
     @readableNames = {
+      # Frameworks
       "attica": "Attica",
-      "foo": "bar"
+      "baloo": "Baloo",
+      "bluez-qt": "Bluez Qt",
+      "breeze-icons": "Breeze Icons",
+      "extra-cmake-modules": "Extra CMake Modules",
+      "frameworkintegration": "Framework Integration",
+      "kapidox": "KAPIDox",
+      "karchive": "KArchive",
+      "kauth": "KAuth",
+      "kbookmarks": "KBookmarks",
+      "kcalendarcore": "KCalendarCore",
+      "kcmutils": "KCMUtils",
+      "kcodecs": "KCodecs",
+      "kcolorscheme": "KColorScheme",
+      "kcompletion": "KCompletion",
+      "kconfig": "KConfig",
+      "kconfigwidgets": "KConfigWidgets",
+      "kcontacts": "KContacts",
+      "kcoreaddons": "KCoreAddons",
+      "kcrash": "KCrash",
+      "kdav": "KDav",
+      "kdbusaddons": "KDBusAddons",
+      "kdeclarative": "KDeclarative",
+      "kded": "KDE Daemon",
+      "kdesu": "KDE SU",
+      "kdnssd": "KDNSSD",
+      "kdoctools": "KDocTools",
+      "kfilemetadata": "KFileMetaData",
+      "kglobalaccel": "KGlobalAccel",
+      "kguiaddons": "KGuiAddons",
+      "kholidays": "KHolidays",
+      "ki18n": "KI18n",
+      "kiconthemes": "KIconThemes",
+      "kidletime": "KIdletime",
+      "kimageformats": "KImageformats",
+      "kio": "KIO",
+      "kirigami": "Kirigami",
+      "kitemmodels": "KItemModels",
+      "kitemviews": "KItemViews",
+      "kjobwidgets": "KJobWidgets",
+      "knewstuff": "KNewStuff",
+      "knotifications": "KNotifications",
+      "knotifyconfig": "KNotifyConfig",
+      "kpackage": "KPackage",
+      "kparts": "KParts",
+      "kpeople": "KPeople",
+      "kplotting": "KPlotting",
+      "kpty": "KPTY",
+      "kquickcharts": "KQuickCharts",
+      "krunner": "KRunner",
+      "kservice": "KService",
+      "kstatusnotifieritem": "KStatusNotifieritem",
+      "ksvg": "KSVG",
+      "ktexteditor": "KTextEditor",
+      "ktexttemplate": "KTextTemplate",
+      "ktextwidgets": "KTextWidgets",
+      "kunitconversion": "KUnitConversion",
+      "kuserfeedback": "KUserFeedback",
+      "kwallet": "KWallet",
+      "kwidgetsaddons": "KWidgetsAddons",
+      "kwindowsystem": "KWindowSystem",
+      "kxmlgui": "KXMLGUI",
+      "modemmanager-qt": "Modem Manager Qt",
+      "networkmanager-qt": "Network Manager Qt",
+      "prison": "Prison",
+      "purpose": "Purpose",
+      "qqc2-desktop-style": "QQC2 Desktop Style",
+      "solid": "Solid",
+      "sonnet": "Sonnet",
+      "syndication": "Syndication",
+      "syntax-highlighting": "Syntax Highlighting",
+      "threadweaver": "Threadweaver",
+      # Plasma
+      "bluedevil": "Bluedevil",
+      "breeze": "Breeze",
+      "Breeze-gtk": "Breeze GTK",
+      "Breeze-plymouth": "Breeze Plymouth",
+      "discover": "Discover",
+      "drkonqi": "Dr Konqi",
+      "kdecoration": "KDE Window Decoration Library",
+      "kde-gtk-config": "KDE GTK Config",
+      "kdeplasma-addons": "Plasma Addons",
+      "kgamma5": "Gamma Monitor Calibration Tool",
+      "khelpcenter": "KHelpCenter",
+      "khotkeys": "KDE Hotkeys",
+      "kinfocenter": "Info Center",
+      "kio-extras": "KIO Extras",
+      "kmenuedit": "KMenuEdit",
+      "kscreen": "KScreen",
+      "ksshaskpass": "KSSHAskPass",
+      "ksysguard": "KSysGuard",
+      "kwayland": "KWayland",
+      "kwin": "KWin",
+      "libKScreen": "LibKScreen",
+      "milou": "Milou",
+      "muon": "Muon",
+      "oxygen-fonts": "Oxygen Fonts",
+      "oxygen": "Oxygen",
+      "plasma-browser-integration": "Plasma Browser Integration",
+      "plasma-desktop": "Plasma Desktop",
+      "plasma-firewall": "Plasma Firewall",
+      "plasma-mediacenter": "Plasma Media Center",
+      "plasma-nano": "Plasma Nano",
+      "plasma-nm": "Plasma Networkmanager (plasma-nm)",
+      "plasma-pa": "Plasma Audio Volume Control",
+      "plasma-phone-components": "Plasma Phone Components",
+      "plasma-sdk": "Plasma SDK",
+      "plasma-systemmonitor": "Plasma Systemmonitor",
+      "plasma-workspace": "Plasma Workspace",
+      "Plasma Workspace-wallpapers": "Plasma Workspace Wallpapers",
+      "plymouth-kcm": "Plymouth KControl Module",
+      "powerdevil": "Powerdevil",
+      "sddm-kcm": "SDDM KCM",
+      "systemsettings": "System Settings",
+      "user-manager": "User Manager",
+      "plasma-disks": "Plasma Disks",
+      "plasma-bigscreen": "Plasma Bigscreen",
+      "aura-browser": "Aura Browser",
+      "plank-player": "Plank Player",
+      "plasma-remotecontrollers": "Plasma Remotecontrollers",
+      "flatpak-kcm": "Flatpak Permissions",
     }
     @plasma_versions = PlasmaVersion.new
     # override old version for a feature release so we still include changes from last feature not from last beta
     #@plasma_versions.version = "5.3.2"
-    @file = "#{@plasma_versions.old_version}-#{@plasma_versions.version}.md"
     @tmpdir = 'tmp-changelog'
     @repos = "git-repositories-for-release-#{@plasma_versions.product}"
     @branch = @plasma_versions.branch
     @version = @plasma_versions.version
     @product = @plasma_versions.product.capitalize
+    @file = "#{@plasma_versions.product}-#{@version}/#{@plasma_versions.old_version}-#{@version}.md"
   end
 
   def cloneRepos
@@ -55,6 +170,7 @@ class MakeChangelog
     @readableNames.keys.each do |product|
       sed("title=\"#{product.to_s}\"", "title=\"#{@readableNames[product]}\"")
     end
+    puts "Now check and manually edit:   kate #{@file}"
   end
 
   def sed(text_to_replace, text_to_put_in_place)
@@ -68,61 +184,3 @@ makeChangelog = MakeChangelog.new
 makeChangelog.cloneRepos
 makeChangelog.makeTheChangelog
 
-=begin
-
-
-echo running create_log
-./create_log.py >> ${FILE}
-
-sed 's,="baloo",="Baloo",' ${FILE} -i
-sed 's,="bluedevil",="Bluedevil",' ${FILE} -i
-sed 's,="breeze",="Breeze",' ${FILE} -i
-sed 's,="Breeze-gtk",="Breeze GTK",' ${FILE} -i
-sed 's,="Breeze-plymouth",="Breeze Plymouth",' ${FILE} -i
-sed 's,="discover",="Discover",' ${FILE} -i
-sed 's,="drkonqi",="Dr Konqi",' ${FILE} -i
-sed 's,="kdecoration",="KDE Window Decoration Library",' ${FILE} -i
-sed 's,="kde-gtk-config",="KDE GTK Config",' ${FILE} -i
-sed 's,="kdeplasma-addons",="Plasma Addons",' ${FILE} -i
-sed 's,="kgamma5",="Gamma Monitor Calibration Tool",' ${FILE} -i
-sed 's,="khelpcenter,="KHelpCenter",' ${FILE} -i
-sed 's,="khotkeys",="KDE Hotkeys",' ${FILE} -i
-sed 's,="kinfocenter",="Info Center",' ${FILE} -i
-sed 's,="kio-extras",="KIO Extras",' ${FILE} -i
-sed 's,="kmenuedit",="KMenuEdit",' ${FILE} -i
-sed 's,="kscreen",="KScreen",' ${FILE} -i
-sed 's,="ksshaskpass",="KSSHAskPass",' ${FILE} -i
-sed 's,="ksysguard",="KSysGuard",' ${FILE} -i
-sed 's,="kwayland",="KWayland",' ${FILE} -i
-sed 's,="kwin",="KWin",' ${FILE} -i
-sed 's,="libKScreen",="LibKScreen",' ${FILE} -i
-sed 's,="milou",="Milou",' ${FILE} -i
-sed 's,="muon",="Muon",' ${FILE} -i
-sed 's,="oxygen-fonts",="Oxygen Fonts",' ${FILE} -i
-sed 's,="oxygen",="Oxygen",' ${FILE} -i
-sed 's,="plasma-browser-integration",="Plasma Browser Integration",' ${FILE} -i
-sed 's,="plasma-desktop",="Plasma Desktop",' ${FILE} -i
-sed 's,="plasma-firewall",="Plasma Firewall",' ${FILE} -i
-sed 's,="plasma-mediacenter",="Plasma Media Center",' ${FILE} -i
-sed 's,="plasma-nano",="Plasma Nano",' ${FILE} -i
-sed 's,="plasma-nm",="Plasma Networkmanager (plasma-nm)",' ${FILE} -i
-sed 's,="plasma-pa",="Plasma Audio Volume Control",' ${FILE} -i
-sed 's,="plasma-phone-components",="Plasma Phone Components",' ${FILE} -i
-sed 's,="plasma-sdk",="Plasma SDK",' ${FILE} -i
-sed 's,="plasma-systemmonitor",="Plasma Systemmonitor",' ${FILE} -i
-sed 's,="plasma-workspace",="Plasma Workspace",' ${FILE} -i
-sed 's,="Plasma Workspace-wallpapers",="Plasma Workspace Wallpapers",' ${FILE} -i
-sed 's,="plymouth-kcm",="Plymouth KControl Module",' ${FILE} -i
-sed 's,="powerdevil",="Powerdevil",' ${FILE} -i
-sed 's,="sddm-kcm",="SDDM KCM",' ${FILE} -i
-sed 's,="systemsettings",="System Settings",' ${FILE} -i
-sed 's,="user-manager",="User Manager",' ${FILE} -i
-sed 's,="plasma-disks",="Plasma Disks",' ${FILE} -i
-sed 's,="plasma-bigscreen",="Plasma Bigscreen",' ${FILE} -i
-sed 's,="aura-browser",="Aura Browser",' ${FILE} -i
-sed 's,="plank-player",="Plank Player",' ${FILE} -i
-sed 's,="plasma-remotecontrollers",="Plasma Remotecontrollers",' ${FILE} -i
-sed 's,="flatpak-kcm",="Flatpak Permissions",' ${FILE} -i
-
-echo now edit manually  emacs ${FILE}
-=end
