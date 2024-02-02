@@ -10,14 +10,24 @@ require_relative 'lib/plasma_version'
 require_relative 'lib/kde_identify'
 require_relative 'retry'
 
+
+
 class MakeChangelog
+
   def initialize
+    @readableNames = {
+      "attica": "Attica",
+      "foo": "bar"
+    }
     @plasma_versions = PlasmaVersion.new
     # override old version for a feature release so we still include changes from last feature not from last beta
     #@plasma_versions.version = "5.3.2"
     @file = "#{@plasma_versions.old_version}-#{@plasma_versions.version}.md"
     @tmpdir = 'tmp-changelog'
     @repos = "git-repositories-for-release-#{@plasma_versions.product}"
+    @branch = @plasma_versions.branch
+    @version = @plasma_versions.version
+    @product = @plasma_versions.product.capitalize
   end
 
   def cloneRepos
@@ -25,39 +35,41 @@ class MakeChangelog
     FileUtils.rm_rf(@tmpdir)
     FileUtils.mkdir(@tmpdir)
     File.readlines(@repos, chomp: true).each do |repo|
+      Dir.chdir(@tmpdir) do
         puts(repo)
         invent_path = KDEIndentify.get_kde_category(repo)
         puts invent_path
         `git clone --reference /home/jr/src/*/#{repo}/kdegit/#{repo} invent:#{invent_path}/#{repo}`
+        Dir.chdir(repo) do
+          `git checkout #{@branch}`
+        end
+      end
     end
   end
+
+  def makeTheChangelog
+    FileUtils.cp('templates/changelog.md', @file)
+    sed('VERSION', @version)
+    sed('PRODUCT', @product)
+    File.open(@file, 'a') { |f| f.puts(`./create_log.py`) }
+    @readableNames.keys.each do |product|
+      sed("title=\"#{product.to_s}\"", "title=\"#{@readableNames[product]}\"")
+    end
+  end
+
+  def sed(text_to_replace, text_to_put_in_place)
+    text = File.read(@file)
+    File.open(@file, 'w+') {|f| f << text.gsub(text_to_replace, text_to_put_in_place)}
+  end
+
 end
 
 makeChangelog = MakeChangelog.new
 makeChangelog.cloneRepos
+makeChangelog.makeTheChangelog
 
 =begin
-FILE=${OLD_VERSION}-${VERSION}.md
 
-rm -rf ${FILE}
-rm -rf tmp-changelog
-mkdir tmp-changelog
-WORKSPACE=`cat git-repositories-for-release-frameworks`
-cd tmp-changelog
-for project in $WORKSPACE; do
- INVENT_PATH=$(../lib/kde_identify.rb $project)
- GITPREFIX="invent:${INVENT_PATH}/"
- echo ${project};
- git clone --reference /home/jr/src/*/${project}/kdegit/${project} ${GITPREFIX}${project};
- cd ${project}; git checkout ${BRANCH}; cd ..;
- cd ${project};
- pwd;
- cd ..;
-done
-cd ..
-
-cat templates/plasma-changelog.md > ${FILE}
-sed -i s,VERSION,${VERSION}, ${FILE}
 
 echo running create_log
 ./create_log.py >> ${FILE}

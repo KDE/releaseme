@@ -65,7 +65,7 @@ for repo in repos:
 	retval = p.wait()
 	if retval != 0:
 		raise NameError('git fetch failed')
-	print 'git rev-parse '+fromVersion+os.getcwd()
+	# print 'git rev-parse '+fromVersion+os.getcwd()
 	p = subprocess.Popen('git rev-parse '+fromVersion, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	retval = p.wait()
 	if retval != 0:
