@@ -1,7 +1,7 @@
 ---
 version: "5.9.1"
 title: "KDE Plasma 5.9.1, Bugfix Release"
-type: info/plasma5
+type: info/plasma6
 signer: Jonathan Riddell
 signing_fingerprint: EC94D18F7F05997E
 draft: true
