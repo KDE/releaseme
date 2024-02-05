@@ -76,7 +76,7 @@ class UploadTars
 
   def webpages
     product_webpage = "plasma"
-    product_webpage = "kf" if @product == "frameworks"
+    product_webpage = "kf" if @product == "frameworks" # frameworks file is named "kf"
     puts "== start updating info page source-#{@product}-#{@version}.html"
     FileUtils.cp("#{@product}-#{@version}/source-#{@product}-#{@version}.inc", "#{@infocheckout}/sources/source-#{product_webpage}-#{@version}.html")
     Dir.chdir("#{@infocheckout}") do

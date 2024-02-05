@@ -4,7 +4,7 @@
 # SPDX-FileCopyrightText: 2020 Bhushan Shah <bhush94@gmail.com>
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
-PRODUCT="frameworks" # frameworks or plasma
+PRODUCT="plasma" # frameworks or plasma
 
 MAJOR_VERSION=6
 VERSION=5.249.0

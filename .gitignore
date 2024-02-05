@@ -9,6 +9,8 @@
 /.yardoc
 /plasma/bugzilla-cookies.inc
 /plasma/wordpress_access.rb
+/plasma/git-repositories-for-release-frameworks-old
+/plasma/git-repositories-for-release-plasma-old
 /.sig
 /.tags*
 /.bundle/
