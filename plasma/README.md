@@ -65,7 +65,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - For .0 update invent:websites/aether-sass /css/kde-org/plasma-desktop.scss and assets/wallpaper.jpg for new wallpaper
  - For LTS .0 release edit and run ./plasma-bugzilla-versions to set beta .90 version and versions prior to the old old LTS release to inactive (we like to allow people to select the version they are using so if in doubt keep it enabled)
 
- - (tell a KDE neon person to update forks/base-files and neon/settings (release-lts only) to show new version before running 'jenking_retry -p' and making ISOs and Docker)
+ - (For Plasma .0 tell a KDE neon person to update forks/base-files and neon/settings (release-lts only) to show new version before running 'jenking_retry -p' and making ISOs and Docker)
 
 ## Post Release Bugfix update
  - If you need an update between releases use plasma-update-1-tar-post-release for the tar in question
@@ -81,8 +81,4 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 ## TODO Frameworks
  - Frameworks pushed tags with v5.100.0-rc1 on packaging then any plasma-update-1-tar calls should use that tag and local branch and a cherry-pick (or master) and push v5.100.0-rc2 see ./make_rc_tag.sh and ./make_updated_tarball.sh, port into plasma-update-1-tar
  - consider a script to update copyright years for KAboutData in Plasma
- - plasma-upload for Frameworks (to upload to ftpadmin, run some checks compared to previous release, and update info page
- - plasma-changelog works ok for frameworks but does need fixes
- - plasma-webpages needs frameworksified
- - ./plasma-tag needs frameworkified
  - make-changelog has a Jonathan specific path in it for git repos
