@@ -52,10 +52,9 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - tell VDG and Plasma team about announce and get feedback
 
 ## On release day (launch)
- - ./plasma-tag to push tags
- - ./plasma-update-web-git
- - ./plasma-tag-test to check the tags are really pushed or run http://xenon.pangea.pub/job/plasma-releaseme-tags-test/ to check tags are really pushed
- - ./plasma-release
+ - ./push-tags to push tags
+ - ./pushed-tags-test to check the tags are really pushed
+ - ./make-release
  - this will open tabs in firefox and kate: check the web pages are good, e-mail out the texts, post the social media bits
  - run ./update-versions --next to update the version ahead of the next release
  - check if www/images/teaser teaser image needs an update

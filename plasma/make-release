@@ -1,0 +1,55 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2015-2021 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
+# SPDX-FileCopyrightText: 2020 Bhushan Shah <bhush94@gmail.com>
+
+set -xe
+
+. VERSIONS.inc
+
+ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/${PRODUCT}/${VERSION}"
+
+# remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
+
+sed -i "s/draft: true/draft: false/" ${ANNOUNCECHECKOUT}/${PRODUCT}/${MAJOR_VERSION}/${VERSION}.md
+sed -i "s/draft: true/draft: false/" ${INFOCHECKOUT}/${PRODUCT}-${VERSION}.md
+
+# commit to git
+cd ${WWWCHECKOUT}
+git checkout master
+git pull
+git checkout work/${PRODUCT}-${VERSION}
+git diff
+git commit -a -m "release ${PRODUCT} ${VERSION}"
+git rebase master
+git push
+git checkout master
+git pull
+git merge work/${PRODUCT}-${VERSION}
+git push
+cd -
+
+$BROWSER https://kde.org/info/${PRODUCT}-${VERSION}
+$BROWSER https://kde.org/announcements/${PRODUCT}/${MAJOR_VERSION}/${VERSION}
+$BROWSER https://kde.org/announcements/
+$BROWSER https://kde.org/
+$BROWSER https://invent.kde.org/websites/kde-org/-/pipelines
+
+rm -rf tmp-announcements
+mkdir tmp-announcements
+
+# Social media announcements now seem to be done by Promo contractors
+## post on twitter, g+, facebook, reddit (r/kde and r/linux)
+#echo "@kdecommunity releases Plasma ${VERSION} to fix your bugs https://kde.org/announcements/plasma/${MAJOR_VERSION}/${VERSION}" > tmp-announcements/twitter.text
+#kate tmp-announcements/twitter.text
+#$BROWSER https://tweetdeck.twitter.com
+#$BROWSER https://facebook.com/kde
+#$BROWSER https://mastodon.technology/
+#$BROWSER https://www.reddit.com/r/kde/submit
+#$BROWSER https://dot.kde.org/#overlay=node/add/story
+
+# e-mail release-team@kde.org, plasma-devel@kde.org with the happy news
+echo "e-mail me to kde-announce@kde.org, release-team@kde.org, plasma-devel@kde.org" > tmp-announcements/release-team
+echo "${PRODUCT} ${VERSION} is now released https://kde.org/announcements/${PRODUCT}/${MAJOR_VERSION}/${VERSION}" >> tmp-announcements/release-team
+kate tmp-announcements/release-team

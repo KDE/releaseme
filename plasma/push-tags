@@ -11,7 +11,7 @@ echo asdf > asdf
 gpg --clearsign asdf
 rm -f asdf asdf.asc
 
-cd ${VERSION}
+cd ${PRODUCT}-${VERSION}
 cp ${VERSION}-release-data release_data
 
 ../../tagme.rb --version ${VERSION}

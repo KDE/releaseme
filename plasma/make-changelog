@@ -164,7 +164,11 @@ class MakeChangelog
   end
 
   def makeTheChangelog
-    FileUtils.cp('templates/changelog.md', @file)
+    if @product == "plasma"
+      FileUtils.cp('templates/changelog.md', @file)
+    else
+      File.open(@file, 'w').close # empty the file
+    end
     sed('VERSION', @version)
     sed('PRODUCT', @product)
     File.open(@file, 'a') { |f| f.puts(`./create_log.py`) }
