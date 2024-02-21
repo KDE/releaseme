@@ -38,7 +38,7 @@ apiUrl = {plasma:"https://projects.kde.org/api/v1/projects/plasma",
 # Stuff in https://invent.kde.org/plasma-bigscreen/
 @plasma5_26_additions = %w(plasma-remotecontrollers aura-browser plank-player)
 @plasma5_27_additions = %w(plasma-remotecontrollers aura-browser plank-player)
-@plasma6_0_additions = %w(kwayland)
+@plasma6_0_additions = %w()
 
 @frameworks6_0_additions = %w()
 

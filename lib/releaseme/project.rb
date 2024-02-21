@@ -61,7 +61,11 @@ module ReleaseMe
                    else
                      api_project.i18n.trunk_kf5
                    end
-      i18n_stable = api_project.i18n.stable_kf5
+      i18n_stable = if api_project.i18n.data[:stable_kf6] and not api_project.i18n.stable_kf6.nil?
+                     api_project.i18n.stable_kf6
+                   else
+                     api_project.i18n.stable_kf5
+                   end
 
       # Figure out which i18n path to use.
       i18n_path = api_project.i18n.component
@@ -147,7 +151,11 @@ module ReleaseMe
         else
           i18n_trunk = api_project.i18n.trunk_kf5
         end
-        i18n_stable = api_project.i18n.stable_kf5
+        if api_project.i18n.data.include?(:stable_kf6) and not api_project.i18n.stable_kf6.nil?
+          i18n_stable = api_project.i18n.stable_kf6
+        else
+          i18n_stable = api_project.i18n.stable_kf5
+        end
 
         # Figure out which i18n path to use.
         i18n_path = api_project.i18n.component

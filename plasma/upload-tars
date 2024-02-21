@@ -26,6 +26,8 @@ class UploadTars
     @ftpstable = @plasma_versions.ftpstable
     @old_ftpstable = @plasma_versions.old_ftpstable
     @version = @plasma_versions.version
+    @dirversion = @plasma_versions.version if @product = "plasma"
+    @dirversion = @plasma_versions.short_version if @product = "frameworks"
     @old_version = @plasma_versions.old_version
     @scratch_server = @plasma_versions.scratch_server
     @scratch_server_url = @plasma_versions.scratch_server_url
@@ -35,14 +37,14 @@ class UploadTars
 
   def makeDirectory
     puts "== Making directory"
-    system("ssh #{@upload_server} mkdir -p #{@ftpstable}/#{@product}/#{@version}")
-    system("ssh #{@upload_server} chmod 750 #{@ftpstable}/#{@product}/#{@version}")
-    system("ssh #{@upload_server} chown .packager #{@ftpstable}/#{@product}/#{@version}")
+    system("ssh #{@upload_server} mkdir -p #{@ftpstable}/#{@product}/#{@dirversion}")
+    system("ssh #{@upload_server} chmod 750 #{@ftpstable}/#{@product}/#{@dirversion}")
+    system("ssh #{@upload_server} chown .packager #{@ftpstable}/#{@product}/#{@dirversion}")
   end
 
   def upload
     puts "== Uploading Tars"
-    system("rsync -CvzaP --stats #{@product}-#{@version}/*xz #{@product}-#{@version}/*xz.sig #{@upload_server}:#{@ftpstable}/#{@product}/#{@version}/")
+    system("rsync -CvzaP --stats #{@product}-#{@version}/*xz #{@product}-#{@version}/*xz.sig #{@upload_server}:#{@ftpstable}/#{@product}/#{@dirversion}/")
     puts "== Uploading release-data file to #{@scratch_server}/#{@version}-release-data"
     system("scp #{@product}-#{@version}/#{@version}-release-data #{@scratch_server}")
     system("#{@browser} #{@scratch_server_url}/#{@version}-release-data")
@@ -55,20 +57,20 @@ class UploadTars
       puts "Already exists tmp-tests/"
     end
     puts "== Start diff tarballs test, check for diff below"
-    system("ssh #{@upload_server} ls #{@ftpstable}/#{@product}/#{@version}/ | sed s,-[56].*xz,, > tmp-tests/#{@product}-#{@version}-tars")
+    system("ssh #{@upload_server} ls #{@ftpstable}/#{@product}/#{@dirversion}/ | sed s,-[56].*xz,, > tmp-tests/#{@product}-#{@version}-tars")
     puts("ssh #{@upload_server} ls #{@old_ftpstable}/#{@product}/#{@old_version}/ | sed s,-[56].*xz,, > tmp-tests/#{@product}-#{@old_version}-tars")
     system("ssh #{@upload_server} ls #{@old_ftpstable}/#{@product}/#{@old_version}/ | sed s,-[56].*xz,, > tmp-tests/#{@product}-#{@old_version}-tars")
     system("diff -u tmp-tests/#{@product}-#{@old_version}-tars tmp-tests/#{@product}-#{@version}-tars | tee tmp-tests/#{@product}-#{@version}-tars-testoutput")
     puts "== End diff tarballs test"
 
     puts "== Start tarballs l10n probe test, check for diff below"
-    system("ssh #{@upload_server} \"for asdf in #{@ftpstable}/#{@product}/#{@version}/*xz; do tar --list -f \\\${asdf} | awk '{print \$6}' | grep /po/ | sed s,.*-#{@version}/,, | grep .po\$ | sort; done \" > tmp-tests/#{@product}-#{@version}-po")
+    system("ssh #{@upload_server} \"for asdf in #{@ftpstable}/#{@product}/#{@dirversion}/*xz; do tar --list -f \\\${asdf} | awk '{print \$6}' | grep /po/ | sed s,.*-#{@version}/,, | grep .po\$ | sort; done \" > tmp-tests/#{@product}-#{@version}-po")
     system("ssh #{@upload_server} \"for asdf in #{@old_ftpstable}/#{@product}/#{@old_version}/*xz; do tar --list -f \\\${asdf} | awk '{print \$6}' | grep /po/ | sed s,.*-#{@old_version}/,, | grep .po$ | sort; done \" > tmp-tests/#{@product}-#{@old_version}-po")
     system("diff -u tmp-tests/#{@product}-#{@old_version}-po tmp-tests/#{@product}-#{@version}-po | tee tmp-tests/#{@product}-#{@version}-po-testoutput")
     puts "== End tarballs l10n probe test"
 
     puts "== Start tarballs docs probe test, check for diff below"
-    system("ssh #{@upload_server} \"for asdf in #{@ftpstable}/#{@product}/#{@version}/*xz; do tar --list -f \\\${asdf} | awk '{print \$6}' | grep /doc/ | sed s,.*-#{@version}/,, | grep -v /$ | sort; done \" > tmp-tests/#{@product}-#{@version}-doc")
+    system("ssh #{@upload_server} \"for asdf in #{@ftpstable}/#{@product}/#{@dirversion}/*xz; do tar --list -f \\\${asdf} | awk '{print \$6}' | grep /doc/ | sed s,.*-#{@version}/,, | grep -v /$ | sort; done \" > tmp-tests/#{@product}-#{@version}-doc")
     system("ssh #{@upload_server} \"for asdf in #{@old_ftpstable}/#{@product}/#{@old_version}/*xz; do tar --list -f \\\${asdf} | awk '{print \$6}' | grep /doc/ | sed s,.*-#{@old_version}/,, | grep -v /$ | sort; done \" > tmp-tests/#{@product}-#{@old_version}-doc")
     system("diff -u tmp-tests/#{@product}-#{@old_version}-doc tmp-tests/#{@product}-#{@version}-doc | tee tmp-tests/#{@product}-#{@version}-doc-testoutput")
     puts "== End tarballs l10n probe test"

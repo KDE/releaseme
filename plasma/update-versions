@@ -61,7 +61,7 @@ class UpdateVersions
         sleep(2) # meh invent.kde.org seems to block git clone if you do several
         Retry.retry_it(times: 3, sleep: 4) { `git clone --depth 1 --no-single-branch invent:#{invent_category}/#{repo} #{repo}` || raise }
         Dir.chdir(repo) do
-          `git checkout #{@plasma_versions.branch}`
+          `git checkout master`
           # do sed
           if @special_variables.include?(repo) and @next
             @sub_variable = @special_variables[repo]
