@@ -30,7 +30,6 @@ layer-shell-qt
 libkscreen
 libksysguard
 libplasma
-lightdm-kde-greeter
 milou
 ocean-sound-theme
 oxygen
