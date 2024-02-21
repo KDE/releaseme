@@ -12,11 +12,11 @@ set -xe
 . ./VERSIONS.inc
 
 # override the branch!
-BRANCH=master
+BRANCH=Plasma/6.0
 
 # echo for updating version in master after branch override versions here
 # VERSION=5.23.0
-KF6_VERSION=5.240.0
+KF6_VERSION=6.0.0
 QT_VERSION=6.6.0
 GITPREFIX="invent:"
 
@@ -28,7 +28,7 @@ cd tmp-version-update-qtkf
 for project in $WORKSPACE; do
   projectrepo=$project
   project=`basename $project`
-  if [ $project != "breeze-grub" ] && [ $project != "plasma-browser-integration" ] && [ $project != "kinfocenter" ]  && [ $project != "ksysguard" ]; then
+  if [ $project != "breeze-grub" ] && [ $project != "plasma-browser-integration" ] && [ $project != "ksysguard" ] && [ $project != "kwayland-integration" ]; then
     echo ${project};
     git clone --depth 1 --branch ${BRANCH} ${GITPREFIX}/plasma/${projectrepo} ${project} ||     git clone --depth 1 --branch ${BRANCH} ${GITPREFIX}/plasma-bigscreen/${projectrepo} ${project};
     cd ${project};
