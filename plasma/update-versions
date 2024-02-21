@@ -33,8 +33,9 @@ class UpdateVersions
         @next = v
       end
     end.parse!
-    @variable = "PROJECT_VERSION"
+    @variable = "PROJECT_DEP_VERSION" if @plasma_versions.product == "plasma"
     @variable = "KF_DEP_VERSION" if @plasma_versions.product == "frameworks"
+    @variable = "PROJECT_VERSION" if @plasma_versions.product == "plasma" and @next
     @variable = "KF_VERSION" if @plasma_versions.product == "frameworks" and @next
     @special_variables = {"extra-cmake-modules"=> "VERSION"}
     @directory = "tmp-version-update"
@@ -69,7 +70,7 @@ class UpdateVersions
           end
           if File.exist?("CMakeLists.txt")
             system('sed', '-i', "s,set(#{@sub_variable} " + '\".*\"' + ",set(#{@sub_variable} " + '\"' + "#{@new_version}" + '\",', "CMakeLists.txt")
-            system('sed -i "s, VERSION \".....\", VERSION "'+"#{@new_version}"+', CMakeLists.txt')
+            system('sed -i "s, VERSION \".....\", VERSION \"""'+"#{@new_version}\""+', CMakeLists.txt')
             system('sed', '-i', "s,find_package(ECM [0-9\.]\\+,find_package(ECM #{@new_version},", "CMakeLists.txt")
           end
           # kapidox has a setup.py
