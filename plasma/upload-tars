@@ -26,8 +26,8 @@ class UploadTars
     @ftpstable = @plasma_versions.ftpstable
     @old_ftpstable = @plasma_versions.old_ftpstable
     @version = @plasma_versions.version
-    @dirversion = @plasma_versions.version if @product = "plasma"
-    @dirversion = @plasma_versions.short_version if @product = "frameworks"
+    @dirversion = @plasma_versions.version if @product == "plasma"
+    @dirversion = @plasma_versions.short_version if @product == "frameworks"
     @old_version = @plasma_versions.old_version
     @scratch_server = @plasma_versions.scratch_server
     @scratch_server_url = @plasma_versions.scratch_server_url
