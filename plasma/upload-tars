@@ -30,7 +30,7 @@ class UploadTars
     @scratch_server = @plasma_versions.scratch_server
     @scratch_server_url = @plasma_versions.scratch_server_url
     @browser = @plasma_versions.browser
-    @infocheckout = @plasma_versions.infocheckout
+    @infocheckout = @plasma_versions.wwwcheckout + '/content/info'
   end
 
   def makeDirectory
@@ -55,9 +55,9 @@ class UploadTars
       puts "Already exists tmp-tests/"
     end
     puts "== Start diff tarballs test, check for diff below"
-    system("ssh #{@upload_server} ls #{@ftpstable}/#{@product}/#{@version}/ | sed s,-5.*xz,, > tmp-tests/#{@product}-#{@version}-tars")
-    puts("ssh #{@upload_server} ls #{@old_ftpstable}/#{@product}/#{@old_version}/ | sed s,-5.*xz,, > tmp-tests/#{@product}-#{@old_version}-tars")
-    system("ssh #{@upload_server} ls #{@old_ftpstable}/#{@product}/#{@old_version}/ | sed s,-5.*xz,, > tmp-tests/#{@product}-#{@old_version}-tars")
+    system("ssh #{@upload_server} ls #{@ftpstable}/#{@product}/#{@version}/ | sed s,-[56].*xz,, > tmp-tests/#{@product}-#{@version}-tars")
+    puts("ssh #{@upload_server} ls #{@old_ftpstable}/#{@product}/#{@old_version}/ | sed s,-[56].*xz,, > tmp-tests/#{@product}-#{@old_version}-tars")
+    system("ssh #{@upload_server} ls #{@old_ftpstable}/#{@product}/#{@old_version}/ | sed s,-[56].*xz,, > tmp-tests/#{@product}-#{@old_version}-tars")
     system("diff -u tmp-tests/#{@product}-#{@old_version}-tars tmp-tests/#{@product}-#{@version}-tars | tee tmp-tests/#{@product}-#{@version}-tars-testoutput")
     puts "== End diff tarballs test"
 
@@ -80,12 +80,12 @@ class UploadTars
     puts "== start updating info page source-#{@product}-#{@version}.html"
     FileUtils.cp("#{@product}-#{@version}/source-#{@product}-#{@version}.inc", "#{@infocheckout}/sources/source-#{product_webpage}-#{@version}.html")
     Dir.chdir("#{@infocheckout}") do
-      system("git add sources/source-#{@product}-#{@version}.html || true")
-      system("git diff sources/source-#{@product}-#{@version}.html")
-      system("git commit -m \"update source-#{@product}-#{@version}.html\"")
+      system("git add sources/source-#{product_webpage}-#{@version}.html || true")
+      system("git diff sources/source-#{product_webpage}-#{@version}.html")
+      system("git commit -m \"update source-#{product_webpage}-#{@version}.html\"")
       system("git push")
     end
-    puts "== end updating info page source-#{@product}-#{@version}.html"
+    puts "== end updating info page source-#{product_webpage}-#{@version}.html"
     puts "→ Read and check the test output in tmp-tests/#{@product}-#{@version}-doc-testoutput tmp-tests/#{@product}-#{@version}-po-testoutput tmp-tests/#{@product}-#{@version}-tars-testoutput"
   end
 
