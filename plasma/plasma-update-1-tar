@@ -13,6 +13,13 @@ TAR=$1
 
 . VERSIONS.inc
 
+if [ $PRODUCT = "frameworks" ]; then
+   DIR_VERSION=${SHORT_VERSION}
+else
+   DIR_VERSION=${VERSION}
+fi
+
+
 pkgdiff --version > /dev/null || { echo "Install pkgdiff"; exit 1; }
 
 echo asdf > /tmp/test-gpg
@@ -22,18 +29,18 @@ rm -f /tmp/test-gpg /tmp/test-gpg.asc
 cd $PRODUCT-$VERSION
 
 rm -fr ${TAR}-${VERSION}/
-mv ${TAR}-5.21.0.tar.xz.sig ${TAR}-5.21.0.tar.xz.sig.old || true
+mv ${TAR}-6*.tar.xz.sig ${TAR}-6*.tar.xz.sig.old || true
 ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${TAR}
 RELEASE_DATA=`cat release_data`
 sed "s,${TAR};.*,$RELEASE_DATA," ${VERSION}-release-data -i
 
-../create_sources_inc $VERSION > source-plasma-${VERSION}.inc
+../create_sources_inc $VERSION > source-${PRODUCT}-${VERSION}.inc
 cd ..
 
 echo == diff to previous tar
 cd tmp-tests
-scp ${UPLOADSERVER}:${FTPSTABLE}/plasma/${VERSION}/${TAR}-5*xz old.tar.xz
-pkgdiff old.tar.xz ../${VERSION}/${TAR}-${VERSION}.tar.xz || true
+scp ${UPLOADSERVER}:${FTPSTABLE}/${PRODUCT}/${DIR_VERSION}/${TAR}-6*xz old.tar.xz
+pkgdiff old.tar.xz ../${PRODUCT}-${VERSION}/${TAR}-${VERSION}.tar.xz || true
 scp pkgdiff_reports/old/X_to_${VERSION}/changes_report.html ${SCRATCH_SERVER}/${TAR}-${VERSION}-changes_report.html
 $BROWSER ${SCRATCH_SERVER_URL}/${TAR}-${VERSION}-changes_report.html
 cd ..

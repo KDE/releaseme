@@ -45,9 +45,9 @@ class UploadTars
   def upload
     puts "== Uploading Tars"
     system("rsync -CvzaP --stats #{@product}-#{@version}/*xz #{@product}-#{@version}/*xz.sig #{@upload_server}:#{@ftpstable}/#{@product}/#{@dirversion}/")
-    puts "== Uploading release-data file to #{@scratch_server}/#{@version}-release-data"
-    system("scp #{@product}-#{@version}/#{@version}-release-data #{@scratch_server}")
-    system("#{@browser} #{@scratch_server_url}/#{@version}-release-data")
+    puts "== Uploading release-data file to #{@scratch_server}/#{@product}-#{@version}-release-data"
+    system("scp #{@product}-#{@version}/#{@version}-release-data #{@scratch_server}/#{@product}-#{@version}-release-data")
+    system("#{@browser} #{@scratch_server_url}/#{@product}-#{@version}-release-data")
   end
 
   def tests
