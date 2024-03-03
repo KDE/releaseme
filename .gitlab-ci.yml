@@ -5,6 +5,8 @@ stages:
   - test
 
 default:
+  tags:
+    - Linux
   before_script:
     - apt-get -qq update
     - apt-get install -y gnupg2 gettext git subversion
