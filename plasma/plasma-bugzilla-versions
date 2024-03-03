@@ -19,7 +19,7 @@ set -ex
 . bugzilla-products.inc
 
 versions="\
-git-stable-Plasma/5.27
+git-stable-Plasma/6.0
 "
 
 for PRODUCT in $products; do 

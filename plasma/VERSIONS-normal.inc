@@ -5,9 +5,9 @@
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
 MAJOR_VERSION=6
-VERSION=5.92.0
+VERSION=6.0.0
 SHORT_VERSION=6.0
-OLD_VERSION=5.91.0
+OLD_VERSION=5.93.0
 ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=unstable  # set to unstable or stable
 OLD_FTPSTABLE=unstable  # set to unstable or stable of previous release for changelog
