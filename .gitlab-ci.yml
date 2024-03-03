@@ -29,6 +29,8 @@ reuse:
   inherit:
     default: false
     variables: false
+  tags:
+  - Linux
   image:
     name: fsfe/reuse:latest
     entrypoint: [""] # image by default has some custom script as entrypoint :S
