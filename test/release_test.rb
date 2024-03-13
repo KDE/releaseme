@@ -216,4 +216,11 @@ class TestRelease < Testme
     r = ReleaseMe::Release.new(project, :trunk, '1.0')
     assert_equal('phonon-backend-vlc-1.0', r.source.target)
   end
+
+  def test_sysadmin_ticket
+    FileUtils.touch('tar')
+    FileUtils.touch('sig')
+    release = new_test_release
+    release.send(:sysadmin_ticket, 'tar', 'sig')
+  end
 end
