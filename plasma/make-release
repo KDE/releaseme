@@ -12,14 +12,14 @@ ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/${PRODUCT}/${VERSION}"
 
 # remove non-release notice in www/announcements/plasma-5.x.y.php and www/info/plasma-5.x.y.php
 
-sed -i "s/draft: true/draft: false/" ${ANNOUNCECHECKOUT}/${PRODUCT}/${MAJOR_VERSION}/${VERSION}.md
-sed -i "s/draft: true/draft: false/" ${INFOCHECKOUT}/${PRODUCT}-${VERSION}.md
+sed -i "s/draft: true/draft: false/" ${WWWCHECKOUT}/content/announcements/${PRODUCT}/${MAJOR_VERSION}/${VERSION}.md
+sed -i "s/draft: true/draft: false/" ${WWWCHECKOUT}/content/info/${PRODUCT}-${VERSION}.md
 
 # commit to git
 cd ${WWWCHECKOUT}
 git checkout master
 git pull
-git checkout work/${PRODUCT}-${VERSION}
+git checkout work/${PRODUCT}-6-0-3
 git diff
 git commit -a -m "release ${PRODUCT} ${VERSION}"
 git rebase master

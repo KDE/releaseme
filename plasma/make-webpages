@@ -47,7 +47,7 @@ if plasma_versions.product == 'plasma'
                           plasma_versions.old_version,
                           version)
   FileUtils.cp(changelog_file,
-              format('%s/changelogs/plasma/%s/%s', announcecheckout, major_version, changelog_file))
+              format('%s/changelogs/plasma/%s/', announcecheckout, major_version))
 end
 
 if plasma_versions.product == 'frameworks'
