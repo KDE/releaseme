@@ -82,3 +82,6 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - Frameworks pushed tags with v5.100.0-rc1 on packaging then any plasma-update-1-tar calls should use that tag and local branch and a cherry-pick (or master) and push v5.100.0-rc2 see ./make_rc_tag.sh and ./make_updated_tarball.sh, port into plasma-update-1-tar
  - consider a script to update copyright years for KAboutData in Plasma
  - make-changelog has a Jonathan specific path in it for git repos
+ - create_log is python2
+ - create_log hardcodes which repos list
+ - make-release hardcodes version instead of BRANCH=${VERSION//./-}
