@@ -1,5 +1,5 @@
 ---
-title: Plasma VERSION complete changelog
+title: PRODUCT VERSION complete changelog
 version: VERSION
 hidden: true
 plasma: true

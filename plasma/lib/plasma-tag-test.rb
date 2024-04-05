@@ -16,10 +16,11 @@ class PlasmaTagTest
   def initialize
     plasma_versions = PlasmaVersion.new
     @version = plasma_versions.version
+    @product = plasma_versions.product
   end
 
   def grab_git_repos
-    file_contents = File.read('git-repositories-for-release')
+    file_contents = File.read("git-repositories-for-release-#{@product}")
     @repos = file_contents.split(' ')
   end
 

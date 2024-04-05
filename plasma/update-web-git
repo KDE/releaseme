@@ -1,0 +1,20 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2015-2021 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
+
+# Update and branch the web Git repo before making additions
+
+set -xe
+
+. VERSIONS.inc
+
+cd ${WWWCHECKOUT}
+git checkout master
+git pull --rebase
+
+# work branches do not allow dots so replace with dash e.g. work/frameworks-6-0-0
+BRANCH=${VERSION//./-}
+
+git checkout -b work/${PRODUCT}-${BRANCH}
+git push -u origin work/${PRODUCT}-${BRANCH}

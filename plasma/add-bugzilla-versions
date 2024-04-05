@@ -9,6 +9,9 @@
 # Bugzilla_logincookie=QskELeoUxx
 # Bugzilla_login=12345
 
+# Plasma has no consistent set of projects in Bugzilla so it has a manual list
+# Frameworks uses frameworks-$repo so use the git repos
+
 set -ex
 
 . bugzilla-cookies.inc
@@ -16,9 +19,17 @@ set -ex
 . VERSIONS.inc
 #VERSION="git-stable-Plasma/5.26"
 
-. bugzilla-products.inc
+if [ $PRODUCT = "plasma" ]; then
+  file="bugzilla-products-plasma.text"
+elif [ $PRODUCT = "frameworks" ]; then
+  file="git-repositories-for-release-frameworks"
+fi
 
-for PRODUCT in $products; do 
+for PROJECT in `cat $file`; do
+
+ if [ $PRODUCT = "frameworks" -a $PROJECT != "extra-cmake-modules"]; then
+   PROJECT="frameworks-${PROJECT}"
+ fi
 
  # Add the new version
  tokenline=`curl -s --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" "https://bugs.kde.org/editversions.cgi?action=add&product=ksysguard" | grep 'name="token"'`
@@ -29,7 +40,7 @@ for PRODUCT in $products; do
  TOKEN=`echo $tokenline | sed "s,.*value=\",," | sed "s,\".,,"`
  echo token is: $TOKEN
 
- curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" --data "version=${VERSION}&action=new&product=${PRODUCT}&token=${TOKEN}" https://bugs.kde.org/editversions.cgi -o curlpushout.html
+ curl --cookie "Bugzilla_logincookie=${Bugzilla_logincookie};Bugzilla_login=${Bugzilla_login}" --data "version=${VERSION}&action=new&product=${PROJECT}&token=${TOKEN}" https://bugs.kde.org/editversions.cgi -o curlpushout.html
  if grep -q 'needs a legitimate login and password to continue' curlpushout.html; then
    echo "Login failure"
    exit 1
@@ -38,5 +49,9 @@ for PRODUCT in $products; do
 
 done
 
-echo "opening plasma-nm as example to verify"
-$BROWSER "https://bugs.kde.org/editproducts.cgi?action=edit&product=plasma-nm"
+verify=`head -n1 git-repositories-for-release-${PRODUCT}`
+if [ $PRODUCT = "frameworks" ]; then
+  verify="frameworks-${verify}"
+fi
+echo "opening $verify as example to verify"
+$BROWSER "https://bugs.kde.org/editproducts.cgi?action=edit&product=${verify}"

@@ -1,0 +1,191 @@
+#!/usr/bin/env ruby
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2024 Jonathan Riddell <jr@jriddell.org>
+
+require 'optparse'
+require 'fileutils'
+require_relative 'lib/plasma_version'
+require_relative 'lib/kde_identify'
+
+class MakeChangelog
+
+  def initialize
+    @readableNames = {
+      # Frameworks
+      "attica": "Attica",
+      "baloo": "Baloo",
+      "bluez-qt": "Bluez Qt",
+      "breeze-icons": "Breeze Icons",
+      "extra-cmake-modules": "Extra CMake Modules",
+      "frameworkintegration": "Framework Integration",
+      "kapidox": "KAPIDox",
+      "karchive": "KArchive",
+      "kauth": "KAuth",
+      "kbookmarks": "KBookmarks",
+      "kcalendarcore": "KCalendarCore",
+      "kcmutils": "KCMUtils",
+      "kcodecs": "KCodecs",
+      "kcolorscheme": "KColorScheme",
+      "kcompletion": "KCompletion",
+      "kconfig": "KConfig",
+      "kconfigwidgets": "KConfigWidgets",
+      "kcontacts": "KContacts",
+      "kcoreaddons": "KCoreAddons",
+      "kcrash": "KCrash",
+      "kdav": "KDav",
+      "kdbusaddons": "KDBusAddons",
+      "kdeclarative": "KDeclarative",
+      "kded": "KDE Daemon",
+      "kdesu": "KDE SU",
+      "kdnssd": "KDNSSD",
+      "kdoctools": "KDocTools",
+      "kfilemetadata": "KFileMetaData",
+      "kglobalaccel": "KGlobalAccel",
+      "kguiaddons": "KGuiAddons",
+      "kholidays": "KHolidays",
+      "ki18n": "KI18n",
+      "kiconthemes": "KIconThemes",
+      "kidletime": "KIdletime",
+      "kimageformats": "KImageformats",
+      "kio": "KIO",
+      "kirigami": "Kirigami",
+      "kitemmodels": "KItemModels",
+      "kitemviews": "KItemViews",
+      "kjobwidgets": "KJobWidgets",
+      "knewstuff": "KNewStuff",
+      "knotifications": "KNotifications",
+      "knotifyconfig": "KNotifyConfig",
+      "kpackage": "KPackage",
+      "kparts": "KParts",
+      "kpeople": "KPeople",
+      "kplotting": "KPlotting",
+      "kpty": "KPTY",
+      "kquickcharts": "KQuickCharts",
+      "krunner": "KRunner",
+      "kservice": "KService",
+      "kstatusnotifieritem": "KStatusNotifieritem",
+      "ksvg": "KSVG",
+      "ktexteditor": "KTextEditor",
+      "ktexttemplate": "KTextTemplate",
+      "ktextwidgets": "KTextWidgets",
+      "kunitconversion": "KUnitConversion",
+      "kuserfeedback": "KUserFeedback",
+      "kwallet": "KWallet",
+      "kwidgetsaddons": "KWidgetsAddons",
+      "kwindowsystem": "KWindowSystem",
+      "kxmlgui": "KXMLGUI",
+      "modemmanager-qt": "Modem Manager Qt",
+      "networkmanager-qt": "Network Manager Qt",
+      "prison": "Prison",
+      "purpose": "Purpose",
+      "qqc2-desktop-style": "QQC2 Desktop Style",
+      "solid": "Solid",
+      "sonnet": "Sonnet",
+      "syndication": "Syndication",
+      "syntax-highlighting": "Syntax Highlighting",
+      "threadweaver": "Threadweaver",
+      # Plasma
+      "bluedevil": "Bluedevil",
+      "breeze": "Breeze",
+      "Breeze-gtk": "Breeze GTK",
+      "Breeze-plymouth": "Breeze Plymouth",
+      "discover": "Discover",
+      "drkonqi": "Dr Konqi",
+      "kdecoration": "KDE Window Decoration Library",
+      "kde-gtk-config": "KDE GTK Config",
+      "kdeplasma-addons": "Plasma Addons",
+      "kgamma5": "Gamma Monitor Calibration Tool",
+      "khelpcenter": "KHelpCenter",
+      "khotkeys": "KDE Hotkeys",
+      "kinfocenter": "Info Center",
+      "kio-extras": "KIO Extras",
+      "kmenuedit": "KMenuEdit",
+      "kscreen": "KScreen",
+      "ksshaskpass": "KSSHAskPass",
+      "ksysguard": "KSysGuard",
+      "kwayland": "KWayland",
+      "kwin": "KWin",
+      "libKScreen": "LibKScreen",
+      "milou": "Milou",
+      "muon": "Muon",
+      "oxygen-fonts": "Oxygen Fonts",
+      "oxygen": "Oxygen",
+      "plasma-browser-integration": "Plasma Browser Integration",
+      "plasma-desktop": "Plasma Desktop",
+      "plasma-firewall": "Plasma Firewall",
+      "plasma-mediacenter": "Plasma Media Center",
+      "plasma-nano": "Plasma Nano",
+      "plasma-nm": "Plasma Networkmanager (plasma-nm)",
+      "plasma-pa": "Plasma Audio Volume Control",
+      "plasma-phone-components": "Plasma Phone Components",
+      "plasma-sdk": "Plasma SDK",
+      "plasma-systemmonitor": "Plasma Systemmonitor",
+      "plasma-workspace": "Plasma Workspace",
+      "Plasma Workspace-wallpapers": "Plasma Workspace Wallpapers",
+      "plymouth-kcm": "Plymouth KControl Module",
+      "powerdevil": "Powerdevil",
+      "sddm-kcm": "SDDM KCM",
+      "systemsettings": "System Settings",
+      "user-manager": "User Manager",
+      "plasma-disks": "Plasma Disks",
+      "plasma-bigscreen": "Plasma Bigscreen",
+      "aura-browser": "Aura Browser",
+      "plank-player": "Plank Player",
+      "plasma-remotecontrollers": "Plasma Remotecontrollers",
+      "flatpak-kcm": "Flatpak Permissions",
+    }
+    @plasma_versions = PlasmaVersion.new
+    # override old version for a feature release so we still include changes from last feature not from last beta
+    #@plasma_versions.version = "5.3.2"
+    @tmpdir = 'tmp-changelog'
+    @repos = "git-repositories-for-release-#{@plasma_versions.product}"
+    @branch = @plasma_versions.branch
+    @version = @plasma_versions.version
+    @product = @plasma_versions.product.capitalize
+    @file = "#{@plasma_versions.product}-#{@version}/#{@plasma_versions.old_version}-#{@version}.md"
+  end
+
+  def cloneRepos
+    FileUtils.rm_f(@file)
+    FileUtils.rm_rf(@tmpdir)
+    FileUtils.mkdir(@tmpdir)
+    File.readlines(@repos, chomp: true).each do |repo|
+      Dir.chdir(@tmpdir) do
+        puts(repo)
+        invent_path = KDEIndentify.get_kde_category(repo)
+        puts invent_path
+        # FIXME this is Jonathan specific
+        `git clone --reference /home/jr/src/*/#{repo}/kdegit/#{repo} invent:#{invent_path}/#{repo}`
+        Dir.chdir(repo) do
+          `git checkout #{@branch}`
+        end
+      end
+    end
+  end
+
+  def makeTheChangelog
+    if @product == "plasma"
+      FileUtils.cp('templates/changelog.md', @file)
+    else
+      File.open(@file, 'w').close # empty the file
+    end
+    sed('VERSION', @version)
+    sed('PRODUCT', @product)
+    File.open(@file, 'a') { |f| f.puts(`./create_log.py`) }
+    @readableNames.keys.each do |product|
+      sed("title=\"#{product.to_s}\"", "title=\"#{@readableNames[product]}\"")
+    end
+    puts "Now check and manually edit:   kate #{@file}"
+  end
+
+  def sed(text_to_replace, text_to_put_in_place)
+    text = File.read(@file)
+    File.open(@file, 'w+') {|f| f << text.gsub(text_to_replace, text_to_put_in_place)}
+  end
+
+end
+
+makeChangelog = MakeChangelog.new
+makeChangelog.cloneRepos
+makeChangelog.makeTheChangelog
+

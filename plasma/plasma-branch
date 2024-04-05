@@ -1,9 +1,0 @@
-#!/bin/bash
-# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2015-2016 Jonathan Riddell <jr@jriddell.org>
-
-. VERSIONS.inc
-
-cd ${VERSION}
-cp ${VERSION}-release-data release_data
-../../branchme.rb --name Plasma/${SHORT_VERSION}
