@@ -27,7 +27,7 @@ fi
 
 for PROJECT in `cat $file`; do
 
- if [ $PRODUCT = "frameworks" -a $PROJECT != "extra-cmake-modules"]; then
+ if [ $PRODUCT = "frameworks" -a $PROJECT != "extra-cmake-modules" ]; then
    PROJECT="frameworks-${PROJECT}"
  fi
 

@@ -33,6 +33,7 @@ apiUrl = {plasma:"https://projects.kde.org/api/v1/projects/plasma",
 @plasma6_0_exclusions = %w(kde-vdg-extras lancelot latte-dock oxygen-gtk plasma-active-window-control plasma-pass plasma-redshift-control plasma-simplemenu smaragd user-manager ksysguard kwayland-server pico-wizard plasma-tests plasma-bigscreen aura-browser plank-player plasma-remotecontrollers khotkeys krdp lightdm-kde-greeter)
 
 @frameworks6_0_exclusions = %w(kinit plasma-framework kactivities kactivities-stats kdelibs4support kdesignerplugin kdewebkit khtml kjs kjsembed kmediaplayer kross kxmlrpcclient kemoticons oxygen-icons)
+@frameworks6_1_exclusions = %w(kinit plasma-framework kactivities kactivities-stats kdelibs4support kdesignerplugin kdewebkit khtml kjs kjsembed kmediaplayer kross kxmlrpcclient kemoticons oxygen-icons)
 
 @plasma5_25_additions = %w()
 # Stuff in https://invent.kde.org/plasma-bigscreen/
