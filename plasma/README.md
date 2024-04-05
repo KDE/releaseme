@@ -84,4 +84,3 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - make-changelog has a Jonathan specific path in it for git repos
  - create_log is python2
  - create_log hardcodes which repos list
- - make-release hardcodes version instead of BRANCH=${VERSION//./-}
