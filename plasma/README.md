@@ -88,4 +88,4 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - frameworks changelog links fix
  - create_log needs to use the right git-repos file
  - changelog add headers
- - for Plasma do not update ECM version when running update-version
+ - for Plasma do not update ECM version when running update-version for breeze-gtk and breeze-plymouth
