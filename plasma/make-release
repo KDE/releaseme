@@ -8,10 +8,15 @@ set -xe
 
 . VERSIONS.inc
 
-ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/${PRODUCT}/${VERSION}"
+if [ $PRODUCT = "plasma" ]; then
+  VER=${VERSION}
+  PROD="plasma"
+elif [ $PRODUCT = "frameworks" ]; then
+  VER=${SHORT_VERSION}
+  PROD="kde-frameworks"
+fi
 
-sed -i "s/draft: true/draft: false/" ${WWWCHECKOUT}/content/announcements/${PRODUCT}/${MAJOR_VERSION}/${VERSION}.md
-sed -i "s/draft: true/draft: false/" ${WWWCHECKOUT}/content/info/${PRODUCT}-${VERSION}.md
+ssh $UPLOADSERVER "chmod 755 ${FTPSTABLE}/${PRODUCT}/${VER}"
 
 # work branches do not allow dots so replace with dash e.g. work/frameworks-6-0-0
 BRANCH=${VERSION//./-}
@@ -21,13 +26,16 @@ cd ${WWWCHECKOUT}
 git checkout master
 git pull
 git checkout work/${PRODUCT}-${BRANCH}
+git pull --rebase
+sed -i "s/draft: true/draft: false/" ${WWWCHECKOUT}/content/announcements/${PRODUCT}/${MAJOR_VERSION}/${VERSION}.md
+sed -i "s/draft: true/draft: false/" ${WWWCHECKOUT}/content/info/${PROD}-${VERSION}.md
 git diff
-git commit -a -m "release ${PRODUCT} ${VERSION}"
+git commit -a -m "release ${PRODUCT} ${VERSION}" || true # allow repeated attempts
 git rebase master
-git push
+#git push
 git checkout master
 git pull
-git merge work/${PRODUCT}-${VERSION}
+git merge work/${PRODUCT}-${BRANCH}
 git push
 cd -
 
