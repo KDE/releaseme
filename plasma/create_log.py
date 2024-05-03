@@ -118,6 +118,8 @@ for repo in repos:
                                 # changed jr ignore update version commits
 				elif str(line).startswith("Update version number for"):
 					ignoreCommit = True
+				elif str(line).startswith("update version for new release"):
+					ignoreCommit = True
 				elif line:
 					commit.append(line)
 		# Add the last commit
