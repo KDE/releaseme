@@ -37,7 +37,7 @@ class UpdateVersions
     @variable = "KF_DEP_VERSION" if @plasma_versions.product == "frameworks"
     @variable = "PROJECT_VERSION" if @plasma_versions.product == "plasma" and @next
     @variable = "KF_VERSION" if @plasma_versions.product == "frameworks" and @next
-    @special_variables = {"extra-cmake-modules"=> "VERSION"}
+    @special_variables = {"extra-cmake-modules"=> "VERSION", "kpipewire"=> "KPipewire VERSION"}
     @directory = "tmp-version-update"
     if @next
       @new_version = @plasma_versions.next_version
@@ -69,8 +69,7 @@ class UpdateVersions
             @sub_variable = @variable
           end
           if File.exist?("CMakeLists.txt")
-            system('sed', '-i', "s,set(#{@sub_variable} " + '\".*\"' + ",set(#{@sub_variable} " + '\"' + "#{@new_version}" + '\",', "CMakeLists.txt")
-            system('sed -i "s, VERSION \".....\", VERSION \"""'+"#{@new_version}\""+', CMakeLists.txt')
+            sed_i('CMakeLists.txt', "#{@sub_variable}" + ' "6.0.4"', "#{@sub_variable}" + ' "' + "#{@new_version}" + '"')
           end
           if File.exist?("CMakeLists.txt") and not @next
             system('sed', '-i', "s,find_package(ECM [0-9\.]\\+,find_package(ECM #{@new_version},", "CMakeLists.txt")
@@ -111,6 +110,10 @@ class UpdateVersions
     end
   end
 
+  def sed_i(file, text_to_replace, text_to_put_in_place)
+    text= File.read file
+    File.open(file, 'w+'){|f| f << text.gsub(text_to_replace, text_to_put_in_place)}
+  end
 end
 
 updateVersions = UpdateVersions.new
