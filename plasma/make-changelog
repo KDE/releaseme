@@ -171,7 +171,12 @@ class MakeChangelog
     end
     sed('VERSION', @version)
     sed('PRODUCT', @product)
-    File.open(@file, 'a') { |f| f.puts(`./create_log.py`) }
+    #File.open(@file, 'a') { |f| f.puts(`./create_log.py`) }
+    File.readlines(@repos, chomp: true).each do |repo|
+      Dir.chdir(@tmpdir) do
+        getRepoChangelog()
+      end
+    end
     @readableNames.keys.each do |product|
       sed("title=\"#{product.to_s}\"", "title=\"#{@readableNames[product]}\"")
     end
@@ -181,6 +186,11 @@ class MakeChangelog
   def sed(text_to_replace, text_to_put_in_place)
     text = File.read(@file)
     File.open(@file, 'w+') {|f| f << text.gsub(text_to_replace, text_to_put_in_place)}
+  end
+
+  def getRepoChangelog()
+    puts "XXX getRepoChangelog()"
+    File.open("../"+@file, 'a') { |f| f.puts('moo') }
   end
 
 end
