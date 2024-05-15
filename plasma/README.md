@@ -39,7 +39,9 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  On a new 5.x release make branches Plasma/5.x after making the tars
 
  - run ./make-branch for Plasma (but not Frameworks)
- - edit ./update-versions to override versions to set 5.x.80 and run it for master
+ - edit ./update-versions to override versions to set 6.x.80 and run it for master
+ - edit ./add-bugzilla-versions and override version to VERSION="git-stable-Plasma/6.x" and run it
+ - Add git-stable-Plasma/6.x to data/versions.ym in git@invent.kde.org:sysadmin/bugzilla-bot.git
  - ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages and update repo-metadata
  - Update https://community.kde.org/Plasma/Live_Images
 
