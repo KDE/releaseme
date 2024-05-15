@@ -164,7 +164,7 @@ class MakeChangelog
   end
 
   def makeTheChangelog
-    if @product == "plasma"
+    if @product == "Plasma"
       FileUtils.cp('templates/changelog.md', @file)
     else
       File.open(@file, 'w').close # empty the file
