@@ -69,9 +69,9 @@ class UpdateVersions
             @sub_variable = @variable
           end
           if File.exist?("CMakeLists.txt")
-            sed_i('CMakeLists.txt', "#{@sub_variable}" + ' "6.0.4"', "#{@sub_variable}" + ' "' + "#{@new_version}" + '"')
+            sed_i('CMakeLists.txt', /#{@sub_variable} \"[\d\.]+\"/, "#{@sub_variable} \"#{@new_version}\"")
           end
-          if File.exist?("CMakeLists.txt") and not @next
+          if File.exist?("CMakeLists.txt") and not @next and @plasma_versions.product == "frameworks"
             system('sed', '-i', "s,find_package(ECM [0-9\.]\\+,find_package(ECM #{@new_version},", "CMakeLists.txt")
           end
           # kapidox has a setup.py

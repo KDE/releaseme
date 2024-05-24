@@ -29,7 +29,7 @@ rm -f /tmp/test-gpg /tmp/test-gpg.asc
 cd $PRODUCT-$VERSION
 
 rm -fr ${TAR}-${VERSION}/
-mv ${TAR}-6*.tar.xz.sig ${TAR}-6*.tar.xz.sig.old || true
+mv ${TAR}-${VERSION}.tar.xz.sig ${TAR}-${VERSION}.tar.xz.sig.old || true
 ../../tarme.rb --origin ${ORIGIN} --version $VERSION ${TAR}
 RELEASE_DATA=`cat release_data`
 sed "s,${TAR};.*,$RELEASE_DATA," ${VERSION}-release-data -i
