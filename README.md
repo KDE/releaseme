@@ -137,3 +137,6 @@ For background info on tarball signing take a look at the [GPG page](GPG.md)
 ## Hacking ReleaseMe
 
 [Check out the contributor's page](Contributing.md)
+
+## Plasma-specific workflows
+See https://community.kde.org/Schedules/Plasma_6#Future_releases for additional tasks to complete on the soft and hard feature freeze days.
