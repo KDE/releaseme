@@ -18,12 +18,6 @@ cd releaseme
 For more details on how to make a release see
 https://community.kde.org/ReleasingSoftware
 
-## KDELibs 4.x
-
-The `master` branch only supports KDE Frameworks based releases. To release for
-KDELibs 4.x please use the `kdelibs4` branch. This in particular also applies
-to software that has its translations in the kdelibs4 directories on SVN.
-
 ## KDE Frameworks 5.x
 
 Releaseme uses 'origins' to control which branch to release. An origin is 
