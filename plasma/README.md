@@ -22,7 +22,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 ## On Beta day (setting versions)
  - Add release exceptions array to ./git-repos and run "./git-repos -r 6.xx" to update list of things to package in git-repositories-for-release
  - set QT_VERSION and KF5_VERSION in ./plasma-update-versions-qtkf and run that script to set version agreed at cycle kickoff (make sure to check the exceptions)
- - Edit and run add-bugzilla-versions to add a new version git-stable-Plasma/5.xx
+ - Edit and run add-bugzilla-versions to add a new version git-stable-Plasma/6.xx
  - Update bug closing bot versions at https://invent.kde.org/sysadmin/bugzilla-bot/-/blob/master/data/versions.yml
 
 ## On Tar days (making tars)
@@ -40,9 +40,8 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
 
  - run ./make-branch for Plasma (but not Frameworks)
  - edit ./update-versions to override versions to set 6.x.80 and run it for master
- - edit ./add-bugzilla-versions and override version to VERSION="git-stable-Plasma/6.x" and run it
- - Add git-stable-Plasma/6.x to data/versions.ym in git@invent.kde.org:sysadmin/bugzilla-bot.git
  - ping tosky and kde-i18n-doc@kde.org list to branch messages and docmessages and update repo-metadata
+ - E-mail plasma-devel@kde.org with the happy news of new Plasma/6.x branches
  - Update https://community.kde.org/Plasma/Live_Images
 
 ## On tar day (prepare)

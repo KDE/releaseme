@@ -35,8 +35,10 @@ server = options.include?(:scratch) ? "#{plasma_versions.scratch_server}/" : "#{
 version = plasma_versions.version + "." + options[:update_version]
 repo = ARGV[0]
 
+dir = "plasma-#{plasma_versions.version}"
+
 begin
-  Dir.mkdir(plasma_versions.version)
+  Dir.mkdir(dir)
 rescue Errno::EEXIST => e
   puts "Using existing directory"
 rescue => e
@@ -44,7 +46,7 @@ rescue => e
   exit
 end
 
-Dir.chdir(plasma_versions.version) do
+Dir.chdir(dir) do
   system("../../tarme.rb", "--origin", plasma_versions.origin, "--version", version, repo)
 end
 
@@ -59,8 +61,8 @@ Dir.chdir("tmp-tests") do
   system("#{plasma_versions.browser} #{plasma_versions.scratch_server_url}/#{repo}-#{version}-changes_report.html")
 end
 
-gitCommit = File.read("#{plasma_versions.version}/release_data").split(';')[2]
-branch = File.read("#{plasma_versions.version}/release_data").split(';')[1]
+gitCommit = File.read("#{dir}/release_data").split(';')[2]
+branch = File.read("#{dir}/release_data").split(';')[1]
 
 system("#{plasma_versions.browser} https://invent.kde.org/plasma/kwin/-/commits/#{branch}")
 
@@ -70,10 +72,10 @@ if TTY::Prompt.new.no?("Tar made with https://invent.kde.org/plasma/#{repo}/-/co
 end
 
 puts("== uploading")
-system("rsync -CvzaP --stats #{plasma_versions.version}/*xz #{plasma_versions.version}/*xz.sig #{server}#{plasma_versions.ftpstable}/plasma/#{plasma_versions.version}/")
+system("rsync -CvzaP --stats #{dir}/*xz #{dir}/*xz.sig #{server}#{plasma_versions.ftpstable}/plasma/#{plasma_versions.version}/")
 
 puts("== editing kde.org")
-sha256sum = File.read("#{plasma_versions.version}/release_data").split(';')[4].chomp!
+sha256sum = File.read("#{dir}/release_data").split(';')[4].chomp!
 Dir.chdir(plasma_versions.wwwcheckout) do
   updated_source_plasma = []
   found_line_no = -99
@@ -123,8 +125,8 @@ File.open("tmp-announcements/release-team-update-#{repo}", "w+") do |f|
   f.puts("There has been an update to Plasma #{plasma_versions.version}")
   f.puts()
   f.puts("#{repo} now has #{repo}-#{version} tar available to download for packaging")
-  sha256sum = File.read("#{plasma_versions.version}/release_data").split(';')[4].chomp!
-  gitCommit = File.read("#{plasma_versions.version}/release_data").split(';')[2]
+  sha256sum = File.read("#{dir}/release_data").split(';')[4].chomp!
+  gitCommit = File.read("#{dir}/release_data").split(';')[2]
   f.puts("sha256sum: #{sha256sum} Git commit: #{gitCommit}")
   f.puts()
   f.puts("https://kde.org/info/plasma-#{plasma_versions.version}/")

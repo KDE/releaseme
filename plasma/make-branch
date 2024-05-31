@@ -16,9 +16,9 @@ class MakeBranch
 
   def branch
     Dir.chdir("#{@plasma_versions.product}-#{@plasma_versions.version}") do
-      File.copy("#{@plasma_versions.product}-#{@plasma_versions.version}-release-data", "release_data")
-      branch_name = @plasma_version.product.capitalize
-      system("../../branchme.rb --name #{branch_name}/#{@plasma_versions.short_version}")
+      FileUtils.copy("#{@plasma_versions.version}-release-data", "release_data")
+      branch_name = @plasma_versions.product.capitalize
+      system("../../branchme.rb --name #{branch_name}/#{@plasma_versions.branch_version}")
     end
   end
 end
