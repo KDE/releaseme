@@ -82,8 +82,8 @@ class UpdateVersions
           if @plasma_versions.origin != "trunk"
             appstream = Dir.glob("**/*.appdata.xml") + Dir.glob("**/*.metainfo.xml")
             appstream.each do |appstream_file|
-              puts "::#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datastring #{@plasma_versions.releasedate} --releases-to-show 4"
-              `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datestring #{@plasma_versions.releasedate} --releases-to-show 4`
+              puts "::#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datastring #{@plasma_versions.releasedateiso} --releases-to-show 4"
+              `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datestring #{@plasma_versions.releasedateiso} --releases-to-show 4`
             end
           end
           system("git --no-pager diff")
@@ -97,7 +97,7 @@ class UpdateVersions
             appstream = Dir.glob("**/*.appdata.xml")
             appstream << Dir.glob("**/*.metainfo.xml")
             appstream.each do |appstream_file|
-              `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datestring #{@plasma_versions.releasedate} --releases-to-show 4`
+              `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datestring #{@plasma_versions.releasedateiso} --releases-to-show 4`
             end
           end
           system("git --no-pager diff")
