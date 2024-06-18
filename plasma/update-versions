@@ -79,7 +79,7 @@ class UpdateVersions
             system('sed', '-i', "s,version=" + "'.*'" + ",version=" + "'#{@new_version}',", "setup.py")
           end
 
-          if @plasma_versions.origin != "trunk"
+          if @plasma_versions.origin != "trunk" and not @next
             appstream = Dir.glob("**/*.appdata.xml") + Dir.glob("**/*.metainfo.xml")
             appstream.each do |appstream_file|
               puts "::#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datastring #{@plasma_versions.releasedateiso} --releases-to-show 4"
@@ -92,18 +92,18 @@ class UpdateVersions
             `git push`
           end
           # push to master
-          if @plasma_versions.origin != "trunk" and @plasma_versions.origin != "lts"
+          if @plasma_versions.origin != "trunk" and @plasma_versions.origin != "lts" and not @next
             `git checkout master`
             appstream = Dir.glob("**/*.appdata.xml")
             appstream << Dir.glob("**/*.metainfo.xml")
             appstream.each do |appstream_file|
               `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datestring #{@plasma_versions.releasedateiso} --releases-to-show 4`
             end
-          end
-          system("git --no-pager diff")
-          `git commit -a -m 'update version for new release'`
-          if not @trial
-            `git push`
+            system("git --no-pager diff")
+            `git commit -a -m 'update version for new release'`
+            if not @trial
+              `git push`
+            end
           end
         end
       end
