@@ -42,6 +42,7 @@ module ReleaseMe
     def get(target, shallow = true, clean: false)
       args = %w[clone]
       args << '--depth' << '1' if shallow
+      args << "--recurse-submodules"
       args << "--branch" << branch unless branch.nil? || branch.empty?
       args += [repository, target]
       output, status = run(args)
