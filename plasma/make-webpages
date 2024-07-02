@@ -47,7 +47,8 @@ if plasma_versions.product == 'plasma'
                           plasma_versions.old_version,
                           version)
   FileUtils.cp(changelog_file,
-              format('%s/changelogs/plasma/%s/', announcecheckout, major_version))
+               format('%s/changelogs/plasma/%s/', announcecheckout, major_version))
+  system('git', 'add', format('%s/changelogs/plasma/%s/', announcecheckout, major_version), chdir: plasma_versions.wwwcheckout)
 end
 
 if plasma_versions.product == 'frameworks'
