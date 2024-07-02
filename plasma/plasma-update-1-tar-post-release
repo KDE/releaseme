@@ -108,7 +108,7 @@ Dir.chdir(plasma_versions.wwwcheckout) do
 end
 
 puts("== pushing tag kde.org")
-Dir.chdir(plasma_versions.version) do
+Dir.chdir(dir) do
   if scratch
     puts("../../tagme.rb --version #{version}")
   else

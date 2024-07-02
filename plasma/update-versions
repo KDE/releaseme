@@ -79,6 +79,7 @@ class UpdateVersions
             system('sed', '-i', "s,version=" + "'.*'" + ",version=" + "'#{@new_version}',", "setup.py")
           end
 
+          # Add Appstream version in branch
           if @plasma_versions.origin != "trunk" and not @next
             appstream = Dir.glob("**/*.appdata.xml") + Dir.glob("**/*.metainfo.xml")
             appstream.each do |appstream_file|
@@ -91,7 +92,7 @@ class UpdateVersions
           if not @trial
             `git push`
           end
-          # push to master
+          # Add Appstream version in master
           if @plasma_versions.origin != "trunk" and @plasma_versions.origin != "lts" and not @next
             `git checkout master`
             appstream = Dir.glob("**/*.appdata.xml")
