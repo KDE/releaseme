@@ -127,7 +127,7 @@ done before releasing.
 
 ## Issues
 
-If you are problems or suggestions file a bug report in bugzilla:
+If you have problems or suggestions file a bug report in bugzilla:
 https://bugs.kde.org/enter_bug.cgi?product=releaseme
 
 ## Signing | GPG
