@@ -111,7 +111,7 @@ module ReleaseMe
       title = "Publish #{tar}"
       sha256s = [sig, tar].collect { |x| `sha256sum #{x}`.strip }
       sha1s = [sig, tar].collect { |x| `sha1sum #{x}`.strip }
-      template = HashTemplate.new(sha256s: sha256s, sha1s: sha1s, version: version, projectName: project.identifier, origin: origin)
+      template = HashTemplate.new(sha256s: sha256s, sha1s: sha1s, version: version, projectName: project.identifier, target: ReleaseMe::Origin::target_sub_path(origin))
       template_file = "#{__dir__}/data/ticket_description.txt.erb"
       description = template.render(template_file)
       sysadmin_ticket_uri(title: title, description: description)

@@ -18,5 +18,11 @@ module ReleaseMe
     def kde4?(origin)
       [TRUNK_KDE4, STABLE_KDE4].include?(origin)
     end
+
+    # The sub directory where releases are located
+    def target_sub_path(origin)
+      origin_target_map = { lts: "stable", stable: "stable", trunk: "unstable", stable_kde4: "stable", trunk_kde4: "unstable" }
+      origin_target_map[origin]
+    end
   end
 end
