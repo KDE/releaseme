@@ -45,7 +45,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - Update https://community.kde.org/Plasma/Live_Images
 
 ## On tar day (prepare)
- - run ./make-changelog (manually edit file after)
+ - run ./make-changelog (manually edit file after)  TODO extract bug report title
  - run ./make-webpages [-n] and check over output opened in firefox (use -n for noannounce on e.g. .0 releases where the announce is written manually)
  - run cwebp on the images to convert to WebP and update URLs https://developers.google.com/speed/webp
  - run ./add-bugzilla-versions to update bugzilla version numbers (needs curl installed and may need bugzilla-cookies.inc updated)
