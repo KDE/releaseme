@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: Albert Astals Cid <aacid@kde.org>
 # SPDX-FileCopyrightText: 2015 Jonathan Riddell <jr@jriddell.org>
@@ -12,7 +12,7 @@
 import os
 import subprocess
 #edited jr, escape & to &amp; and cgi.escape
-import cgi
+import html
 
 def getVersionFrom(repo):
         #jr changed to just return nothing (will diff to latest commit)
@@ -65,12 +65,12 @@ for repo in repos:
 	retval = p.wait()
 	if retval != 0:
 		raise NameError('git fetch failed')
-	# print 'git rev-parse '+fromVersion+os.getcwd()
+	# print('git rev-parse '+fromVersion+os.getcwd())
 	p = subprocess.Popen('git rev-parse '+fromVersion, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	retval = p.wait()
 	if retval != 0:
                 #jr changed to not have show line
-		#print "<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a> <a href='#" + repo + "' onclick='toggle(\"ul" + repo +"\", this)'>[Show]</a></h3>"
+		#print("<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a> <a href='#" + repo + "' onclick='toggle(\"ul" + repo +"\", this)'>[Show]</a></h3>")
 		print("### [{0}](https://commits.kde.org/{0})\n".format(repo))
 		print("+ New in this release")
 		continue
@@ -130,10 +130,10 @@ for repo in repos:
 			print("{{{{< details title=\"{0}\" href=\"https://commits.kde.org/{0}\" >}}}}".format(repo))
 			for commit in commits:
 				extra = ""
-				changelog = commit[1]
+				changelog = commit[1].decode()
 
 				for line in commit:
-					line = cgi.escape(line)
+					line = html.escape(str(line))
 					if str(line).startswith("BUGS:"):
 						bugNumbers = line[line.find(":") + 1:].strip()
 						for bugNumber in bugNumbers.split(","):

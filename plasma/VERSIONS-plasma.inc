@@ -8,11 +8,11 @@ PRODUCT="plasma" # frameworks or plasma
 
 MAJOR_VERSION=6
 VERSION=6.2.0
-NEXT_VERSION=6.2.1 # what will the next release be for ./update-verions --next
+NEXT_VERSION=6.2.80 # what will the next release be for ./update-verions --next
 SHORT_VERSION=6.2.0 # the directory to use on ftpadmin
 BRANCH_VERSION=6.2 # the version part to use in the Plasma/6.x branch name
 OLD_VERSION=6.1.5
-ORIGIN=branch # git branch as set in projects.k.o, set to trunk or stable or lts
+ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release for changelog
 BRANCH=master # set to master or Plasma/6.x
