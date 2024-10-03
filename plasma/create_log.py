@@ -32,7 +32,9 @@ repos.sort()
 
 versionsDir = os.getcwd() + "/versions"
 
+#print("for repo in repos")
 for repo in repos:
+	#print("repo " + str(repo))
 	toVersion = getVersionFrom(repo)
 	os.chdir(srcdir+repo)
 
@@ -61,31 +63,41 @@ for repo in repos:
 		if line.startswith("OLD_BALOO_VERSION=") and (repo == "baloo" or repo == "kfilemetadata"):
 			fromVersion = "v" + line[18:]
 
+#	print("fromVersion " + str(fromVersion))
 	p = subprocess.Popen('git fetch', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	retval = p.wait()
 	if retval != 0:
 		raise NameError('git fetch failed')
-	# print('git rev-parse '+fromVersion+os.getcwd())
-	p = subprocess.Popen('git rev-parse '+fromVersion, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	retval = p.wait()
-	if retval != 0:
-                #jr changed to not have show line
-		#print("<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a> <a href='#" + repo + "' onclick='toggle(\"ul" + repo +"\", this)'>[Show]</a></h3>")
-		print("### [{0}](https://commits.kde.org/{0})\n".format(repo))
-		print("+ New in this release")
-		continue
 
+#Removed jriddell 2024-10-03 on Ubuntu 24.04 rebase git 2.43.0 3.12.3 this just hangs at the p.wait() for no obvious reason
+#	print('git rev-parse '+fromVersion+' '+os.getcwd())
+#	p = subprocess.Popen('git rev-parse '+fromVersion, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+#	retval = p.wait()
+#	if retval != 0:
+                #jr changed to not have show line
+#		#print("<h3><a name='" + repo + "' href='http://quickgit.kde.org/?p="+repo+".git'>" + repo + "</a> <a href='#" + repo + "' onclick='toggle(\"ul" + repo +"\", this)'>[Show]</a></h3>")
+#		print("### [{0}](https://commits.kde.org/{0})\n".format(repo))
+#		print("+ New in this release")
+#		continue
+
+	#print('git diff '+fromVersion+'..'+toVersion)
 	p = subprocess.Popen('git diff '+fromVersion+'..'+toVersion, shell=True, stdout=subprocess.PIPE)
 	diffOutput = p.stdout.readlines()
 	retval = p.wait()
 	if retval != 0:
-		raise NameError('git diff failed', repo, fromVersion, toVersion)
+#		raise NameError('git diff failed', repo, fromVersion, toVersion)
+		print("{{{{< details title=\"{0}\" href=\"https://commits.kde.org/{0}\" >}}}}".format(repo))
+		print("+ New in this release")
+		print("{{< /details >}}\n")
 
+	#print("length: " + str(len(diffOutput)))
 	if len(diffOutput):
-		p = subprocess.Popen('git log '+fromVersion+'..'+toVersion, shell=True, stdout=subprocess.PIPE)
+		p = subprocess.Popen('git log '+fromVersion+'..'+toVersion, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
 		commit = []
 		commits = []
 		for line in p.stdout.readlines():
+			#line = line.decode()
+			#print("line in readlines: " + line)
 			ignoreCommit = False
 			if str(line).startswith("commit"):
 				if len(commit) > 1 and not ignoreCommit:
@@ -130,7 +142,7 @@ for repo in repos:
 			print("{{{{< details title=\"{0}\" href=\"https://commits.kde.org/{0}\" >}}}}".format(repo))
 			for commit in commits:
 				extra = ""
-				changelog = commit[1].decode()
+				changelog = commit[1]
 
 				for line in commit:
 					line = html.escape(str(line))

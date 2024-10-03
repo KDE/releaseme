@@ -133,6 +133,8 @@ class MakeChangelog
       "plank-player": "Plank Player",
       "plasma-remotecontrollers": "Plasma Remotecontrollers",
       "flatpak-kcm": "Flatpak Permissions",
+      "spacebar": "Spacebar",
+      "plasma-dialer": "Plasma Dialer",
     }
     @plasma_versions = PlasmaVersion.new
     # override old version for a feature release so we still include changes from last feature not from last beta
