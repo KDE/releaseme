@@ -39,4 +39,4 @@ APPSTREAM_UPDATER="/home/jr/src/sysadmin/appstream-metainfo-release-update/appst
 GPG_KEY=E0A3EB202F8E57528E13E72FD7574483BB57B18D
 RELEASE_DUDE="Jonathan Riddell"
 
-BROWSER=chromium  # chromium, firefox etc
+BROWSER=firefox  # chromium, firefox etc
