@@ -123,13 +123,13 @@ module ReleaseMe
       uri
     end
 
-    def warn_job_state(pipeline)
+    def warn_job_state(pipeline, repository)
       log_warn format(
         if %w[failed canceled skipped].none? { |x| x == pipeline['status'] }
-          'invent.kde.org: pipeline %s is still building [%s]'
+          'invent.kde.org: pipeline %s is still building [%s], see https://invent.kde.org/%s/-/pipelines/%s'
         else
           'invent.kde.org: pipeline %s is not of sufficient quality [%s]'
-        end, pipeline['id'], pipeline['status']
+        end, pipeline['id'], pipeline['status'], repository, pipeline['id']
       )
     end
 
@@ -138,7 +138,8 @@ module ReleaseMe
         auto_continue = pipeline['status'] == 'success'
         break if auto_continue
 
-        warn_job_state(pipeline)
+        path = project.vcs.repository.split(':', 2)[-1]
+        warn_job_state(pipeline, path)
         continue?
         break
       end
