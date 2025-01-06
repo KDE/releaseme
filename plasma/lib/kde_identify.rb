@@ -3,6 +3,7 @@
 # SPDX-FileCopyrightText: 2023 Jonathan Esk-Riddell <jr@jriddell.org>
 
 require 'httparty'
+require 'json'
 
 class KDEIndentify
   # Uses KDE's projects.kde.org API to get the path to the repo in invent.kde.org
