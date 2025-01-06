@@ -5,9 +5,9 @@
 # SPDX-FileCopyrightText: 2020 Carl Schwan <carl@carlschwan.eu>
 
 MAJOR_VERSION=5
-VERSION=5.27.11
+VERSION=5.27.12
 SHORT_VERSION=5.27
-OLD_VERSION=5.27.10
+OLD_VERSION=5.27.11
 ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release for changelog
@@ -22,8 +22,8 @@ WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@tinami.kde.org"
 #UPLOADSERVER="weegie"
 
-RELEASEDATE="Wednesday, 06 March 2024" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2024-03-06" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Monday, 06 January 2025" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2025-01-06" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 #SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
@@ -36,6 +36,6 @@ VIDEO_VALUE="false" # The video ID used in URL for "youtube" and "peertube", and
 APPSTREAM_UPDATER="/home/jr/src/sysadmin/appstream-metainfo-release-update/appstream-metainfo-release-update"
 
 GPG_KEY=D7574483BB57B18D
-RELEASE_DUDE="Jonathan Esk-Riddell"
+RELEASE_DUDE="Jonathan Riddell"
 
 BROWSER=firefox  # chromium, firefox etc
