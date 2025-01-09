@@ -24,6 +24,8 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - set QT_VERSION and KF5_VERSION in ./plasma-update-versions-qtkf and run that script to set version agreed at cycle kickoff (make sure to check the exceptions)
  - Edit and run add-bugzilla-versions to add a new version git-stable-Plasma/6.xx
  - Update bug closing bot versions at https://invent.kde.org/sysadmin/bugzilla-bot/-/blob/master/data/versions.yml
+ - Check if a new release of plasma-wayland-protocols is needed and make it
+ - Bump the version of plasma-wayland-protocols in CMakeLists.txt of kwayland, powerdevil and other users
 
 ## On Tar days (making tars)
  - update VERSIONS.inc
