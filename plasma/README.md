@@ -38,7 +38,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - (or upload to upload.kde.org and tell sysadmins to make tars available to packagers if you do not have permission)
 
 ## On Beta day (making branches)
- On a new 5.x release make branches Plasma/5.x after making the tars
+ On a new 6.x release make branches Plasma/6.x after making the tars
 
  - run ./make-branch for Plasma (but not Frameworks)
  - edit ./update-versions to override versions to set 6.x.80 and run it for master
