@@ -18,7 +18,7 @@ set -ex
 . bugzilla-cookies.inc
 
 . VERSIONS.inc
-VERSION="git-stable-Plasma/6.3"
+#VERSION="git-stable-Plasma/6.3"
 
 if [ $PRODUCT = "plasma" ]; then
   file="bugzilla-products-plasma.text"
