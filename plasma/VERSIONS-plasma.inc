@@ -8,7 +8,7 @@ PRODUCT="plasma" # frameworks or plasma
 
 MAJOR_VERSION=6
 VERSION=6.3.0
-NEXT_VERSION=6.3.0 # what will the next release be for ./update-verions --next
+NEXT_VERSION=6.3.1 # what will the next release be for ./update-verions --next
 SHORT_VERSION=6.3.0 # the directory to use on ftpadmin
 BRANCH_VERSION=6.3 # the version part to use in the Plasma/6.x branch name
 OLD_VERSION=6.2.5
