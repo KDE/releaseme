@@ -50,3 +50,4 @@ makeTars = MakeTars.new
 makeTars.testGpg
 makeTars.makeTars
 makeTars.makeSourcesList
+puts " TODO make Spectacle manually"
