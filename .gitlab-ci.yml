@@ -56,3 +56,8 @@ test:3.3:
   image: ruby:3.3
   script:
     - rake test
+
+test:3.4:
+  image: ruby:3.4
+  script:
+    - rake test
