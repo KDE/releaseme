@@ -82,7 +82,7 @@ branchme.
 - Verify the tarball and do a test build, possibly ask peers to build on their
   systems as well.
 - Upload to ftp://upload.kde.org/ and note the README in there.
-- File a ticket with the sysadmins to move your tarball into a suitable place on
+- File a [ticket with the sysadmins](https://phabricator.kde.org/maniphest/task/edit/form/2/) to move your tarball into a suitable place on
   http://download.kde.org. If you are unsure about where to put it you can
   ask the release-team@kde.org for some guidance.
 - Run tagme to tag your release in git.
