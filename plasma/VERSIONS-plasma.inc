@@ -7,11 +7,11 @@
 PRODUCT="plasma" # frameworks or plasma
 
 MAJOR_VERSION=6
-VERSION=6.3.4
-NEXT_VERSION=6.3.5 # what will the next release be for ./update-verions --next
-SHORT_VERSION=6.3.4 # the directory to use on ftpadmin
+VERSION=6.3.5
+NEXT_VERSION=6.3.6 # what will the next release be for ./update-verions --next
+SHORT_VERSION=6.3.5 # the directory to use on ftpadmin
 BRANCH_VERSION=6.3 # the version part to use in the Plasma/6.x branch name
-OLD_VERSION=6.3.3
+OLD_VERSION=6.3.4
 ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release for changelog
@@ -23,8 +23,8 @@ WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde
 UPLOADSERVER="ftpadmin@tinami.kde.org"
 #UPLOADSERVER="embra"
 
-RELEASEDATE="Tuesday, 01 April 2025" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2025-04-01" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Tuesday, 06 May 2025" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2025-05-06" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
