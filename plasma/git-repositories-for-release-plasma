@@ -1,3 +1,4 @@
+aurorae
 bluedevil
 breeze
 breeze-grub
@@ -25,6 +26,7 @@ kwallet-pam
 kwayland
 kwayland-integration
 kwin
+kwin-x11
 kwrited
 layer-shell-qt
 libkscreen

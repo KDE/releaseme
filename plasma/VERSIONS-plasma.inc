@@ -7,24 +7,24 @@
 PRODUCT="plasma" # frameworks or plasma
 
 MAJOR_VERSION=6
-VERSION=6.3.5
-NEXT_VERSION=6.3.6 # what will the next release be for ./update-verions --next
-SHORT_VERSION=6.3.5 # the directory to use on ftpadmin
-BRANCH_VERSION=6.3 # the version part to use in the Plasma/6.x branch name
-OLD_VERSION=6.3.4
-ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
-FTPSTABLE=stable  # set to unstable or stable
-OLD_FTPSTABLE=stable  # set to unstable or stable of previous release for changelog
-BRANCH=Plasma/6.3 # set to master or Plasma/6.x
+VERSION=6.3.90
+NEXT_VERSION=6.3.91 # what will the next release be for ./update-verions --next
+SHORT_VERSION=6.3.90 # the directory to use on ftpadmin
+BRANCH_VERSION=6.4 # the version part to use in the Plasma/6.x branch name
+OLD_VERSION=6.3.80
+ORIGIN=unstable # git branch as set in projects.k.o, set to trunk or stable or lts
+FTPSTABLE=unstable  # set to unstable or stable
+OLD_FTPSTABLE=unstable  # set to unstable or stable of previous release for changelog
+BRANCH=master # set to master or Plasma/6.x
 
-RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
+RELEASETYPE=beta # for changelog, set to beta, feature or bugfix
 
-WWWCHECKOUT="/home/jr/src/websites/kde-org"                     # git@invent.kde.org:websites/kde-org.git
+WWWCHECKOUT="/home/bshah/src/websites/kde-org"                     # git@invent.kde.org:websites/kde-org.git
 UPLOADSERVER="ftpadmin@tinami.kde.org"
 #UPLOADSERVER="embra"
 
-RELEASEDATE="Tuesday, 06 May 2025" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2025-05-06" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Thursday, 15 May 2025" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2025-05-15" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER=embra:tmp/ # somewhere to scp QA and tag files to
@@ -34,9 +34,9 @@ VIDEO_KEY="video" # type of video: "youtube", "peertube", "video"
 VIDEO_VALUE="false" # The video ID used in URL for "youtube" and "peertube", and "true" for "video"
 
 # command from   git clone invent:sysadmin/appstream-metainfo-release-update
-APPSTREAM_UPDATER="/home/jr/src/sysadmin/appstream-metainfo-release-update/appstream-metainfo-release-update"
+APPSTREAM_UPDATER="/home/bshah/src/Projects/KDE/appstream-metainfo-release-update/appstream-metainfo-release-update"
 
-GPG_KEY=E0A3EB202F8E57528E13E72FD7574483BB57B18D
-RELEASE_DUDE="Jonathan Riddell"
+GPG_KEY=0AAC775BB6437A8D9AF7A3ACFE0784117FBCE11D
+RELEASE_DUDE="Bhushan Shah"
 
 BROWSER=firefox  # chromium, firefox etc
