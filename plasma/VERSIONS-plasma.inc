@@ -11,15 +11,16 @@ VERSION=6.3.90
 NEXT_VERSION=6.3.91 # what will the next release be for ./update-verions --next
 SHORT_VERSION=6.3.90 # the directory to use on ftpadmin
 BRANCH_VERSION=6.4 # the version part to use in the Plasma/6.x branch name
-OLD_VERSION=6.3.80
-ORIGIN=unstable # git branch as set in projects.k.o, set to trunk or stable or lts
+OLD_VERSION=6.3.5
+ORIGIN=trunk # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=unstable  # set to unstable or stable
 OLD_FTPSTABLE=unstable  # set to unstable or stable of previous release for changelog
 BRANCH=master # set to master or Plasma/6.x
 
 RELEASETYPE=beta # for changelog, set to beta, feature or bugfix
 
-WWWCHECKOUT="/home/bshah/src/websites/kde-org"                     # git@invent.kde.org:websites/kde-org.git
+# git@invent.kde.org:websites/kde-org.git
+WWWCHECKOUT="/home/bshah/src/Websites/kde-org"
 UPLOADSERVER="ftpadmin@tinami.kde.org"
 #UPLOADSERVER="embra"
 
