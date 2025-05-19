@@ -92,7 +92,7 @@ for repo in repos:
 
 	#print("length: " + str(len(diffOutput)))
 	if len(diffOutput):
-		p = subprocess.Popen('git log '+fromVersion+'..'+toVersion, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
+		p = subprocess.Popen('git log --no-merges --first-parent '+fromVersion+'..'+toVersion, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
 		commit = []
 		commits = []
 		for line in p.stdout.readlines():
