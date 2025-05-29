@@ -37,7 +37,7 @@ class UpdateVersions
     @variable = "KF_DEP_VERSION" if @plasma_versions.product == "frameworks"
     @variable = "PROJECT_VERSION" if @plasma_versions.product == "plasma" and @next
     @variable = "KF_VERSION" if @plasma_versions.product == "frameworks" and @next
-    @special_variables = {"extra-cmake-modules"=> "VERSION", "kpipewire"=> "KPipewire VERSION"}
+    @special_variables = {"extra-cmake-modules"=> "VERSION"}
     @directory = "tmp-version-update"
     if @next
       @new_version = @plasma_versions.next_version
@@ -59,7 +59,7 @@ class UpdateVersions
         # git clone
         puts ":: Git cloning #{repo} Branch #{@plasma_versions.branch}"
         sleep(2) # meh invent.kde.org seems to block git clone if you do several
-        Retry.retry_it(times: 3, sleep: 4) { `git clone --depth 1 --no-single-branch invent:#{invent_category}/#{repo} #{repo}` || raise }
+        Retry.retry_it(times: 3, sleep: 4) { `git clone --depth 1 --no-single-branch kde:#{invent_category}/#{repo} #{repo}` || raise }
         Dir.chdir(repo) do
           `git checkout #{@plasma_versions.branch}`
           # do sed
