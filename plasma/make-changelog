@@ -159,7 +159,7 @@ class MakeChangelog
         # FIXME this is Jonathan specific
         puts "git clone --reference /home/jr/src/*/#{repo}/kdegit/#{repo} invent:#{invent_path}/#{repo}"
 
-        `git clone --reference /home/jr/src/*/#{repo}/kdegit/#{repo} invent:#{invent_path}/#{repo}`
+        `git clone --reference /home/bshah/kdesrc/source/#{repo} kde:#{invent_path}/#{repo}`
         Dir.chdir(repo) do
           `git checkout #{@branch}`
         end

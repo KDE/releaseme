@@ -88,10 +88,11 @@ class UpdateVersions
             end
           end
           system("git --no-pager diff")
-          `git commit -a -m 'update version for new release'`
+          `git commit -a -m 'Update version for new release #{@new_version}'`
           if not @trial
             `git push`
           end
+
           # Add Appstream version in master
           if @plasma_versions.origin != "trunk" and @plasma_versions.origin != "lts" and not @next
             `git checkout master`

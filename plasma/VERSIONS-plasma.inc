@@ -8,7 +8,7 @@ PRODUCT="plasma" # frameworks or plasma
 
 MAJOR_VERSION=6
 VERSION=6.4.0
-NEXT_VERSION=6.4.1 # what will the next release be for ./update-verions --next
+NEXT_VERSION=6.4.0 # what will the next release be for ./update-verions --next
 SHORT_VERSION=6.4.0 # the directory to use on ftpadmin
 BRANCH_VERSION=6.4 # the version part to use in the Plasma/6.x branch name
 OLD_VERSION=6.3.5
@@ -24,8 +24,8 @@ WWWCHECKOUT="/home/bshah/src/Websites/kde-org"
 UPLOADSERVER="ftpadmin@tinami.kde.org"
 #UPLOADSERVER="embra"
 
-RELEASEDATE="Thursday, 12 June 2025" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2025-06-12" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Thursday, 17 June 2025" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2025-06-17" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER_URL=http://embra.edinburghlinux.co.uk/~jr/tmp # URL to view this
