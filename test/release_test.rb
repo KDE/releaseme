@@ -30,6 +30,7 @@ class TestRelease < Testme
       `git add file`
       `git commit -a -m 'import'`
       `git push origin master`
+      `git push origin other`
     end
   ensure
     FileUtils.rm_rf('clone')
@@ -223,5 +224,30 @@ class TestRelease < Testme
     FileUtils.touch('sig')
     release = new_test_release
     release.send(:sysadmin_ticket, 'tar', 'sig')
+  end
+
+  def test_branch_release
+    data = {
+      identifier: 'phonon-vlc',
+      vcs: ReleaseMe::Git.new,
+      i18n_trunk: 'master',
+      i18n_stable: 'master',
+      i18n_path: ''
+    }
+    project = ReleaseMe::Project.new(**data)
+    project.vcs.repository = @remotedir
+
+    # Make sure it shuts up
+    ReleaseMe::Silencer.expects(:shutup?).returns(true).at_least_once
+    r = ReleaseMe::Release.new(project, "branch:other", '1.0')
+    assert_equal('other', r.project.vcs.branch)
+
+    # And also make sure it aborts
+    ReleaseMe::Silencer.expects(:shutup?).returns(false).at_least_once
+    ReleaseMe::Release.any_instance.expects(:abort).raises(SystemCallError.new(''))
+    ReleaseMe::Release.any_instance.expects(:gets).returns("n\n")
+    assert_raises SystemCallError do
+      ReleaseMe::Release.new(project, "branch:other", '1.0')
+    end
   end
 end
