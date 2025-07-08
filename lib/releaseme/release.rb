@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2007-2022 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2007-2025 Harald Sitter <sitter@kde.org>
 
 require_relative 'archive_signer'
 require_relative 'gitlab'
@@ -50,7 +50,13 @@ module ReleaseMe
                              when :lts
                                project.i18n_lts
                              else
-                               raise "Origin #{origin} unsupported. See readme."
+                               # Do NOT use this. Use origins!
+                               if origin.start_with?('branch:')
+                                 continue_with_branch?
+                                 origin.split(':', 2)[1]
+                               else
+                                 raise "Origin #{origin} unsupported. See readme."
+                               end
                              end
       end
 
@@ -150,6 +156,23 @@ module ReleaseMe
         ARGV.clear
         puts 'Continue despite unexpected pipeline states? [y/n]' unless shutup?
         case gets.strip
+        when 'y'
+          break
+        when 'n'
+          abort
+        end
+      end
+    end
+
+    def continue_with_branch?
+      loop do
+        ARGV.clear
+        unless shutup?
+          puts
+          puts "Do not use branches directly!!!"
+          puts "Use origins. If you are unsure ask @sitter. Do you know what you are doing? [y/n]"
+        end
+        case gets.strip.downcase
         when 'y'
           break
         when 'n'

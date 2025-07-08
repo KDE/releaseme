@@ -17,7 +17,7 @@ OptionParser.new do |opts|
   opts.separator ''
   opts.separator 'Automatic Project Definition via projects.kde.org:'
 
-  opts.on('--origin ORIGIN', ReleaseMe::Origin::ALL,
+  opts.on('--origin ORIGIN',
           "Origin (#{ReleaseMe::Origin::ALL.join(' | ')}).",
           '   Used to deduce release branch and localization branches.') do |v|
     options[:origin] = v
