@@ -32,7 +32,7 @@ module ReleaseMe
     # Init
     # @param project [Project] the Project to release
     # @param origin [Symbol] the origin to release from :trunk or :stable
-    # @param version [String] the versin to release as
+    # @param version [String] the version to release as
     def initialize(project, origin, version)
       @project = project
       @source = Source.new

@@ -173,7 +173,7 @@ class TestRelease < Testme
 
     # Release.rb will call abort once we tell it to not ignore the shitty jobs.
     # We intercept this and instead raise a sytemcallerror to verify that this
-    # is in fact what occured.
+    # is in fact what occurred.
     ReleaseMe::Release.any_instance.expects(:abort).raises(SystemCallError.new(''))
     ReleaseMe::Release.any_instance.expects(:gets).returns("n\n")
     assert_raises SystemCallError do
