@@ -10,8 +10,9 @@ module ReleaseMe
     LTS = :lts
     TRUNK_KDE4 = :trunk_kde4
     STABLE_KDE4 = :stable_kde4
+    PLASMA_PREVIOUS = :plasma_previous # The Plasma minus 1 version. Allows us to release 6.3 when we are already on 6.4
 
-    ALL = [TRUNK, STABLE, LTS, TRUNK_KDE4, STABLE_KDE4].freeze
+    ALL = [TRUNK, STABLE, LTS, TRUNK_KDE4, STABLE_KDE4, PLASMA_PREVIOUS].freeze
 
     module_function
 
@@ -21,7 +22,7 @@ module ReleaseMe
 
     # The sub directory where releases are located
     def target_sub_path(origin)
-      origin_target_map = { lts: "stable", stable: "stable", trunk: "unstable", stable_kde4: "stable", trunk_kde4: "unstable" }
+      origin_target_map = { lts: "stable", stable: "stable", trunk: "unstable", stable_kde4: "stable", trunk_kde4: "unstable", plasma_previous: "stable" }
       origin_target_map[origin]
     end
   end

@@ -49,6 +49,8 @@ module ReleaseMe
                                project.i18n_stable
                              when :lts
                                project.i18n_lts
+                             when :plasma_previous
+                               "Plasma/6.3"
                              else
                                raise "Origin #{origin} unsupported. See readme."
                              end
