@@ -152,9 +152,11 @@ module ReleaseMe
     end
 
     def continue?
+      return if Silencer.shutup?
+
       loop do
         ARGV.clear
-        puts 'Continue despite unexpected pipeline states? [y/n]' unless shutup?
+        puts 'Continue despite unexpected pipeline states? [y/n]'
         case gets.strip
         when 'y'
           break
@@ -165,13 +167,13 @@ module ReleaseMe
     end
 
     def continue_with_branch?
+      return if Silencer.shutup?
+
       loop do
         ARGV.clear
-        unless shutup?
-          puts
-          puts "Do not use branches directly!!!"
-          puts "Use origins. If you are unsure ask @sitter. Do you know what you are doing? [y/n]"
-        end
+        puts
+        puts "Do not use branches directly!!!"
+        puts "Use origins. If you are unsure ask @sitter. Do you know what you are doing? [y/n]"
         case gets.strip.downcase
         when 'y'
           break
