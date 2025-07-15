@@ -7,11 +7,11 @@
 PRODUCT="plasma" # frameworks or plasma
 
 MAJOR_VERSION=6
-VERSION=6.4.2
-NEXT_VERSION=6.4.2 # what will the next release be for ./update-verions --next
-SHORT_VERSION=6.4.2 # the directory to use on ftpadmin
+VERSION=6.4.3
+NEXT_VERSION=6.4.3 # what will the next release be for ./update-verions --next
+SHORT_VERSION=6.4.3 # the directory to use on ftpadmin
 BRANCH_VERSION=6.4 # the version part to use in the Plasma/6.x branch name
-OLD_VERSION=6.4.1
+OLD_VERSION=6.4.2
 ORIGIN=stable # git branch as set in projects.k.o, set to trunk or stable or lts
 FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=stable  # set to unstable or stable of previous release for changelog
@@ -24,8 +24,8 @@ WWWCHECKOUT="/home/bshah/src/Websites/kde-org"
 UPLOADSERVER="ftpadmin@tinami.kde.org"
 #UPLOADSERVER="embra"
 
-RELEASEDATE="Tuesday, 01 July 2025" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
-RELEASEDATEISO="2025-07-01" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
+RELEASEDATE="Tuesday, 15 July 2025" # usually  `LC_ALL=C date "+%A, %d %B %Y" --date="next Tue"`
+RELEASEDATEISO="2025-07-15" # usually  `LC_ALL=C date "+%Y-%m-%d" --date="next Tue"`
 
 SCRATCH_SERVER=bshah.in:/tmp/ # somewhere to scp QA and tag files to
 SCRATCH_SERVER_URL=http://embra.edinburghlinux.co.uk/~jr/tmp # URL to view this
