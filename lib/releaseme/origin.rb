@@ -5,6 +5,8 @@ module ReleaseMe
   module Origin
     # The symbolic values should not ever be changed as they may be hardcoded or
     # converted to/from strings representation with outside sources.
+    # TODO: revisit this stuff because we now accept branch origins as well and they are strings, so the
+    #   string<->symbol conversion is not holding anymore
     TRUNK = :trunk # technicall _kf5
     STABLE = :stable
     LTS = :lts

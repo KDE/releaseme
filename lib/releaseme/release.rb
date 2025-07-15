@@ -42,12 +42,12 @@ module ReleaseMe
 
       # FIXME: this possibly should be logic inside Project itself?
       if project.vcs.is_a? Git
-        project.vcs.branch = case origin
-                             when :trunk
+        project.vcs.branch = case origin.to_s # input may be a Symbol (internal) or a String (user provided)
+                             when 'trunk'
                                project.i18n_trunk
-                             when :stable
+                             when 'stable'
                                project.i18n_stable
-                             when :lts
+                             when 'lts'
                                project.i18n_lts
                              else
                                # Do NOT use this. Use origins!
