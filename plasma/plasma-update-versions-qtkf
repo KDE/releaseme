@@ -16,8 +16,8 @@ BRANCH=master
 
 # echo for updating version in master after branch override versions here
 # VERSION=5.23.0
-KF6_VERSION=6.14.0
-QT_VERSION=6.8.0
+KF6_VERSION=6.18.0
+QT_VERSION=6.9.0
 GITPREFIX="kde:"
 
 WORKSPACE=`cat git-repositories-for-release-plasma`
