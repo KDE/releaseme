@@ -8,7 +8,7 @@ PRODUCT="plasma" # frameworks or plasma
 
 MAJOR_VERSION=6
 VERSION=6.5.1
-NEXT_VERSION=6.5.1
+NEXT_VERSION=6.5.2
 SHORT_VERSION=6.5.1 # the directory to use on ftpadmin
 BRANCH_VERSION=6.5 # the version part to use in the Plasma/6.x branch name
 OLD_VERSION=6.5.0
@@ -17,7 +17,7 @@ FTPSTABLE=stable  # set to unstable or stable
 OLD_FTPSTABLE=unstable  # set to unstable or stable of previous release for changelog
 BRANCH=Plasma/6.5 # set to master or Plasma/6.x
 
-RELEASETYPE=feature # for changelog, set to beta, feature or bugfix
+RELEASETYPE=bugfix # for changelog, set to beta, feature or bugfix
 
 # git@invent.kde.org:websites/kde-org.git
 WWWCHECKOUT="/home/bshah/src/Websites/kde-org"
