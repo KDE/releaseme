@@ -50,6 +50,7 @@ apiUrl = {plasma:"https://projects.kde.org/api/v1/projects/plasma",
 @plasma6_3_additions = %w(plasma-dialer spacebar spectacle)
 @plasma6_4_additions = %w(kwin-x11 aurorae plasma-dialer spacebar spectacle)
 @plasma6_5_additions = %w(kwin-x11 aurorae plasma-dialer spacebar spectacle knighttime)
+@plasma6_6_additions = %w(kwin-x11 aurorae plasma-dialer spacebar spectacle knighttime plasma-keyboard plasma-setup plasma-login-manager)
 
 @frameworks6_0_additions = %w()
 
