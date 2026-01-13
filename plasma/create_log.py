@@ -159,6 +159,12 @@ for repo in repos:
 							if extra:
 								extra += ". "
 							extra += "Fixes bug [#{0}](https://bugs.kde.org/{0})".format(bugNumber)
+					elif str(line).startswith("ENHANCEMENT:"):
+						enhancementNumber = line[line.find(":") + 1:].strip()
+						if enhancementNumber.isdigit():
+							if extra:
+								extra += ". "
+							extra += "Implements improvement [#{0}](https://bugs.kde.org/{0})".format(enhancementNumber)
 					elif str(line).startswith("REVIEW:"):
 						if extra:
 							extra += ". "
