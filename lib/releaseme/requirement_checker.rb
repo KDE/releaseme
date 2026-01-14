@@ -88,7 +88,7 @@ module ReleaseMe
     # you may end up with a broken or malformed tar. To prevent this, a change
     # here must be followed by running `rake test` to pass the entire test suite
     # Also see the section on bumping versions in the Contributing.md.
-    COMPATIBLE_RUBIES = %w[3.1.0 3.2.0 3.3.0 3.4.0].freeze
+    COMPATIBLE_RUBIES = %w[3.1.0 3.2.0 3.3.0 3.4.0 4.0.0].freeze
     REQUIRED_BINARIES = %w[git tar xz msgfmt gpg2].freeze
 
     def initialize
