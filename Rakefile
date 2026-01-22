@@ -17,12 +17,10 @@ require 'rake/testtask'
 Rake::TestTask.new('test::unit') do |t|
   t.libs << 'test'
   t.libs << 'lib'
-  t.options = '--pride'
   t.test_files = FileList['test/*_test.rb']
   t.verbose = true
 end
 Rake::TestTask.new('test::integration') do |t|
-  t.options = '--pride'
   t.test_files = FileList['test/integration/*_test.rb']
   t.verbose = true
 end

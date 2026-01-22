@@ -15,14 +15,10 @@ default:
     - bundle install
     - gem install minitest-junit simplecov-cobertura
   artifacts:
-    reports:
-      junit: report.xml
     paths:
-      - report.xml
       - coverage/coverage.xml
 
 variables:
-  TESTOPT: '--junit --pride'
   LANG: 'C.UTF-8' # container has no LANG by default which messes with ruby's utf8 support
 
 reuse:

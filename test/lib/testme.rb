@@ -7,7 +7,7 @@ require 'tmpdir'
 
 require_relative '../test_helper'
 
-require 'minitest/unit'
+require 'minitest/autorun'
 begin
   require 'mocha/minitest'
 rescue LoadError # 1.0 changed the name, try older name as well for good measure
