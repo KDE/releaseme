@@ -90,7 +90,7 @@ class UpdateVersions
           system("git --no-pager diff")
           `git commit -a -m 'Update version for new release #{@new_version}'`
           if not @trial
-            `git push`
+            `git push -o ci.skip`
           end
 
           # Add Appstream version in master
@@ -104,7 +104,7 @@ class UpdateVersions
             system("git --no-pager diff")
             `git commit -a -m 'update version for new release'`
             if not @trial
-              `git push`
+              `git push -o ci.skip`
             end
           end
         end
