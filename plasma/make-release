@@ -37,6 +37,7 @@ git checkout master
 git pull
 git merge work/${PRODUCT}-${BRANCH}
 git push
+git push --delete origin work/${PRODUCT}-${BRANCH}
 cd -
 
 $BROWSER https://kde.org/info/${PRODUCT}-${VERSION}
