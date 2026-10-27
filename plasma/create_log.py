@@ -104,6 +104,7 @@ for repo in repos:
 		p = subprocess.Popen('git log --no-merges --first-parent '+fromVersion+'..'+toVersion, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
 		commit = []
 		commits = []
+		people = contributor_stats.people_by_commit(srcdir + repo, fromVersion + '..' + toVersion)
 		for line in p.stdout.readlines():
 			#line = line.decode()
 			#print("line in readlines: " + line)
@@ -212,6 +213,9 @@ for repo in repos:
 				if not changelog.endswith("."):
 					changelog = changelog + "."
 				capitalizedChangelog = changelog[0].capitalize() + changelog[1:]
+				names = [contributor_stats.markdown_escape(name) for name, email in people.get(commitHash, [])]
+				if names:
+					capitalizedChangelog += " *By {}.*".format(names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1])
 				print("+ {} [Commit.](http://commits.kde.org/{}/{}) {}".format(capitalizedChangelog, repo, commitHash, extra))
 
 				# edited jr, add newlines
