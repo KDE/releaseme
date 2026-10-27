@@ -227,4 +227,5 @@ for repo in repos:
 contributors, newcomers, skipped = contributor_stats.collect(statsRepos)
 for repo in skipped:
 	sys.stderr.write("{}: no tag {}, left out of the contributor count\n".format(repo, fromVersion))
-print(contributor_stats.markdown_section(contributors, newcomers))
+translators, languages = contributor_stats.collect_translations(statsRepos)
+print(contributor_stats.markdown_section(contributors, newcomers, translators, languages))

@@ -8,6 +8,10 @@
 # appears in any of the released repositories before the previous release. Names and emails go
 # through the .mailmap of each repository.
 #
+# The translators of a release are the Last-Translator of each .po file whose PO-Revision-Date
+# changed since the previous release. When several translators worked on one file during the
+# release, only the last one is counted.
+#
 # Run on its own after make-changelog has cloned the repositories into tmp-changelog:
 #   ./contributor_stats.py
 
@@ -153,6 +157,69 @@ def collect(repos):
     return contributors, newcomers, skipped
 
 
+PO_HEADER_FIELD = re.compile(r'^"(PO-Revision-Date|Last-Translator): *(.*?)\\n"$', re.MULTILINE)
+
+
+def po_header(content):
+    """The PO-Revision-Date and Last-Translator of a .po file, as a dict."""
+    header = content.split("\n\n", 1)[0]
+    return dict(PO_HEADER_FIELD.findall(header))
+
+
+def read_blobs(repo_dir, revisions):
+    """The content of each "revision:path", None for one that does not exist."""
+    process = subprocess.run(["git", "cat-file", "--batch"], cwd=repo_dir,
+                             input="".join(revision + "\n" for revision in revisions).encode(),
+                             capture_output=True, check=True)
+    output = process.stdout
+    contents = []
+    position = 0
+    for _ in revisions:
+        line_end = output.index(b"\n", position)
+        fields = output[position:line_end].split(b" ")
+        position = line_end + 1
+        if fields[-1] == b"missing" or len(fields) != 3:
+            contents.append(None)
+            continue
+        size = int(fields[2])
+        contents.append(output[position:position + size].decode("utf-8", "replace"))
+        position += size + 1
+    return contents
+
+
+def collect_translations(repos):
+    """repos is a list of (repo_dir, from_revision, to_revision); an empty to_revision is HEAD.
+
+    Returns the number of translators, and of languages, of the .po files that were translated
+    since from_revision. Repositories without from_revision are left out."""
+    translators = {}  # email or name -> name
+    languages = set()
+    for repo_dir, from_revision, to_revision in repos:
+        if not has_revision(repo_dir, from_revision):
+            continue
+        to_revision = to_revision or "HEAD"
+        changed = git(repo_dir, "diff", "--name-only", from_revision, to_revision, "--", "po/*.po").split()
+        if not changed:
+            continue
+        old_contents = read_blobs(repo_dir, ["{}:{}".format(from_revision, path) for path in changed])
+        new_contents = read_blobs(repo_dir, ["{}:{}".format(to_revision, path) for path in changed])
+        for path, old_content, new_content in zip(changed, old_contents, new_contents):
+            if new_content is None:
+                continue
+            new_header = po_header(new_content)
+            old_header = po_header(old_content) if old_content else {}
+            if new_header.get("PO-Revision-Date") == old_header.get("PO-Revision-Date"):
+                continue
+            name, _, email = new_header.get("Last-Translator", "").partition("<")
+            name = name.strip()
+            email = email.rstrip(">").strip().lower()
+            if not name or name == "FULL NAME" or is_ignored(name, email):
+                continue
+            translators.setdefault(email or name, name)
+            languages.add(path.split("/")[1])
+    return len(set(translators.values())), len(languages)
+
+
 def markdown_escape(text):
     text = html.escape(text)
     for character in "\\`*_[]":
@@ -160,7 +227,7 @@ def markdown_escape(text):
     return text
 
 
-def markdown_section(contributors, newcomers):
+def markdown_section(contributors, newcomers, translators=0, languages=0):
     lines = ["", "## Contributors", ""]
     if len(contributors) == 1:
         lines.append("1 person contributed to this release.")
@@ -176,6 +243,11 @@ def markdown_section(contributors, newcomers):
         lines.append('<ul style="columns: 14em; column-gap: 2em;">')
         lines.extend("<li>{}</li>".format(html.escape(name)) for name in newcomers)
         lines.append("</ul>")
+    if translators:
+        lines.append("")
+        lines.append("{} {} updated the translations, in {} {}.".format(
+            translators, "translator" if translators == 1 else "translators",
+            languages, "language" if languages == 1 else "languages"))
     lines.append("")
     return "\n".join(lines)
 
@@ -202,7 +274,8 @@ def main():
     for repo in skipped:
         print("{}: no tag v{}, left out of the contributor count".format(repo, versions["OLD_VERSION"]),
               file=sys.stderr)
-    print(markdown_section(contributors, newcomers))
+    translators, languages = collect_translations(repos)
+    print(markdown_section(contributors, newcomers, translators, languages))
 
 
 if __name__ == "__main__":
