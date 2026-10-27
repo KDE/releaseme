@@ -11,8 +11,11 @@
 
 import os
 import subprocess
+import sys
 #edited jr, escape & to &amp; and cgi.escape
 import html
+
+import contributor_stats
 
 def getVersionFrom(repo):
         #jr changed to just return nothing (will diff to latest commit)
@@ -21,10 +24,7 @@ def getVersionFrom(repo):
 #	return f.readlines()[1].strip()
 
 
-product = "plasma"
-for line in open('VERSIONS.inc'):
-	if line.startswith("PRODUCT="):
-		product = line[len("PRODUCT="):].split("#")[0].strip().strip('"')
+product = contributor_stats.read_versions('VERSIONS.inc')['PRODUCT']
 f = open('git-repositories-for-release-' + product)
 #srcdir="/d/kde/src/5/"
 srcdir=os.getcwd() + "/tmp-changelog/"
@@ -35,6 +35,9 @@ repos = line.split("\n")
 repos.sort()
 
 versionsDir = os.getcwd() + "/versions"
+
+# (repository folder, from version, to version) of each repository, for the contributor count
+statsRepos = []
 
 #print("for repo in repos")
 for repo in repos:
@@ -68,6 +71,8 @@ for repo in repos:
 			fromVersion = "v" + line[18:]
 
 #	print("fromVersion " + str(fromVersion))
+	statsRepos.append((srcdir + repo, fromVersion, toVersion))
+
 	p = subprocess.Popen('git fetch', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	retval = p.wait()
 	if retval != 0:
@@ -214,3 +219,8 @@ for repo in repos:
 		retval = p.wait()
 		if retval != 0:
 			raise NameError('git log failed', repo, fromVersion, toVersion)
+
+contributors, newcomers, skipped = contributor_stats.collect(statsRepos)
+for repo in skipped:
+	sys.stderr.write("{}: no tag {}, left out of the contributor count\n".format(repo, fromVersion))
+print(contributor_stats.markdown_section(contributors, newcomers))
