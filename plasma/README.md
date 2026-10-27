@@ -86,9 +86,7 @@ Tars get made and release same day for beta releases, bugfix releases but not .0
  - consider a script to update copyright years for KAboutData in Plasma
  - make-changelog has a Jonathan specific path in it for git repos
  - create_log is python2
- - create_log hardcodes which repos list
  - frameworks changelog links fix
- - create_log needs to use the right git-repos file
  - changelog add headers
  - for Plasma do not update ECM version when running update-version for breeze-gtk and breeze-plymouth
  - OLD_VERSION for frameworks needs to be 6.x for upload-tars and 6.x.0 for make-changelog

@@ -21,7 +21,11 @@ def getVersionFrom(repo):
 #	return f.readlines()[1].strip()
 
 
-f = open('git-repositories-for-release-plasma')
+product = "plasma"
+for line in open('VERSIONS.inc'):
+	if line.startswith("PRODUCT="):
+		product = line[len("PRODUCT="):].split("#")[0].strip().strip('"')
+f = open('git-repositories-for-release-' + product)
 #srcdir="/d/kde/src/5/"
 srcdir=os.getcwd() + "/tmp-changelog/"
 repos=[]
