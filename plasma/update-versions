@@ -23,6 +23,7 @@ class UpdateVersions
     @plasma_versions = PlasmaVersion.new
     @next = false
     @trial = false
+    @dependency_version = false
     OptionParser.new do |opts|
       opts.banner = "Usage: update-versions [options]"
 
@@ -31,6 +32,9 @@ class UpdateVersions
       end
       opts.on("-n", "--next", "Next") do |v|
         @next = v
+      end
+      opts.on("-d", "--dep", "Dependency version") do |v|
+        @dependency_version = v
       end
     end.parse!
     @variable = "PROJECT_DEP_VERSION" if @plasma_versions.product == "plasma"
@@ -41,8 +45,11 @@ class UpdateVersions
     @directory = "tmp-version-update"
     if @next
       @new_version = @plasma_versions.next_version
-    else
+    elsif @dependency_version
       @new_version = @plasma_versions.version
+    else
+      puts "Pass either --next or --dep"
+      exit 1
     end
   end
 
@@ -88,7 +95,11 @@ class UpdateVersions
             end
           end
           system("git --no-pager diff")
-          `git commit -a -m 'Update version for new release #{@new_version}'`
+          if @dependency_version
+            `git commit -a -m 'Update dependency version to #{@new_version}'`
+          else
+            `git commit -a -m 'Update version to #{@new_version}'`
+          end
           if not @trial
             `git push -o ci.skip`
           end
@@ -102,7 +113,7 @@ class UpdateVersions
               `#{@plasma_versions.appstream_updater} #{appstream_file} --version #{@new_version} --datestring #{@plasma_versions.releasedateiso} --releases-to-show 4`
             end
             system("git --no-pager diff")
-            `git commit -a -m 'update version for new release'`
+            `git commit -a -m 'Update version to #{@new_version}'`
             if not @trial
               `git push -o ci.skip`
             end
