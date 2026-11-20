@@ -122,17 +122,6 @@ for repo in repos:
 							if extra:
 								extra += ". "
 							extra += "Implements improvement [#{0}](https://bugs.kde.org/{0})".format(enhancementNumber)
-					elif str(line).startswith("REVIEW:"):
-						if extra:
-							extra += ". "
-						reviewNumber = line[line.find(":") + 1:].strip()
-						extra += "Code review [#{0}](https://git.reviewboard.kde.org/r/{0})"
-						# jr addition 2017-02 phab link
-					elif str(line).startswith("Differential Revision:"):
-						if extra:
-							extra += ". "
-						reviewNumber = line[line.find("org/") + 4:].strip()
-						extra += "Phabricator Code review [{0}](https://phabricator.kde.org/{0})".format(reviewNumber)
 					elif str(line).startswith("CCBUG:"):
 						if extra:
 							extra += ". "
