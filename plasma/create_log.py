@@ -12,25 +12,7 @@ import os
 import subprocess
 import html
 
-f = open('git-repositories-for-release-plasma')
-srcdir=os.getcwd() + "/tmp-changelog/"
-repos=[]
-
-line = f.read().rstrip()
-repos = line.split("\n")
-repos.sort()
-
-versionsDir = os.getcwd() + "/versions"
-
-for repo in repos:
-	os.chdir(srcdir+repo)
-
-	versionsFile = open("../../VERSIONS.inc")
-	for line in versionsFile:
-		line = line.rstrip()
-		if line.startswith("OLD_VERSION="):
-			fromVersion = "v" + line[12:]
-
+def createLogForRepo(repo, fromVersion):
 	p = subprocess.Popen('git fetch', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	retval = p.wait()
 	if retval != 0:
@@ -147,3 +129,22 @@ for repo in repos:
 		retval = p.wait()
 		if retval != 0:
 			raise NameError('git log failed', repo, fromVersion)
+
+
+f = open('git-repositories-for-release-plasma')
+srcdir=os.getcwd() + "/tmp-changelog/"
+repos=[]
+
+line = f.read().rstrip()
+repos = line.split("\n")
+repos.sort()
+
+versionsFile = open("VERSIONS.inc")
+for line in versionsFile:
+	line = line.rstrip()
+	if line.startswith("OLD_VERSION="):
+		fromVersion = "v" + line[12:]
+
+for repo in repos:
+	os.chdir(srcdir+repo)
+	createLogForRepo(repo, fromVersion)
