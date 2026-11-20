@@ -12,11 +12,6 @@ import os
 import subprocess
 import html
 
-def getVersionFrom(repo):
-        #jr changed to just return nothing (will diff to latest commit)
-        return ""
-
-
 f = open('git-repositories-for-release-plasma')
 srcdir=os.getcwd() + "/tmp-changelog/"
 repos=[]
@@ -28,7 +23,6 @@ repos.sort()
 versionsDir = os.getcwd() + "/versions"
 
 for repo in repos:
-	toVersion = getVersionFrom(repo)
 	os.chdir(srcdir+repo)
 
 	versionsFile = open("../../VERSIONS.inc")
@@ -42,7 +36,7 @@ for repo in repos:
 	if retval != 0:
 		raise NameError('git fetch failed')
 
-	p = subprocess.Popen('git diff '+fromVersion+'..'+toVersion, shell=True, stdout=subprocess.PIPE)
+	p = subprocess.Popen('git diff '+fromVersion+'..', shell=True, stdout=subprocess.PIPE)
 	diffOutput = p.stdout.readlines()
 	retval = p.wait()
 	if retval != 0:
@@ -51,7 +45,7 @@ for repo in repos:
 		print("{{< /details >}}\n")
 
 	if len(diffOutput):
-		p = subprocess.Popen('git log --no-merges --first-parent '+fromVersion+'..'+toVersion, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
+		p = subprocess.Popen('git log --no-merges --first-parent '+fromVersion+'..', shell=True, stdout=subprocess.PIPE, universal_newlines=True)
 		commit = []
 		commits = []
 		for line in p.stdout.readlines():
@@ -152,4 +146,4 @@ for repo in repos:
 			print("{{< /details >}}\n")
 		retval = p.wait()
 		if retval != 0:
-			raise NameError('git log failed', repo, fromVersion, toVersion)
+			raise NameError('git log failed', repo, fromVersion)
