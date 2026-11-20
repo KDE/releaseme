@@ -38,30 +38,11 @@ for repo in repos:
 	toVersion = getVersionFrom(repo)
 	os.chdir(srcdir+repo)
 
-	if repo == "kdelibs":
-		fromVersion = "v4.14.4"
-	elif repo == "kdepim":
-		fromVersion = "v4.14.4"
-	elif repo == "kdepimlibs":
-		fromVersion = "v4.14.4"
-	elif repo == "kdepim-runtime":
-		fromVersion = "v4.14.4"
-	elif repo == "kde-workspace":
-		fromVersion = "v4.11.15"
-	elif repo == "baloo":
-		fromVersion = "v5.9.1"
-	elif repo == "kfilemetadata":
-		fromVersion = "v5.9.1"
-	else:
-		fromVersion = "v14.12.1"
-    # jr changed to set version
 	versionsFile = open("../../VERSIONS.inc")
 	for line in versionsFile:
 		line = line.rstrip()
 		if line.startswith("OLD_VERSION="):
 			fromVersion = "v" + line[12:]
-		if line.startswith("OLD_BALOO_VERSION=") and (repo == "baloo" or repo == "kfilemetadata"):
-			fromVersion = "v" + line[18:]
 
 #	print("fromVersion " + str(fromVersion))
 	p = subprocess.Popen('git fetch', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
