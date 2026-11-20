@@ -158,10 +158,7 @@ class MakeChangelog
         puts(repo)
         invent_path = KDEIndentify.get_kde_category(repo)
         puts invent_path
-        # FIXME this is Jonathan specific
-        puts "git clone --reference /home/jr/src/*/#{repo}/kdegit/#{repo} invent:#{invent_path}/#{repo}"
-
-        `git clone --reference /home/bshah/kdesrc/source/#{repo} kde:#{invent_path}/#{repo}`
+        `git clone invent:#{invent_path}/#{repo}`
         Dir.chdir(repo) do
           `git checkout #{@branch}`
         end
