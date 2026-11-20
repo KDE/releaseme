@@ -14,4 +14,8 @@ rm -f asdf asdf.asc
 cd ${PRODUCT}-${VERSION}
 cp ${VERSION}-release-data release_data
 
-../../tagme.rb --version ${VERSION}
+if [[ "$1" == "--rc" ]]; then
+    ../../tagme.rb --version ${VERSION}-rc1
+else
+    ../../tagme.rb --version ${VERSION}
+fi
